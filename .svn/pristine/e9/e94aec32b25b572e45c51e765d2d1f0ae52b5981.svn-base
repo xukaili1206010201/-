@@ -1,0 +1,110 @@
+/*body{*/
+  /*background-color: #F0EFF5;*/
+/*}*/
+/*html{*/
+  /*font-size: 10px;*/
+/*}*/
+
+/*.navigation-bar{*/
+  /*!*background: green;*!*/
+  /*overflow: hidden;*/
+/*}*/
+/*.navigationbar {*/
+  /*background: rgb(161, 216, 34);*/
+/*}*/
+
+/* ******************************** 返回按钮样式  ******************************** */
+
+/*.back-button{*/
+  /*!*background: green;*!*/
+  /*width: 12px;*/
+  /*height: 18px;*/
+  /*margin-left: 10px;*/
+  /*!* 51/2 - 30/3  *!*/
+  /*margin-top: 15px;*/
+  /*float: left;*/
+/*}*/
+
+/* ******************************** 输入框组样式 ******************************** */
+/*.search-group{*/
+  /*/!*position: relative;*!/*/
+  /*height: 30px;*/
+  /*margin-left: 50px;*/
+  /*margin-top: 10.5px;*/
+  /*margin-right: 10px;*/
+  /*overflow: hidden;*/
+/*}*/
+
+
+/*.search-button{*/
+  /*width: 30px;*/
+  /*height: 30px;*/
+  /*margin-right: 0px;*/
+  /*float: right;*/
+/*}*/
+
+/*.search-input{*/
+  /*/!*background: red;*!/*/
+  /*margin-right: 35px;*/
+  /*height: 30px;*/
+/*}*/
+
+/*.search-input input{*/
+  /*height: 30px;*/
+  /*margin-right: 10px;*/
+  /*margin-left: 0px;*/
+/*}*/
+/*!*--------------列表样式--------------*!*/
+/*.st-city{*/
+  /*margin-top: 50px;*/
+  /*margin-left: 20px;*/
+/*}*/
+/*.st-city-text{*/
+  /*font-size: 15px;*/
+/*}*/
+/*.st-list-group{*/
+  /*margin-top: 10px;*/
+  /*margin-left: 5px;*/
+  /*margin-right: 5px;*/
+  /*background-color: white;*/
+
+/*}*/
+/*.st-station-name{*/
+  /*font-size: 15px;*/
+/*}*/
+/*.st-station-name ,.st-cover-house{*/
+  /*margin-left: 10px;*/
+  /*height: 16px;*/
+/*}*/
+/*.st-cover-house{*/
+  /*margin-top: 4px;*/
+  /*font-size: 12px;*/
+/*}*/
+
+/*城市*/
+.stationCityName{
+  font-size: 1.6rem;
+  height:2.2rem;
+  line-height: 2.2rem;
+  background-color:#ddd;
+  vertical-align: middle;
+  padding-left:10px;
+}
+/*列表*/
+.stationList .line-normal-wrapper{
+  font-size: 1.3rem;
+  margin-left: 10px;
+  width:100%;
+  position: relative;
+}
+.stationInfo{
+  width:15%;
+  height:2rem;
+  font-size:1.6rem;
+  position: absolute;
+  top:0.8rem;
+  right:0px;
+  text-align: center;
+  vertical-align: middle;
+  color: #7DB343;
+}

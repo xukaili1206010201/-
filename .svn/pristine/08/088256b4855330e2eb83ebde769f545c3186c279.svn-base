@@ -1,0 +1,86 @@
+
+  <script>
+    $(function () {
+      var screenW = $(window).width();
+      var screenH = $(window).height();
+      $('.familyaccountdetail-content').css({
+        'height': screenH
+      })
+    })
+
+
+    //倒计时
+//    function getRTime() {
+//      var EndTime = new Date('2016/07/5 10:00:00'); //截止时间 前端路上 http://www.51xuediannao.com/qd63/
+//      var NowTime = new Date();
+//      var t = EndTime.getTime() - NowTime.getTime();
+//      var day = Math.floor(t / 1000 / 60 / 60 / 24);
+//      var hour = Math.floor(t / 1000 / 60 / 60 % 24);
+//      var minute = Math.floor(t / 1000 / 60 % 60);
+//      var second = Math.floor(t / 1000 % 60);
+//      document.getElementById("familiservicedetail-countdown").innerHTML = "开卖倒计时:" + day + "天" + hour + "小时" + minute + "分" + second + "秒";
+//    }
+//    setInterval(getRTime, 1000);
+
+
+  </script>
+
+
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+
+    <div class="navigationbar-item">
+      <p class="item-title">服务详情</p>
+    </div>
+  </div>
+</nav>
+
+<div class="familyaccountdetail-content">
+
+  <div class="familyaccountdetail-carousel">
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides">
+          <img ng-src="{{slide}}" curousel-height class="slideImg">
+        </slide>
+      </carousel>
+    </div>
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.jpg" class="slideImg" curousel-height>
+    </div>
+
+  </div>
+
+
+
+  <div class="familyaccountdetail-service-info">
+    <p class="familyaccountdetail-service-name">{{accountgoodsList.name}}</p>
+
+    <p class="familyaccountdetail-service-intro">{{accountgoodsList.introduction}}</p>
+  </div>
+
+  <div ng-bind-html="showTimeHtml" class="count_down">
+    开卖倒计时
+    <span id="show_time"></span>
+  </div>
+
+  <div class="familyaccountdetail-service-detail">
+
+    <div class="familyaccountdetail-service-segmentcontrol">
+      <button type="button" class="familyaccountdetail-service-segmentcontrol-item">商品详情</button>
+    </div>
+
+    <div class="familyaccountdetail-service-detail-view" ng-bind-html="accountgoodsList.description">
+    </div>
+
+
+  </div>
+
+
+</div>
+
+

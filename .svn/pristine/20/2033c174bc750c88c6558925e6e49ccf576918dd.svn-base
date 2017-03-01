@@ -1,0 +1,118 @@
+<nav class="navbar navbar-fixed-top text-center navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="jumpGoodsDetail()" src="images/back_button.png">
+
+    <div class="navigationbar-item">
+      <p class="item-title">商品购买</p>
+    </div>
+  </div>
+</nav>
+<div class="purchase">
+  <ul class="list-group pu-list-group">
+    <li class="list-group-item" style="border:none;">
+      <p><span class="shop-name">{{goods.business}}</span><span class="pu-product-name">{{goods.name}}</span></p>
+    </li>
+    <li class="list-group-item goods-purchase-detail purchase-split"></li>
+    <li class="list-group-item goods-purchase-detail">
+      <img class="pu-product-pic" src="{{goods.imageUrl}}">
+      <p class="pu-price ">
+        <span class="gold"><span style="font-size:18px">&#165 {{goods.sale_price}}</span> /{{goods.unit}}</span>
+        <del class="delete">&#165 {{goods.old_price}}</del>
+      <span class="button-pic rt">
+        <span ng-click="decrease()" class="decrease-button">－</span>
+        <input ng-keyup="inputChange($event)" type="number" ng-model="count" class="pu-number-input"
+               value="{{goods.goods_count}}">
+        <span class="increase-button" ng-click="increase()">＋</span>
+      </span>
+      </p>
+      <ul class="list-unstyled list-inline goods-pro">
+        <li class="goods-pro-li">日销量 : {{goods.day_count}}</li>
+        <li class="goods-pro-li" style="margin-left:10px;">库存 : {{goods.inventory}}</li>
+        <li class="gold all_price">总额 : ¥{{goods.sale_price*count}}</li>
+      </ul>
+    </li>
+    <li class="list-group-item goods-purchase-detail purchase-split"></li>
+
+    <!-- 服务站与选择服务站 -->
+    <li class="list-group-item goods-purchase-detail station-li purchase-servicestation-row">
+        <div class="purchase-bottom">
+
+          <!-- 提货方式 -->
+        <div class="purchase-express-type">
+          <select style="height: 3.5rem" ng-change="selChange()" ng-model="selected" tabindex="1"
+                  class="pu-drop font15"
+                   ng-options="x.delivery_id as x.name for x in delivery">
+          </select>
+        </div>
+
+        <!-- 选择服务站 -->
+        <div class="pu-next" ng-click="jumpselectStation()">
+          <img class="next-pic" style="margin-top: 1rem"  src="images/next.png">
+          <span class="font15" style="margin-top: 1rem">{{station_name}}</span>
+        </div>
+      </div>
+    </li>
+
+    <!-- 规格 -->
+    <li class="list-group-item goods-purchase-detail station-li"
+        ng-repeat="b in goods.guige">
+
+      <div ng-class="$index+1==goods.guige.length?'font15 purchase-end':'font15 purchase-bottom'">
+        <span>{{b.key}}:</span>
+        <select ng-disabled="guige_id==''" ng-change="changeGuige(guige_id)" ng-init="guige_id=goods.guige[$index]['value'][0]['guige_id']" ng-model="guige_id" name="guigeID"
+                class="font15 dropdown pu-dropdown">
+          <option class = "font15" value="{{a.guige_id}}" class="size" ng-repeat="a in b.value">{{a.guige_name}}</option>
+        </select>
+      </div>
+    </li>
+
+    <li class="list-group-item goods-purchase-remark">
+      <textarea class="pu-textarea" ng-model="remark" placeholder="给卖家留言..."></textarea>
+    </li>
+  </ul>
+
+  <div class="purchase-content">
+    <form name="form" class="form-horizontal">
+      <div class="form-group bg-fff-title" ng-click="jumpToMyCommunitySelect(10)">
+        <label class="col-xs-5 control-label">我的小区</label>
+        <div class="col-xs-7 house-next">
+          <img class="next-pic" style="margin-right:18px;" src="images/next.png">
+        </div>
+      </div>
+      <div class="bg-fff">
+
+        <!-- 联系人姓名 -->
+        <div class="form-group">
+            <input type="text" ng-model="username" class="" id="username"
+                   placeholder="姓名*">
+        </div>
+
+        <!-- 联系人电话 -->
+        <div class="form-group">
+            <input type="text" ng-model="telphone" class=" " id="mobile" placeholder="电话*">
+        </div>
+
+        <!-- 联系人小区 -->
+        <div class="form-group">
+          <input type="text" ng-model="community" class="" id="community"
+                 placeholder="小区*">
+        </div>
+
+        <!-- 联系人楼号 -->
+        <div class="form-group"  style="border:none;clear: both;">
+          <input type="text" ng-model="number" class="" id="number"
+                 placeholder="楼号*">
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+
+  <div class="purchase-footer">
+    <button class="button-group-left btn btn-success" ng-disabled="goods.guige[0]['value'][0]['guige_id']==''||goods.guige[1]['value'][0]['guige_id']==''" ng-click="addcart()">放入购物车</button>
+    <button class="button-group-right btn btn-success" ng-disabled="goods.guige[0]['value'][0]['guige_id']==''||goods.guige[1]['value'][0]['guige_id']==''" ng-click="jumptopay()">直接购买</button>
+  </div>
+
+</div>

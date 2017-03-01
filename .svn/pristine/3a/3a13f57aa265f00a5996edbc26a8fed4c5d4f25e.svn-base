@@ -1,0 +1,83 @@
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮 -->
+    <img class="back-button" src="images/back_button.png" ng-click="goToback()">
+
+    <!-- 添加按钮 -->
+    <!--<img ng-click="addOrEditCommunity()" class="add-image" src="images/add_white.png">-->
+
+    <!--搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchCom()">
+
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div ng-if="isShowCommunity">
+  <div class="commmunity-table" load-more data="{params : params,repeatFun : '$scope.CommunityFun'}">
+
+    <div>
+      <div class="line-wrapper" ng-repeat="communityModel in myCommunityList" ng-click="didSelectedCommunity(communityModel)">
+        <div class="line-scroll-wrapper">
+          <div class="line-normal-wrapper" style="padding: 0 1rem 0rem 1rem;width:100%"
+               ng-click="editCommunity(communityModel)">
+            <div>
+              <span class="font15">{{communityModel.community}}</span>
+              <span style="float: right;">{{communityModel.number}}号楼</span>
+            </div>
+            <div>
+              <span style="font-size: 1.2rem">{{communityModel.username}}</span>
+              <span style="float: right;">{{communityModel.telphone}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-------关键字搜索---------------->
+  <div ng-if="!isShowCommunity">
+    <div ng-if="!isCommunity" style="text-align: center;font-size:1.6rem"><span>sorry,暂无相关数据！</span></div>
+    <div ng-if="isCommunity">
+      <div class="commmunity-table searchCommunity" load-more data="{params : searchParams,repeatFun : '$scope.showSearchCom'}">
+
+        <div>
+          <div class="line-wrapper" ng-repeat="communityModel in myCommunityList" >
+            <div class="line-scroll-wrapper">
+
+              <div class="line-normal-wrapper" ng-click="editCommunity(communityModel)">
+                <!-- 小区名称 -->
+                <div class="line-normal-community-name">{{communityModel.community}}</div>
+                <!-- 小区所在的城市 -->
+                <!--<span class="line-normal-city-name">{{communityModel.city}}</span>-->
+                <!-- 楼号 -->
+                <span class="line-normal-floor">{{communityModel.number}}号楼</span>
+                <!-- 联系人姓名 -->
+                <span>{{communityModel.username}}</span>
+                <!-- 联系人电话 -->
+                <span>{{communityModel.telphone}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  var communityHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.commmunity-table').css({
+    'height' : communityHeight + 'px',
+    'overflow' : 'scroll'
+  });
+  $('.searchCommunity').css({
+    'height' : communityHeight + 'px',
+    'overflow' : 'scroll'
+  });
+</script>

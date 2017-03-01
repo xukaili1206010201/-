@@ -1,0 +1,86 @@
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+
+    <div class="navigationbar-item">
+      <p class="item-title">站点详情</p>
+    </div>
+  </div>
+</nav>
+
+<div class="content" style="background-color: #fff;">
+  <p ng-model="stationDetailList.name" class="station-name">{{stationDetailList.name}}</p>
+
+  <div class="station-images-block">
+    <img src="images/show-big-image.jpg">
+  </div>
+
+  <div class="station-manager-block">
+    <div class="wxh">
+      <img src="{{stationDetailList.wx_qrcode}}">
+      <p>{{stationDetailList.wx_name}}</p>
+    </div>
+    <div class="station-manager">
+      <div class="manager-avatar">
+        <img ng-src="{{stationDetailList.service}}">
+        <p ng-model="stationDetailList.number">编号:{{stationDetailList.number}}</p>
+      </div>
+      <div class="station-manager-name">
+        <p>社区阿庆嫂</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="stationdetail-community">{{effectedCommunity}}</p>
+    <p class="stationdetail-service">{{supportService}}</p>
+  </div>
+
+
+
+  <div class="connect-block">
+
+    <div class="connect-top">
+
+      <div class="mobile-phone-block">
+        <div class="num-block">
+          <img src="images/mobile-icon.png">
+          <div class="mobile-num">
+            <p class="manager-mobile">{{stationDetailList.wuye}}</p>
+            <p class="manager-name"></p>
+          </div>
+        </div>
+
+        <div class="num-block phone-block">
+          <img src="images/phone-icon.png">
+          <div class="mobile-num">
+            <p class="manager-mobile">{{stationDetailList.telphone}}</p>
+            <p class="manager-name">阿姨&nbsp;</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="address-location">
+        <img src="images/address-icon.png">
+        <p ng-model="stationDetailList.address">{{stationDetailList.community_address}}&nbsp;{{stationDetailList.address}}</p>
+      </div>
+
+    </div>
+
+
+
+    <!--&lt;!&ndash;<div class="location-block">&ndash;&gt;-->
+      <!--&lt;!&ndash;<img src="images/location-icon.png">&ndash;&gt;-->
+      <!--&lt;!&ndash;<p ng-model="stationDetailList.address">{{stationDetailList.community}}</p>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+  </div>
+
+
+</div>
+
+
+<!--</body>-->
+<!--</html>-->

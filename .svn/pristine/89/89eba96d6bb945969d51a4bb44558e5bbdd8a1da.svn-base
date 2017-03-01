@@ -1,0 +1,125 @@
+/**
+ * Created by crazybear on 16/4/21.
+ */
+'use strict';
+
+var guanjiaModuleRoute = angular.module('guanjiaModuleRoute', ['ngRoute', 'ui.router', 'authService']);
+
+guanjiaModuleRoute.config(function ($stateProvider) {
+  $stateProvider
+    //.state('guanjia', {
+    //  url: '/member/cart.htm',
+    //  templateUrl: 'modules/member/user/cart/view/cart.html',
+    //  controller: 'guanjiaCtrl'
+    //})
+    .state('guanjia-comservice', {
+      url: '/guanjia/comservice.htm',
+      templateUrl: 'modules/guanjia/views/comservice.html',
+      controller: 'comServiceCtrl'
+    })
+    .state('guanjia-support', {
+      url: '/guanjia/support.htm?from',
+      templateUrl: 'modules/guanjia/views/support.html',
+      controller: 'supportCtrl'
+    })
+    .state('guanjia-sellerdetail',{
+      url:'/guanjia/sellerdetail.htm?businessId',
+      templateUrl:'modules/guanjia/views/sellerdetail.html',
+      controller:'sellerdetailCtrl'
+    })
+    .state('guanjia-goodslist',{
+      url:'/guanjia/goodslist.htm',
+      templateUrl:'modules/guanjia/views/goodslist.html',
+      controller:'goodslistCtrl'
+    })
+    /*
+     *@params:from 判断页面从哪儿跳转来
+     * from = 1; 从购物车下单成功后跳转
+     * from = 2; 从我的订单-未支付订单选择支付跳转
+     * from = 3; 从我的购买页直接支付跳转
+     */
+    .state('guanjia-pay',{
+      url:'/guanjia/pay.htm/:from',
+      templateUrl:'modules/guanjia/views/pay.html',
+      controller:'payCtrl',
+      params:{
+        obj : null
+      }
+    })
+
+    .state('ali-pay',{
+      url:'/guanjia/alipay.htm',
+      templateUrl:'modules/guanjia/views/alipay.html',
+      controller:'alipayCtrl'
+    })
+
+    .state('guanjia-shoppingonline',{
+      url:'/guanjia/shoppingonline.htm',
+      templateUrl: 'modules/guanjia/views/shoppingonline.html',
+      controller: 'shoppingCtrl'
+    })
+    .state('guanjia-callactivity',{
+      url : '/guanjia/callactivity.htm',
+      templateUrl : 'modules/guanjia/views/callactivity.html',
+      controller : 'activityCtrl'
+    })
+    .state('guanjia-activitydetail',{
+      url : '/guanjia/activitydetail.htm?activityId&from',
+      templateUrl : 'modules/guanjia/views/activitydetail.html',
+      controller : 'activityDetailCtrl'
+    })
+
+    //家庭服务-商家列表
+    .state('guanjia-familyservice',{
+      url:'/guanjia/familyservice.htm?from',
+      templateUrl: 'modules/guanjia/views/familyservice.html',
+      controller: 'familyserviceCtrl'
+    })
+
+    //家庭服务-服务列表
+    .state('guanjia-familyservicelist',{
+      url:'/guanjia/familyservicelist.htm?businessId&businessName',
+      templateUrl: 'modules/guanjia/views/familyservicelist.html',
+      controller: 'familyservicelistCtrl'
+    })
+
+    //家庭服务-服务详情
+    .state('guanjia-familyservicedetail',{
+      url:'/guanjia/familyservicedetail.htm?goodsId',
+      templateUrl: 'modules/guanjia/views/familyservicedetail.html',
+      controller: 'familyservicedetailCtrl'
+    })
+
+    //家庭金融
+    .state('guanjia-familyaccount',{
+      url:'/guanjia/familyaccount.htm',
+      templateUrl: 'modules/guanjia/views/familyaccount.html',
+      controller: 'familyaccountCtrl'
+    })
+    .state('guanjia-familyaccountlist',{
+      url:'/guanjia/familyaccountlist.htm?businessName&businessId',
+      templateUrl: 'modules/guanjia/views/familyaccountlist.html',
+      controller: 'familyaccountlistCtrl'
+    })
+    .state('guanjia-familyaccountdetail',{
+      url:'/guanjia/familyaccountdetail.htm?goodsId&goodsName',
+      templateUrl: 'modules/guanjia/views/familyaccountdetail.html',
+      controller: 'familyaccountdetailCtrl'
+    })
+    //服务预约
+    .state('guanjia-servicereserve',{
+      url:'/guanjia/servicereserve.htm:operate',
+      templateUrl: 'modules/guanjia/views/servicereserve.html',
+      controller: 'servicereserveCtrl',
+      params:{
+        obj:null
+      }
+    })
+
+    //公共服务
+    .state('guanjia-publicservice',{
+      url:'/guanjia/publicservice.htm',
+      templateUrl: 'modules/guanjia/views/publicservice.html',
+      controller: 'publicserviceCtrl'
+    })
+});

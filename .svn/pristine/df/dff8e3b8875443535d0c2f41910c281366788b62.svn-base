@@ -1,0 +1,117 @@
+.ico-info{
+  color:#3879D9;
+}
+
+.ico-success{
+  color: #008000;
+}
+.ico-warn{
+  color:#FFC636;
+}
+.ico-danger{
+  color:#ff4500;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/*头部用户信息展示样式*/
+.user {
+  /*margin-top: 51px;*/
+  overflow: hidden;
+  padding-left: 5px;
+  background:#7DB343;
+  color: #ffffff;
+}
+.user p:first-child{
+  font-size:22px;
+}
+.user p:last-child{
+  font-size:14px;
+}
+.user .pull-right>i{
+  line-height:85px;
+  font-weight:bold;
+  margin-right:15px;
+  font-size:30px;
+}
+/*用户头像*/
+.user-avatar {
+  width: 62px;
+  height:62px;
+  display: block;
+  margin: 10px;
+  float: left;
+  -webkit-border-radius: 31px;
+  -moz-border-radius: 31px;
+  border-radius: 31px;;
+}
+
+.user-info {
+  float: left;
+  overflow: hidden;
+  max-width: 60%;
+  margin-top:11px;
+  margin-left:4px;
+}
+
+.table-view{
+  margin-bottom: 49px;
+  margin-left:-7px;
+}
+.table-view .panel-ico{
+  float:left;
+  margin-right:8px;
+  margin-top:2px;
+
+}
+.table-view .panel-title{
+  font-size:14px;
+}
+.table-view .panel-title span{
+  font-size:16px;
+}
+.table-view i{
+  font-size:16px;
+  padding-top:0px;
+}
+.panel-border-none {
+  border: 1px solid transparent;
+  /*background: yellow;*/
+}
+.panel-group .panel + .panel{
+  margin-top:0px;
+}
+
+.content-padding {
+  padding: 0 0 0 0;
+  /*background: green;*/
+  /*margin-bottom: -10px;*/
+}
+
+/*列表*/
+.content-padding ul {
+  padding-left: 10px;
+  color:#333333;
+}
+.content-padding ul i{
+  font-size:14px;
+  margin-left:15px;
+  width:30px;
+}
+.content-padding ul li {
+  border-bottom: 1px solid #dddddd;
+  padding-right: 10px;
+}
+
+.content-padding ul li a {
+  display: block;
+  height: 44px;
+  line-height: 44px;
+  overflow: hidden;
+  font-size: 14px;;
+  /*background: url("/leshenghuoClient/app/images/next.png") right center no-repeat;*/
+  background-size: auto 15px;
+}
+

@@ -1,0 +1,128 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+  <!--<meta charset="UTF-8">-->
+  <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">-->
+
+  <!--&lt;!&ndash;新 Bootstrap 核心 CSS 文件 &ndash;&gt;-->
+  <!--<link rel="stylesheet" href="/leshenghuoClient/app/styles/bootstrap-3.3.5-dist/bootstrap.min.css">-->
+  <!--&lt;!&ndash; 可选的Bootstrap主题文件（一般不用引入） &ndash;&gt;-->
+  <!--<link rel="stylesheet" href="/leshenghuoClient/app/styles/bootstrap-3.3.5-dist/bootstrap-theme.min.css">-->
+  <!--&lt;!&ndash; jQuery文件。务必在bootstrap.min.js 之前引入 &ndash;&gt;-->
+  <!--<script src="/leshenghuoClient/app/scripts/common/jquery-1.11.3.js"></script>-->
+  <!--&lt;!&ndash; 最新的 Bootstrap 核心 JavaScript 文件 &ndash;&gt;-->
+  <!--<script src="/leshenghuoClient/app/scripts/common/bootstrap-3.3.5-dist/bootstrap.min.js"></script>-->
+
+
+  <!--<link rel="stylesheet" href="../../../styles/util.css">-->
+
+  <!--<title>我的小区选择</title>-->
+  <!--<style type="text/css">-->
+    <!--body{-->
+      <!--background-color: #F0EFF5;-->
+    <!--}-->
+    <!--html{-->
+      <!--font-size: 10px;-->
+    <!--}-->
+
+
+    <!--/* ******************************** 输入框组样式 ******************************** */-->
+    <!--.search-group{-->
+      <!--/*position: relative;*/-->
+      <!--height: 30px;-->
+      <!--margin-left: 50px;-->
+      <!--margin-top: 10.5px;-->
+      <!--margin-right: 10px;-->
+      <!--overflow: hidden;-->
+    <!--}-->
+
+
+    <!--.search-button{-->
+      <!--width: 30px;-->
+      <!--height: 30px;-->
+      <!--margin-right: 0px;-->
+      <!--float: right;-->
+    <!--}-->
+
+    <!--.search-input{-->
+      <!--/*background: red;*/-->
+      <!--margin-right: 35px;-->
+      <!--height: 30px;-->
+    <!--}-->
+
+    <!--.search-input input{-->
+      <!--height: 30px;-->
+      <!--margin-right: 10px;-->
+      <!--margin-left: 0px;-->
+    <!--}-->
+    <!--/*&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;列表样式-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;*/-->
+    <!--.list-group{-->
+      <!--margin-top: 50px;-->
+      <!--margin-bottom: -1px;-->
+      <!--/*margin-left: 2px;*/-->
+      <!--/*margin-right: 2px;*/-->
+      <!--background-color: white;-->
+    <!--}-->
+    <!--.list-group-item{-->
+      <!--padding: 5px;-->
+    <!--}-->
+    <!--/*.line-bottom{*/-->
+      <!--/*margin-bottom: 5px !important;*/-->
+
+    <!--/*}*/-->
+    <!--/*.line{*/-->
+      <!--/*border-bottom: 1px solid #9e9898;*/-->
+      <!--/*border-top: 1px solid #9e9898;*/-->
+      <!--/*border-left: 1px solid #9e9898;*/-->
+      <!--/*border-right: 1px solid #9e9898;*/-->
+
+
+    <!--/*}*/-->
+    <!--.name, .address{-->
+      <!--margin-left: 10px;-->
+      <!--margin-bottom: 0px;-->
+    <!--}-->
+    <!--.tel{-->
+      <!--float: right;-->
+      <!--margin-right: 20px;-->
+      <!--font-size: 13px;-->
+    <!--}-->
+    <!--.name{-->
+      <!--font-size: 16px;-->
+    <!--}-->
+    <!--.line-top{-->
+      <!--margin-top: 0px !important;-->
+    <!--}-->
+  <!--</style>-->
+<!--</head>-->
+<!--<body>-->
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png">
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入关键字搜索">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="line-bottom ">
+  <div class="se-list-group-item">
+  <p class="name">张全蛋<span class="tel">18811118888</span> </p>
+  <p class="house-address">锦绣小区 20号1011</p>
+  </div>
+</div>
+<div class="line-top">
+  <div class="se-list-group-item">
+  <p class="name">唐马儒<span class="tel">17711117777</span></p>
+  <p class="house-address">世纪花园 11号1103</p>
+  </div>
+</div>
+
+
+<!--</body>-->
+<!--</html>-->

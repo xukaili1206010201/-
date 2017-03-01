@@ -1,0 +1,142 @@
+
+/*---------------列表样式---------------------*/
+.detail-list-group{
+  margin-top:50px;
+}
+.list-group-item{
+  overflow: hidden;
+}
+.line{
+  border-bottom: 1px solid #9e9898;
+}
+.message-text{
+  width:90%;
+  margin-left: 5px;
+  float: left;
+  font-size: 17px;
+}
+.coupon{
+  float: right;
+}
+.message-text .goodsname,.ordernum,.ordertime,.detail-allmoney{
+  height: 20px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+.detail-allmoney{
+  float:right;
+  margin-right: -10px;
+}
+.list-text{
+  margin-left: 100px;
+  margin-right: 0;
+  height: 58px;
+}
+
+.orderDetail-time,.size{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.sendway{
+  margin-left: 10px;
+}
+.orderDetail-time,.size,.sendway{
+  font-size: 12px;
+}
+.message-pic{
+  float: left;
+  height: 100%;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.product-pic{
+  height: 100%;
+  float: right;
+  width: 60px;
+  margin-left: 5px;
+}
+.product-pic img{
+  width: 60px;
+  height: 60px;
+}
+.pic{
+  float: left;
+  width: 95px;
+  height: 60px;
+}
+.message-pic img{
+  width: 20px;
+  height: 20px;
+}
+.count{
+  float:right;
+}
+#orderDetail .detail-list-group .list-group-item .order-note-message {
+  /*margin-left: 25px;*/
+  margin-top: 5px;
+  margin-bottom: 0px;
+
+}
+.notetext{
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis
+}
+
+/*-------------最下方的按键------------------------*/
+.detail-button-group{
+  /*position:fixed;*/
+  /*width: 100%;*/
+  bottom: 0;
+  overflow: hidden;
+  height: 60px;
+  background-color: #c4e3f3;
+}
+
+.button-group-left1{
+  float: left;
+  width: 40%;
+  height: 100%;
+}
+
+.button-group-right1{
+  float: left;
+  width: 60%;
+  height: 100%;
+}
+
+.edit-group{
+  width: 50%;
+  height: 100%;
+  float: right;
+}
+.edit-group-all{
+  width: 26%;
+  height: 100%;
+  float: right;
+}
+.edit-group button{
+  width: 100%;
+  height: 100%;
+}
+.edit-group-all button{
+  width: 100%;
+  height: 100%;
+}
+.labletext {
+  margin-left: 15px;
+  margin-top: 15px;
+}
+.all-select-button{
+  float: inherit;
+  margin-right: 5px;
+}
+#orderDetail .code{
+  margin-top : .8rem;
+}
+.orderDetailMain{
+  margin-bottom: 0px;
+  padding:0 10px;
+}
+

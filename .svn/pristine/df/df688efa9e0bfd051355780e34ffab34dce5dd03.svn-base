@@ -1,0 +1,26 @@
+<div class="container">
+  <br>
+  <!--<form>-->
+    <!--<div class="form-group has-feedback">-->
+      <!--<label for="kw" class="sr-only">请输入搜索关键字</label>-->
+      <!--<input class="form-control" id="kw" placeholder="搜索菜品名称和原料..." ng-model="kw">-->
+      <!--<span class="form-control-feedback glyphicon glyphicon-search"></span>-->
+    <!--</div>-->
+  <!--</form>-->
+<div style="height:100px;">
+  121
+</div>
+  <div class="list-group" load-more="" pull-refresh="" style="height:200px;overflow: scroll;">
+    <ul>
+      <li ng-repeat="d in dishList" class="list-group-item">
+        <div class="media">
+          <div class="media-body">
+            <h5 class="media-heading">{{d.city_id}}</h5>
+            <p>主要食料：{{d.name}}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>

@@ -1,0 +1,60 @@
+/*body{*/
+  /*background-color: #F0EFF5;*/
+  /*/!*overflow: hidden;*!/*/
+/*}*/
+ul{
+  list-style: none;
+}
+/*.navigation-bar{*/
+
+  /*overflow: hidden;*/
+/*}*/
+
+
+.rececoupons-content{
+  margin-top: 60px;
+}
+.basic_attribute , .user_attribute{
+  margin:0px;
+  /*padding-left:10px;*/
+}
+.basic_attribute li , .user_attribute li{
+  margin:5px 5px;
+}
+
+.coupons-name{
+  font-size: 16px;
+}
+.coupons-city-type{
+  text-align: right;
+  font-size: 13px;
+}
+
+.coupons-time{
+  text-align: left;
+  font-size: 13px;
+}
+
+.workerno-field{
+  margin:20px 10px;
+
+}
+
+.rececoupons-footer{
+  bottom: 0;
+  /*background: #dddddd;*/
+}
+
+.container-button{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.btn:focus , .btn:focus , .btn:hover{
+  color: white;
+}
+/*.navbar{*/
+  /*background-color: #7CB342;*/
+/*}*/

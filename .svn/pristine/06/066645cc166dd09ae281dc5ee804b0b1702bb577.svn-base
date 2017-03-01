@@ -1,0 +1,41 @@
+.activities-content{
+  margin-top: 50px;
+}
+
+.activities-row{
+  padding: 1rem;
+  border-bottom: 1px solid #F0EFF6;
+  overflow: hidden;
+}
+
+.activities-img{
+  width: 5rem;
+  height: 5rem;
+  float: left;
+  margin-bottom: 0.5rem;
+}
+
+.activities-row-right{
+  /*float: right;*/
+  padding-left: 1rem;
+  overflow: hidden;
+}
+
+.activities-row-right p{
+  margin: 0;
+}
+
+.activities-name{
+  font-size: 1.4rem;
+}
+
+.activities-time-start{
+  clear: both;
+}
+.activities-time-start , .activities-time-end , .activities-time-join , .activities-time-approve ,
+.activities-intro{
+  margin:0;
+  font-size: 1.2rem;
+  margin-top: 0.3rem;
+  clear: both;
+}

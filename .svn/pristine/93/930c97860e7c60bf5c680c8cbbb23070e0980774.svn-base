@@ -1,0 +1,16 @@
+.neighborhood-social{
+  margin-top:65px;
+}
+.neighborhood-social div{
+  width:33%;
+  float:left;
+  text-align: center;
+}
+.neighborhood-social div img{
+  width:7rem;
+  height:7rem;
+}
+.neighborhood-social div span{
+  display: block;
+  margin:5px;
+}

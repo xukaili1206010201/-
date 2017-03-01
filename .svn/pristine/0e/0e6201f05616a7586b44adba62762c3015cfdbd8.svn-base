@@ -1,0 +1,81 @@
+<script>
+  $(function(){
+    var screenWidth = $(window).width();
+    var screenHeight = $(window).height();
+    $('.followus-content').css({
+      'width':screenWidth,
+      'height':screenHeight,
+      'background':'rgb(235,235,241)'
+    });
+  });
+</script>
+
+
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goToUserCenter()">
+
+    <!-- 搜索框组-->
+    <div class="navigationbar-item">
+      <p class="item-title">关注我们</p>
+    </div>
+  </div>
+</nav>
+
+
+<div class="followus-content">
+
+  <div class="sharetofriends text-center">
+
+    <div class="wx">
+      <div class="wxcode-block">
+        <div id="wx-code"></div>
+      </div>
+      <p class="qrcode-type">微信公众账号</p>
+    </div>
+
+    <div class="app">
+      <div class="apple">
+        <div class="applecode-block">
+          <div id="apple-code"></div>
+        </div>
+        <p class="qrcode-type">苹果应用二维码</p>
+      </div>
+
+      <div class="android">
+        <div class="androidcode-block">
+          <div id="android-code"></div>
+        </div>
+        <p class="qrcode-type">安卓应用二维码</p>
+      </div>
+    </div>
+
+    <div class="share-block">
+      <button type="button" class="btn btn-block btn-success -mob-share-open" ng-click="share()">分享给好友</button>
+    </div>
+
+  </div>
+
+  <div class="recommend">
+    <div class="recommend-block">
+      <input ng-model="friendsMobile" type="text" maxlength="11" class="form-control" placeholder="好友手机">
+      <button class="btn btn-block btn-success" ng-click="recommedToFriends()">推荐给好友</button>
+    </div>
+  </div>
+
+</div>
+
+<!--<div class="-mob-share-ui-button -mob-share-open">分享</div>-->
+<div class="-mob-share-ui" style="display: none">
+  <ul class="-mob-share-list">
+    <li class="-mob-share-weibo"><p>新浪微博</p></li>
+    <li class="-mob-share-qzone"><p>QQ空间</p></li>
+    <li class="-mob-share-weixin"><p>微信</p></li>
+  </ul>
+  <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=12bcc2ac76b9a"></script>
+<!--MOB SHARE END-->

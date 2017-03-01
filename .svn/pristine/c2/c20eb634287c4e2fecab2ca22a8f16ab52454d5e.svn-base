@@ -1,0 +1,284 @@
+'use strict';
+
+var userService = angular.module('userService', []);
+
+userService.factory('userService', function ($http, commonService, $q,$timeout,$cookies) {
+
+  var service = { // our factory definition
+
+    getIOSInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getIOSInfo.action';
+      return $http.get(url, params);
+    },
+
+    getIOSSyncInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getIOSInfo.action';
+      return commonService.handleSyncData(url, params);
+    },
+
+
+    //获取项目配置信息
+    getProjectConfigInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getProjectConfigInfo.action';
+      return $http.post(url, params);
+    },
+
+    //添加令牌
+    dynamicAddParamsOfTicket:function(params){
+
+      var apiParams = new Array();
+      var ticketKey = 'ticket';
+      var ticketValue = $cookies.get('ticket');
+      //添加令牌参数到参数组中
+      //var str = "params." + key + "=" + ticket + "";
+      //// //使用eval执行
+      //console.log(str);
+      //eval(str);
+      for (var key in params) {
+        apiParams[key] = params[key];
+      }
+      apiParams[ticketKey] = ticketValue;
+      return apiParams;
+    },
+
+
+    //登录
+    memberLogin: function (params) {
+      var url = commonService.getBaseParams().url + 'login.action';
+      return $http.post(url, params);
+    },
+    //获取微信用户的openId
+    getOpenId: function (params) {
+      var url = commonService.getBaseParams().url + 'getOpenId.action';
+      return $http.post(url, params);
+    },
+    //注销登录
+    loginOut: function (params) {
+      console.log(params)
+      var url = commonService.getBaseParams().url + 'loginOut.action';
+      return $http.post(url, params);
+    },
+    //注册
+    memberRegister: function (params) {
+      var url = commonService.getBaseParams().url + 'register.action';
+      return $http.post(url, params);
+    },
+
+    //获取验证码
+    getSMSCode: function (params) {
+      var url = commonService.getBaseParams().url + 'getSMSCode.action';
+
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //密码设置
+    editPassword: function (params) {
+      var url = commonService.getBaseParams().url + 'editPassword.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //个人信息设置
+    editUserInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'editUserInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //手机号码设置
+    editMobileInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'editMobile.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //获取用户信息
+    getUserInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getUserInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+    //获取系统配置信息
+    getSystemConfigInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getSystemConfigInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //头像上传
+    editHeadImgurl: function (params) {
+      var url = commonService.getBaseParams().url + 'editHeadImgurl.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //订单详情
+    getOrder: function (params) {
+      var url = commonService.getBaseParams().url + 'getOrder.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //删除订单
+    givingUserCoupons: function (params) {
+      var url = commonService.getBaseParams().url + 'givingUserCoupons.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    /********我的业务***********/
+    //我粉丝的验证码
+    listCode: function (params) {
+      var url = commonService.getBaseParams().url + 'listCode.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //我报名的活动
+    listActivityBaoming: function (params) {
+      var url = commonService.getBaseParams().url + 'listActivityBaoming.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //用户城市列表
+    listUserCity: function (params) {
+      var url = commonService.getBaseParams().url + 'listUserCity.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    save: function (params) {
+      var url = commonService.getBaseParams().url + 'datas/audio/workset/save';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    saveSync: function (params) {
+      var url = commonService.getBaseParams().url + 'datas/audio/workset/save';
+      return commonService.handleSyncData(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+
+    postRequestWithUrlAndParams: function (apiUrl, params) {
+
+      if (apiUrl.length == 0) {
+        return;
+      }
+
+      var url = commonService.getBaseParams().url + apiUrl;
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+    postRequestWithPageNo: function (params) {
+      if (params.url.length == 0) {
+        console.log("post请求url不能为空");
+        return;
+      }
+      var url = commonService.getBaseParams().url + params.url;
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+
+    getRequestWithUrlAndParams: function (apiUrl, params) {
+
+      if (apiUrl.length == 0) {
+        console.log("get请求url不能为空");
+        return;
+      }
+      var url = commonService.getBaseParams().url + apiUrl;
+
+      return $http.get(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+
+    getReceive: function (params) {
+      var defer = $q.defer();
+      $http.post(commonService.getBaseParams().url + 'editUserCoupons.action', this.dynamicAddParamsOfTicket(params))
+        .success(function (response) {
+          defer.resolve(response);
+        }).error(function (response) {
+          defer.reject();
+        });
+      return defer.promise;
+    },
+
+
+    handleOrder : function(goodLis,orderLis,goodS,changeGoodS,oparate,url,orderType){
+      var orderIdArr = [];
+      var goodIdArr = [];
+      var isContinue = true;
+      var isType = false;
+      var dateTime;
+      //遍历商品，获取选中的商品的goods_id
+      $.each(goodLis,function(index,domEl){
+        if($(domEl).hasClass('checked')){
+          var good_type = $(domEl).parent().next().html();
+          //判断商品的状态是否符合相应操作需要的状态
+          if($(domEl).prev().html() != goodS){
+            isContinue = false;
+            return false;
+          }else if((oparate == '确认收货' || oparate == '取消确认收货') && good_type == 'Y'){ //商品为已发货且是定时商品
+            isContinue = false;
+            isType = true;
+            return false;
+          }else{
+            goodIdArr.push($(domEl).next().html());
+          }
+        }
+      });
+
+      if(orderType == '我的订单'){
+        //遍历订单，获取选中订单的order_id
+        $.each(orderLis,function(index,domEl){
+          if($(domEl).hasClass('checked')){
+            orderIdArr.push($(domEl).next().html());
+          }
+        });
+      }else{//如果是订单详情页，则直接获取order_id(即orderLis=order_id)
+        if($('.orderSure').hasClass('checked')){
+          orderIdArr.push(orderLis);
+        }
+      }
+
+      if(isContinue){
+        var params = {
+          'mobile' : localStorage.mobile,
+          'order_id' : orderIdArr.join(),
+          'goods_id' : goodIdArr.join()
+        };
+
+        $http.post(commonService.getBaseParams().url + url, params)
+          .success(function (response) {
+            console.log(response.code);
+            if(response.code == '0'){
+              commonService.showSuccessMessage(oparate+'申请成功！');
+              dateTime = new Date();
+              $.each(goodLis,function(index,domEl){
+                if($(domEl).hasClass('checked')){
+                  if(oparate == '确认收货'){
+                    //确认收货一分钟内显示取消确认收货按钮
+                      $('.cancelConfirm').removeClass('statusHide');
+                      $('.spanStatus').css('display','none');
+                      $(domEl).prev().html(changeGoodS);
+                    $(domEl).parents('.list-group-item').find('.good-status').html(changeGoodS);
+                    $timeout(function(){
+                      $('.cancelConfirm').addClass('statusHide');
+                      $('.spanStatus').css('display','block');
+                    },60000);
+                  }else if(oparate == '取消确认收货'){
+                    $(domEl).parents('.list-group-item').find('.good-status').html(changeGoodS);
+                    $('.cancelConfirm').addClass('statusHide');
+                    $('.spanStatus').css('display','block');
+                  }else{
+                    $(domEl).parents('.list-group-item').find('.good-status').html(changeGoodS);
+                  }
+                }
+              });
+
+            }else{
+              commonService.showErrorMessage(oparate+'操作失败！');
+            }
+          });
+      }else if(goodS == '已发货' && isType){
+        commonService.showWarnMessage('选择商品中有定时商品，无法执行该操作！');
+      }else{
+        commonService.showWarnMessage('选择商品中有非'+goodS+'状态，无法执行该操作！');
+      }
+    }
+
+  };
+  return service;
+
+});

@@ -1,0 +1,52 @@
+/**
+ * Created by 印聪 on 16/6/22.
+ */
+'use strict';
+
+var activitiesModuleController = angular.module('activitiesController', []);
+
+//我报名的活动
+activitiesModuleController.controller('myactivitiesCtrl',['$scope','userService','commonService','$state',function($scope,userService,commonService,$state){
+
+  //返回到个人中心
+  $scope.backCenter=function(){
+    $state.go('member-personal-usercenter');
+  };
+
+  userService.listActivityBaoming({
+    'mobile':localStorage.mobile,
+    'pageno':'1',
+    'pagesize':'6'
+  }).success(function(response){
+    switch (response.code){
+      case '0':
+        $scope.listActivityBaoming=response.data;
+        console.log(response.data)
+        break;
+      case '-1':
+        commonService.showWarnMessage('参数为空');
+        break;
+      case '-2':
+        commonService.showWarnMessage('参数错误');
+        break;
+    }
+
+  });
+
+  //跳转到活动详情页
+    //从某个页面跳转到活动详情
+    //from = 0 活动召集页
+    //from = 1 我报名的活动页
+  $scope.goDetail = function(activityId){
+    $state.go('guanjia-activitydetail',{
+      'activityId':activityId,
+      'from':'1'
+    });
+  };
+
+}]);
+
+activitiesModuleController.controller('myactivitiesdetailCtrl',['$scope',function($scope){
+
+}]);
+

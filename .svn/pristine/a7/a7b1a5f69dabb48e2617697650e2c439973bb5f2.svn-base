@@ -1,0 +1,75 @@
+
+.activityDetail{
+  /**background:rgba(242,49,66,1); **/
+  background: -webkit-linear-gradient(red,blue); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(red, blue); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(red, blue); /* Firefox 3.6 - 15 */
+  background: linear-gradient(rgba(242,49,66,1), #eea236); /* 标准的语法 */
+  color:#fff;
+}
+.activityDetail .activityInfo > img{
+
+}
+.activityInfo {
+
+}
+
+.activityInfoList {
+  padding: .5rem 1rem;
+  font-size: 1rem;
+}
+
+.active-list {
+  background:#FBB20D;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin:.5rem;
+  padding:.5rem;
+  font-size: 1rem;
+}
+.active-list p:first-child{
+  font-size: 1.3rem;
+  font-weight: bold;
+  color:#E10601 !important;
+}
+.activityInfoList p:first-child {
+  font-size: 1.4rem;
+  font-weight: bolder;
+  letter-spacing: .1rem;
+}
+
+.activityDetail .action-time {
+  float: right;
+  margin-right: 1rem;
+}
+
+.activityDetail .detail {
+  padding: 10px 15px;
+}
+
+.activityDetail .action-attached {
+  font-size: 1rem;
+  padding:1rem;
+  padding-top:.5rem;
+}
+
+.activityDetail .action-enter {
+  /*background-color: #F05B3D;*/
+  padding: 5px 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.activityDetail .action-enter div {
+  width: 100%;
+  float: left;
+  padding: 0px 5px;
+}
+
+.activityDetail .action-enter .btn {
+  background-color: #F1543F;
+  width: 100%;
+  border-radius: 4px;
+}

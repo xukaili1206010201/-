@@ -1,0 +1,186 @@
+.stationdetail-navbar{
+  width: 70%;
+}
+
+.content{
+  margin-top: 51px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.station-name{
+  background: #70b92c;
+  color: white;
+  font-size: 16px;
+  height: 25px;
+  line-height: 25px;
+  padding-left: 8px;
+}
+
+
+.station-images-block{
+  margin-top: 5px;
+  width: 100%;
+  height: 140px;
+}
+
+.station-images-block img{
+  width: 100%;
+  height: 100%;
+}
+
+/*覆盖小区 */
+.station-info{
+  margin-top:5px;
+  padding:5px;
+  background-color:#ddd;
+}
+.stationdetail-community{
+  font-size: 1rem;
+}
+/* 提供服务 */
+.stationdetail-service{
+  font-size: 1rem;
+}
+
+.station-manager-block{
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.station-manager-block .wxh{
+  float: right;
+}
+
+.station-manager-block .wxh img{
+  width: 67px;
+  height: 67px;
+}
+
+.station-manager-block .wxh p{
+  font-size: 1rem;
+  text-align: center;
+}
+
+.station-manager{
+  float: right;
+}
+
+.station-manager .manager-avatar{
+  float: right;
+  margin-right: 10px;
+}
+
+.station-manager .manager-avatar img{
+  width: 67px;
+  height: 67px;
+}
+
+
+.station-manager .manager-avatar p{
+  font-size: 1rem;
+  margin: 0px;
+  text-align: center;
+}
+
+.stationdetail-manager-name{
+  /*float: right;*/
+  /*margin-right: 20px;*/
+  margin-left: 1rem;
+}
+
+.stationdetail-manager-name p{
+  height: 80px;
+  line-height: 80px;
+  font-size: 20px;
+  color: #42b142;
+  /*float: right;*/
+  margin-left: 1rem;
+}
+
+
+
+.connect-block{
+  overflow: hidden;
+}
+
+.connect-block .connect-top .mobile-phone-block .num-block{
+  overflow: hidden;
+  margin-top: 10px;
+}
+.connect-top{
+  float: right;
+}
+.connect-top .num-block img{
+  float: right;
+  width: 30px;
+  height: 30px;
+}
+
+.connect-top .num-block .mobile-num{
+  float: right;
+  margin-right: 10px;
+  background: #dddddd;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.connect-top .num-block .mobile-num p{
+  margin: 0px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.connect-top .num-block .mobile-num .manager-mobile{
+  float: right;
+}
+
+.connect-top .num-block .mobile-num .manager-name{
+  height: 30px;
+  line-height: 30px;
+  float: right;
+  font-size: 7px;
+}
+
+.phone-block{
+  margin-top: 5px;
+}
+
+.location-block{
+  width:25%;
+  height:100px;
+  margin-left: 5%;
+  padding-top:30px;
+  text-align: center;
+}
+.location-block img{
+  width: 50px;
+  height: 75px;
+
+}
+
+
+.address-location{
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+
+.address-location img{
+  float: right;
+  width: 30px;
+  height: 30px;
+}
+
+.address-location p{
+  margin-right: 40px;
+  line-height: 25px;
+  background: #dddddd;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#detailMap{
+  with : 100%;
+}

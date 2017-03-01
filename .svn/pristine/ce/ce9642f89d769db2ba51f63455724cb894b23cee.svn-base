@@ -1,0 +1,212 @@
+<script type="text/javascript">
+  //设置商品名称的宽度
+  $(function () {
+
+    var screenW = $(window).width;
+    var screenH = $(window).height;
+    $('.gray-body').css({
+      'width': screenW,
+      'height': screenH
+    });
+
+    var mediaBodyW = parseInt($('.name-price').css('width'));
+    var goodsPriceW = parseInt($('.goods-price').css('width'));
+    var maxW = mediaBodyW - goodsPriceW - 5;
+    $('.goods-name').css({
+      'width': maxW + 'px'
+    });
+
+  })
+
+
+</script>
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+  </div>
+  <div class="navText">支付</div>
+</nav>
+
+<div class="pay-content gray-body">
+
+  <!-- **************************************** 订单列表 begin ******************************************-->
+  <div class="order-table">
+
+    <ul class="list-group">
+
+      <li class="list-group-item pay-order-row" style="padding: 0px;" ng-repeat="order in orderList">
+
+        <div class="section-header">
+          <div style="background: #dddddd;padding: 10px">
+            <div class="section-header-content">
+              <span class="order-no">{{order.business}}&nbsp;&nbsp;&nbsp;<span class="pay-order-no">{{order.order_no}}</span></span>
+              <span class="pay-order-id" style="display: none;">{{order.order_id}}</span>
+              <span class="order-price"><span>￥</span><span class="order-price-num">{{order.sum}}</span></span>
+
+              <p class="order-time">{{order.order_date}}</p>
+            </div>
+
+          </div>
+
+          <!--  优惠券 -->
+          <ul class="list-group coupons-table" ng-hide="order.coupons.length == 0">
+            <li class="list-group-item coupons-table-row" ng-repeat="couponsModel in order.coupons">
+              <span class="pay-coupons-info">
+                <span class="pay-coupons-name" style="float: left;">{{couponsModel.name}}</span>
+                <span ng-hide="couponsModel.type !='现金'">&nbsp;&nbsp;</span>
+                <span ng-hide="couponsModel.type =='现金'">&nbsp;&nbsp;{{couponsModel.type}}</span>
+                <span class="pay-coupons-discount">{{couponsModel.number}}</span>
+                <span>&nbsp;&nbsp;x</span>
+                <span class="pay-coupons-num">{{couponsModel.size}}</span>
+                <span class="pay-coupons-type" style="display: none">{{couponsModel.type}}</span>
+              </span>
+              <span class="numbermodify" style="float: right;">
+                <button class="numbermodify-minus" ng-click="minusCouponsNumberAction($event)">-</button>
+                <input class="numbermodify-number" value="0" disabled>
+                <button class="numbermodify-add" ng-click="addCouponsNumberAction($event)">+</button>
+              </span>
+            </li>
+          </ul>
+
+        </div>
+
+        <!--********** 商品列表 begin ********** -->
+        <ul class="media-list pay-goods-table">
+
+          <li class="media pay-goods-row" ng-repeat="goods in order.goods">
+            <span class="pay-goods-id" style="display: none;">{{goods.goods_id}}</span>
+            <div class="media-left">
+              <a>
+                <img class="media-object pay-goods-image" style="margin-top: 10px;" ng-src="{{goods.imageUrl}}"
+                     alt="...">
+              </a>
+            </div>
+            <div class="media-body pay-row-content">
+              <div class="pay-name-price">
+                <p style="margin-top: 10px;margin-bottom: 5px;">
+                  <span class="pay-goods-name">{{goods.name}}</span>
+                  <span class="pay-goods-price" style="float:right;color: orange;">￥{{goods.sale_price}}</span>
+                </p>
+              </div>
+
+              <div class="pay-guige-servicestation-count">
+                <div class="pay-guige-service-station">
+                  <div class="pay-spec-coupons" style="overflow: hidden">
+                    <div class="pay-goods-specifications">
+                      <p class="pay-goods-guige1">{{goods.guige_1}}</p>
+                      <p class="pay-goods-guige2">{{goods.guige_2}}</p>
+                    </div>
+                  </div>
+
+                  <p class="pay-goods-station" ng-hide="goods.service_station.length == 0">服务站:{{goods
+                    .service_station}}</p>
+                </div>
+
+                <div class="pay-goods-num">
+                  <span>x{{goods.count}}{{goods.unit}}</span>
+                </div>
+
+              </div>
+
+
+              <p class="pay-goods-coupons" ng-hide="goods.coupons.length == 0">{{goods.coupons}}</p>
+            </div>
+            <p class="pay-goods-remarks" ng-hide="goods.remark.length == 0">{{goods.remark}}</p>
+
+          </li>
+        </ul>
+        <!--********** 商品列表 end ********** -->
+
+        <!--  留言输入框 -->
+        <div class="remark-field-block">
+          <input type="text" class="form-control remark-field" placeholder="给卖家留言...">
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+<!-- **************************************** 订单列表 end ******************************************-->
+
+
+<!-- **************************************** 订单总额 begin ******************************************-->
+<div class="total-price-block">
+  <div class="pay-require-topline"></div>
+  <div class="total-price">
+    <span class="total-price-text">总额:</span>
+    <span class="total-price-int">￥{{orderSumPay | number:2}}</span>
+  </div>
+</div>
+<!-- **************************************** 订单总额 end ******************************************-->
+
+
+<!-- **************************************** 账户余额 begin ******************************************-->
+<div>
+  <div class="balance">
+    <div class="pay-require-topline"></div>
+    <span class="user-banlance">账户余额&nbsp;&nbsp;{{userBanlance | number:2}}</span>
+    <div class="use-balance-field">
+      <input type="number" class="form-control banlaneUsed" style="margin-top: 0.5rem;
+  height: 2.5rem;" value="0" ng-model="banlancePaid" ng-blur="losefocus(this)">
+    </div>
+  </div>
+</div>
+<!-- **************************************** 账户余额 end ******************************************-->
+
+<!-- **************************************** 需付款 begin ******************************************-->
+<div class="pay-require-block">
+  <div class="pay-require-topline"></div>
+  <p class="paid-required">需付:￥{{needsPay | number:2}}</p>
+  <div class="pay-require-topline"></div>
+</div>
+
+<!-- **************************************** 需付款 end ******************************************-->
+
+
+<!-- **************************************** 付款方式 begin ******************************************-->
+<div class="pay-type-block">
+
+  <p class="pay-type-text">选择支付方式</p>
+
+  <div class="pay-paytype">
+
+    <div class="media pay-type-content" ng-repeat="paymentModel in paymentTypeList">
+      <div class="media-left pay-type-content-left">
+        <a href="#">
+          <img class="media-object pay-type-content-left-image" style="border: 1px solid #dddddd;"
+               ng-src="{{paymentModel.logo}}">
+        </a>
+      </div>
+      <div class="media-body pay-row-content">
+        <div>
+
+          <span class="payment-platform">{{paymentModel.name}}</span>
+          <span class="payment-remarks">{{paymentModel.moeny}}</span>
+          <span class="payment-id" style="display: none">{{paymentModel.payment_id}}</span>
+
+          <!-- 单选开关-->
+          <input class="choosePaymentPlatform" type="radio" name="choosePaymentPlatform"
+                 value="{{paymentModel.payment_id}}">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- **************************************** 付款方式 end ******************************************-->
+
+<div class="pay-button-group" style="width: 100%;padding: 0px 10px;">
+  <button type="button" class="btn btn-success pay-ensurepay-button" ng-click="payAction()">确认支付
+  </button>
+</div>
+
+</div>
+
+
+<!--<iframe class="alipay-html" style="width: 100%;height: 100%;z-index: 100;display: none;position: fixed;top: 0;left: 0">-->
+
+<!--</iframe>-->
+
+

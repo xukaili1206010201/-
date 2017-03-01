@@ -1,0 +1,32 @@
+
+
+    <div id="collapse-add-form">
+      <button ng-click="addItem()">Add Item</button>
+    </div>
+    <div custom-accordion="" ng-model="collapseData" collapse-panel-id="collapse-panel" collapse-panel-body-id="collapse-panel-body">
+      <div class="panel-group" id="{{panelId}}">
+        <div class="panel panel-default" ng-repeat="item in collapseData">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <span ng-click="toggleCollapsedStates($index)" href="#{{panelBaseId}}-{{$index}}">{{item.title}}</span>
+            </h4>
+          </div>
+          <div id="{{panelBaseId}}-{{$index}}" data-parent="#{{panelId}}" class="panel-collapse collapse">
+            <!--<div class="panel-body">{{item.content}}</div>-->
+            <ul class="panel-body" ng-repeat="k in item.content">
+              <li><a href="">{{k}}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+
+    <style>
+      input { border: 1px solid #333; width: 300px;}
+      textarea { width: 300px; border: 1px solid #333; resize: none; margin: 10px 0px; padding: 3px;
+      }
+      button { margin-bottom: 20px;}
+    </style>

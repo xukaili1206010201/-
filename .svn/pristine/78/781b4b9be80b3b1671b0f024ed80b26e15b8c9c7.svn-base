@@ -1,0 +1,91 @@
+.familyservice-content{
+  margin-top: 50px;
+}
+.family-segment-tab{
+  overflow-x: scroll;
+  height:3.3rem;
+  width: 100%;
+  border-bottom:1px solid #ddd;
+}
+.familyservice-segementcontrol {
+  height: 3.3rem;
+  overflow-x: scroll;
+  display: inline-flex;
+  padding:0 1rem;
+}
+.tab-service{
+  float: left;
+  height:3.3rem;
+  line-height:3.3rem;
+  text-align: center;
+  margin-right:1rem;
+}
+.familyservice-segmentcontrol-item {
+  display:inline-block;
+  font-size: 1.3rem;
+  height:3.2rem;
+  width:6rem;
+}
+.familyservice-active {
+  color: #7DB343;
+}
+
+.familyservice-table{
+  clear:both;
+  margin-top:2rem;
+}
+
+.familyservice-row {
+  border-bottom: 1px solid #dddddd;
+  padding: 10px;
+}
+
+.familyservice-row-left {
+  width: 60px;
+  height: 60px;
+  float: left;
+  position:relative;
+}
+
+.familyservice-row-right {
+  padding-left: 10px;
+  overflow: hidden;
+}
+
+.familyservice-row-right p {
+  margin: 0;
+}
+
+.familyservice-seller-name {
+  color: #515151;
+  font-weight: bold;
+  font-size: 17px;
+}
+.familyservice-tag{
+  width: 32px;
+  height: 16px;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+.familyservice-goods-num {
+  float: right;
+}
+
+.familyservice-seller-intro , .familyservice-seller-service{
+  color: #999999;
+  font-size: 13px;
+}
+
+.hiddenH{
+  height:2px;
+}
+.tipImg{
+  width:100%;
+  height:120px;
+}
+.errMsg{
+  text-align: center;
+  font-size:1.3rem;
+}
+

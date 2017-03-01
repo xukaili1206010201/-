@@ -1,0 +1,176 @@
+
+<script>
+
+    //设置背景颜色
+    $(function () {
+      var screenW = $(window).width();
+      var screenH = $(window).height() - parseInt($('.navigationbar').css('height'));
+      $('.familyaccountlist-content').css({
+        'height': screenH
+      })
+    })
+
+
+    $(function(){
+      $("#marquee").marquee({
+//        yScroll: "bottom",
+        scrollSpeed:12,
+        pauseSpeed:1000
+      });
+    });
+
+
+//    var lastSelectedItem = '.familyaccountlist-default-selected-item'
+//    function didSelectedSegmentItem(currentItem) {
+//      $(lastSelectedItem).css({
+//        'border-bottom': 'none'
+//      })
+//      $(currentItem).css({
+//        'border-bottom': '2px solid #7DB343'
+//      })
+//      lastSelectedItem = currentItem;
+//    }
+//    function showTargetView(event) {
+//      didSelectedSegmentItem(event.target)
+//    }
+
+    // ************************************* 卡头切换效果 begin ***************************************
+    var lastSelectButton = '.all-button';
+
+    function setSelectButton(target) {
+
+      //上次选中按钮样式
+      $(lastSelectButton).css({
+        'color': '#000',
+        'border-bottom': '3px solid white'
+      });
+
+      //当前选中按钮样式
+      $(target).css({
+        'color': 'rgb(125, 179, 67)',
+        'border-bottom': '3px solid  rgb(125, 179, 67)'
+      });
+
+      lastSelectButton = target;
+    }
+
+    function showAllTable(event) {
+      setSelectButton(event.target);
+    }
+
+    function showPackageTable() {
+      setSelectButton(event.target);
+    }
+
+    function showSingleTable() {
+      setSelectButton(event.target);
+    }
+
+    function showDrinkTable() {
+      setSelectButton(event.target);
+    }
+    //************************************* 卡头切换效果 end ***************************************
+
+</script>
+
+
+
+<nav class="navbar navbar-default navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="backtofamilyaccount()">
+
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchAccount()">
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="familyaccountlist-content" ng-if="isCategory">
+
+  <!-- 商家名称 -->
+  <div class="familyaccountlist-sellername-view service-name" ng-click="jumpSellerdetail()">
+    <span class="familyaccountlist-sellername-text">{{accountbusinessName}}</span>
+    <img class="familyaccountlist-next-image" src="images/next.png">
+  </div>
+
+  <div class="marquee_box" ng-show="marqueeContent.length > 0" good-height data="{type:'1'}">
+    <div class="marquee">
+      <ul class="marquee-content-items">
+        <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="goods-segment-control change-tabs">
+    <button  class="all-button a" style="{{sty}}" ng-click="changecate('',0,'全部')" onclick="showAllTable(event)">全部<span style="width: 1px;height: 24px;background: #dddddd;float: left;margin-top: 8px"></span></button>
+
+    <button  class="package-button a" style="{{sty}}" ng-click="changecate(a.category_id,$index,'非全部')" onclick="showPackageTable(event)" ng-repeat="a in category">{{a.name}}</button>
+  </div>
+
+  <div class="familyaccountlist-table show{{count}}" ng-repeat=" count in category_count">
+    <div class="accountLists common-contentList" load-more data="{params : params,repeatFun : '$scope.accountListFun'}">
+      <div>
+        <div class="familyaccountlist-row" ng-repeat="k in accountList" ng-click="jumpaccountDetail(k.goods_id,k.name)">
+          <div class="familyaccountlist-row-left">
+            <img ng-src={{k.imageUrl}} class="img-responsive">
+          </div>
+
+          <div class="familyaccountlist-row-right">
+
+            <div class="familyaccountlist-content-top">
+
+              <div class="familyaccountlist-content-top-left">
+                <p class="familyaccountlist-service-name">{{k.name}}</p>
+                <p class="familyaccountlist-service-intro">{{k.introduction}}</p>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
+
+<!------------关键字搜索------------------------------->
+<div ng-if="!isCategory">
+  <div class="accountLists searchLists" load-more data="{params : params,repeatFun : '$scope.accountListFun'}">
+    <div>
+      <div class="familyaccountlist-row" ng-repeat="k in searchList" ng-click="jumpaccountDetail(k.goods_id,k.name)">
+        <div class="familyaccountlist-row-left">
+          <img ng-src={{k.imageUrl}} class="img-responsive">
+        </div>
+
+        <div class="familyaccountlist-row-right">
+
+          <div class="familyaccountlist-content-top">
+
+            <div class="familyaccountlist-content-top-left">
+              <p class="familyaccountlist-service-name">{{k.name}}</p>
+              <p class="familyaccountlist-service-intro">{{k.introduction}}</p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var searchH = window.screen.availHeight - parseInt($('.navigationbar').css('height'));
+  $('.searchLists').css({
+    'height' : searchH + 'px',
+    'overflow' : 'scroll',
+    'background-color' : '#F0EFF6'
+  });
+</script>

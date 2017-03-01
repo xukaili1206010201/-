@@ -1,0 +1,171 @@
+
+<script>
+  var height = window.height;
+  $('.purchase').css({
+    'min-height':height + 'px'
+  })
+
+</script>
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="back()" src="images/back_button.png">
+  </div>
+  <div class="navText">商品购买</div>
+
+</nav>
+<div class="purchase">
+
+  <ul class="list-group pu-list-group">
+
+    <!-- 商品名称 -->
+    <li class="purchase-goodsName-row">
+      <p class="purchase-goodsName font15">
+        <span class="font15"><b>{{goods.business}}</b></span>&nbsp;&nbsp;
+        <span class="font15"><b>{{goods.name}}</b></span>
+      </p>
+    </li>
+
+    <!-- 展示商品信息:图片、价格、原价、销量、库存、商品数量输入框以及对应的总价格 -->
+    <div class="purchase-goods-info">
+
+      <div class="purchase-goods-image">
+        <img class="img-responsive" src="{{goods.imageUrl}}">
+      </div>
+
+      <!-- 价格，销量，库存 -->
+      <div class="purchase-goods-middle">
+        <div>
+          <span class="purchase-goods-current-price">&#165{{salePrice}}</span> <!-- 当前价格 -->
+          <span class="purchase-goods-price-unit">/{{goods.unit}}</span>        <!-- 价格单位 -->
+          <span class="purchase-goods-old-price"><s>&#165{{oldPrice}}</s></span>  <!-- 原价 -->
+        </div>
+        <div class="purchase-goods-coun-inventory">
+          <span>日销量：{{goods.day_count}}</span>&nbsp;&nbsp;
+          <!-- 库存＝-1表示该商品不限库存 -->
+          <span ng-hide="goods.inventory == -1">库存：{{goods.inventory}}</span>
+        </div>
+      </div>
+
+      <div class="purchase-goods-right">
+        <div class="purchase-numoperater">
+          <span class="decrease-button" ng-click="decrease()" >－</span>
+          <input ng-keyup="inputChange($event)" type="number" ng-model="count" class="pu-number-input"
+          value="{{goods.goods_count}}">
+          <span class="increase-button" ng-click="increase()">＋</span>
+        </div>
+
+        <div class="purchase-totalprice">
+          总额  <span style="color: #E79D1E;">&#165{{totalPrice}}</span>
+          <!--总额 : ¥{{goods.sale_price*count}}-->
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <!-- 服务站与选择服务站 -->
+    <li class="list-group-item goods-purchase-detail station-li purchase-servicestation-row"
+        ng-if="delivery.length > 0">
+        <div class="purchase-bottom">
+
+          <!-- 提货方式 -->
+        <div class="purchase-express-type">
+          <!--<select style="height: 100%;margin-left:-3.5px" ng-change="selChange()" ng-model="selected"  tabindex="1"-->
+                  <!--class="pu-drop font15" id="purchase-delivery" ng-options="x.delivery_id as x.name for x in delivery">-->
+          <!--</select>-->
+          <select style="height: 100%;margin-left:-3.5px;text-align: right;" ng-change="selChange()"
+                  ng-model="selected"
+                  class="pu-drop font15" id="purchase-delivery">
+            <option value="{{delObject.delivery_id}}" ng-repeat="delObject in delivery">{{delObject.name}}</option>
+          </select>
+
+
+        </div>
+
+
+        <!-- 选择服务站 -->
+        <div class="pu-next purchase-selct-servicestation" ng-show="selectedDeliveryName.indexOf('服务站')>-1"
+             ng-click="jumpselectStation()">
+          <span class="purchase-stationname font15">{{station_name}}</span>
+          <span style="display: none;">{{stationId}}</span>
+        </div>
+      </div>
+    </li>
+
+
+    <!-- 规格 -->
+    <li class="list-group-item goods-purchase-detail station-li guigeList"
+        ng-repeat="b in goods.guige">
+
+      <div ng-class="$index+1==goods.guige.length?'font15 purchase-end':'font15 purchase-bottom'">
+        <span class="purchase-spec-name">{{b.key}}：</span>
+        <select ng-disabled="guige_id==''" ng-change="changeGuige(guige_id)"
+                ng-init="guige_id=goods.guige[$index]['value'][0]['guige_id']"  ng-model="guige_id" name="guigeID"
+                class="font15 dropdown pu-dropdown guigeSelect">
+          <option class = "font15" value="{{a.guige_id}}" class="size"
+                  ng-repeat="a in b.value">{{a.guige_name}}</option>
+        </select>
+      </div>
+    </li>
+
+
+    <li class="list-group-item goods-purchase-remark">
+      <textarea class="pu-textarea" ng-model="remark" placeholder="给卖家留言..."></textarea>
+    </li>
+  </ul>
+
+  <div class="purchase-content">
+    <form name="form" class="form-horizontal">
+      <div class="form-group bg-fff-title" ng-click="jumpToMyCommunitySelect(10)">
+        <label class="col-xs-5 control-label">我的小区</label>
+        <div class="col-xs-7 house-next">
+          <img class="next-pic" style="margin-right:18px;" src="images/next.png">
+        </div>
+      </div>
+      <div class="bg-fff">
+
+        <!-- 联系人姓名 -->
+        <div class="form-group">
+            <input type="text" ng-model="username" class="" id="username"
+                   placeholder="姓名*">
+        </div>
+
+        <!-- 联系人电话 -->
+        <div class="form-group">
+            <input type="tel" ng-model="telphone" class=" " id="mobile" placeholder="电话*"
+                   style="height: 3rem;line-height: 3rem;width: 100%;border: none;" maxlength="11">
+        </div>
+
+        <!-- 联系人小区 -->
+        <div class="form-group" ng-click="selectCommunity()">
+          <input type="text" ng-model="community" class="" id="community" disabled
+                 placeholder="小区*" >
+          <span style="display: none;">{{communityId}}}</span>
+          <!--<img src="images/next.png">-->
+        </div>
+
+        <!-- 联系人楼号 -->
+        <div class="form-group"  style="border:none;clear: both;">
+          <input type="text" ng-model="number" class="" id="number"
+                 placeholder="楼房号">
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="empty"></div>
+  <div class="navbar navbar-default navbar-fixed-bottom text-center buttonTwo">
+    <button class="btn btn-success btnRadius"
+            ng-disabled="goods.guige[0]['value'][0]['guige_id']==''||goods.guige[1]['value'][0]['guige_id']==''" ng-click="addcart()">放入购物车</button>
+    <button class="btn btn-success btnRadius"
+            ng-disabled="goods.guige[0]['value'][0]['guige_id']==''||goods.guige[1]['value'][0]['guige_id']==''" ng-click="jumptopay()">直接购买</button>
+  </div>
+
+
+</div>
+
+

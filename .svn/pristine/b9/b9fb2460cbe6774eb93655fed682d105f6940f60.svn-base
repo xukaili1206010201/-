@@ -1,0 +1,237 @@
+<script type="text/javascript">
+
+
+//  $(function () {
+//    $('#owl-comservice-ad').owlCarousel({
+//      autoPlay: 3000,
+//      pagination: false
+//    });
+//  });
+
+
+  $(function () {
+    var width = $(window).width();
+    var superW = $('.left-service-image').css('width');
+    var superWInt = parseInt(superW);
+
+    var leftGap = 10;
+    var rightgap = 5;
+    var ratio = (1 - (leftGap + rightgap) / superWInt) * 100;
+
+    $('.left-service-image img').css({
+      'width': ratio + '%',
+      'height': 'auto'
+    });
+    $('.right-service-image img').css({
+      'width': ratio + '%',
+      'height': 'auto'
+    });
+
+
+    //*************************** 消息、优惠券、购物车、订单 ********************************
+    var w = 44 / 320 * width;
+    var overGap = (width - w * 4) / 5;
+    $('.message-item').css({
+      'margin-left': overGap + 'px',
+      'margin-right': overGap + 'px',
+    });
+
+    $('.coupons-item').css({
+    });
+
+    $('.order-item').css({
+      'margin-left': overGap + 'px',
+      'margin-right': overGap + 'px',
+    });
+    $('.cart-item').css({
+    });
+
+    $('.message-item img').css({
+      'width': w + 'px',
+      'height': w + 'px'
+    });
+
+    $('.coupons-item img').css({
+      'width': w + 'px',
+      'height': w + 'px'
+    });
+
+    $('.order-item img').css({
+      'width': w + 'px',
+      'height': w + 'px'
+    });
+
+    $('.cart-item img').css({
+      'width': w + 'px',
+      'height': w + 'px'
+    });
+
+
+    $('.comservice-badge').css({
+      'width': 0.37 * w + 'px',
+      'height': 0.37 * w + 'px',
+      'line-height': 0.37 * w + 'px',
+      'top': 0 + 'px',
+      'right': 0 + 'px',
+      'border-radius': 0.5 * 0.37 * w + 'px',
+      '-webkit-border-radius': 0.5 * 0.37 * w + 'px',
+      '-moz-border-radius': 0.5 * 0.37 * w + 'px'
+    });
+
+
+  });
+
+
+</script>
+
+
+<!--<nav class="navbar navbar-fixed-top navigationbar commonservice-bar">-->
+  <!--<img class="image-title" src="images/title_view.png">-->
+<!--</nav>-->
+
+<!--{{adList}}-->
+<div class="comservice-content">
+  <!--轮播图-->
+  <!--<div>-->
+    <!--<carousel interval="myInterval" class="carousel-ad-images">-->
+      <!--<slide active="slide.active">-->
+        <!--<img class="adImage" src="images/1.jpg" alt="1">-->
+      <!--</slide>-->
+      <!--<slide>-->
+        <!--<img class="adImage" src="images/2.jpg" alt="2">-->
+      <!--</slide>-->
+    <!--</carousel>-->
+  <!--</div>-->
+  <div>
+    <!--<nav class="commonservice-bar">-->
+      <!--<ul>-->
+        <!--<li class="circleText">乐</li>-->
+        <!--<li class="circleText">生</li>-->
+        <!--<li class="circleText">活</li>-->
+      <!--</ul>-->
+    <!--</nav>-->
+    <nav class="commonservice-bar ">
+      <img class="circleImg" src="images/title_view.png">
+    </nav>
+    <carousel interval="myInterval" class="carousel-ad-images" ng-hide="imgShow">
+      <slide ng-repeat="slide in slides">
+
+        <!--项目圈字-->
+        <!--<nav class="navbar navigationbar commonservice-bar">-->
+          <!--<p class="navbar-text text-center" ng-bind-html="fontHtml">-->
+          <!--</p>-->
+        <!--</nav>-->
+        <img ng-src="{{slide.image}}" curousel-height class="slideImg">
+        <!--<div class="carousel-caption">-->
+          <!--<p>{{slide.text}}</p>-->
+        <!--</div>-->
+      </slide>
+    </carousel>
+  </div>
+
+  <!--占位图-->
+  <div ng-if="imgShow">
+    <img src="images/zhanwei.jpg" class="slideImg" curousel-height>
+  </div>
+
+  <!--定位-->
+  <!--<div id="position"></div>-->
+  <!-- ****************************** 消息、优惠券、购物车、订单 *****************************-->
+  <div class="comservice-user-info">
+    <div class="message-coupons-block">
+      <div class="message-item" ng-click="jumpUsermessage()">
+        <img src="images/message.png">
+
+        <div class="comservice-badge message-badge" ng-if="isShow && message">{{message}}</div>
+        <p>消息</p>
+
+      </div>
+      <div class="coupons-item" ng-click="jumpMycoupons()">
+        <img src="images/coupons.png">
+
+        <div class="comservice-badge coupons-badge" ng-if="isShow && coupons">{{coupons}}</div>
+        <p>优惠券</p>
+      </div>
+    </div>
+    <div class="cart-order-block">
+      <div class="order-item" ng-click="jumpMyorder()">
+        <img src="images/order.png">
+
+        <div class="comservice-badge order-badge" ng-if="isShow && order">{{order}}</div>
+        <p>订单</p>
+      </div>
+      <div class="cart-item" ng-click="jumpCart()">
+        <img src="images/cart.png">
+
+        <div class="comservice-badge cart-badge" ng-if="isShow && cart">{{cart}}</div>
+        <p>购物车</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rules"></div>
+
+  <!-- ************************************ 服务  ************************************-->
+  <div class="service">
+    <div class="left-service-image">
+      <img src="images/public_service.png" class="img-rounded" ng-click="jumpPublicservice()">
+      <img ng-click="jumpSupport()" src="images/special_service.png" class="img-rounded service-button-frame">
+      <img src="images/shoponline.png" ng-click="jumpShopping()" class="img-rounded service-button-frame">
+    </div>
+    <div class="right-service-image">
+      <img src="images/family_service.png" class="img-rounded" ng-click="jumpFamilyservice()">
+      <img src="images/jinrong.png" class="img-rounded service-button-frame" ng-click="jumpFamilyaccount()">
+      <img src="images/activity.png" class="img-rounded service-button-frame" ng-click="jumpActivity()">
+    </div>
+  </div>
+
+  <div class="rules" ng-if="hotData"></div>
+
+  <!-- ************************************ 热门服务  ************************************-->
+  <div class="hot-service" ng-if="hotData">
+    <div class="hot-service-title">
+      <img src="images/fire.png">
+      <span>热门服务</span>
+    </div>
+    <div class="hot-service-button">
+
+        <div class="hot-service-button-item" ng-click="Hotjump(hot.type,hot.city_fuwu_id)" ng-repeat="hot in hotData">
+          <div class="hot-service-button-itemBox">
+            <div>{{hot.name}}</div>
+            <img ng-src="{{hot.imageUrl}}" alt="">
+          </div>
+
+        </div>
+
+      <!--<img src="images/breakfast.png" alt="">-->
+      <!--<img src="images/drywash.png" alt="" class="second-image" ng-click="secondHot()">-->
+      <!--<img src="images/car_shop.png" alt="" ng-click="threeHot()">-->
+    </div>
+  </div>
+
+</div>
+
+<div class="comservice-empty"></div>
+<!-- ************************************ 底部导航栏  ************************************-->
+<div class="navbar-fixed-bottom tabbar">
+  <div class="tabbar-item">
+    <img src="images/comservice_select.png">
+    <p class="comservice-button">社区服务</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpWelfare()">
+    <img src="images/welfare_1.png">
+    <p class="comservice-button">商家福利</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpSociety()">
+    <img src="images/linli.png">
+    <p>邻里社交</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpUsercenter()">
+    <img src="images/usercenter.png">
+    <p>个人中心</p>
+  </div>
+</div>
+

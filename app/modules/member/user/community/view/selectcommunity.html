@@ -1,0 +1,47 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="/images/back_button.png" ng-click="back()">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="/images/search_button.png" ng-click="searchCommunity()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字" ng-click="communityBlur()">
+    </div>
+  </div>
+</nav>
+
+<div class="navMain" ng-if="!errMsg">
+  <p class="current-select-city-name">{{currentSelectedCityName}}</p>
+  <p class="hot_community" ng-show="hotCommunityList.length > 0">
+    热门小区
+  </p>
+  <ul ng-repeat="communityModel in hotCommunityList" class="text-center" style="word-break:keep-all;/* 不换行 */
+  white-space:nowrap;/* 不换行 */text-overflow:ellipsis;">
+    <li ng-bind="communityModel.name" ng-click="selectCommunity(communityModel)"
+        class="col-xs-4 selectcommunity-hotcommunity">{{communityModel.name}}}
+    </li>
+  </ul>
+</div>
+<div id="letter"></div>
+<div class="sort_box" ng-if="!errMsg">
+
+  <div ng-repeat="communityModel in communityList" class="sort_list">
+    <ul>
+      <li ng-click="selectCommunity(communityModel)" style="border-bottom:1px solid #ddd;" class="communityRow num_name">{{communityModel.name}}
+        <span class="status">已开通</span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+
+<div class="errMsg" ng-if="errMsg" style="margin-top:50px">{{errMsg}}</div>
+
+<div class="initials" ng-show="communityList.length > 0">
+  <ul>
+    <!--<li></li>-->
+  </ul>
+</div>

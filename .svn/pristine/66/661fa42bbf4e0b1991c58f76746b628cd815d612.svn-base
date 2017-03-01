@@ -1,0 +1,141 @@
+
+  <script>
+
+    $(function () {
+      $('#owl-ad').owlCarousel({
+        items: 1,
+        autoPlay: 3000,
+        pagination: false
+      });
+    });
+
+
+  </script>
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <div class="left-item">
+      <img class="back-button" src="images/back_button.png" ng-click="backtocomservice()">
+
+      <p ng-click="jumpSelectcity()" class="city" style="color: white; padding-right: 5px;"> {{city_name}} <span
+        class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>
+    </div>
+
+    <div class="navigationbar-item">
+      <div class="search-button">
+        <img src="images/search_button.png" ng-click="searchAccount()">
+      </div>
+      <div class="search-field-block">
+        <div class="search-input">
+          <input type="text" class="form-control" placeholder="请输入搜索关键字">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+
+<div class="familyaccount-content" ng-if="isShowAccount">
+  <!--轮播图-->
+  <div ng-if="slides">
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides" active="slide.active">
+          <img ng-src="{{slide.image}}" class="slideImg" curousel-height>
+          <!--<div class="carousel-caption">-->
+            <!--<p>{{slide.text}}</p>-->
+          <!--</div>-->
+        </slide>
+      </carousel>
+    </div>
+
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.jpg" curousel-height class="slideImg">
+    </div>
+  </div>
+
+  <!-- 跑马灯 -->
+  <div class="marquee_box" ng-if="marqueeContent.data">
+    <div class="marquee">
+      <ul class="marquee-content-items">
+        <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!--提示区-->
+  <div>
+    <img class="familyaccount-prompt support-prompt" src="images/tishi.jpg" alt="">
+  </div>
+
+  <!-- 列表 -->
+  <div class="familyaccount-table" load-more data="{params : params,repeatFun : '$scope.familyAccount'}">
+    <div>
+      <div class="familyaccount-row" ng-repeat="b in familyaccountList" ng-click="jumpaccountlist(b.name,b.business_id)">
+
+      <div class="familyaccount-row-left">
+        <img ng-src={{b.logo}} class="img-responsive">
+      </div>
+
+      <div class="familyaccount-row-right">
+        <p>
+           <span class="familyaccount-seller-name">
+            {{b.name}}
+             <img ng-show="b.hot == 'Y'" src="images/fire.png">
+             <img ng-show="b.new == 'Y'" class="img-responsive familyaccount-tag" src="images/newtag.png">
+           </span>
+          <span class="familyaccount-goods-num">{{b.goods_count}}</span>
+        </p>
+
+        <p class="familyaccount-seller-intro">{{b.introduction}}</p>
+
+        <p class="familyaccount-seller-service">{{b.service}}</p>
+      </div>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+  <!------------------关键字搜索------------------------------>
+<div ng-if="!isShowAccount">
+  <!-- 列表 -->
+  <div class="familyaccount-search" load-more data="{params : params,repeatFun : '$scope.familyAccount'}">
+    <div>
+      <div class="familyaccount-row" ng-repeat="b in searchAccountList" ng-click="jumpaccountlist(b.name,b.business_id)">
+
+        <div class="familyaccount-row-left">
+          <img ng-src={{b.logo}} class="img-responsive">
+        </div>
+
+        <div class="familyaccount-row-right">
+          <p>
+           <span class="familyaccount-seller-name">
+            {{b.name}}
+             <img ng-show="b.hot == 'Y'" src="images/fire.png">
+             <img ng-show="b.new == 'Y'" class="img-responsive familyaccount-tag" src="images/newtag.png">
+           </span>
+            <span class="familyaccount-goods-num">{{b.goods_count}}</span>
+          </p>
+
+          <p class="familyaccount-seller-intro">{{b.introduction}}</p>
+
+          <p class="familyaccount-seller-service">{{b.service}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    var searchH = window.screen.availHeight - parseInt($('.navigationbar').css('height'));
+    $('.familyaccount-search').css({
+      height : searchH + 'px',
+      overflow : 'scroll'
+    });
+  </script>
+

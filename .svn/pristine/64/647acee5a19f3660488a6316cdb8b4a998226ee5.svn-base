@@ -1,0 +1,46 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <div class="left-item">
+      <img class="back-button" ng-click="backtocomservice()" src="images/back_button.png">
+
+      <!--<p ng-click="jumpSelectcity()" class="city" style="color: white; padding-right: 5px;">{{city_name}} <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>-->
+      <p class="city" usercity-select>
+        <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}</span>
+        <select ng-show="citySelect" usercity-select class="citySelect" ng-model="usercityId" ng-options="x.city_id as x.name for x in usercityList"></select>
+        <!--<span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>-->
+      </p>
+    </div>
+
+    <div class="navigationbar-item">
+      <div class="search-button">
+        <img src="images/search_button.png">
+      </div>
+      <div class="search-field-block">
+        <div class="search-input">
+          <input type="text" class="form-control" placeholder="请输入搜索关键字">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div>
+  <ul class="list-group" ng-show="listActivity.length > 0">
+    <li class="list-group-item" ng-repeat="k in listActivity" ng-click="goDetail(k.activity_id)">
+      <div class="media">
+        <div class="media-left">
+          <a href="#">
+            <img class="media-object" ng-src="{{k.logo}}" alt=""/>
+          </a>
+        </div>
+        <div class="media-body">
+          <p>{{k.name}}</p>
+          <p>{{k.introduction}}</p>
+          <p>{{k.start_date}}~{{k.end_date}}</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="text-center" ng-hide="listActivity.length > 0" style="margin-top:80px;font-size: 1.5rem;">暂无活动信息！</div>
+</div>

@@ -1,0 +1,141 @@
+.familyservicelist-content {
+  margin-top: 50px;
+  width: 100%;
+  background: #F0EFF6;
+}
+
+.familyservicelist-sellername-view {
+  height: 3rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  vertical-align: middle;
+}
+
+.familyservicelist-sellername-text {
+  height: 2rem;
+  line-height: 2rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.familyservicelist-next-image {
+  width: 2rem;
+  margin-top: 0;
+  height: auto;
+  float: right;
+}
+
+.familyservicelist-marquee {
+  width: 100%;
+  height: 3rem;
+}
+
+/*.familyservicelist-dropdown-menu {*/
+  /*width: 100%;*/
+  /*padding: 1rem;*/
+/*}*/
+
+/*.familyservicelist-dropdown {*/
+  /*background: white;*/
+  /*width: 100%;*/
+  /*height: 3rem;*/
+/*}*/
+
+.familyservicelist-segmentcontrol {
+  width: 100%;
+  height: 30px;
+  background: white;
+}
+
+.familyservicelist-segment-item {
+  background: white;
+  /*width: 25%;*/
+  height: 100%;
+  border: none;
+  outline: none;
+  float: left;
+}
+
+.familyservicelist-active {
+  border-bottom: 2px solid #7DB343;
+}
+
+.familyservicelist-row {
+  padding: 1rem;
+  background: white;
+  margin-top: 1px;
+  overflow: hidden;
+}
+
+.familyservicelist-row-left {
+  float: left;
+  position:relative;
+}
+
+.familyservicelist-row-left img {
+  width: 5rem;
+  height: auto;
+}
+
+.familyservicelist-content-top{
+  overflow: hidden;
+  padding-left: 1rem;
+}
+
+.familyservicelist-content-top-left {
+  float: left;
+}
+
+.familyservicelist-content-top-left p {
+  margin: 0;
+}
+
+.familyservicelist-service-name{
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.familyservicelist-service-intro{
+  font-size: 1.2rem;
+  color: #818181;
+}
+
+.familyservicelist-content-top-right {
+  float: right;
+}
+
+.familyservicelist-content-top-right img{
+  width: 3.5rem;
+  height: auto;
+}
+
+.familyservicelist-row-right-bottom{
+  vertical-align: bottom;
+  padding-left: 1rem;
+  overflow: hidden;
+}
+
+.familyservicelist-goods-currentprice{
+  color: orange;
+  font-size: 1.4rem;
+}
+
+.familyservicelist-goods-unit{
+  color: orange;
+  font-size: 1.2rem;
+}
+
+.familyservicelist-goods-orginalprice{
+  color: black;
+  font-size: 1.2rem;
+}
+
+.familyservicelist-goods-sellnum{
+  color: #818181;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  float: right;
+}
+.hiddenHeight{
+  height:10px;
+}

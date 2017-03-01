@@ -1,0 +1,152 @@
+/*头像编辑区域*/
+.edit-image {
+  margin-top: 51px;
+  text-align: center;
+  width: 100%;
+}
+
+/*********头像**********/
+.inputBox {
+  border-radius: 50px;
+  left: 37%;
+  width: 26%;
+}
+
+.info-input {
+  padding-bottom: 20px;
+}
+
+.inputBox, .imgBox {
+  top: 70px;
+}
+
+#newImg, #ordImg {
+  margin-top: 20px;
+  width: 26%;
+  border-radius: 50px;
+}
+
+@media screen and (min-width: 414px) {
+  #newImg, #ordImg {
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    border-radius: 60px;;
+  }
+}
+
+/*性别行 右侧的div（包裹男、switch、女三个div）*/
+.gender-select {
+  overflow: hidden;
+  /*background: greenyellow;*/
+}
+
+/*性别-男 的漂浮样式*/
+.man {
+  float: left;
+}
+
+/*开关*/
+.gendet-swicth {
+  float: left;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.first-info-submit {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.first-info-submit button {
+  width: 100%;
+}
+
+.finally {
+  margin-bottom: 100px;
+}
+
+/*底部“确认”按钮*/
+.bottom-eidt button {
+  margin-top: 5px;
+  width: 94%;
+}
+
+/*设置z-index，以使弹出框能显示出来*/
+.content {
+  z-index: 10;
+}
+
+.verfication-code-input {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+/*查询验证码按钮以及获取验证码按钮*/
+.verficationCode-button-group {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5%;
+  overflow: hidden;
+}
+
+.verficationCode-button-group button {
+  width: 47.5%;
+  float: left;
+}
+
+/*获取验证码按钮*/
+.verfication-code-get {
+  margin-left: 5%;
+}
+
+.password-input {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.newpassword-input {
+  margin-top: 10px;
+}
+
+/*取消、确认按钮组*/
+.edit-button-group {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 10px;
+}
+
+.edit-button-group button {
+  width: 47.5%;
+  float: left;
+  margin-bottom: 10px;
+}
+
+/*--------------------------------编辑密码弹框样式----------------------------------*/
+.edit-password-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: RGBA(219, 219, 221, 0.5);
+  z-index: 100;
+  display: none;
+}
+
+.edit-password-alert {
+  position: absolute;
+  background: white;
+  top: 25%;
+  left: 8%;
+  right: 8%;
+  padding-top: 8px;
+  text-align: center;
+}
+
+
+
+

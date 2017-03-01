@@ -1,0 +1,79 @@
+.couponsSeller-content{
+  margin-top: 50px;
+}
+
+.content-header{
+  overflow: hidden;
+  background: white;
+  padding: 5px;
+}
+
+.content-header-right{
+  float: right;
+  margin-right: 10px;
+}
+
+.content-header-left{
+  margin-left: 10px;
+  float: left;
+}
+
+.couponsSeller-content .sellers-table .media{
+  margin-top: 0px;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: white;
+  /*border-top: 1px solid #ddd;*/
+  border-bottom: 1px solid #ddd;
+}
+
+.img-middle{
+  width: 64px;
+  height: 64px;
+}
+
+
+.media-body{
+  overflow: hidden;
+}
+
+.content-top{
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.content-bottom{
+  margin-right: 10px;
+}
+
+.coupons-city{
+  text-align: right;
+}
+.seller-name{
+  font-size: 14px;
+  font-weight:bold;
+}
+
+.goods-num{
+  float: right;
+  margin-right: 20px;
+}
+
+.content-bottom p{
+  /*最多显示两行*/
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+
+  margin-top: 10px;
+}
+
+.sellers-table .media-list .media-body .seller-intro , .seller-goods{
+  /*最多显示两行*/
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}

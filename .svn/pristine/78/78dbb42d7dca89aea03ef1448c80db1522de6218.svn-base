@@ -1,0 +1,51 @@
+
+.familyaccountdetail-content {
+  width: 100%;
+  margin-top: 50px;
+  margin-bottom: 4rem;
+  background: #F0EFF6;
+}
+
+.familyaccountdetail-service-info {
+  background: white;
+  padding: 0.5rem 1rem;
+}
+
+.familyaccountdetail-service-info p {
+  margin: 0;
+}
+
+.familyaccountdetail-timecount {
+  margin-top: 1px;
+  padding: 0.3rem 1rem;
+  font-size: 1.3rem;
+  width: 100%;
+  height: 2.5rem;
+  line-height: 1.9rem;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.familyaccountdetail-service-detail {
+  background: white;
+  width: 100%;
+}
+
+.familyaccountdetail-service-segmentcontrol-item {
+  width: 100%;
+  height: 3rem;
+  background: white;
+  border: none;
+  color: #7DB343;
+  border-bottom: 0.3rem solid #7DB343;
+  font-size: 1.2rem;
+  margin: 0;
+  outline: none;
+}
+
+
+.familyaccountdetail-service-detail-view {
+  height: 200px;
+  background: white;
+  margin:5px 15px;
+}

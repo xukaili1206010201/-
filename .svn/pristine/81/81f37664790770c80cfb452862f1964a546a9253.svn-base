@@ -1,0 +1,117 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="backtogoodslist()" src="images/back_button.png">
+  </div>
+  <div class="navText">商品详情</div>
+
+</nav>
+
+<div class="navMain goods-detail-content">
+  <!--商品详情轮播图-->
+  <div>
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides">
+          <img ng-src="{{slide}}" curousel-height class="slideImg">
+        </slide>
+      </carousel>
+    </div>
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.png" class="slideImg" curousel-height>
+    </div>
+  </div>
+
+
+  <div class="goodsdetail goods-detail">
+    <ul>
+      <li class="goods_title">
+        <b>{{goods.name}}</b>
+      </li>
+      <li class="goods_body">
+        <p style="color:#000;font-size: 1.1rem;">{{goods.business}}</p>
+        <p>{{goods.introduction}}</p>
+      </li>
+      <li style="overflow:hidden">
+        <ul class="number">
+          <li class="sale_count">
+            <b class="moneyColor">¥</b>
+            <span ng-if="showSaleP" class="moneyColor"><b>{{goods.sale_price}}</b></span>
+            <span ng-if="!showSaleP" class="moneyColor"><b>{{goods.priceRange.min_sale_price}}~{{goods.priceRange.max_sale_price}}</b></span>
+            <b style="font-size: 10px;margin-right: 5px;" class="moneyColor">/{{goods.unit}}</b>
+            </b>
+            <s>  <span class="old_price" ng-if="showOldP">¥{{goods.old_price}}</span>
+            <span class="old_price" ng-if="!showOldP">¥{{goods.priceRange.min_old_price}}~{{goods.priceRange.max_old_price}}</span></s>
+          </li>
+          <li class="today_sales">
+            <span>日销量：{{goods.day_count}}</span>
+            <span ng-if="goods.inventory >= 0">&nbsp;&nbsp;&nbsp;&nbsp;库存：{{goods.inventory}}</span>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p ng-repeat="guige in goods.guige">
+          {{guige.key}}：
+          <span ng-repeat="val in guige.value">{{val.guige_name}}&nbsp;&nbsp;</span>
+        </p>
+      </li>
+    </ul>
+  </div>
+  <div class="count_down" ng-if="showTimeHtml != ''">
+    {{showTimeHtml}}
+  </div>
+
+  <ul class="goodDetailTabs">
+    <li ng-click="detailTab($event,'1')" class="good-common tab-active">商品详情</li>
+    <li ng-click="detailTab($event,'2')" class="good-common">销量</li>
+    <li ng-click="detailTab($event,'3')" class="good-common">评价</li>
+  </ul>
+
+  <div style="margin-top:10px;">
+    <!-- 商品详情 -->
+    <div ng-if="showType == '1'" class="descriptionBox">
+      <div class="goods-description" ng-bind-html="description"></div>
+    </div>
+    <!-- 销量图表 -->
+    <div class="chartsBox" ng-if="showType == '2'">
+      <canvas ng-if="!chartsContent" id="line" class="chart chart-line" chart-data="salesData"
+              chart-labels="labels" style="padding:0px 10px;" chart-click="onClick" chart-options="options">
+      </canvas>
+      <div ng-if="chartsContent" class="errMsg">{{errMsg}}</div>
+    </div>
+
+    <!-- 评论列表 -->
+    <div ng-if="showType == '3'" class="evaluateBox">
+        <div class="media goodsdetail-comment-row" ng-repeat="k in evaluateList">
+          <div class="media-left media-top">
+            <img class="headImg" ng-src="{{k.headImgurl}}" alt="">
+          </div>
+          <div class="media-body">
+            <h5 class="media-heading">
+             {{k.nickname}}
+              <span class="time rt">{{k.create_date}}</span>
+            </h5>
+            <div ng-if="k.star > 0" ng-bind-html="k.starimgObj" class="goodsDetail-star-pic"></div>
+            <div class="evaluate">
+              {{k.content}}
+            </div>
+          </div>
+
+          <div class="evaluate_imgBox" ng-if="k.tupian.length > 0" ng-bind-html="k.tupianObj"></div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="navbar-fixed-bottom navbar-default text-center buttonOne">
+  <button class="btn btn-success btnRadius" ng-click="jumppurchase(business_id)"><b>购买</b></button>
+</div>
+
+<script>
+  var w = window.screen.availWidth;
+  var h = 3*w/5;
+  $('.good-img').css({
+    'height' : h + 'px'
+  });
+</script>

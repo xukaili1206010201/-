@@ -1,0 +1,66 @@
+
+.goodsInfo {
+  margin-top: 5px;
+}
+
+.line-normal-wrapper .coupons_money{
+  color:rgb(248, 98, 116);
+  float:left;
+  width:25%;
+  height:80px;
+  line-height:80px;
+  text-align: center;
+  border-right:1px dashed #CCCCCC;
+  border-left: 4px solid rgb(248, 98, 116);
+}
+.line-normal-wrapper .coupons_money span{
+  font-size:1.4rem;
+  font-weight:bold;
+}
+
+.fuwu_coupons{
+  text-overflow: ellipsis;
+}
+
+.coupons-time {
+  text-align: right;
+}
+.coupons-content .list-group .coupons-row {
+  padding: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  border:none;
+  margin-bottom: 5px;
+}
+
+.coupons-content .list-group{
+ margin-bottom: 0 !important;
+}
+.unreceive-table .list-group,.outdate-table .list-group,.used-table .list-group,.unused-table .list-group{
+  margin-bottom: 0;
+}
+.media-li{
+  background: #ddd;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 3px;
+  margin-top: 5px;
+}
+.goods-content-top {
+  overflow: hidden;
+}
+
+.goods-name {
+  float: left;
+}
+
+.goods-price,.yuCount {
+  float: right;
+}
+
+.goods-content-bottom p {
+  font-size: 13px;
+}
+

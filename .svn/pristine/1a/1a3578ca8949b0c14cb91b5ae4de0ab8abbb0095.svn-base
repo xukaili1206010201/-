@@ -1,0 +1,27 @@
+<div class="weui_msg" style="padding-top:0;" ng-if="isShow">
+  <div class="weui_text_area" style="margin-bottom: 0;">
+    <h2 class="weui_msg_title">温馨<i class="fa fa-heart-o" style="color:red" aria-hidden="true"></i>提示
+    </h2>
+    <p class="weui_msg_desc">请您关注乐生活服务平台的服务号（lesnho），
+      以便您在微信中收到业务消息和系统重要公告，及时了解业务和系统动态。</p>
+  </div>
+
+  <div class="serviceNo-img">
+    <img width="60%" src="images/serviceNo.jpg"/>
+    <p style="color:#888888">请长按二维码，点击识别图中二维码</p>
+  </div>
+  <div style="text-align: left" class="weui_cells weui_cells_checkbox">
+    <label class="weui_cell weui_check_label" for="s11">
+      <div class="weui_cell_hd">
+        <input type="checkbox" class="weui_check" ng-model="ckFollow" name="checkbox1" id="s11" checked="checked">
+        <i class="weui_icon_checked"></i>
+      </div>
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>已关注</p>
+      </div>
+    </label>
+  </div>
+  <a style="width:95%;margin-top:15px;" ng-click="goNext(ckFollow)"
+     class="weui_btn weui_btn_primary">确认</a>
+
+</div>

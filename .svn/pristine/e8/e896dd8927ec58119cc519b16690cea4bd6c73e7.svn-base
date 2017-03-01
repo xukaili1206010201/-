@@ -1,0 +1,34 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="methods.backOther()">
+  </div>
+  <div class="navText">支付完成</div>
+
+</nav>
+
+<div class="weui_msg" style="margin-top:40px;">
+  <div style="margin-bottom: 10px"><i class="weui_icon_success weui_icon_msg"></i></div>
+  <p class="weui_msg_title">订单支付成功</p>
+  <p class="weui_msg_title" style="color:#ff6600">￥{{data.total}}</p>
+</div>
+<div class="weui_cells">
+  <div class="weui_cell">
+    <div class="weui_cell_bd weui_cell_primary">
+      <p>支付方式</p>
+    </div>
+    <div class="weui_cell_bd">支付金额</div>
+  </div>
+  <div class="weui_cell" ng-repeat="payInfo in data.payment">
+    <div class="weui_cell_bd weui_cell_primary">
+      <p style="color:#9d9d9d">{{payInfo.pay_name}}</p>
+    </div>
+    <div class="weui_cell_ft" style="color:#ff6600">￥{{payInfo.pay_sum}}</div>
+  </div>
+</div>
+
+<div class="weui_opr_area">
+  <p class="weui_btn_area">
+    <a class="weui_btn weui_btn_primary" ng-click="methods.shareOrder()">我要晒订单</a>
+  </p>
+</div>

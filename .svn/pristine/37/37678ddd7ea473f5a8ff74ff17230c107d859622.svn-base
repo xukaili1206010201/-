@@ -1,0 +1,384 @@
+/* ******************************** navigationbar with back-button   begin ******************************** */
+/*body{*/
+/*background-color: #F0EFF5;*/
+/*}*/
+/* ******************************** 列表 样式 ******************************** */
+.purchase {
+  background: rgb(240, 239, 247);
+  margin-top: 50px;
+  mso-ansi-font-weight: 600;
+  mso-bidi-font-weight: 600;
+  height:100%;
+}
+
+/* 商品名称 */
+.purchase-goodsName-row{
+  padding: 0 1rem 0 1rem;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background: white;
+  border-bottom: 1px solid #DCDCDC;
+}
+.purchase-goodsName{
+  height: 100%;
+  padding-top:5px;
+  padding-bottom: 5px;
+  /*border-bottom: 1px solid #DCDCDC;*/
+}
+
+/**************************** 商品信息 ****************************/
+.purchase-goods-info{
+  width: 100%;
+  background: white;
+  padding: 1rem;
+  border-bottom: 1px solid #DCDCDC;
+  overflow: hidden;
+}
+
+/* 商品图片 */
+.purchase-goods-image{
+  float: left;
+}
+.purchase-goods-image img{
+ border-radius: 3px;
+  /*width: 4rem;*/
+  /*height: 4rem;*/
+  width:64px;
+  height:36px;
+}
+/* 商品属性，如价格、销量等 */
+.purchase-goods-middle{
+  float: left;
+  height: 100%;
+  margin-left: 0.8rem;
+}
+
+/* 当前销售价格 */
+.purchase-goods-current-price{
+  color:#E79D1E;
+  font-size: 1.5rem;
+}
+/* 销价颜色 */
+.purchase-goods-price-unit{
+  color:#E79D1E;
+  font-size: 1.1rem;
+}
+.purchase-goods-old-price{
+  color:#999;
+}
+
+
+/* 日销量，库存 */
+.purchase-goods-coun-inventory{
+  margin-top: 0.6rem;
+  margin-bottom: 0px;
+}
+.purchase-goods-coun-inventory span{
+  font-size: 1rem;
+  color: dimgray;
+}
+
+/* 商品数量修改框以及总金额 */
+.purchase-goods-right{
+  float: right;
+}
+
+
+
+
+
+
+
+
+.purchase select {
+  border: none;
+}
+
+.pu-list-group {
+  padding-top: 10px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.next-pic {
+  height: 20px;
+  width: 20px;
+  float:right;
+  margin-right:5px;
+}
+
+/*.rt {*/
+  /*float: right;*/
+  /*margin-top:-2px !important;*/
+/*}*/
+
+
+.pu-dropdown {
+  float: right;
+  width: 80%;
+  margin-top: -2px;
+  background: url(../images/down.png) no-repeat right;
+  outline: none;
+}
+
+.pu-drop {
+
+  background: url(../images/down.png) no-repeat right;
+  padding-right: 30px;
+}
+
+.font15 {
+  font-size: 1.2rem;
+}
+
+
+.daysale {
+  margin-left: 10%;
+}
+
+.pu-textarea {
+  width: 100%;
+  border: 1px solid #DCDCDC;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px;
+}
+
+
+.goods-purchase-remark > input::-webkit-input-placeholder,
+.goods-purchase-remark > textarea::-webkit-input-placeholder {
+  padding-left:10px;
+  padding-top:10px;
+}
+
+.goods-purchase-remark{
+  padding:12px 5px 12px 5px;
+  font-weight: 100 !important;
+  border-left:none;
+  border-right:none;
+  border-bottom:none;
+}
+.button-group-left {
+  float: left;
+  margin-left: 6%;
+  margin-top: 8px;
+  width: 42%;
+}
+
+.button-group-right {
+  float: right;
+  margin-right: 6%;
+  margin-top: 8px;
+  width: 42%;
+}
+
+.pu-list-group .goods-pro {
+  font-size: 10px;
+  margin-top: 10px;
+}
+
+.pu-list-group .goods-pro .goods-pro-li {
+  font-size: 10px;
+  font-weight: 100;
+  color: #8A8A8A;
+  margin-left:-5px;
+}
+
+.pu-list-group .all_price {
+  font-size: 14px;
+  float: right;
+  margin-top:-3px;
+  margin-right:-5px;
+}
+
+
+/* 数量修改部分 */
+.purchase-numoperater{
+  overflow: hidden;
+}
+
+.increase-button {
+  float: left;
+  width: 2.7rem;
+  height: 2.3rem;
+  border: 1px solid #ccc;
+  line-height: 2.3rem;
+  text-align: center;
+  color: #ccc;
+  border-left: none;
+  border-radius: 0px 5px 5px 0;
+  font-size:2rem;
+}
+
+.increase-button img {
+  overflow: hidden;
+}
+
+.decrease-button {
+  float: left;
+  width: 2.7rem;
+  height: 2.3rem;
+  border: 1px solid #ccc;
+  line-height: 2.5rem;
+  text-align: center;
+  color: #ccc;
+  border-right: none;
+  -webkit-border-radius: 5px 0 0 5px;
+  -moz-border-radius:5px 0 0 5px;
+  border-radius: 5px 0 0 5px;
+  font-size:2rem;
+}
+
+.button-pic {
+  width: 100px;
+  height: 2.3rem;
+  margin-right:-2px;
+  overflow: hidden;
+}
+
+.pu-number-input {
+  width: 2.7rem;
+  height: 2.3rem;
+  border: 1px solid #ccc;
+  text-align: center;
+  float: left;
+}
+
+/*总额 */
+.purchase-totalprice{
+  margin-top: 0.3rem;
+  float: right;
+}
+
+
+.purchase-content {
+  margin-top:-15px !important;
+  /*margin-bottom: 75px;*/
+  padding-left: 8px;
+  margin-right:8px;
+  overflow:hidden;
+}
+
+.purchase-content .bg-fff-title{
+  padding-left:15px;
+  margin-bottom:-1px !important;
+}
+.purchase-content .house-next{
+  margin-top:5px;
+}
+.purchase-content .bg-fff{
+  background: #ffffff;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  clear: both;
+}
+
+.purchase-content .bg-fff .form-group{
+  margin-left:15px;
+  margin-right:15px;
+  height:4rem;
+
+  border-bottom:1px solid #EBEBEB;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom:0;
+}
+.purchase-content .bg-fff input[type=text]{
+  border:white;
+  width:100%;
+  height: 100%;
+  /*color:#BDBDBD;*/
+  font-size: 1.2rem;
+}
+.purchase-content .bg-fff #community{
+  background:url(../images/next.png) no-repeat right;
+  background-size: 20px 20px;
+}
+
+
+.purchase-content label.control-label {
+  height: 30px;
+  line-height: 30px;
+  font-size: 1.5rem;
+  text-align: left;
+}
+
+.pu-product-pic {
+  float: left;
+  margin-right: 8px;
+  width: 44px;
+  height: 44px;
+}
+.goods-purchase-detail{
+   border:none;
+}
+
+.station-li{
+  padding-top:0;
+  padding-bottom:0;
+}
+
+.purchase-servicestation-row{
+  height: 3.5rem;
+}
+
+
+.station-li .purchase-bottom{
+  border-bottom:2px solid #EBEBEB;
+  height: 100%;
+  padding:0.7rem 0px;
+  /*overflow: hidden;*/
+}
+
+.purchase-express-type{
+  float: left;
+  height: 100%;
+}
+
+
+
+.station-li .purchase-bottom .pu-next{
+  float: right;
+  min-width: 25px;
+  padding-right: 30px;
+  height: 100%;
+  overflow: hidden;
+  background:url(../images/next.png) no-repeat right;
+  background-size: 20px 20px;
+}
+
+.station-li .purchase-bottom .pu-next .purchase-stationname{
+  height: 2.1rem;
+  line-height: 2.1rem;
+}
+
+
+.station-li .purchase-end{
+  padding-top:7px;
+  padding-bottom:7px;
+}
+.house-name-block {
+  margin-top: 0px;
+  background: white;
+  width: 100%;
+  height: 40px;
+  overflow: hidden;
+  margin-left: 50px;
+}
+
+.house-name-block img {
+  float: right;
+  width: 20px;
+  height: 20px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.purchase-addcart-btn{
+  height: 35px;
+}
+.purchase-buy-btn{
+  height: 35px;
+  color: white;
+}

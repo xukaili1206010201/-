@@ -1,0 +1,102 @@
+<script type="text/javascript">
+
+  //iframe高度计算
+  var iframeH = window.screen.availHeight - $('.navigationbar').height() - $('.publicservice-segmentcontrol').height();
+  $('.goverment').css({
+    'height': iframeH + 'px'
+  });
+  $('.sqLis').css({
+    'height': iframeH + 'px',
+    'overflow': 'scroll'
+  });
+  $('.wuye').css({
+    'height': iframeH + 'px',
+    'overflow': 'scroll'
+  });
+  $('.sqLis').css({
+    'height': iframeH + 'px',
+    'overflow': 'scroll'
+  });
+</script>
+
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!-- 返回按钮-->
+  <div class="navcityLeft">
+    <img class="back-button" src="images/back_button.png" ng-click="toBack()">
+
+    <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+      <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+              ng-options="x.city_id as x.name for x in usercityList">
+      </select>
+    </p>
+  </div>
+  <div class="navcityText navigationbar-government">
+    公共服务
+  </div>
+
+
+
+  <div class="navcityRight navigationbar-publicservice">
+    <div class="search-group">
+      <input type="text" class="search-input form-control" placeholder="请输入搜索关键字">
+      <img class="search-button" src="images/search_button.png" ng-click="searchbyKey()">
+    </div>
+  </div>
+</nav>
+
+
+<div class="navMain publicservice-segmentcontrol" >
+  <a class="publicservice-sc-item" public-tab ng-repeat="menu in menuList" ng-click="showActive(menu.type,$event)">{{menu.name}}</a>
+</div>
+
+
+<!--<div class="publicservice-content">-->
+
+  <!-- 政务平台  -->
+  <div class="publicservice-government-table" ng-if="defaultType == '0'">
+    <div ng-if="!governmentUrl" style="text-align: center"><p style="font-size: 1.3rem">{{tipInfo}}</p></div>
+    <iframe id="government" ng-src="{{governmentUrl}}" class="goverment" ng-if="governmentUrl"></iframe>
+  </div>
+
+  <!-- 社区街道 -->
+  <div class="publicservice-street-table" ng-if="defaultType == '1'">
+    <div class="sqLis" load-more data="{params : shequParams,repeatFun : '$scope.shequFun'}">
+      <ul class="list-group">
+        <li ng-if="sheInfo != ''"><p style="text-align: center;font-size:1.3rem">{{sheInfo}}</p></li>
+        <li ng-if="sheInfo == ''" class="list-group-item publicservice-street-row" ng-repeat="shequ in shequLis">
+          <p>
+            <span class="publicservice-street-name">{{shequ.name}}</span>
+            <span class="publicservice-street-phone">
+              <a href="tel://{{shequ.telphone}}" class="tellColor">{{shequ.telphone}}</a>
+            </span>
+          </p>
+          <p class="publicservice-street-address">{{shequ.address}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="publicservice-manager-table" ng-if="defaultType == '2'">
+    <div class="wuye" load-more data="{params : wuyeParams,repeatFun : '$scope.wuyeFun'}">
+      <ul class="list-group">
+        <li ng-if="wuyeInfo != ''"><p style="text-align: center;font-size:1.3rem;">{{wuyeInfo}}</p></li>
+        <li ng-if="wuyeInfo == ''" class="list-group-item publicservice-manager-row" ng-repeat="wuye in wuyeLis">
+          <p class="publicservice-manager-communityname">{{wuye.community}}</p>
+          <p>
+            <span class="publicservice-manager-name">{{wuye.name}}</span>
+            <span class="publicservice-manager-phone">
+              <a href="tel://{{wuye.telphone}}" class="tellColor">{{wuye.telphone}}</a>
+            </span>
+          </p>
+          <p class="publicservice-manager-address">{{wuye.address}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+<!--</div>-->

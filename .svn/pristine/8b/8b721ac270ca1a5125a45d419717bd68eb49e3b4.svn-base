@@ -1,0 +1,116 @@
+
+<!--<link rel="stylesheet" type="text/css" href="http://f1.webshare.mob.com/code/mob-share.css">-->
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=12bcc2ac76b9a"></script>
+
+<script>
+  $(function(){
+    var screenWidth = $(window).width();
+    var screenHeight = $(window).height();
+    $('.followus-content').css({
+      'width':screenWidth,
+      'height':screenHeight,
+      'background':'rgb(235,235,241)'
+    });
+
+  });
+
+  function showShareUI(){
+    $('.followus-share').css({
+      'display':'block'
+    })
+    $('.followus-share').animate({
+      'top':0
+    })
+  }
+
+  function hiddenShareUI(){
+    $('.followus-share').animate({
+      'top':'100%'
+    })
+    $('.followus-share').css({
+      'display':'block'
+    })
+  }
+
+
+</script>
+
+<!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui  -mob-share-ui-theme -mob-share-ui-theme-slide-bottom" style="display: none">
+  <ul class="-mob-share-list">
+    <li class="-mob-share-weibo"><p>新浪微博</p></li>
+    <li class="-mob-share-qzone"><p>QQ空间</p></li>
+    <li class="-mob-share-qq"><p>QQ好友</p></li>
+    <li class="-mob-share-weixin"><p>微信</p></li>
+  </ul>
+  <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<!--MOB SHARE END-->
+
+
+
+
+
+
+<nav class="navbar navbar-fixed-top navigationbar"  ng-show="isShow">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goToUserCenter()">
+  </div>
+  <div class="navText">关注我们</div>
+</nav>
+
+
+<div class="followus-content"  ng-show="isShow">
+
+  <div class="sharetofriends text-center">
+
+    <div class="followus-qrcode">
+
+      <!-- 微信公众号 -->
+      <div class="followus-first-qrcode">
+        <img class="followus-qrcode-left-image" ng-src="{{wxgzhCode}}">
+        <p class="followus-qrcode-title">微信服务号：{{wxfwh}}</p>
+      </div>
+
+      <!-- 微信服务号 -->
+      <div class="followus-second-qrcode">
+        <img class="followus-qrcode-right-image" ng-src="{{wxdrhCode}}">
+        <p class="followus-qrcode-title">微信订阅号：{{wxdrh}}</p>
+      </div>
+
+    </div>
+
+    <div class="followus-qrcode">
+
+      <!-- 微信公众号 -->
+      <div class="followus-first-qrcode">
+        <img class="followus-qrcode-left-image" ng-src="{{appleCode}}" ng-click="goToAppleAppStore()">
+        <p class="followus-qrcode-title">苹果应用二维码</p>
+      </div>
+
+      <!-- 微信服务号 -->
+      <div class="followus-second-qrcode">
+        <img class="followus-qrcode-right-image" ng-src="{{androidCode}}" ng-click="goToAndroidAppStore()">
+        <p class="followus-qrcode-title">安卓应用二维码</p>
+      </div>
+
+    </div>
+
+    <div class="share-block">
+      <button type="button" class="btn btn-block btn-success btnRadius -mob-share-open">分享给好友</button>
+    </div>
+
+  </div>
+
+  <div class="recommend">
+    <div class="recommend-block">
+      <input ng-model="friendsMobile" type="text" maxlength="11" class="form-control" placeholder="好友手机">
+      <button class="btn btn-block btn-success btnRadius" ng-click="recommedToFriends()">推荐给好友</button>
+    </div>
+  </div>
+
+</div>
+
+

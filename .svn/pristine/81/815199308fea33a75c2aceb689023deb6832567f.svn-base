@@ -1,0 +1,50 @@
+.error{
+  margin-top:40px;
+  display: block;
+  z-index:1000 ;
+  color:#A94442;
+}
+.TagListError{
+  display: block;
+  z-index:1000 ;
+  color:#A94442;
+  margin-left:23%;
+}
+.content{
+  margin-top: 50px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+.main{
+  margin-top:50px;
+}
+.selectMain{
+  margin-top:80px;
+}
+
+/*查询验证码*/
+.verfication-code{
+  text-align: center;
+}
+.verfication-code button{
+  width:45.5%;
+  height: 35px;
+}
+.verfication-code-query{
+  margin-right: 1.5%;
+}
+/*间隔固定底部和内容*/
+.empty{
+  height:60px;
+}
+button,a{ outline: none;}
+a,a:hover{ text-decoration:none; color:#333}
+
+/*数字输入框样式*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]{
+  -moz-appearance: textfield;
+}

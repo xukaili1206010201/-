@@ -1,0 +1,62 @@
+/****************部落信息*************************/
+.tribe-content .list-group-item:first-child{
+  background-color: #ddd;
+}
+.tieInfo{
+  position:relative;
+}
+.tieInfo span{
+  font-size: 1.3rem;
+}
+.tribe-content .tie-count{
+  position:absolute;
+  /*right: 0px;*/
+  bottom:0px;
+}
+.tribe-content .list-group-item{
+  border-radius: 0px;
+}
+/***************帖子列表*****************************/
+.BBS_title span{
+  font-size: 1.2rem;
+}
+.BBS_title img{
+  margin-left: 1rem;
+}
+.BBS_info{
+  margin-top:10px;
+}
+.BBS_info span{
+  float:right;
+  padding-right:0.8rem;
+}
+.BBS_info span:first-child{
+  float: none;
+  padding-left:0px;
+}
+/**************发表帖子*********************/
+.tribe-content .express-tie{
+  background-color: #ddd;
+  padding:5px 10px;
+  position:fixed;
+  bottom: 0;
+  left:0;
+  width:100%;
+}
+.tribe-content .express-tie .btn{
+  width:100%;
+  border-radius: 4px;
+}
+
+.own{
+  /*width:90px;*/
+  /*height:30px;*/
+  float:right;
+  border: 1px solid #ddd;
+  /*padding: 5px 6px;*/
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+  margin-top:8px;
+  background-color: #fff;
+}

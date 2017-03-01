@@ -1,0 +1,29 @@
+.post-edit-content{
+  width:100%;
+  padding:10px;
+}
+.post-edit-content .property-edit textarea{
+  width:78%;
+}
+.post-edit-content #contentTie{
+  height:120px;
+  resize: none;
+}
+.post-edit-content .img-bg{
+  background-color: rgb(240, 239, 245);
+}
+.editBbsImg{
+  width:79px;
+  height:79px;
+}
+.edit-submit{
+  width:100%;
+  background-color: #ddd;
+  padding:5px 10px;
+  position:fixed;
+  bottom: 0;
+  left:0;
+}
+.edit-submit button{
+  width:100%;
+}

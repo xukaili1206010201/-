@@ -1,0 +1,53 @@
+<nav class="navbar  navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+  </div>
+  <div class="navText">优惠券领取</div>
+
+</nav>
+
+<div class="rececoupons-content">
+  <ul class="basic_attribute">
+    <li class="coupons-name">{{receiveDetail.name}}优惠券</li>
+    <li class="coupons-city-type">
+      {{receiveDetail.city}}&nbsp;&nbsp;{{receiveDetail.type}}&nbsp;{{receiveDetail.number}}
+    </li>
+    <li class="coupons-time">{{receiveDetail.start_date}}~{{receiveDetail.end_date}}</li>
+    <li>{{receiveDetail.business}} <span ng-if="receiveDetail.business && receiveDetail.goods">、</span>{{receiveDetail.goods}}
+    </li>
+    <li>{{receiveDetail.community}}</li>
+  </ul>
+
+  <div class="workerno-field">
+    <input type="text" class="form-control work-no-field" placeholder="推荐人工号*" ng-model="recommend_person">
+  </div>
+
+</div>
+
+<div class="navbar-fixed-bottom rececoupons-footer">
+  <div class="container-button">
+    <button type="button" class="btn btn-block btn-success receive-btn" ng-click="receiving()"
+            data-toggle="modal">领取
+    </button>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span ng-click="backList()"
+                                                                                          aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">领取成功，是否立即使用？</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="backList()">取消</button>
+        <button type="button" class="btn btn-primary" ng-click="goBusiness()">确认</button>
+      </div>
+    </div>
+  </div>
+</div>

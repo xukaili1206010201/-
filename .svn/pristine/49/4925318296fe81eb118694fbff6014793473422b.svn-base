@@ -1,0 +1,60 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮 -->
+    <img class="back-button" src="images/back_button.png" ng-click="goToback()">
+  </div>
+  <!-- 添加按钮 -->
+  <!--<img ng-click="addOrEditCommunity()" class="add-image" src="images/add_white.png">-->
+  <div class="navRight">
+    <!--搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchCom()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字">
+    </div>
+  </div>
+
+
+</nav>
+
+<div ng-if="!errMsg">
+  <!-- 小区所在的城市 -->
+  <div class="navMain mycommunityselect-city" style="height: 30px;background: #EBEBEB;">
+    <span style="height: 30px;line-height: 30px;margin-left: 10px">{{currentCityName}}</span>
+  </div>
+  <div class="commmunity-table"  load-more
+       data="{params : params,repeatFun : '$scope.CommunityFun'}">
+
+    <div>
+      <div class="line-wrapper" ng-repeat="communityModel in myCommunityList"
+           ng-click="didSelectedCommunity(communityModel)">
+        <div class="line-scroll-wrapper">
+          <div class="line-normal-wrapper" style="padding: 0 1rem 0rem 1rem;width:100%"
+               ng-click="editCommunity(communityModel)">
+            <div>
+              <span style="font-size: 1.4rem">{{communityModel.community}}</span>
+              <span style="float: right;">{{communityModel.number}}号楼</span>
+            </div>
+            <div>
+              <span style="font-size: 1.2rem">{{communityModel.username}}</span>
+              <span style="float: right;">{{communityModel.telphone}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="errMsg navMain" ng-if="errMsg">{{errMsg}}</div>
+
+<script>
+  var communityHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.commmunity-table').css({
+    'height': communityHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.searchCommunity').css({
+    'height': communityHeight + 'px',
+    'overflow': 'scroll'
+  });
+</script>

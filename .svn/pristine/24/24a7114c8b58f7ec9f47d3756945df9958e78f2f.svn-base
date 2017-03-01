@@ -1,0 +1,216 @@
+var messageModuleController = angular.module('messageModuleController', []);
+
+//消息列表
+messageModuleController.controller(
+  'userMessageCtrl',
+  function ($scope, $stateParams, userService, $state, commonService,$q,$cookies,$location) {
+    var skipType = localStorage.skip;//记录跳转到我的消息的页面
+    //console.log(skipType);
+    //默认请求未读消息列表
+    $scope.messageList = [];
+    $scope.params = {
+      "mobile": localStorage.mobile,
+      "city_id": sessionStorage.gpscityId,
+      "read": "0",
+      'pageno' : '1', //页码
+      'pagesize' : '15', //页数
+      "url" : 'listUserMessage.action',
+      "direction" : 'up',
+      "key" : ''
+    };
+
+    var isOver = false; //false:标志数据未加载完成
+    $scope.errMsg = '';
+    $scope.readMsg = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function(response){
+        if(response.code == '0'){
+          var tempList = response.data;
+          if (tempList.length == 0 && params.pageno == '1') {
+            $scope.errMsg = '没有相关数据';
+            return;
+          }
+
+          $scope.errMsg = '';
+          if(tempList.length < params.pagesize){
+            isOver = true;//true:标志数据加载完成
+            defer.resolve(isOver);
+          }else{
+            isOver = false;
+            defer.resolve(isOver);
+          }
+          //移除a标签中href
+          $.each(tempList,function(index,info){
+            var tmpContent = info.content;
+            if(tmpContent && tmpContent.indexOf('href') != -1){
+              var firstIndex = tmpContent.indexOf('href');
+              var lastIndex = tmpContent.lastIndexOf("'");
+              tmpContent = tmpContent.substring(0,firstIndex) + tmpContent.substring(lastIndex+1,tmpContent.length);
+              info.content = tmpContent;
+            }
+            info.content = '(' + info.create_date + ')' + info.content;
+          });
+          if(params.direction == 'down'){//下拉刷新
+            $scope.messageList = tempList;
+          }else{//上拉加载
+            $scope.messageList = $scope.messageList.concat(tempList);
+          }
+          $.getScript('scripts/common/plugins/swipeleft.js', function () {
+            addSwipeLeft();
+          });
+        }else if(response.code == '-8'){
+          $state.go('member-personal-login');
+          sessionStorage.loginLocation=$location.path();
+        }else{
+          commonService.showWarnMessage(response.data);
+        }
+      });
+      return defer.promise;
+    };
+
+
+    if(skipType == 'comservice' || skipType == 'usercenter'){
+      //从个人中心 或 首页跳转到我的消息页
+      localStorage.goBack = $stateParams.from; //from 0:首页  1：个人中心
+      $scope.showMsgType = '0'; // '0':未读，'1':已读
+      localStorage.showType = '0';
+      localStorage.sctrollTop = 0;
+    }else if(skipType == 'msgDetail'){
+      //从消息详情页跳转到我的消息页
+      $scope.showMsgType = localStorage.showType;
+      $('.msg-menu li').removeClass('cartHead');
+      if(localStorage.showType == '0'){
+        $('.unread-message-button').addClass('cartHead');
+        //
+        console.log('localStorage.scrollTop: '+typeof Number(localStorage.scrollTop));
+        $('.unread-message-table').scrollTop(Number(localStorage.scrollTop));
+      }else if(localStorage.showType == '1'){
+        $('.readed-message-button').addClass('cartHead');
+      }
+    }
+    $scope.params.read = localStorage.showType;
+    $scope.readMsg($scope.params);
+
+    //点击选项卡
+    $scope.showMsg = function(type){
+      $scope.messageList = [];
+      $scope.showMsgType = type;
+      localStorage.showType = type;
+      $scope.params.read = type;
+      $scope.params.pageno = '1';
+      $scope.readMsg($scope.params);
+    };
+
+    /***********************关键字搜索*************************/
+    var val = '';
+    $scope.searchMsg = function(){
+      $scope.messageList = [];
+      val = $('.search-input').val();
+      $scope.params.key = val;
+      $scope.params.pageno = 1;
+      $scope.readMsg($scope.params);
+    };
+    //失去焦点，获取key的值
+    $scope.msgBlur = function(){
+      $scope.params.key = $('.search-input').val();
+    };
+
+    //删除消息
+    $scope.deleteMessage = function (messageModel,event) {
+      var params = {"mobile": "18701712551", "userMessage_id": messageModel.userMessage_id};
+      userService.postRequestWithUrlAndParams('delUserMessage.action', params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var rowName = event.target.parentNode.parentNode.parentNode;
+            if(rowName.className == 'line-wrapper ng-scope'){
+              $(rowName).remove();
+              commonService.showSuccessMessage("删除成功！");
+            }
+            break;
+          case '-1':
+            commonService.showErrorMessage("参数为空!");
+            break;
+          case '-2':
+            commonService.showErrorMessage("参数错误!");
+            break;
+          case '-3':
+            commonService.showErrorMessage("操作无效");
+            break;
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+    };
+
+    //监听滚动条的scrollTop值
+    $scope.$on('scrollTop',function(event,data){
+      $scope.scrollTop = data;
+    });
+    //查看详细详情
+    $scope.readMessage = function (messageModel) {
+      console.log('$scope.scrollTop: '+$scope.scrollTop);
+      //记录跳转到消息详情页前，滚动条的位置
+      localStorage.scrollTop = $scope.scrollTop;
+     //记录消息状态：未读 || 已读
+      localStorage.showType = $scope.params.read;
+      $state.go("member-user-messagedetail",{messageId:messageModel.userMessage_id});
+    };
+
+    //返回个人中心
+    $scope.goToUserCenter = function(){
+        if(localStorage.goBack =='0'){
+          $state.go("guanjia-comservice");
+        }else{
+          $state.go("member-personal-usercenter");
+        }
+    }
+  }
+);
+
+//消息详情
+messageModuleController.controller(
+  'messageDetailCtrl',
+  function ($scope, $stateParams, userService, $state, commonService,$cookies,$location) {
+    //请求消息详情
+    var params = {
+      "userMessage_id": $stateParams.messageId
+    };
+
+    if (!params.userMessage_id) {
+      commonService.showNoticeMessage("优惠券不能为空");
+      return;
+    }
+    userService.postRequestWithUrlAndParams('getUserMessage.action', params).success(function (response) {
+      switch (response.code) {
+        case '0':
+          $scope.messageModel = response.data;
+          break;
+        case '-1':
+          commonService.showErrorMessage("参数为空");
+          break;
+        case '-2':
+          commonService.showErrorMessage("参数错误");
+          break;
+        case '-8':
+          $state.go('member-personal-login');
+          sessionStorage.loginLocation = $location.path();
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+
+    //前往消息列表
+    $scope.goToUserMessage = function(){
+      localStorage.skip = 'msgDetail';
+      $state.go("member-user-message");
+    };
+
+    //点击内容，跳转到相应的页面(优惠券详情页、订单详情页、预约单详情页)
+    $scope.goOtherDetail = function(){
+      localStorage.skip = 'messagedetail';
+      localStorage.msgId = $stateParams.messageId;
+    }
+
+  }
+);

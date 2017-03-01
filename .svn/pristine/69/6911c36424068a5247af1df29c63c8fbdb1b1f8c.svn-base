@@ -1,0 +1,24 @@
+/**
+ * Created by 印聪 on 16/6/22.
+ */
+'use strict';
+
+var activitiesModuleRoute = angular.module('activitiesRoute', ['ngRoute', 'ui.router', 'authService']);
+
+activitiesModuleRoute.config(function ($stateProvider) {
+  $stateProvider
+    .state('member-user-myactivities', {
+      url: '/member/myactivities.htm',
+      templateUrl: 'modules/member/user/activities/view/myactivities.html',
+      controller: 'myactivitiesCtrl'
+    });
+});
+
+activitiesModuleRoute.config(function ($stateProvider) {
+  $stateProvider
+    .state('member-user-myactivitiesdetail', {
+      url: '/member/myactivitiesdetail.htm',
+      templateUrl: 'modules/member/user/activities/view/myactivitiesdetail.html',
+      controller: 'myactivitiesdetailCtrl'
+    });
+});

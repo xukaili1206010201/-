@@ -1,0 +1,229 @@
+/*body{*/
+  /*background: rgb(240,240,240);*/
+/*}*/
+
+
+.commonservice-bar {
+  position: absolute;
+  z-index: 1;
+  width:100%;
+  text-align: center;
+}
+/*项目圈图*/
+.commonservice-bar .circleImg {
+  margin:10px 0px;
+  height:2.5rem;
+}
+/*******************项目圈字*******************/
+/*.commonservice-bar {*/
+  /*background-color: #85C727;*/
+/*}*/
+/*.navigationbar .image-title{*/
+  /*margin:5px;*/
+  /*padding:5px;*/
+  /*color:#85C727;*/
+  /*font-size: 1rem;*/
+  /*border-radius: 15px;*/
+  /*background-color: #fff;*/
+/*}*/
+
+.comservice-content {
+  /*position: absolute;*/
+}
+
+.owl-carousel .adImage {
+  width: 100%;
+  height: 150px;
+}
+
+.comservice-user-info {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 7px;
+  /*margin-bottom: 10px;*/
+  overflow: hidden;
+  background: white;
+}
+
+.comservice-user-info p {
+  text-align: center;
+  margin: 0px;
+  margin-top: 0.2rem;
+  font-size: 1.2rem;
+}
+
+.comservice-user-info .message-coupons-block, .cart-order-block {
+  width: 50%;
+  float: left;
+}
+
+.comservice-user-info .message-coupons-block .message-item, .coupons-item {
+  float: left;
+  /*background: red;*/
+}
+
+.comservice-user-info .cart-order-block .order-item, .cart-item {
+  float: right;
+  /*background: red;*/
+}
+
+.message-item, .coupons-item, .order-item, .cart-item {
+  position: relative;
+}
+
+.comservice-badge {
+  position: absolute;
+  background: red;
+  text-align: center;
+  color: white;
+  font-size: 1rem;
+  /*padding: 0px;*/
+}
+
+.service {
+  background: white;
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+
+.left-service-image {
+  width: 50%;
+  float: left;
+  border-right: 1px dashed #e5e5e5;
+}
+
+.right-service-image {
+  width: 50%;
+  float: left;
+}
+
+.left-service-image img {
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-right: 5px;
+  display: block;
+}
+
+.right-service-image img {
+  margin-left: 5px;
+  margin-top: 10px;
+  margin-right: 10px;
+  display: block;
+}
+
+
+
+.hot-service {
+  /*margin-bottom: 49px;*/
+  background: white;
+  /*margin-top: 10px;*/
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.hot-service-title {
+  margin-left: 10px;
+  overflow: hidden;
+  vertical-align: middle;
+  /*border-bottom: 1px solid #e5e5e5;*/
+  height: 22px;
+}
+
+.hot-service-title img {
+  display: block;
+  float: left;
+  width: 9px;
+  height: 12.5px;
+  margin-top: 5px;
+}
+
+.hot-service-title span {
+  font-size: 12px;
+  margin-top: 3px;
+  margin-left: 4px;
+  color: gray;
+  height: 22px;
+  line-height: 22px;
+}
+/*.hot-service-buttonBox{*/
+  /*width: 100%;*/
+  /*overflow-x: scroll;*/
+/*}*/
+.hot-service-button {
+  height:4rem;
+  line-height: 4rem;
+  font-size: 1.2rem;
+  color: #B0B0B0;
+  font-weight: 600;
+  border-top: 1px solid #F4F4F4;
+  /*border-bottom: 1px solid #F4F4F4;*/
+  /*display: inline-flex;*/
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+.hot-service-button-itemBox{
+  width: 33%;
+  height: 4rem;
+  display: inline-block;
+  /*float: left;*/
+  text-align: center;
+  border-left: 1px solid #F4F4F4;
+}
+.hot-service-button-item{
+  /*width:105px;*/
+}
+.hot-service-button-itemBox:first-child{
+  border-left: none;
+}
+.hot-service-button-item section{
+  width:2.5rem;
+  vertical-align: middle;
+  display:inline-block ;
+  line-height: 1.6rem;
+  margin-top:0.2rem;
+  white-space:pre-wrap
+}
+.hot-service-button-item img{
+  width:3rem;
+  height:3rem;
+  margin-left:0.5rem;
+}
+/*.hot-service-button img {*/
+  /*width: 33.3333%;*/
+  /*height: auto;*/
+  /*float: left;*/
+/*}*/
+
+.second-image {
+  border-left: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
+}
+.comservice-empty{
+  height:49px;
+}
+.cg-busy-backdrop{
+  height:600px;
+  margin-top:-230px;
+}
+
+.rules{
+  width:100%;
+  height:8px;
+  background:#F0EFF5;
+  /*margin-top: 5px;*/
+}
+/*项目圈字*/
+/*.circleText{*/
+  /*width:25px;*/
+  /*height:25px;*/
+  /*float: left;*/
+  /*padding:4px;*/
+  /*margin:10px 5px;*/
+  /*border-radius: 12px;*/
+  /*color: rgb(164, 214, 40);*/
+  /*background-color: #fff;*/
+/*}*/
+
+
+

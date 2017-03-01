@@ -1,0 +1,890 @@
+'use strict';
+
+var userService = angular.module('userService', []);
+
+userService.factory('userService', function ($http, commonService,$rootScope,$location, $q,$timeout,$cookies,$state) {
+
+  var service = { // our factory definition
+
+    getIOSInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getIOSInfo.action';
+      return $http.get(url, params);
+    },
+
+    getIOSSyncInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getIOSInfo.action';
+      return commonService.handleSyncData(url, params);
+    },
+
+
+    //获取项目配置信息
+    getProjectConfigInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getProjectConfigInfo.action';
+      return $http.post(url, params);
+    },
+
+    //添加令牌
+    dynamicAddParamsOfTicket:function(params){
+
+      var apiParams = new Array();
+      var ticketKey = 'ticket';
+      var ticketValue = $cookies.get('ticket');
+      //添加令牌参数到参数组中
+      //var str = "params." + key + "=" + ticket + "";
+      //// //使用eval执行
+      //console.log(str);
+      //eval(str);
+      for (var key in params) {
+        apiParams[key] = params[key];
+      }
+      apiParams[ticketKey] = ticketValue;
+      return apiParams;
+    },
+
+
+    //登录
+    memberLogin: function (params) {
+      var url = commonService.getBaseParams().url + 'login.action';
+      return $http.post(url, params);
+    },
+    //获取微信用户的openId
+    getOpenId: function (params) {
+      var url = commonService.getBaseParams().url + 'getOpenId.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+    //注销登录
+    loginOut: function (params) {
+      console.log(params)
+      var url = commonService.getBaseParams().url + 'loginOut.action';
+      return $http.post(url, params);
+    },
+    //注册
+    memberRegister: function (params) {
+      var url = commonService.getBaseParams().url + 'register.action';
+      return $http.post(url, params);
+    },
+
+    //获取验证码
+    getSMSCode: function (params) {
+      var url = commonService.getBaseParams().url + 'getSMSCode.action';
+
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //密码设置
+    editPassword: function (params) {
+      var url = commonService.getBaseParams().url + 'editPassword.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //个人信息设置
+    editUserInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'editUserInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //手机号码设置
+    editMobileInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'editMobile.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //获取用户信息
+    getUserInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getUserInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+    //获取系统配置信息
+    getSystemConfigInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getSystemConfigInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //头像上传
+    editHeadImgurl: function (params) {
+      var url = commonService.getBaseParams().url + 'editHeadImgurl.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+
+    //修改购物车数量
+    updCartGoodsCount:function(params){
+      var url = commonService.getBaseParams().url + "editCart.action";
+      return $http.post(url,this.dynamicAddParamsOfTicket(params))
+    },
+
+    //订单详情
+    getOrder: function (params) {
+      var url = commonService.getBaseParams().url + 'getOrder.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //删除订单
+    givingUserCoupons: function (params) {
+      var url = commonService.getBaseParams().url + 'givingUserCoupons.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    /********我的业务***********/
+    //我粉丝的验证码
+    listCode: function (params) {
+      var url = commonService.getBaseParams().url + 'listCode.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //我报名的活动
+    listActivityBaoming: function (params) {
+      var url = commonService.getBaseParams().url + 'listActivityBaoming.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //用户城市列表
+    listUserCity: function (params) {
+      var url = commonService.getBaseParams().url + 'listUserCity.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    save: function (params) {
+      var url = commonService.getBaseParams().url + 'datas/audio/workset/save';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    saveSync: function (params) {
+      var url = commonService.getBaseParams().url + 'datas/audio/workset/save';
+      return commonService.handleSyncData(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+
+    postRequestWithUrlAndParams: function (apiUrl, params) {
+
+      if (apiUrl.length == 0) {
+        return;
+      }
+
+      var url = commonService.getBaseParams().url + apiUrl;
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+    postRequestWithPageNo: function (params) {
+      if (params.url.length == 0) {
+        console.log("post请求url不能为空");
+        return;
+      }
+      var url = commonService.getBaseParams().url + params.url;
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+
+    getRequestWithUrlAndParams: function (apiUrl, params) {
+
+      if (apiUrl.length == 0) {
+        console.log("get请求url不能为空");
+        return;
+      }
+      var url = commonService.getBaseParams().url + apiUrl;
+
+      return $http.get(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+
+    getReceive: function (params) {
+      var defer = $q.defer();
+      $http.post(commonService.getBaseParams().url + 'editUserCoupons.action', this.dynamicAddParamsOfTicket(params))
+        .success(function (response) {
+          defer.resolve(response);
+        }).error(function (response) {
+          defer.reject();
+        });
+      return defer.promise;
+    },
+
+
+    /*
+     *
+     * 获取选中的商品和订单的id
+     *
+     * @params parent 字符串,选择商品和订单的div名称
+     * @params statusArray 数组,选择的商品状态
+     *
+     * 返回勾选对应的状态的数据以及是否够训吖了其他状态的标志
+     * @return Array apiParams             根据用户传入的状态返回对应状态的勾选的商品
+     * @return Array hadInvalidGoods       错误标志位，表明用户勾选的数据中是否存在其他状态的商品数据
+     *         Bool hadOtherStatusGoods    勾选商品中是否有其他状态的商品
+     *         Bool hadTimerGoods          勾选商品中是否有定时商品
+     *         Bool hadInvalidGoods        勾选商品中是否有失效商品
+     *         Bool hadTimeOutGoods        勾选商品中是否有确认收货后超过60s的商品
+     *         Bool hadDaoZhanGoods        勾选商品中是否有到站类的商品
+     */
+   getSelectedOrdersAndGoods : function(parent,statusArray){
+
+      var hadSendOrderParamsArray = [];  //存储经过处理的准备传到后台的参数
+      var selectedOrderIdTable = [];  //存储所有的勾选的订单id
+      var selectedOrderParamsTable = [];   //存储所有的勾选的订单id与商品id
+      var hadOtherStatusGoods = false; //是否勾选非已发货商品的标志
+      var hadTimerGoods = false; // 是否勾选了定时商品
+      var hadInvalidGoods = false; //是否勾选了失效商品
+      var hadTimeOutGoods = false; //是否有确认收货后超过60s的的商品
+      var hadDaoZhanGoods = false; //是否有到站类的商品
+      var goodSure = $(parent).find('.goodSure');
+
+      $.each(goodSure,function(index,domEl){
+        // var goodsStatus = $(domEl).prev().html();
+        // var isTimerGoods = $(domEl).prev().prev().html(); //是否是定时商品
+        // var isInvalidGoods = $(domEl).prev().prev().prev().html(); //商品的失效原因
+        // var sureReceivedTime = $(domEl).prev().prev().prev().prev().html()  //商品确认收货的时间
+        // var isDaoZhan = $(domEl).prev().prev().prev().prev().prev().html()  //商品是否到站
+
+        var goodsStr = $(domEl).parent().next().html();
+        var goods = JSON.parse(goodsStr);
+
+        var goodsStatus = goods.status;         //商品状态
+        var isTimerGoods = goods.time;          //是否是定时商品
+        var isInvalidGoods = goods.error;       //商品的失效原因
+        var sureReceivedTime = goods.ok_date;   //商品确认收货的时间
+        var isDaoZhan = goods.daozhan;          //商品是否到站
+
+
+
+        if($(domEl).hasClass('checked')) {
+          //如果选中并且满足订单状态，则保存good_id
+          //判断选中的商品是否是给定的状态
+          var isInvalidStatus = false;
+          for (var index = 0 ; index < statusArray.length; index ++){
+            var status = statusArray[index];
+            if (status == goodsStatus){
+              isInvalidStatus = true;
+              break;
+            }
+          }
+
+          if (isInvalidStatus) {
+
+            //判断是否勾选定时商品
+            if (isTimerGoods == true){
+              hadTimerGoods = true;
+            }
+            //判断是否勾选失效商品
+            if (isInvalidGoods.length > 0){
+              hadInvalidGoods = true;
+            }
+
+            //判断是否有到站类的商品
+            if(isDaoZhan == true){
+              hadDaoZhanGoods = true;
+            }
+
+            //判断是否勾选了群人收货后超过60s的商品
+            if(sureReceivedTime.length > 0){
+              var receiveTime  = sureReceivedTime.replace(/-/g,"/");
+              var sureReceivedDate = new Date(receiveTime);
+              var currentDate = new Date()
+              var seconds = (currentDate.getTime()-sureReceivedDate.getTime())/1000; //相差的秒数
+              var cancelConfirmOrderSeconds = parseInt($rootScope.cancel_confirm_order) * 60;
+              if (seconds > cancelConfirmOrderSeconds){
+                hadTimeOutGoods = true;
+              }
+            }
+
+
+            var goodId = $(domEl).next().html();
+            var orderId = $(domEl).parents('.list-group').find('.myOrder-orderId').html();
+            selectedOrderIdTable.push(orderId);
+            selectedOrderParamsTable.push([orderId,goodId]);
+
+          }else{
+            //遍历到非已发货商品时停止遍历，并设置标识符为勾选了非法商品
+            hadOtherStatusGoods = true;
+            return false;
+          }
+        }
+      });
+
+      //元素去重
+      var tmp = new Array();
+      for(var i in selectedOrderIdTable){
+        if(tmp.indexOf(selectedOrderIdTable[i])==-1){
+          tmp.push(selectedOrderIdTable[i]);
+        }
+      }
+      //遍历去重后的订单id,把取到的oredrid与去重后的对比,如果一样就方法哦同一个数组
+      for (var index = 0; index < tmp.length;index++){
+        var deleteObject = {};
+        var deleteGoodsTable = [];
+        var orderId = tmp[index];
+        for (var i = 0 ; i < selectedOrderParamsTable.length;i++){
+          var deleteOrderId = selectedOrderParamsTable[i][0];
+          var deleteGoodsId = selectedOrderParamsTable[i][1];
+          if (orderId == deleteOrderId){
+            deleteObject.order_id = orderId;
+            deleteGoodsTable.push(deleteGoodsId);
+          }
+        }
+        deleteObject.orderItem_id = deleteGoodsTable;
+        hadSendOrderParamsArray.push(deleteObject);
+      }
+
+      return {'apiParams':hadSendOrderParamsArray,'hadInvalidGoods':[hadOtherStatusGoods,hadTimerGoods,hadInvalidGoods,hadTimeOutGoods,hadDaoZhanGoods]}
+
+    },
+
+
+    /*
+     * 点击广告进入广告详情,当需要返回广告处时使用$state.go(localStorage.adRoute);返回
+     *
+     * @params adRoute   广告所在控制器的路由
+     * @params adParams  后台传过来的广告的参数
+     *
+     */
+
+    adLinkTo: function(adRoute,adParams){
+
+      localStorage.adRoute = adRoute;
+
+      var category = adParams.category;
+      if (category == '静态'){
+        var param = adParams.param;
+        top.location.href = param;
+      }
+      if (category == '动态'){
+        var param = adParams.param;
+        var page = param.page;
+
+        if(page == '特供服务'){
+          //特供服务
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('from', '%guanggao%', {'expires': expireDate.toUTCString()});
+          $state.go('guanjia-support');
+        }
+        if(page == '特供服务-商家服务'){
+
+          var businessId = param.bussinessId;
+
+          $cookies.put('from',"%guanggao%");
+
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          //如果商家存在，说明不是从所有商家进去的，就清除city_fuwu—id
+          $cookies.remove('city_fuwu_id');
+          $cookies.put('businessId', businessId, {'expires': expireDate.toUTCString()});
+
+          //默认选中全部卡头
+          localStorage.showType = '0';
+
+          $state.go('guanjia-goodslist');
+
+        }
+        if(page == '特供服务-全部服务'){
+          var serviceId = param.serviceId;
+
+          $cookies.put('from',"%guanggao%");
+
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('city_fuwu_id', serviceId, {'expires': expireDate.toUTCString()}); //存入当前城市的服务id
+
+          $state.go('guanjia-goodslist');
+        }
+        if(page == '特供服务-商家详情'){
+          var bussinessId = param.bussinessId;
+          $state.go('guanjia-sellerdetail', {businessId: bussinessId});
+        }
+        if(page == '特供服务-服务详情'){
+          var goods_id = param.goodsId;
+          localStorage.goodsId = goods_id;
+          localStorage.goodsDetailFrom = '%guanggao%';
+          $state.go('service-goodsDetail');
+        }
+
+        if(page == '家庭服务'){
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('from', '%guanggao%', {'expires': expireDate.toUTCString()});
+          $state.go('guanjia-familyservice');
+        }
+        if(page == '家庭服务-商家服务'){
+          var bussinessId = param.bussinessId;
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.remove('city_fuwu_id');
+          //存放商家ID
+          $cookies.put('businessId', bussinessId, {'expires': expireDate.toUTCString()});
+          $cookies.put('from','%guanggao%');
+          localStorage.showType = '0';
+          $state.go('guanjia-familyservicelist');
+
+        }
+        if(page == '家庭服务-全部服务'){
+          var serviceId = param.serviceId;
+          $cookies.put('from',"%guanggao%");
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('city_fuwu_id', serviceId, {'expires': expireDate.toUTCString()}); //存入当前城市的服务id
+          localStorage.showType = '0';
+          $state.go('guanjia-familyservicelist');
+        }
+        if(page == '家庭服务-商家详情'){
+          var bussinessId = param.bussinessId;
+          $state.go('guanjia-sellerdetail', {businessId: bussinessId});
+        }
+        if(page == '家庭服务-服务详情'){
+          var goodsId = param.goodsId;
+          localStorage.goodsDetailFrom = "%guanggao%";
+          $state.go('guanjia-familyservicedetail', {
+            goodsId: goodsId
+          });
+        }
+
+        if(page == '商家福利'){
+          $location.path('/welfare/sellerWelfare.htm');
+        }
+        if(page == '商家福利-全部商品'){
+          var serviceId = param.serviceId;
+          $cookies.put('from',"%guanggao%");
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('city_fuwu_id', serviceId, {'expires': expireDate.toUTCString()}); //存入当前城市的服务id
+          localStorage.showType = '0';
+          $state.go('guanjia-familyservicelist');
+        }
+        if(page == '商家福利-商家商品'){
+          var bussinessId = param.bussinessId;
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.remove('city_fuwu_id');
+          //存放商家ID
+          $cookies.put('businessId', bussinessId, {'expires': expireDate.toUTCString()});
+          $cookies.put('from','%guanggao%');
+          localStorage.showType = '0';
+          $state.go('guanjia-familyservicelist');
+
+        }
+        if(page == '商家福利-商家详情'){
+          var bussinessId = param.bussinessId;
+          $state.go('guanjia-sellerdetail', {businessId: bussinessId});
+        }
+        if(page == '商家福利-商品详情'){
+          var goodsId = param.goodsId;
+          localStorage.goodsDetailFrom = "%guanggao%";
+          $state.go('guanjia-familyservicedetail', {
+            goodsId: goodsId
+          });
+        }
+
+        if(page == '家庭金融'){
+          localStorage.jinrongFrom = "%guanggao%";
+          $state.go('guanjia-familyaccount');
+        }
+        if(page == '家庭金融-全部服务'){
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          var serviceId = param.serviceId;
+          $cookies.put('from',"%guanggao%",{'expires': expireDate.toUTCString()});
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('city_fuwu_id', serviceId, {'expires': expireDate.toUTCString()}); //存入当前城市的服务id
+          localStorage.showType = '0';
+          $state.go('guanjia-familyaccountlist');
+        }
+        if(page == '家庭金融-商家服务'){
+          var bussinessId = param.bussinessId;
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.remove('city_fuwu_id');
+          //存放商家ID
+          $cookies.put('businessId', bussinessId, {'expires': expireDate.toUTCString()});
+          $cookies.put('from','%guanggao%');
+          localStorage.showType = '0';
+          $state.go('guanjia-familyaccountlist');
+
+        }
+        if(page == '家庭金融-服务详情'){
+          var goodsId = param.goodsId;
+          localStorage.jinrongDetailFrom = "%guanggao%";
+          $state.go('guanjia-familyaccountdetail', {
+            goodsId: goodsId
+          });
+        }
+
+        if(page =='公共服务'){
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('from', '%guanggao%', {'expires': expireDate.toUTCString()});
+          $state.go('guanjia-publicservice');
+        }
+        if(page == '在线超市'){
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('from', '%guanggao%', {'expires': expireDate.toUTCString()});
+          $state.go('guanjia-shoppingonline');
+        }
+
+        if (page =='活动召集'){
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 30);
+          $cookies.put('from', '%guanggao%', {'expires': expireDate.toUTCString()});
+          $state.go('member-user-callactivity');
+        }
+        if (page == '活动召集-活动详情'){
+          var activityId = param.activityId;
+          localStorage.goodsDetailFrom = "%guanggao%";
+          sessionStorage.activityId = activityId;
+          $state.go('member-user-activitydetail', {
+            'activityId': activityId,
+            'from': '101'
+          });
+        }
+
+        if (page == '邻里社交'){
+          $location.path('/society/society.htm');
+        }
+        if (page == '邻里社交-帖子列表'){
+          var forumId = param.forumId;
+          localStorage.forumDetailFrom = "%guanggao%";
+          $state.go('society-tribe', {
+            'buluoId': forumId
+          });
+        }
+        if (page == '邻里社交-帖子详情'){
+          var bbsId = param.bbsId;
+          localStorage.bbsDetailFrom = "%guanggao%";
+          $state.go('society-postdetail', {
+            'bbsId': bbsId
+          });
+        }
+
+
+        if (page == '社区服务'){
+          $location.path('/guanjia/comservice.htm');
+        }
+
+      }
+
+    },
+
+
+    /*
+     * 验证手机号码是否合法
+     * @params mobile 需要验证的手机号码
+     *
+     * return Object msg,验证信息；validate，是否合法
+     *
+     */
+    validateMobile :function(mobile){
+      var msg = "手机号码合法！";
+      var isValidate = true;
+      if(mobile.length==0)
+      {
+        msg = '请输入手机号码！';
+        isValidate = false;
+      }
+      if(mobile.length!=11)
+      {
+        msg = '请输入有效的手机号码！';
+        isValidate = false;
+      }
+
+      var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+      if(!myreg.test(mobile))
+      {
+        msg = '请输入有效的手机号码！';
+        isValidate = false;
+      }
+      return {"msg":msg,"validate":isValidate};
+    },
+
+
+    /*
+     * 购买页上传用户选择的星期，服务站以及我的小区数据
+     *
+     * @params dataType 上传数据的类别
+     *         dataType = 1 , 服务站
+     *         dataType = 2 , 星期规格
+     *         dataType = 3 , 我的小区
+     *
+     * @params data 上传的数据信息
+     *         dataType ＝ 1 , String data
+     *         dataType ＝ 2 , Array[规格id,日期] data
+     *         dataType ＝ 3 , String data
+     *
+     *
+     */
+    uploadGoodsSpecOfUserSelected :function(dataType,data){
+      var params = {
+        "service_station_id": "",
+        "xingqi_guige_id": "",
+        "user_community_id": "",
+        "date": "",
+        "ticket": $cookies.get("ticket")
+      }
+      if (dataType == 1) {
+        params.service_station_id = data;
+      }
+      if (dataType == 2) {
+        params.xingqi_guige_id = data[0];
+
+        //获取星期规格中括号内的日期
+        var weekSpecName = data[1];
+        var start = weekSpecName.indexOf('(') + 1;
+        var end = weekSpecName.indexOf(")");
+        var date = weekSpecName.substring(start,end)
+        params.date = date;start
+      }
+      if (dataType == 3) {
+        params.user_community_id = data;
+      }
+       this.postRequestWithUrlAndParams("saveMySelect.action", params).success(function (response) {
+
+      });
+    },
+
+
+
+    showMap : function(array){
+      //地图
+      var lastIndex; //保存上一次点击的div中的span的id值
+      var lastDetailDiv; //保存上一次点击创建的覆盖物二
+      locateCity(array);
+      function locateCity(array){
+        // 百度地图API功能
+        var mp = new BMap.Map("allmap");
+        mp.centerAndZoom(new BMap.Point(array[0].longitude,array[0].latitude), 11);
+        mp.enableScrollWheelZoom(true);
+
+        // 复杂的自定义覆盖物
+        function ComplexCustomOverlay(point, text,id){
+          this._point = point;
+          this._text = text;
+          this._id = id;
+        }
+        ComplexCustomOverlay.prototype = new BMap.Overlay();
+        ComplexCustomOverlay.prototype.initialize = function(map){
+          this._map = map;
+          var div = this._div = document.createElement("div");
+          div.style.position = "absolute";
+          div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+          div.style.backgroundColor = "#EE5D5B";
+          div.style.border = "1px solid #BC3B3A";
+          div.style.color = "white";
+          div.style.height = "18px";
+          div.style.padding = "0px 2px 0px 2px";
+          div.style.lineHeight = "18px";
+          div.style.whiteSpace = "nowrap";
+          div.style.MozUserSelect = "none";
+          div.style.fontSize = "12px";
+          var span = this._span = document.createElement("span");
+          div.appendChild(span);
+          span.appendChild(document.createTextNode(this._text));
+          span.id = "'"+this._id+"'";
+          span.addEventListener('click',function(event){
+            var i = event.target.id;
+            i = parseInt(i.substr(1,1));
+            if(lastIndex != i){
+              var thisPoint = new BMap.Point(array[i].longitude,array[i].latitude);
+              var fuwuContent = array[i].content;
+              var detailW = new DetailWindow(thisPoint,array[i].name,fuwuContent,array[i].telphone,array[i].service_station_id);
+              map.addOverlay(detailW);
+              if(lastDetailDiv){
+                lastDetailDiv.hide();
+              }
+            }
+            lastDetailDiv = detailW;
+            lastIndex = i;
+          });
+          //移动端
+          span.addEventListener('touchstart',function(event){
+            var i = event.target.id;
+            i = parseInt(i.substr(1,1));
+            if(lastIndex != i){
+              var thisPoint = new BMap.Point(array[i].longitude,array[i].latitude);
+              var fuwuContent = array[i].content;
+              var detailW = new DetailWindow(thisPoint,array[i].name,fuwuContent,array[i].telphone,array[i].service_station_id);
+              map.addOverlay(detailW);
+              if(lastDetailDiv){
+                lastDetailDiv.hide();
+              }
+            }
+            lastDetailDiv = detailW;
+            lastIndex = i;
+          });
+
+          var that = this;
+
+          var arrow = this._arrow = document.createElement("div");
+          arrow.style.background = "url(http://map.baidu.com/fwmap/upload/r/map/fwmap/static/house/images/label.png) no-repeat";
+          arrow.style.position = "absolute";
+          arrow.style.width = "11px";
+          arrow.style.height = "10px";
+          arrow.style.top = "17px";
+          arrow.style.left = "10px";
+          arrow.style.overflow = "hidden";
+          div.appendChild(arrow);
+
+          div.onmouseout = function(){
+            this.style.backgroundColor = "#EE5D5B";
+            this.style.borderColor = "#BC3B3A";
+            this.getElementsByTagName("span")[0].innerHTML = that._text;
+            arrow.style.backgroundPosition = "0px 0px";
+          };
+
+          mp.getPanes().labelPane.appendChild(div);
+
+          return div;
+        };
+        ComplexCustomOverlay.prototype.draw = function(){
+          var map = this._map;
+          var pixel = map.pointToOverlayPixel(this._point);
+          this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
+          this._div.style.top  = pixel.y - 30 + "px";
+        };
+        //添加监听事件
+        ComplexCustomOverlay.prototype.addEventListener = function(event,fun){
+          this._div['on'+event] = fun;
+        };
+        var myCompOverlay;
+        for (var i = 0; i < array.length; i ++) {
+          var txt = array[i].name;
+          myCompOverlay = new ComplexCustomOverlay(new BMap.Point(array[i].longitude,array[i].latitude), txt,i);
+          mp.addOverlay(myCompOverlay);
+        }
+      };
+
+      //自定义覆盖物二
+      //定义自定义覆盖物的构造函数
+      function DetailWindow(point,fuwuName,fuwuContent,tel,stationId){
+        this._point = point;
+        this._fuwuName = fuwuName;
+        this._fuwuContent = fuwuContent;
+        this._tel = tel;
+        this._stationId = stationId;
+      };
+      //继承API的BMap.Overlay
+      DetailWindow.prototype = new BMap.Overlay();
+      //实现初始化
+      DetailWindow.prototype.initialize = function(map){
+        this._map = map;
+        var div = document.createElement('div');
+        this._div = div;
+        div.style.position = "absolute";
+        div.style.width = '200px';
+        //div.style.height = '200px';
+        div.style.border = '2px solid #1BAFF9';
+        div.style.background = '#6AD8F3';
+        div.style.fontSize = '1.2rem';
+
+        var fuwuDiv = document.createElement('div');
+        var h5 = document.createElement('h5');
+        h5.style.float = 'left';
+        h5.style.margin = '0';
+        h5.style.padding = '0';
+        h5.style.height = '30px';
+        h5.style.lineHeight = '30px';
+        h5.appendChild(document.createTextNode(this._fuwuName));
+        var imgDiv = document.createElement('div');
+        imgDiv.style.float = 'right';
+        imgDiv.style.height = '30px';
+        imgDiv.style.lineHeight = '30px';
+        var img = document.createElement('img');
+        img.src = '../../../images/next.png';
+        img.style.width = '25px';
+        imgDiv.appendChild(img);
+
+        fuwuDiv.style.overflow = 'hidden';
+        fuwuDiv.style.background = 'pink';
+        fuwuDiv.style.color = 'red';
+        fuwuDiv.style.paddingLeft = '0.2rem';
+        fuwuDiv.style.height = '30px';
+        fuwuDiv.appendChild(imgDiv);
+        fuwuDiv.appendChild(h5);
+
+        var lat = document.createElement('span');
+        lat.appendChild(document.createTextNode(this._point.lat));
+        lat.style.display = 'none';
+        lat.className = 'lat';
+        fuwuDiv.appendChild(lat);
+        var lng = document.createElement('span');
+        lng.appendChild(document.createTextNode(this._point.lng));
+        lng.style.display = 'none';
+        lng.className = 'lng';
+        fuwuDiv.appendChild(lng);
+
+        var span = document.createElement('span');
+        span.appendChild(document.createTextNode(this._stationId));
+        span.style.display = 'none';
+        fuwuDiv.appendChild(span);
+
+        div.appendChild(fuwuDiv);
+        //兼容移动端
+        fuwuDiv.addEventListener('touchstart',function(){
+          $state.go('member-about-stationdetail',{
+            station_id : this.lastChild.textContent,
+            lat : document.getElementsByClassName('lat')[0].innerHTML,
+            lon : document.getElementsByClassName('lng')[0].innerHTML
+          });
+          sessionStorage.stationTab='map';
+        });
+        fuwuDiv.addEventListener('click',function(event){
+          console.log(this.lastChild.textContent);
+
+          $state.go('member-about-stationdetail',{
+            station_id : this.lastChild.textContent,
+          });
+          sessionStorage.stationTab='map';
+        });
+
+        var p = document.createElement('p');
+        p.appendChild(document.createTextNode(this._fuwuContent));
+        p.style.color = 'white';
+        p.style.padding = '0 0.2rem';
+
+        div.appendChild(p);
+
+        var p = document.createElement('p');
+        p.style.fontStyle = 'italic';
+        p.style.padding = '0 1rem';
+        p.style.color = 'white';
+        var span = document.createElement('span');
+        span.appendChild(document.createTextNode('电话：'));
+        span.style.float = 'right';
+        var a = document.createElement('a');
+        a.appendChild(document.createTextNode(this._tel));
+        a.style.float = 'right';
+        a.href='tel://'+this._tel;
+        a.style.color = '#337ab7';
+        a.style.textDecoration = 'underline';
+        if(this._tel){
+          p.appendChild(a);
+          p.appendChild(span);
+          div.appendChild(p);
+        }
+
+
+        map.getPanes().floatPane.appendChild(div);
+        return div;
+      };
+      DetailWindow.prototype.draw = function(){
+        var map  = this._map;
+        var position = this._map.pointToOverlayPixel(this._point);
+        this._div.style.left = position.x + 'px';
+        this._div.style.top = position.y + 'px';
+      };
+
+      DetailWindow.prototype.hide = function(){
+        if(this._div){
+          this._div.style.display = 'none';
+        }
+      };
+      DetailWindow.prototype.show = function(){
+        if(this._div){
+          this._div.style.display = '';
+        }
+      };
+    }
+
+  };
+  return service;
+
+});

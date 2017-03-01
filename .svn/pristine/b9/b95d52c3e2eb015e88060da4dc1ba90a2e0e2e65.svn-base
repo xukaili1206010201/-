@@ -1,0 +1,225 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="../images/search_button.png" ng-click="searchDel()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字">
+    </div>
+  </div>
+</nav>
+
+<div class="selectMain deliveryMain" ng-if="isShowDel">
+  <!--<div >-->
+  <div class="category-segment">
+    <select class="col-xs-3 sendDate" ng-click="listByConditions('需送日')">
+      <option value="">需送日</option>
+      <option value="" ng-repeat="song in faDate">{{song.name}}</option>
+    </select>
+    <select class="col-xs-3 category" ng-click="listByConditions('类型')">
+      <option value="">类型</option>
+      <option ng-repeat="cate in category" value="{{cate.type_id}}">{{cate.name}}</option>
+    </select>
+    <select class="col-xs-3 business" ng-click="listByConditions('商家')">
+      <option value="">商家</option>
+      <option ng-repeat="bus in business" value="{{bus.business_id}}">{{bus.name}}</option>
+    </select>
+    <select class="col-xs-3 sort" ng-click="listByConditions('排序')">
+      <option value="station_category">服务站分类</option>
+      <option value="category_sort">商品分类</option>
+      <option value="order_sort">订单号</option>
+      <option value="goods_sort">商品名</option>
+      <option value="station_sort">服务站</option>
+      <option value="mobile_sort">手机号</option>
+    </select>
+  </div>
+  <!--</div>-->
+
+  <div ng-if="!isCondition" class="deliveryUl" load-more data="{params : params,repeatFun : '$scope.deliveryFun'}">
+    <ul class="list-group">
+
+      <li class="list-group-item" ng-repeat="delivery in deliveryList">
+        <div class="media deliver_list">
+          <div class="media-left media-middle delivery-media">
+            <span class="spanCheck"><img src="../../../../images/sure-icon.png" check-one class="sure"></span>
+          </div>
+          <div class="media-left media-middle delivery-img">
+            <a href="#" class="good-img"><img ng-src="{{delivery.imageUrl}}" alt=""></a>
+          </div>
+          <div class="media-body">
+            <ul>
+              <li class="goodsName">{{delivery.name}}
+                <span class="goodId" ng-hide="true">{{delivery.goods_id}}</span>
+                <span class="orderId" ng-hide="true">{{delivery.order_id}}</span>
+              </li>
+              <li>
+                <p>{{delivery.guige_1}}</p>
+                <p>{{delivery.guige_2}}</p>
+              </li>
+              <li>
+                <span>订量：{{delivery.count}}</span>
+              <span class="send-num">发量：
+                <span>{{delivery.fa_count}}</span>&nbsp;
+                <span class="glyphicon glyphicon-edit tan" data-toggle="modal" data-target="#Modal"
+                      ng-click="faChange($event,delivery.order_id,delivery.goods_id,delivery.count)"
+                      ng-if="delivery.status == '待发货'" data-toggle="modal" data-target="#Modal"></span>
+              </span>
+              </li>
+              <li>{{delivery.station}} {{delivery.mobile}}</li>
+              <li><span>{{delivery.order_no}}</span> <span class="good_status">{{delivery.status}}</span></li>
+              <li>&nbsp; <span class="time">{{delivery.deliver_date}}</span>
+              <li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</div>
+<!------------条件筛选-------------------->
+<div ng-if="isCondition">
+  <!---->
+  <div class="listByCondition" load-more
+       data="{params : conditionParams,repeatFun : '$scope.deliveryFun',condition : '发货'}">
+    <ul class="list-group">
+
+      <li class="list-group-item" ng-repeat="delivery in deListByCondtion">
+        <div class="media deliver_list">
+          <div class="media-left media-middle delivery-media">
+            <span class="spanCheck"><img src="../../../../images/sure-icon.png" check-one class="sure"></span>
+          </div>
+          <div class="media-left media-middle delivery-img">
+            <a href="#" class="good-img"><img ng-src="{{delivery.imageUrl}}" alt=""></a>
+          </div>
+          <div class="media-body">
+            <ul>
+              <li class="goodsName">{{delivery.name}}
+                <span class="goodId" ng-hide="true">{{delivery.goods_id}}</span>
+                <span class="orderId" ng-hide="true">{{delivery.order_id}}</span>
+              </li>
+              <li>
+                <p>{{delivery.guige_1}}</p>
+                <p>{{delivery.guige_2}}</p>
+              </li>
+              <li>
+                <span>订量：{{delivery.count}}</span>
+              <span class="send-num">发量：
+                <span>{{delivery.fa_count}}</span>&nbsp;
+                <span class="glyphicon glyphicon-edit tan" data-toggle="modal" data-target="#Modal"
+                      ng-click="faChange($event,delivery.order_id,delivery.goods_id,delivery.count)"
+                      ng-if="delivery.status == '待发货'" data-toggle="modal" data-target="#Modal"></span>
+              </span>
+              </li>
+              <li>{{delivery.station}} {{delivery.mobile}}</li>
+              <li><span>{{delivery.order_no}}</span> <span class="good_status">{{delivery.status}}</span></li>
+              <li>&nbsp; <span class="time">{{delivery.deliver_date}}</span>
+              <li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</div>
+
+<!---------关键字搜索---------->
+<div ng-if="!isShowDel">
+  <div ng-if="!isShow" style="text-align: center;font-size:1.6rem"><span>sorry,暂无相关数据！</span></div>
+  <div ng-if="isShow" class="searchDelivery" load-more data="{params : deliParams,repeatFun : '$scope.deliveryFun'}">
+    <ul class="list-group">
+
+      <li class="list-group-item" ng-repeat="delivery in deListByKey">
+        <div class="media deliver_list">
+          <div class="media-left media-middle delivery-media">
+            <span class="spanCheck"><img src="../../../../images/sure-icon.png" check-one class="sure"></span>
+          </div>
+          <div class="media-left media-middle delivery-img">
+            <a href="#" class="good-img"><img ng-src="{{delivery.imageUrl}}" alt=""></a>
+          </div>
+          <div class="media-body">
+            <ul>
+              <li class="goodsName">{{delivery.name}}
+                <span class="goodId" ng-hide="true">{{delivery.goods_id}}</span>
+                <span class="orderId" ng-hide="true">{{delivery.order_id}}</span>
+              </li>
+              <li>
+                <p>{{delivery.guige_1}}</p>
+                <p>{{delivery.guige_2}}</p>
+              </li>
+              <li>
+                <span>订量：{{delivery.count}}</span>
+              <span class="send-num">发量：
+                <span>{{delivery.fa_count}}</span>&nbsp;
+                <span class="glyphicon glyphicon-edit tan" data-toggle="modal" data-target="#Modal"
+                      ng-click="faChange($event,delivery.order_id,delivery.goods_id,delivery.count)"
+                      ng-if="delivery.status == '待发货'" data-toggle="modal" data-target="#Modal"></span>
+              </span>
+              </li>
+              <li>{{delivery.station}} {{delivery.mobile}}</li>
+              <li><span>{{delivery.order_no}}</span> <span class="good_status">{{delivery.status}}</span></li>
+              <li>&nbsp; <span class="time">{{delivery.deliver_date}}</span>
+              <li>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</div>
+
+<!--模态框-->
+<div id="Modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">发量</h4>
+      </div>
+      <div class="modal-body">
+        <!--<input class="form-control temp" type="text">-->
+        <div class="input-group">
+          <div class="input-group-addon" ng-click="jian($event)">-</div>
+          <input type="text" class="form-control temp" ng-model="faCount">
+          <div class="input-group-addon" ng-click="jia($event)">+</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success sureFa" ng-click="faSure()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="navbar-fixed-bottom deli-footer">
+  <div class="fa-block">
+    <button type="button" class="btn send-button btn-success" ng-click="sendGoods()">发货</button>
+  </div>
+</div>
+
+<script>
+  var searchHeight = window.screen.availHeight - $('.navigationbar').height()
+    - $('.deli-footer').height();
+  $('.searchDelivery').css({
+    'height': searchHeight + 'px',
+    'overflow': 'scroll'
+  });
+  var deliveryHeight = searchHeight - $('.category-segment').height();
+  $('.deliveryUl').css({
+    'height': deliveryHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.listByCondition').css({
+    'height': deliveryHeight + 'px',
+    'overflow': 'scroll'
+  });
+</script>
+

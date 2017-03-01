@@ -1,0 +1,167 @@
+/* ******************************** 内容样式 ******************************** */
+.detail-content {
+    margin-top: 51px;
+    color: #8A8A8A;
+}
+
+.basic_attribute, .user_attribute {
+    margin: 0px;
+}
+
+.basic_attribute li:first-child, .user_attribute li {
+    padding: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.add-overflow {
+    overflow: hidden;
+    font-size: .9rem;
+    color: #8A8A8A;
+    height: 80px;
+    /*line-height: 26px;*/
+    padding-left: 10px;
+}
+
+.p-Padding {
+    padding: 0px 5px;
+}
+
+.coupons-name {
+    font-size: 1.2rem;
+    color: #1a1a1a;
+}
+
+.fontColor {
+    color: #F7AF0D;
+}
+
+.detail-content .coupons-time {
+    text-align: left;
+}
+
+.user_attribute {
+    background-color: white;
+    padding-left: 0px;
+}
+
+.user_attribute li {
+    margin-left: 15px;
+}
+
+.user_attribute .group-property {
+    background-color: #dddddd;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 10px;
+    font-size: 15px;
+}
+
+.coupons-goods-table {
+    background: #dddddd;
+    padding-left: 0px;
+}
+
+#coupons-goods-show {
+    margin-left: 0px;
+    overflow: hidden;
+}
+
+.goods-image {
+    float: left;
+}
+
+.goods-image img {
+    width: 64px;
+    height: 64px;
+}
+
+.goods-info {
+    float: left;
+    margin-left: 5px;
+}
+
+.goods-name {
+    margin-top: 10px;
+}
+
+.goods-price {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    color: orange;
+}
+
+/* ******************************** 优惠券操作样式 ******************************** */
+.coupons-operate-block {
+    height: 44px;
+    background: white;
+}
+
+.coupons-unused-block {
+    overflow: hidden;
+}
+
+.use-block {
+    float: left;
+    width: 45%;
+    margin-left: 3.3%;
+    margin-right: 3.3%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.send-block {
+    float: left;
+    width: 45%;
+    margin-right: 3.3%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.receive-block {
+    margin: 5px 10px 5px 10px;
+}
+
+.order_num {
+    float: right;
+    margin-right: 10px;
+}
+
+.using, .coupons-unreceive-block {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.unUsing {
+    width: 96%;
+    margin-left: 2%;
+}
+
+.useRange {
+    font-size: 1.1rem;
+}
+
+.useBusiness {
+    margin-left: 20px;
+}
+
+.useGoods {
+    margin-left: 45px;
+}
+
+.useCommunity {
+    font-size: 1.1rem;
+    margin-left: 20px;
+}
+
+.couponLeft {
+    float: right;
+    margin-right: 10px;
+}
+
+.itemType {
+    background-color: #EfEfF1;
+    padding-left: 5px;
+    color: #1a1a1a;
+}

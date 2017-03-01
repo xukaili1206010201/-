@@ -1,0 +1,43 @@
+.title-position p{
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.input-top-margin{
+    margin-top: 60px;
+    /*text-align: center;*/
+    overflow: hidden;
+}
+.input-property{
+    width: 94%;
+    margin-left: 3%;
+    margin-bottom: 10px;
+}
+
+/*.verfication-code{*/
+    /*text-align: center;*/
+/*}*/
+
+/*.verfication-code button{*/
+    /*width:45.5%;*/
+    /*height: 35px;*/
+/*}*/
+
+/*.verfication-code-query{*/
+    /*margin-right: 1.5%;*/
+/*}*/
+
+.submit-button{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.reminder .wx_qrcodeImg{
+  width:13rem;
+  height:13rem;
+  margin-top:10px;
+}
+.reminder div{
+  color: red;
+}

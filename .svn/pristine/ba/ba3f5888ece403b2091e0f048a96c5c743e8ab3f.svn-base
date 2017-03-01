@@ -1,0 +1,193 @@
+
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goToUserCenter()">
+
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchMsg()">
+
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="segment-control navbar-fixed-top" ng-if="isShowMsg">
+  <a class="unread-message-button" onclick="showUnreadMessage(event)">未读</a>
+  <a class="readed-message-button" onclick="showReadedMessage(event)">已读</a>
+</div>
+
+
+<div id="table" ng-if="isShowMsg">
+  <!-- ****************************** 未读消息列表 ******************************-->
+  <div class="unread-message-table" load-more data="{params : params,repeatFun : '$scope.readMsg'}">
+    <div>
+      <div class="line-wrapper" ng-repeat="messageModel in unreadMessageList">
+        <div class="line-scroll-wrapper">
+
+          <div class="line-normal-wrapper" ng-click="readMessage(messageModel)">
+
+            <!--<span class="glyphicon glyphicon-picture" style="color:rgb(164, 214, 40);padding-left: 10px;" ng-show="messageModel.imageUrl.length > 0"></span>-->
+            <p class="message-content" ng-bind-html="messageModel.content"></p>
+            <span class="message-city">{{messageModel.city}}</span>
+            <span class="message-time">{{messageModel.create_date}}</span>
+          </div>
+
+          <div class="line-btn-delete" ng-click="deleteMessage(messageModel,$event)">
+            <button>删除</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--****************************** 已读消息列表 ******************************-->
+  <div class="readed-message-table" >
+    <div class="readed-msg" load-more data="{params : messageListParams,repeatFun : '$scope.readMsg'}">
+      <div>
+        <div class="line-wrapper" ng-repeat="messageModel in readedMessageList">
+          <div class="line-scroll-wrapper">
+            <div class="line-normal-wrapper" ng-click="readMessage(messageModel)">
+              <!--<span class="glyphicon glyphicon-picture" style="color:rgb(164, 214, 40);padding-left: 10px;" ng-show="messageModel.imageUrl.length > 0"></span>-->
+              <span class="message-content" ng-bind-html="messageModel.content"></span>
+              <span class="message-city">{{messageModel.city}}</span>
+              <span class="message-time">{{messageModel.create_date}}&nbsp;阅</span>
+
+            </div>
+
+            <div class="line-btn-delete" ng-click="deleteMessage(messageModel,$event)">
+              <button>删除</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!---------------关键字搜索---------------------------->
+  <div ng-if="!isShowMsg">
+    <div style="text-align: center" ng-if="!isMsg"><span>sorry,暂无相关数据！</span></div>
+    <div ng-if="isMsg">
+      <div class="readed-msg searchMsg" load-more data="{params : searchParams,repeatFun : '$scope.searchMessage'}">
+        <div>
+          <div class="line-wrapper" ng-repeat="msg in msgList">
+            <div class="line-scroll-wrapper">
+              <div class="line-normal-wrapper" ng-click="readMessage(msg)">
+
+                <!--<span class="glyphicon glyphicon-picture" style="color:rgb(164, 214, 40);padding-left: 10px;" ng-show="messageModel.imageUrl.length > 0"></span>-->
+                <span class="message-content" ng-bind-html="msg.content"></span>
+                <span class="message-city">{{msg.city}}</span>
+                <span class="message-time">{{msg.create_date}}&nbsp;阅</span>
+
+              </div>
+
+              <div class="line-btn-delete" ng-click="deleteMessage(msg,$event)">
+                <button>删除</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+  // ************************************上拉刷新，下拉加载 **************************************************
+  var unreadHeight = window.screen.availHeight - $('.navigationbar').height()
+    - $('.segment-control').height();
+  $('.unread-message-table').css({
+    'height' : unreadHeight + 'px',
+    'overflow' : 'scroll'
+  });
+  $('.readed-msg').css({
+    'height' : unreadHeight + 'px',
+    'overflow' : 'scroll'
+  });
+
+  var searchHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.searchMsg').css({
+    'height' : searchHeight + 'px',
+    'overflow' : 'scroll'
+  });
+  //****************************************** 消息列表切换 begin ********************************************
+  var lastSelectedButton = '.unread-message-button';
+  var lastShowTable = '.unread-message-table';
+  var currentShowTable;
+
+  function showOrHiddenButtonAndTable(target) {
+
+    $(lastSelectedButton).css({
+      'background': 'rgb(235, 235, 241)',
+      'color': 'black'
+    });
+
+    $(target).css({
+      'background': '#84C921',
+      'color': 'white'
+    });
+
+    $(lastShowTable).css({
+      'display': 'none'
+    });
+
+    $(currentShowTable).css({
+      'display': 'block'
+    });
+
+    lastSelectedButton = target;
+    lastShowTable = currentShowTable;
+  }
+    ///////////////滑动删除
+    //  宽度
+    $(".line-scroll-wrapper").width($(".line-wrapper").width() + $(".line-btn-delete").width());
+    $(".line-normal-wrapper").width($(".line-wrapper").width());
+    //  高度
+    $(".line-scroll-wrapper").height($(".line-wrapper").height() );
+    $(".line-normal-wrapper").height($(".line-wrapper").height() );
+    $(".line-btn-delete").height($(".line-normal-wrapper").height() + 40);
+
+  //  function resetCSS(){
+//    // 设定每一行的宽度=屏幕宽度+按钮宽度
+//    $(".line-scroll-wrapper").width($(".line-wrapper").width() + $(".line-btn-delete").width());
+//    // 设定常规信息区域宽度=屏幕宽度
+//    $(".line-normal-wrapper").width($(".line-wrapper").width());
+//    $(".line-btn-delete").height($(".line-normal-wrapper").height() + 60);
+//
+//  }
+
+  //显示未读消息列表
+  function showUnreadMessage(event) {
+
+    currentShowTable = '.unread-message-table';
+    showOrHiddenButtonAndTable(event.target);
+//    resetCSS();
+    addSwipeLeft();
+  }
+
+
+
+  //显示已读消息列表
+  function showReadedMessage() {
+
+    currentShowTable = '.readed-message-table';
+    showOrHiddenButtonAndTable(event.target);
+//    resetCSS();
+    addSwipeLeft();
+
+  }
+
+  //****************************************** 消息列表切换 end ********************************************
+
+</script>
+
+

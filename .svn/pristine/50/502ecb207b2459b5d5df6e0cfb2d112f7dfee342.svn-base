@@ -1,0 +1,78 @@
+/*body{*/
+  /*background-color: #F0EFF5;*/
+/*}*/
+/*html{*/
+  /*font-size: 10px;*/
+/*}*/
+
+
+/* ******************************** 输入框组样式 ******************************** */
+/*.search-group{*/
+  /*/!*position: relative;*!/*/
+  /*height: 30px;*/
+  /*margin-left: 50px;*/
+  /*margin-top: 10.5px;*/
+  /*margin-right: 10px;*/
+  /*overflow: hidden;*/
+/*}*/
+
+
+/*.search-button{*/
+  /*width: 30px;*/
+  /*height: 30px;*/
+  /*margin-right: 0px;*/
+  /*float: right;*/
+/*}*/
+
+/*.search-input{*/
+  /*/!*background: red;*!/*/
+  /*margin-right: 35px;*/
+  /*height: 30px;*/
+/*}*/
+
+/*.search-input input{*/
+  /*height: 30px;*/
+  /*margin-right: 10px;*/
+  /*margin-left: 0px;*/
+/*}*/
+/*/!*----------列表样式-----------*!/*/
+.list-group{
+  margin-bottom: -1px;
+  /*margin-left: 2px;*/
+  /*margin-right: 2px;*/
+  background-color: white;
+}
+/*.list-group-item{*/
+  /*padding: 5px !important;*/
+/*}*/
+/*.line-bottom{*/
+/*margin-bottom: 5px !important;*/
+
+/*}*/
+/*.line{*/
+/*border-bottom: 1px solid #9e9898;*/
+/*border-top: 1px solid #9e9898;*/
+/*border-left: 1px solid #9e9898;*/
+/*border-right: 1px solid #9e9898;*/
+
+
+/*}*/
+.name, .house-address{
+  margin-left: 10px;
+  margin-bottom: 0px;
+  height: 16px;
+}
+.house-address{
+  margin-top: 5px;
+}
+.tel{
+  float: right;
+  margin-right: 20px;
+  font-size: 13px;
+}
+.name{
+  font-size: 16px;
+}
+.line-top{
+  margin-top: 0px !important;
+}

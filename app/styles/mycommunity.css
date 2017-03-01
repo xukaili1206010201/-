@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.line-wrapper {
+  width: 100%;
+  height:80px;
+  overflow: hidden;
+  border-bottom: 1px solid #e1e1e8;
+}
+
+.line-scroll-wrapper {
+  clear: both;
+}
+
+.line-btn-delete {
+  float: left;
+  width:80px;
+  display: none;
+}
+.coupons{
+  padding:5px;
+}
+.line-btn-delete button {
+  width: 100%;
+  height: 80px;
+  background: red;
+  border: none;
+  /*font-size: 24px;*/
+  font-family: 'Microsoft Yahei';
+  color: #fff;
+}
+
+.line-normal-wrapper {
+  display: inline-block;
+  height:80px;
+  line-height: 26px;
+  float: left;
+}
+
+.line-normal-community-name {
+  color: #4e4e4e;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.line-normal-city-name{
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.line-normal-floor{
+  font-size: 12px;
+  float: right;
+  margin-right: 10px;
+}
+.msg-title{
+  float:left;
+  font-size:1.3rem;
+}

@@ -1,0 +1,240 @@
+/*/!* ******************************** navigationbar with back-button   begin ******************************** *!/*/
+
+/*.navigation-bar{*/
+/*/!*background: green;*!/*/
+/*overflow: hidden;*/
+/*}*/
+
+/*/!* ******************************** 返回按钮样式 ******************************** *!/*/
+
+/*.back-button{*/
+/*/!*background: green;*!/*/
+/*width: 30px;*/
+/*height: 30px;*/
+/*margin-left: 10px;*/
+/*/!* 51/2 - 30/3  *!/*/
+/*margin-top: 10.5px;*/
+/*float: left;*/
+/*}*/
+
+/*/!* ******************************** navigationbar item样式 ******************************** *!/*/
+/*.navigationbar-item{*/
+/*height: 30px;*/
+/*margin-left: 50px;*/
+/*margin-top: 10.5px;*/
+/*margin-right: 50px;*/
+/*/!*background: red;*!/*/
+/*padding-top: 5px;*/
+
+/*}*/
+
+/*.item-title{*/
+/*text-align: center;*/
+/*font-size: 14px;*/
+/*color: rgb(119,119,119);*/
+/*}*/
+
+/*/!* ******************************** navigationbar with back-button   end ******************************** *!/*/
+
+/* 右侧文本区域居中（性别（男、女），手机号码、注册时、余额、密码、向右的箭头图片）*/
+.ver-middle {
+  margin-top: 7px;
+}
+
+/*不可编辑项显示为灰色（注册时、余额）*/
+.text-gray {
+  font-size: 14px;
+  color: darkgray;
+}
+
+/*头像编辑区域*/
+.edit-image {
+  margin-top: 51px;
+  text-align: center;
+  width: 100%;
+  height: 120px;
+}
+/*********头像**********/
+.imgBox{
+  position: relative;
+  top:15px;
+  left: 38%;
+}
+.inputBox {
+  top:65px;
+  left: 38%;
+  border-radius: 50px;
+}
+
+.inputBox,.imgBox{
+  width: 100px;
+  height: 100px;
+}
+#newImg, #ordImg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+}
+
+/*头像编辑区域的头像图片*/
+/*.edit-image img {*/
+  /*width: 27%;*/
+  /*height: 27%;*/
+/*}*/
+
+/*右侧【输入框】的样式*/
+.info-input {
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/*每一行的样式*/
+.property-edit {
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+/*每一行左侧的文本显示区域*/
+.property-text {
+  width: 22%;
+  height: 100%;
+  float: left;
+  margin-top: 7px;
+  max-width: 100px;
+}
+
+/*每一行 右侧的编辑区域长度*/
+.property-field {
+  width: 78%;
+}
+
+/*性别行 右侧的div（包裹男、switch、女三个div）*/
+.gender-select {
+  overflow: hidden;
+  /*background: greenyellow;*/
+}
+
+/*性别-男 的漂浮样式*/
+.man {
+  float: left;
+}
+
+/*开关*/
+.gendet-swicth {
+  float: left;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+/*手机、密码右侧的箭头图片*/
+.property-editImg {
+  width: 20px;
+  height: 20px;
+  float: right;
+}
+
+.first-info-submit {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.first-info-submit button {
+  width: 100%;
+}
+
+.finally {
+  margin-bottom: 100px;
+}
+
+/*底部“确认”按钮*/
+.bottom-eidt button {
+  margin-top: 5px;
+  width: 94%;
+}
+
+/*设置手机、密码的可点击区域*/
+.enable-edit {
+  font-size: 14px;
+  width: 70%;
+}
+
+/*设置z-index，以使弹出框能显示出来*/
+.content {
+  z-index: 10;
+}
+
+.verfication-code-input {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+/*查询验证码按钮以及获取验证码按钮*/
+.verficationCode-button-group {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5%;
+  overflow: hidden;
+}
+
+.verficationCode-button-group button {
+  width: 47.5%;
+  float: left;
+}
+
+/*获取验证码按钮*/
+.verfication-code-get {
+  margin-left: 5%;
+}
+
+.password-input {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.newpassword-input {
+  margin-top: 10px;
+}
+
+/*取消、确认按钮组*/
+.edit-button-group {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 10px;
+}
+
+.edit-button-group button {
+  width: 47.5%;
+  float: left;
+  margin-bottom: 10px;
+}
+
+/*--------------------------------编辑密码弹框样式----------------------------------*/
+.edit-password-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: RGBA(219, 219, 221, 0.5);
+  z-index: 100;
+  display: none;
+}
+
+.edit-password-alert {
+  position: absolute;
+  background: white;
+  top: 25%;
+  left: 8%;
+  right: 8%;
+  padding-top: 8px;
+  text-align: center;
+}
+
+
+
+

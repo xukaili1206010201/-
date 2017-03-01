@@ -1,0 +1,113 @@
+<!--<nav class="navbar navbar-fixed-top navigationbar">-->
+  <!--<p class="navbar-text text-center">个人中心</p>-->
+<!--</nav>-->
+
+<div class="user" ng-click="jumpEditUserInfo()" style="margin-top:-50px;">
+  <img class="user-avatar" ng-src="{{formData.headImgurl}}">
+  <div class="user-info">
+      <p>{{formData.nickname}}</p>
+      <p><i class="glyphicon glyphicon-phone"></i>{{formData.mobile}}</p>
+  </div>
+  <div class="pull-right"><i class="fa fa-angle-right"></i></div>
+</div>
+
+
+<div class="table-view">
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+    <div class="panel panel-default panel-border-none">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <div class="panel-title" role="button"  aria-controls="collapseOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true">
+          <p class="panel-ico"><i class="glyphicon glyphicon-info-sign ico-info"></i></p>
+          <span>
+            我的信息
+          </span>
+        </div>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body content-padding">
+          <ul>
+            <li ng-click="jumpCart()"><a href=""><i class="fa fa-shopping-cart ico-success"></i>我的购物车</a>
+            </li>
+            <li ng-click="jumpMyorder()"><a href=""><i class="fa fa-list-alt ico-warn"></i>我的订单</a></li>
+            <li ng-click="jumpAppointment()"><a href=""><i class="fa fa-clock-o ico-info"></i>我的预约单</a></li>
+            <li ng-click="jumpMycoupons()"><a href=""><i class="fa fa-money ico-danger"></i>我的优惠券</a></li>
+            <li ng-click="goToUserMessage()"><a href=""><i class="fa fa-comment ico-info"></i>我的消息</a></li>
+            <li ng-click="goToMyCommunity()"><a href=""><i class="fa fa-home ico-success"></i>我的小区</a></li>
+            <li ng-click="goToMyactivities()"><a href=""><i class="fa fa-bullhorn ico-warn"></i>我报名的活动</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default panel-border-none" ng-if="business">
+      <div class="panel-heading" role="tab" id="headingTwo">
+        <div class="panel-title"class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+             aria-expanded="false" aria-controls="collapseTwo">
+          <p class="panel-ico"><i class="glyphicon glyphicon-list ico-danger"></i></p>
+          <span>
+            我的业务
+          </span>
+        </div>
+      </div>
+      <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body content-padding">
+          <ul>
+            <li ng-if="Fanscode" ng-click="jumpFanscode()"><a href=""><i class="fa fa-star ico-warn"></i>我粉丝的验证码</a></li>
+            <li ng-if="Delivery" ng-click="jumpDelivery()"><a href=""><i class="fa fa-truck ico-success"></i>我发货的商品</a></li>
+            <li ng-if="Distribute" ng-click="jumpDistribute()"><a href=""><i class="fa fa-group ico-danger"></i>我派发的商品</a></li>
+            <li ng-if="Portfolio" ng-click="jumpPortfolio()"><a href=""><i class="fa fa-bar-chart ico-info"></i>业务量统计</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default panel-border-none">
+      <div class="panel-heading" role="tab" id="headingThree">
+        <div class="panel-title" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+             aria-expanded="false" aria-controls="collapseThree">
+          <p class="panel-ico"><i class="glyphicon glyphicon-cloud ico-warn"></i></p>
+          <span>
+            关于我们
+          </span>
+        </div>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body content-padding">
+          <ul>
+            <li ng-click="goToStationintro()"><a href=""><i class="fa fa-map-marker ico-info"></i>站点介绍</a></li>
+            <li ng-click="goToFollowUs()"><a href=""><i class="fa fa-qrcode"></i>关注我们</a></li>
+            <li ng-click="goToContactUs()"><a href=""><i class="fa fa-edit ico-success"></i>联系我们</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="empty"></div>
+<!-- ************************************ 底部导航栏  ************************************-->
+<div class="navbar-fixed-bottom tabbar">
+  <div class="tabbar-item" ng-click="jumpComservice()">
+    <img src="images/comservice.png">
+    <p class="comservice-button">社区服务</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpWelfare()">
+    <img src="images/welfare_1.png">
+    <p class="comservice-button">商家福利</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpSociety()">
+    <img src="images/linli.png">
+    <p>邻里社交</p>
+  </div>
+
+  <div class="tabbar-item">
+    <img src="images/usercenter-select.png">
+    <p class="usercenter-button">个人中心</p>
+  </div>
+</div>
+
+

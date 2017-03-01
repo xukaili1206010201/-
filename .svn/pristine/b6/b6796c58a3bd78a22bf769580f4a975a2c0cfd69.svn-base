@@ -1,0 +1,155 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="backTribe()" src="images/back_button.png">
+  </div>
+  <div class="navText">帖子详情</div>
+
+</nav>
+
+
+<div class="navMain postdetailContent">
+  <div class="base-society">
+    <div class="basesocietyTtitle">{{bbsList.title}}</div>
+    <div class="postInfo">
+      <span>{{bbsList.city_name}}</span>&nbsp;&nbsp;
+      <span>{{bbsList.buluo_name}}</span>&nbsp;&nbsp;
+      <span class="review-status">{{bbsList.review_status}}</span>
+    </div>
+  </div>
+  <div class="review_reason" ng-show="bbsList.review_reason">
+    {{bbsList.review_reason}}
+  </div>
+
+  <div class="postlist ng-scope">
+
+    <div class="media postContent" style="margin-left:5px;">
+      <div class="media-left text-center">
+        <img class="media-object bbs-head-img" ng-src="{{bbsList.bbs_avatar}}" alt=""/>
+        <p class="bbs_nickname">{{bbsList.bbs_nickname}}</p>
+        <span>1楼</span>
+      </div>
+      <div class="media-body">
+        <!--<div style="font-size: 1.3rem;" class="media-heading">{{bbsList.title}}</div>-->
+        <div class="bbs-content">
+          {{bbsList.bbs_content}}
+        </div>
+        <div class="bbs-img" ng-show="bbsList.bbs_image !=null ">
+          <img ng-src="{{k}}" alt="" ng-repeat="k in bbsList.bbs_image">
+        </div>
+        <div class="fr">
+          <span>{{bbsList.create_date}}</span>
+          <a ng-if="replyShow" ng-click="goPostReply()">回复</a>
+          <a ng-if="editShow" ng-click="goPostEdit()">编辑</a>&nbsp;
+          <a ng-if="deleteShow" data-toggle="modal" data-target="#myModal">删除</a>&nbsp;
+        </div>
+      </div>
+    </div>
+
+    <div class="postReplyContent" ng-repeat="k in bbsReplyList">
+      <div class="media content-floor">
+        <div class="media-left">
+          <!--<a href="#">-->
+          <img class="media-object bbs-head-img" ng-src="{{k.avatar}}" alt=""/>
+          <p class="bbs_nickname">{{k.nickname}}</p>
+          <span>{{k.number}}楼</span>
+          <!--</a>-->
+        </div>
+        <div class="media-body">
+
+          <div>
+            {{k.content}}
+          </div>
+          <div class="bbsReply-img" ng-show="k.reply_image !=null ">
+            <img ng-src="{{b}}" alt="" ng-repeat="b in k.reply_image">
+          </div>
+        </div>
+
+        <p class="edit">
+          <span>{{k.create_date}}</span>
+        <span>
+          <a ng-click="goPostReply(k.bbsReply_id)">回复</a>
+          <!--<a>删除</a>-->
+        </span>
+        </p>
+      </div>
+
+      <div class="media content-floor" ng-repeat="b in k.child_array" style=margin-left:10px;>
+        <div class="media-left text-center" style="width:50px;">
+          <!--<a href="#">-->
+          <img class="media-object bbs-head-img" ng-src="{{b.avatar}}" alt=""/>
+          <p class="bbs_nickname">{{b.nickname}}</p>
+          <span>{{b.number}}楼</span>
+          <!--</a>-->
+        </div>
+        <div class="media-body">
+
+          <div>
+            {{b.content}}
+          </div>
+          <div class="bbsReply-img">
+            <img ng-src="{{z}}" alt="" ng-repeat="z in b.reply_image">
+          </div>
+        </div>
+
+        <p class="edit">
+          <span>{{b.create_date}}</span>
+        <span>
+          <a ng-click="goPostReply(b.bbsReply_id)">回复</a>
+          <!--<a>删除</a>-->
+        </span>
+        </p>
+      </div>
+
+      <div class="media content-floor" ng-repeat="x in b.child_array" style=margin-left:15px;>
+        <div class="media-left text-center" style="width:50px;">
+          <!--<a href="#">-->
+          <img class="media-object bbs-head-img" ng-src="{{x.avatar}}" alt=""/>
+          <p class="bbs_nickname">{{x.nickname}}</p>
+          <span>{{x.number}}楼</span>
+          <!--</a>-->
+        </div>
+        <div class="media-body">
+
+          <div>
+            {{x.content}}
+          </div>
+          <div class="bbsReply-img">
+            <img ng-src="{{z}}" alt="" ng-repeat="z in x.reply_image">
+          </div>
+        </div>
+
+        <p class="edit">
+          <span>{{x.create_date}}</span>
+        <span>
+          <a ng-click="goPostReply(x.bbsReply_id)">回复</a>
+          <!--<a>删除</a>-->
+        </span>
+        </p>
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+<!-- 是否删除弹出框 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!--<div class="modal-header">-->
+      <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+      <!--<h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
+      <!--</div>-->
+      <div class="modal-body">
+        <h4 class="text-center">确定删除帖子？</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button ng-click="postDelete()" type="button" data-dismiss="modal" class="btn btn-primary">确定</button>
+      </div>
+    </div>
+  </div>
+</div>

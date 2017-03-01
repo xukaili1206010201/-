@@ -1,0 +1,176 @@
+<nav class="navbar navbar-fixed-top btn-success navigationbar">
+  <!-- 返回按钮-->
+  <div class="navLeft">
+    <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+  </div>
+  <div class="navText">订单详情</div>
+
+</nav>
+
+<div id="orderDetail" class="orderDetailContent">
+  <ul class="detail-list-group list-group">
+
+    <li class="list-group-item line" style="background-color: #F0F0F0">
+
+      <div class="message-pic">
+        <img src="images/sure-icon.png" class="sure orderSure" ng-hide="true" check-all data="{type : '订单'}">
+        <span class="myOrder-orderId" ng-hide="true">{{orderDetail.order_id}}</span>
+      </div>
+
+      <div class="order-message-text">
+        <p class="">
+          {{orderDetail.city}}<span class="myorder-shop">{{orderDetail.business}}</span>
+          <span class="order-status">{{orderDetail.status}}</span>
+        </p>
+
+        <div class="order-basic-second">
+          <p class="">订单号:<span class="order_no">{{orderDetail.order_no}}</span></p>
+          <p class="secondChild">
+            <span class="allmoney">&#165 {{orderDetail.sum}}</span>
+            <span class="allmoney" ng-if="orderDetail.youhui">&nbsp;&nbsp;优惠:&#165 {{orderDetail.youhui}}  </span>
+            <span class="allmoney" ng-if="orderDetail.tiexian">&nbsp;&nbsp;贴现:&#165 {{orderDetail.tiexian}}</span>
+            <span class="allmoney" ng-if="orderDetail.shifu">&nbsp;&nbsp;实付:&#165 {{orderDetail.shifu}}</span>
+          </p>
+        </div>
+
+        <p class="">下单时:{{orderDetail.order_date}}</p>
+
+        <p class="">支付时:{{orderDetail.pay_date}}</p>
+
+        <p class="">
+          <span class="allmoney" ng-if="orderDetail.youhui">优惠:&#165 {{orderDetail.youhui}}  </span>
+          <span class="allmoney" ng-if="orderDetail.tiexian">贴现:&#165 {{orderDetail.tiexian}}</span>
+          <span class="allmoney" ng-if="orderDetail.shifu">实付:&#165 {{orderDetail.shifu}}</span>
+        <p class="" ng-if="orderDetail.remark">{{orderDetail.remark}}</p>
+      </div>
+    </li>
+    <li class="list-group-item" ng-repeat="good in orderDetail.goods">
+      <div class="pic">
+        <div class="message-pic">
+          <p>
+            <!-- 商品的失效原因 -->
+            <span ng-hide="true">{{good.error}}</span>
+            <!-- 商品的类型：是否是定时商品 -->
+            <span ng-hide="true">{{good.time}}</span>
+            <span ng-hide="true">{{good.status}}</span>
+            <img src="images/checked.jpg" class="sure img-status checked orderdetail-goods-isselected goodSure"
+                 check-good
+                 data="{range : '.orderDetailContent'}">
+            <span ng-hide="true" class="orderGoodsId">{{good.orderItem_id}}</span>
+          </p>
+
+          <!--<p><img src="images/code.png"></p>-->
+        </div>
+        <div class="product-pic">
+          <img ng-src="{{good.imageUrl}}">
+        </div>
+
+      </div>
+      <div class="list-text">
+        <p class="product-name">
+          <span class="product-good">{{good.name}}</span>
+          <span class="station good-status spanStatus">{{good.status}}</span>
+        </p>
+
+        <p class="myorder-time">
+          <span style="float:left">{{good.guige_1}}</span>
+          <span class="price">&#165 {{good.sale_price}}</span>
+        </p>
+        <p>
+          <span style="float:left">{{good.guige_2}}</span>
+          <span class="myorder-count">X{{good.count}}{{good.unit}}</span>
+        </p>
+      </div>
+
+      <!--规格-->
+      <div class="size order-guige">
+        <p ng-if="good.delivery">送货方式:{{good.delivery}}({{good.service_station}})</p>
+        <p>{{good.coupons}}</p>
+      </div>
+
+      <div class="note-message">
+        <p class="notetext">
+          <span ng-if="good.remark">备注：{{good.remark}}</span>
+          <button class="station btn btn-success statusHide cancelConfirm" style="color:#fff"
+                  ng-click="cancelConfirm_detail(orderDetail.order_id)">取消确认收货
+          </button>
+        </p>
+        <p ng-if="orderDetail.status == '已完成'">
+          <button type="button" class="btn btn-success judge">评价</button>
+        </p>
+      </div>
+      <p class="notetext" ng-show="good.error.length > 0">
+        <span>失效原因：<span class="myorder-goods-invalid">{{good.error}}</span></span>
+      </p>
+    </li>
+
+  </ul>
+
+  <div class="navbar-fixed-bottom detail-button-group ">
+    <div class="button-group-left1">
+      <p class="labletext">
+        <span class="message-pic all-select-button">
+          <img src="images/checked.jpg" check-all data="{type : '全选',range : '.detail-list-group'}" class="all checked">
+        </span>全选
+      </p>
+    </div>
+
+    <div class="button-group-right1">
+      <div class="edit-group"
+           ng-if="showStatus.indexOf('待付款') != -1 || showStatus.indexOf('已完成') != -1 || showStatus.indexOf('已退货') != -1">
+        <button type="button" class="btn btn-danger button-del" ng-click="deleteGoods()">删除</button>
+      </div>
+      <div class="edit-group" ng-if="showStatus.indexOf('待付款') != -1">
+        <button ng-click="jumpPay()" type="button" class="btn btn-success button-sel">支付</button>
+      </div>
+      <div class="edit-group" ng-if="showStatus.indexOf('待发货') != -1">
+        <button type="button" class="btn btn-danger button-sel" ng-click="refund_detail(orderDetail.order_id)">退款
+        </button>
+      </div>
+      <div class="edit-group" ng-if="showStatus.indexOf('待退款') != -1">
+        <button type="button" class="btn btn-success button-sel" ng-click="cancelRefund_detail(orderDetail.order_id)">
+          取消退款
+        </button>
+      </div>
+      <div class="edit-group" ng-if="showStatus.indexOf('已发货') != -1">
+        <button type="button" class="btn btn-danger button-sel" ng-click="return_detail(orderDetail.order_id)">退货
+        </button>
+      </div>
+      <div class="edit-group" ng-if="showStatus.indexOf('已发货') != -1">
+        <button type="button" class="btn btn-success button-sel" ng-click="confirm_detail(orderDetail.order_id)">确认收货
+        </button>
+      </div>
+      <div class="edit-group" ng-if="showStatus.indexOf('已完成') != -1">
+        <button type="button" class="btn btn-success button-sel" ng-click="cancelConfirm_detail(orderDetail.order_id)">取消确认收货
+        </button>
+      </div>
+      <div class="edit-group" ng-if="showStatus.indexOf('待退货') != -1">
+        <button type="button" class="btn btn-success button-sel" ng-click="cancelReturn_detail(orderDetail.order_id)">
+          取消退货
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!--弹出框-->
+<div class="modal fade" id="deleteSure">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">订单详情</h4>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:1.3rem">确定删除所选商品?</p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" ng-click="deleteOrder(orderDetail.order_id,orderDetail.status)">确定</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,139 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="jumpCenter()" class="back-button" src="images/back_button.png">
+  </div>
+  <div class="navText">个人信息设置</div>
+
+</nav>
+
+<div class="main">
+  <!-- 头像-->
+  <div class="weui_uploader_files edit-image" delete-headimg>
+    <input class="weui_uploader_input js_file inputBox" type="file" accept="image/jpg,image/jpeg,image/png"
+           multiple="">
+    <div class="imgBox"></div>
+  </div>
+
+  <form name="form" ng-submit="jumpTo()">
+    <div class="info-input">
+      <div class="form-horizontal">
+
+        <div class="property-edit">
+          <label class="property-text" for="editmobile">手机号</label>
+          <label class="ver-middle enable-edit" id="editmobile" ng-model="formData.mobile">
+            <a class="tellColor" href="tel:{{formData.mobile}}">{{formData.mobile}}</a>
+          </label>
+          <img class="property-editImg ver-middle" src="images/next.png" ng-click="editmobile()">
+        </div>
+
+        <div class="property-edit">
+          <label class="property-text" for="nickname">昵称</label>
+          <input id="nickname" ng-model="formData.nickname" type="text" class="form-control property-field"
+                 placeholder="昵称">
+        </div>
+
+        <div class="property-edit">
+          <label class="property-text" for="username">姓名</label>
+          <input id="username" ng-model="formData.username" type="text" class="form-control property-field"
+                 placeholder="姓名">
+        </div>
+
+        <div class="property-edit">
+          <label class="property-text">性别</label>
+          <div class="gender-select">
+            <div>
+              <input
+                bs-switch
+                ng-model="formData.sex"
+                type="checkbox"
+                switch-on-text="男"
+                switch-off-text="女"
+                switch-off-color="primary"
+                ng-true-value="1"
+                ng-false-value="2">
+            </div>
+          </div>
+        </div>
+
+        <div class="property-edit">
+          <label class="property-text">身份证号</label>
+          <input ng-model="formData.id_number" name="id_number" type="text" ng-blur="birthdayBlur()" maxlength="18"
+                 class="form-control property-field" placeholder="身份证号">
+          <!--<span class="TagListError" ng-show="form.$dirty && form.id_number.$error.pattern">请输入正确的身份证号码！</span>-->
+        </div>
+
+        <div class="property-edit">
+          <label for="birthday" class="property-text">生日</label>
+          <input id="birthday" type="text" class="form-control property-field" ng-model="formData.birthday"
+                 style="margin-left:22%;">
+        </div>
+
+        <div class="property-edit">
+          <label for="email" class="property-text">电子邮箱</label>
+          <input id="email" ng-model="formData.email" type="email" class="form-control property-field"
+                 placeholder="电子邮箱">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="info-input">
+      <div class="form-horizontal" role="form">
+        <!-- 余额-->
+        <div class="property-edit">
+          <label class="property-text">余额</label>
+          <label class="ver-middle text-gray">{{formData.balance | currency : '￥'}}</label>
+        </div>
+
+        <!-- 个人名片 -->
+        <div class="property-edit" ng-click="editusercard()">
+          <label class="property-text">个人名片</label>
+          <img class="property-editImg ver-middle" src="images/next.png">
+        </div>
+
+
+        <div class="property-edit">
+          <label class="property-text">修改密码</label>
+          <label ng-model="formData.password" class="ver-middle enable-edit"
+                 ng-click="editPasswordreset()">******</label>
+          <img class="property-editImg ver-middle" src="images/next.png">
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="alert text-center" ng-show="errMsg">{{errMsg}}</div>-->
+    <div class="empty"></div>
+    <div class="navbar navbar-default navbar-fixed-bottom text-center buttonTwo">
+      <button type="button" ng-click="editcenterNo()" class="btn btn-danger btnRadius">注销登录</button>
+      <button type="submit" class="btn btn-success btnRadius">提 交</button>
+    </div>
+
+  </form>
+</div>
+
+
+<div class="edit-password-view">
+  <div class="edit-password-alert">
+    <div class="verfication-code-input">
+      <input class="form-control" type="text" placeholder="短信验证码">
+    </div>
+    <div class="verficationCode-button-group">
+      <button type="button" class="btn" onclick="queryVerficationCodeOfEditPassword()" disabled>查询验证码</button>
+      <button type="button" class="btn  verfication-code-get button-background-color"
+              onclick="fetchVerficationCodeOfEditPassword()">获取短信验证码
+      </button>
+    </div>
+    <div class="password-input">
+      <input class="form-control" type="text" placeholder="新密码">
+      <input class="form-control newpassword-input" type="text" placeholder="确认密码">
+    </div>
+    <div class="edit-button-group">
+      <button type="button" class="btn" onclick="cancelEditPassword()">取消</button>
+      <button type="button" class="btn verfication-code-get button-background-color" onclick="submitNewPassword()">确认
+      </button>
+    </div>
+  </div>
+</div>
+
+

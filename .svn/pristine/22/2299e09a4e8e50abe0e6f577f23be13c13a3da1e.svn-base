@@ -1,0 +1,129 @@
+<nav class="navbar navbar-fixed-top btn-success navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+    <div class="navigationbar-item">
+      <p class="item-title">订单详情</p>
+    </div>
+
+  </div>
+</nav>
+
+<div id="orderDetail">
+  <ul class="detail-list-group list-group">
+
+    <li class="list-group-item line">
+
+      <div class="message-pic">
+        <!--<img src="images/sure-icon.png" class="sure orderSure" check-all data="{type : '订单'}">-->
+        <span ng-hide="true">{{orderDetail.order_id}}</span>
+      </div>
+
+      <div class="order-message-text" >
+        <p class="">{{orderDetail.city}}<span class="myorder-shop">{{orderDetail.business}}</span></p>
+
+        <p class="">订单号:{{orderDetail.order_no}}</p>
+
+        <p class="">下单时:{{orderDetail.order_date}}</p>
+
+        <p class="">支付时:{{orderDetail.pay_date}}</p>
+
+        <p class="">
+          <span class="order-status">{{orderDetail.status}}</span>
+          <!--<span class="allmoney">优惠:&#165 {{orderDetail.youhui}}  贴现:&#165 {{orderDetail.tiexian}}  实付:&#165 {{orderDetail.shifu}}</span></p>-->
+          <span class="allmoney" ng-if="finishGood.youhui">优惠:&#165 {{finishGood.youhui}}  </span>
+          <span class="allmoney" ng-if="finishGood.tiexian">贴现:&#165 {{finishGood.tiexian}}</span>
+          <span class="allmoney" ng-if="finishGood.shifu">实付:&#165 {{finishGood.shifu}}</span>
+        <p class="" ng-if="orderDetail.remark">{{orderDetail.remark}}</p>
+      </div>
+    </li>
+    <li class="list-group-item" ng-repeat="good in orderDetail.goods">
+      <div class="pic">
+        <div class="message-pic">
+          <p>
+            <span ng-hide="true">{{good.status}}</span>
+            <!--<img src="images/sure-icon.png" class="sure img-status" check-good>-->
+            <span ng-hide="true">{{good.goods_id}}</span>
+          </p>
+
+          <p><img src="images/code.png"></p>
+        </div>
+        <div class="product-pic">
+          <img ng-src="{{good.imageUrl}}">
+        </div>
+
+      </div>
+      <div class="list-text">
+        <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+        <p class="myorder-time"><span class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+        <p>{{good.coupons}}</p>
+      </div>
+
+      <!--规格-->
+      <div class="size row">
+        <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+          <div class="row"></div>
+          <div class="row">
+            <p>{{good.guige_1}}</p>
+            <p>{{good.guige_2}}</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+          <div class="row">{{good.delivery}}</div>
+          <div class="row">
+            {{good.service_station}}
+          </div>
+        </div>
+      </div>
+
+      <div class="note-message">
+        <p class="notetext">
+          <span ng-if="good.remark">备注：{{good.remark}}</span>
+          <span class="station good-status spanStatus">{{good.status}}</span>
+          <button class="station btn btn-success statusHide cancelConfirm" style="color:#fff" ng-click="cancelConfirm_detail(orderDetail.order_id)">取消确认收货</button>
+        </p>
+        <p ng-if="orderDetail.status == '已完成'">
+          <button type="button" class="btn btn-success judge">评价</button>
+        </p>
+      </div>
+    </li>
+
+  </ul>
+
+  <div class="navbar-fixed-bottom detail-button-group ">
+    <div class="button-group-left1">
+      <!--<p class="labletext">
+        <span class="message-pic all-select-button">
+          <img src="images/sure-icon.png" check-all data="{type : '全选'}" class="all">
+        </span>全选
+      </p>
+-->
+    </div>
+
+    <div class="button-group-right1">
+      <div class="edit-group" ng-if="orderDetail.status == '待付款' || orderDetail.status == '已完成' || orderDetail.status == '已退货'">
+        <button type="button" class="btn btn-danger button-del" ng-click="deleteOrder(orderDetail.order_id,orderDetail.status)">删除</button>
+      </div>
+      <div class="edit-group" ng-if="orderDetail.status == '待付款'" ng-hide="true">
+        <button ng-click="jumpPay()" type="button" class="btn btn-success button-sel">支付</button>
+      </div>
+      <div class="edit-group" ng-if="orderDetail.status == '待发货'">
+        <button type="button" class="btn btn-danger button-sel" ng-click="refund_detail(orderDetail.order_id)">退款</button>
+      </div>
+      <div class="edit-group" ng-if="orderDetail.status == '待退款'">
+        <button type="button" class="btn btn-danger button-sel" ng-click="cancelRefund_detail(orderDetail.order_id)">取消退款</button>
+      </div>
+      <div class="edit-group" ng-if="orderDetail.status == '已发货'">
+        <button type="button" class="btn btn-danger button-sel" ng-click="return_detail(orderDetail.order_id)">退货</button>
+      </div>
+      <div class="edit-group" ng-if="orderDetail.status == '已发货'">
+        <button type="button" class="btn btn-success button-sel" ng-click="confirm_detail(orderDetail.order_id)">确认收货</button>
+      </div>
+      <div class="edit-group" ng-if="orderDetail.status == '待退货'">
+        <button type="button" class="btn btn-danger button-sel" ng-click="cancelReturn_detail(orderDetail.order_id)">取消退货</button>
+      </div>
+    </div>
+
+  </div>
+</div>

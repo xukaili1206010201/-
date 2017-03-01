@@ -1,0 +1,655 @@
+'use strict';
+
+var businessModuleController = angular.module('businessModuleController', ['chart.js']);
+
+//我发货的商品页
+businessModuleController.controller(
+  'deliveryCtrl',['$scope','userService','commonService','$timeout','$q',function($scope,userService,commonService,$timeout,$q){
+    $scope.params = {
+      mobile : localStorage.mobile,
+      url : 'listPeisong.action',
+      pageno : '1', //页码
+      pagesize : '5', //页数
+      direction : 'up',
+      sort : 'station_category'
+    };
+    $scope.deliveryList = [];
+    $scope.category = []; //类型
+    $scope.faDate = []; //需送日
+    $scope.business = []; //商家
+    var isOver = false; //false:标志数据未加载完成
+    $scope.deliveryFun = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function(response){
+        switch (response.code){
+          case '0':
+            var tempList = response.data.order;
+            var conditionList = response.data;
+            if(tempList.length < params.pagesize){
+              isOver = true;//true:标志数据加载完成
+              defer.resolve(isOver);
+            }else{
+              isOver = false;
+              defer.resolve(isOver);
+            }
+            if(params.key){ //关键字搜索
+              console.log('关键字');
+              if(response.data.order.length == 0 && params.pageno == '1'){
+                $scope.isShow = false;
+                return;
+              }else{
+                $scope.isShow = true;
+                if(params.direction == 'down'){
+                  $scope.deListByKey = response.data.order;
+                }else{
+                  $scope.deListByKey = $scope.deListByKey.concat(tempList);
+                }
+              }
+            }else if(params.type_id || params.date || params.business_id){
+              /****************按条件搜索*********************/
+              console.log('条件搜索');
+              if(params.direction == 'down'){
+                $scope.deListByCondtion = response.data.order;
+              }else{
+                $scope.deListByCondtion = $scope.deListByCondtion.concat(tempList);
+              }
+            }else{
+              console.log('全部');
+              if(params.direction == 'down'){
+                $scope.deliveryList = response.data.order;
+              }else{
+                $scope.deliveryList = $scope.deliveryList.concat(tempList);
+              }
+              /*******获取需送日、类型、商家信息****/
+              //类型
+              $scope.category = conditionList.type;
+              //发送日
+              $scope.faDate = conditionList.date;
+              //商家
+              $scope.business = conditionList.business;
+            }
+
+            break;
+          case '-1':
+            break;
+        }
+      });
+      return defer.promise;
+    };
+    $scope.deliveryFun($scope.params);
+    /************************按选择条件筛选列表，通用方法**********************************/
+    var txt = '';
+    var sign = '';
+    var typeSign = ''; //保存上一次点击的下拉列表类型(需送日、类型、商家)
+    $scope.deListByCondtion = [];
+    $scope.isCondition = false;//false:默认显示列表，true:按选择条件显示列表
+    $scope.listByConditions = function(type){
+      sign = txt; //保存上一次选择条件
+      //上一次点击的下拉列表类型和本次不一样的话，将sign置空
+      if(typeSign && typeSign != type){sign = '';}
+      var isContinue = true;
+      var sendTxt = $('.sendDate option:selected').text();
+      var catTxt = $('.category option:selected').text();
+      var busTxt = $('.business option:selected').text();
+      var sortTxt = $('.sort option:selected').val();
+      type == '需送日' ? txt = sendTxt : type == '类型' ? txt = catTxt : type == '商家' ? txt =  busTxt : txt = sortTxt;
+      var isDefault = sendTxt == '需送日' && catTxt == '类型' && busTxt == '商家' && sortTxt == '服务站分类';
+      if(isDefault){
+        isContinue = false;
+      }
+      if(sign == ''){isContinue = false}
+      if(txt != sign && isContinue && !isDefault){
+        $scope.isCondition = true;
+        $scope.deListByCondtion = [];
+        $scope.conditionParams = {
+          mobile : localStorage.mobile,
+          url : 'listPeisong.action',
+          pageno : '1', //页码
+          pagesize : '5', //页数
+          direction : 'up',
+          date : '',
+          type_id : '',
+          business_id : '',
+          sort : ''
+        };
+        $scope.conditionParams.date = sendTxt;
+        $scope.conditionParams.type_id = $('.category option:selected').val();
+        $scope.conditionParams.business_id = $('.business option:selected').val();
+        $scope.conditionParams.sort = sortTxt;
+        $scope.deliveryFun($scope.conditionParams);
+      }else if(isDefault){
+        $scope.isCondition = false;
+      }
+      typeSign = type;
+    };
+
+    /*******************关键字搜索************************/
+    $scope.isShowDel = true; //true:显示分类的优惠券，false：显示搜索的优惠券
+    var val = '';
+    $scope.deListByKey = [];
+    $scope.searchDel = function(){
+      $scope.deListByKey = [];
+      val = $('.search-input input').val();
+      if(val == ''){
+        $scope.isShowDel = true;
+        commonService.showWarnMessage('请输入关键字！');
+      }else{
+        $scope.isShowDel = false;
+        $scope.deliParams.key = val;
+        $scope.deliveryFun($scope.deliParams);
+      }
+    };
+    $scope.deliParams = {
+      mobile : localStorage.mobile,
+      url : 'listPeisong.action',
+      'pageno' : '1', //页码
+      'pagesize' : '4', //页数
+      "direction" : 'up',
+      key : ''
+    };
+    $scope.isShow = true;//false:无相关数据 true：有相关数据
+
+    //返回
+    $scope.back = function(){
+      if($scope.isShowDel){
+        history.back();
+      }else{
+        window.location.reload();
+      }
+    };
+
+    //修改发量
+    $scope.jian = function($event){
+      var val = parseInt($($event.target).next().val());
+      if(val > 0){
+        --val;
+      }
+      $($event.target).next().val(val);
+    };
+
+    $scope.faChange = function($event,orderId,goodId,dingCount){
+      //$('#Modal').modal('show');
+      var faCount = $($event.target).prev().html();
+      $scope.orderId = orderId;
+      $scope.goodId = goodId;
+      $scope.event = $event.target;
+      $scope.dingCount = parseInt(dingCount);
+      $scope.faCount = parseInt(faCount?faCount:0);
+    };
+    $scope.jia =function($event){
+      var val = parseInt($($event.target).prev().val());
+      if(val < parseInt($scope.faCount)){
+        val++;
+      }
+      $($event.target).prev().val(val);
+    };
+    $scope.faSure = function(){
+      //发量为正整数且大于1且小于等于订量数
+      if($scope.faCount <= $scope.dingCount && (/^[1-9]*$/.test( $scope.faCount )) ){
+        userService.postRequestWithUrlAndParams('peisongCount.action',{
+         mobile : localStorage.mobile,
+         order_id : $scope.orderId,
+         goods_id : $scope.goodId,
+         count : $scope.faCount
+         }).success(function(response){
+         if(response.code == '0'){
+         commonService.showWarnMessage('发量修改成功！');
+         }else{
+         commonService.showWarnMessage('发量修改失败！');
+         }
+         var timer = $timeout(function(){
+          $('#Modal').modal('hide');
+          window.location.reload(true);
+         },1000);
+         });
+      }else{
+        commonService.showWarnMessage('请输入1~'+$scope.dingCount+'的整数！');
+      }
+
+    };
+
+    //发货
+    $scope.sendGoods = function(){
+      var orderIds = [];
+      var goodIds = [];
+      var isContinue = false;
+      $.each($('.list-group-item'),function(index,domEl){
+        if($(domEl).find('.sure').hasClass('checked')){
+          var order_id = $(domEl).find('.orderId').html();
+          var good_id = $(domEl).find('.goodId').html();
+          orderIds.push(order_id);
+          goodIds.push(good_id);
+          isContinue = true;
+        }
+      });
+      if(isContinue){
+        userService.postRequestWithUrlAndParams('peisongStatus.action',{
+          mobile : localStorage.mobile,
+          order_id : orderIds.join(),
+          goods_id : goodIds.join()
+        }).success(function(response){
+          console.log(response.code);
+          if(response.code == '0'){
+            commonService.showWarnMessage('发货成功！');
+            var timer = $timeout(function(){
+              window.location.reload();
+            },1000);
+          }else{
+            commonService.showWarnMessage('发货失败！');
+          }
+        });
+      }
+
+    }
+
+  }]);
+
+//我派发的商品页
+businessModuleController.controller(
+  'distributeCtrl',['$scope','$rootScope','commonService','userService','$timeout','$q',
+  function ($scope,$rootScope, commonService, userService,$timeout,$q) {
+    $scope.params = {
+      mobile : localStorage.mobile,
+      city_id : sessionStorage.gpscityId,
+      pageno : '1', //页码
+      pagesize : '5', //页数
+      url : 'listPaisong.action',
+      direction : 'up',
+      sort : 'order_last'
+    };
+    var isOver = false; //false:标志数据未加载完成
+    $scope.distributeList = [];
+    $scope.paiDate = [];//需派日
+    $scope.serviceStation = [];//服务站
+    $scope.fuwu = [];//服务
+    $scope.distributeFun = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function(response){
+        switch (response.code){
+          case '0':
+            var tempList = response.data.order;
+            if(tempList.length < params.pagesize){
+              isOver = true;//true:标志数据加载完成
+              defer.resolve(isOver);
+            }else{
+              isOver = false;
+              defer.resolve(isOver);
+            }
+            if(params.key){ //关键字搜索
+              console.log('关键字');
+              if(response.data.order.length == 0 && params.pageno == '1'){
+                $scope.isShow = false;
+                return;
+              }else{
+                $scope.isShow = true;
+                if(params.direction == 'down'){
+                  $scope.distriByKey = response.data.order;
+                }else{
+                  $scope.distriByKey = $scope.distriByKey.concat(tempList);
+                }
+              }
+            }else if(params.date || params.fuwu || params.service_station){
+              /*****************按条件筛选************************/
+              console.log('条件');
+              if(params.direction == 'down'){
+                $scope.distriByCondtion = response.data.order;
+              }else{
+                $scope.distriByCondtion = $scope.distriByCondtion.concat(tempList);
+              }
+            }else{ /**********初始页面显示的数据************/
+              console.log('初始页面');
+              if(params.direction == 'down'){
+                $scope.distributeList = response.data.order;
+              }else{
+                $scope.distributeList = $scope.distributeList.concat(tempList);
+              }
+              /**********获取需送日、服务站、服务、排序，去除重复放入对应数组中*************/
+              $scope.paiDate = response.data.date;
+              $scope.serviceStation = response.data.service_station;
+              $scope.fuwu = response.data.fuwu;
+            }
+            break;
+          case '-1':
+            break;
+        }
+      });
+      return defer.promise;
+    };
+    $scope.distributeFun($scope.params);
+
+    /********************按选择条件，筛选派发列表*********************************/
+    var txt = '';
+    var sign = '';
+    var typeSign = '';//保存上一次点击的下拉列表类型(需送日、服务站、服务)
+    $scope.distriByCondtion = [];
+    $scope.isCondition = false;//false:默认显示列表，true:按选择条件显示列表
+    $scope.listByCdt = function(type){
+      sign = txt;
+      //上一次点击的下拉列表类型和本次不一样的话，将sign置空
+      if(typeSign && typeSign != type){sign = '';}
+      var isContinue = true;
+      var pdTxt = $('.paiDate option:selected').text();
+      var svTxt = $('.serviceStation option:selected').text();
+      var fwTxt = $('.fw option:selected').text();
+      var stTxt = $('.sort option:selected').val();
+      type == '需送日' ? txt = pdTxt : type == '服务站' ? txt = svTxt : type == '服务' ? txt =  fwTxt : txt = stTxt;
+      var isDefault = pdTxt == '需送日' && svTxt == '服务站' && fwTxt == '服务' && stTxt == '订单尾号';
+      if(isDefault){
+        isContinue = false;
+      }
+      if(sign == ''){isContinue = false}
+      if(txt != sign && isContinue){
+        $scope.isCondition = true;
+        $scope.distriByCondtion = [];
+        $scope.cdtParams = {
+          mobile : localStorage.mobile,
+          city_id : sessionStorage.gpscityId,
+          url : 'listPaisong.action',
+          pageno : '1', //页码
+          pagesize : '5', //页数
+          direction : 'up',
+          date : '',
+          service_station_id : '',
+          fuwu_id : '',
+          sort : ''
+        };
+        $scope.cdtParams.date = pdTxt;
+        $scope.cdtParams.service_station_id = $('.serviceStation option:selected').val();
+        $scope.cdtParams.fuwu_id = $('.fw option:selected').val();
+        $scope.cdtParams.sort = stTxt;
+        $scope.distributeFun($scope.cdtParams);
+      }else if(isDefault){
+        $scope.isCondition = false;
+      }
+      typeSign = type;
+    };
+
+    /*******************关键字搜索************************/
+    $scope.isShowDistr = true; //true:显示分类的优惠券，false：显示搜索的优惠券
+    var val = '';
+    $scope.distriByKey = [];
+    $scope.searchDistr = function(){
+      $scope.distriByKey = [];
+      val = $('.search-input input').val();
+      if(val == ''){
+        $scope.isShowDistr = true;
+        commonService.showWarnMessage('请输入关键字！');
+      }else{
+        $scope.isShowDistr = false;
+        $scope.distriParams.key = val;
+        $scope.distributeFun($scope.distriParams);
+      }
+    };
+    $scope.distriParams = {
+      mobile : localStorage.mobile,
+      url : 'listPaisong.action',
+      city_id : sessionStorage.gpscityId,
+      pageno : '1', //页码
+      pagesize : '5', //页数
+      direction : 'up',
+      key : ''
+    };
+    $scope.isShow = true;//false:无相关数据 true：有相关数据
+
+    //返回
+    $scope.back = function(){
+      if($scope.isShowDistr){
+        history.back();
+      }else{
+        window.location.reload();
+      }
+    };
+
+    //修改收量
+    $scope.shouChange = function($event,orderId,goodId,faCount){
+      $('#Modal').modal('show');
+      var shouCount = parseInt($($event.target).prev().html());
+      $('.shouCount').val(shouCount);
+      $scope.event = $event.target;
+      $scope.orderId = orderId;
+      $scope.goodId = goodId;
+      $scope.shouCount = parseInt(shouCount);
+      $scope.faCount = parseInt(faCount);
+    };
+    //点击确认
+    $scope.shouSure = function(){
+      //修改的收量必须为正整数且小于等于发量
+      if(parseInt($('.shouCount').val()) <= parseInt($scope.faCount) && (/^[0-9]*$/.test( $('.shouCount').val() ))){
+        userService.postRequestWithUrlAndParams('peisongCount.action',{
+         mobile : localStorage.mobile,
+         order_id : $scope.orderId,
+         goods_id : $scope.goodId,
+         count : $('.shouCount').val()
+         }).success(function(response){
+         if(response.code == '0'){
+         commonService.showSuccessMessage('收量修改成功！');
+         }else{
+         commonService.showErrorMessage('收量修改失败！');
+         }
+         var timer = $timeout(function(){
+         $('#Modal').modal('hide');
+           window.location.reload(true);
+         },1000);
+         });
+      }else{
+        commonService.showWarnMessage('请输入不大于发量的正整数！');
+      }
+
+    };
+
+    //修改派量
+    $scope.change_pai = function(paiCount,shoutC){
+      $('#Modal1').modal('show');
+      $scope.paiCount = parseInt(paiCount);
+      $scope.shouCount = parseInt(shoutC);
+    };
+    //-
+    $scope.minus = function($event){
+      var val = parseInt($($event.target).next().val());
+      if(val > 0){
+        --val;
+      }
+      $($event.target).next().val(val);
+    };
+    //+
+    $scope.plus = function($event,type){
+      var val = parseInt($($event.target).prev().val());
+      if(val < parseInt($scope.shouCount) && type == '派量'){
+        val++;
+      }else if(val < parseInt($scope.faCount) && type == '收量'){
+        val++;
+      }
+      $($event.target).prev().val(val);
+    };
+    //确认修改派量
+    $scope.isPaic = false;
+    $scope.sure_paiC = function(){
+      if(parseInt($('.paiC').val()) <= parseInt($scope.shouCount) && (/^[0-9]*$/.test($('.paiC').val()))){
+        $scope.isPaic = false;
+        //toDo
+        //添加修改派量接口
+
+      }else{
+        $scope.isPaic = true;
+      }
+    };
+
+    //派发
+    $scope.paiFa = function(){
+      $('#Modal2').modal('show');
+    };
+    //确定派发
+    $scope.sure_paiFa = function(){
+      var lis = $('.distribute-ul').find('.sure');
+      $.each(lis,function(index,domEl){
+        if($(domEl).hasClass('checked')){
+          var orderId = $(domEl).prev().html();
+          var goodId = $(domEl).next().html();
+          var paiCount = $(domEl).parents('.line-wrapper').find('.paL').html();
+          userService.postRequestWithUrlAndParams('paisongStatus.action',{
+            mobile : localStorage.mobile,
+            order_id : orderId,
+            goods_id : goodId,
+            count : paiCount
+          }).success(function(response){
+            console.log(response.code);
+            if(response.code == '0'){
+              //$($scope.event).parent().prev().find('.paL').html($('.paiC').val());
+              commonService.showSuccessMessage('派发成功！');
+            }else{
+              commonService.showErrorMessage('派发失败！');
+            }
+             var timer = $timeout(function(){
+             $('#Modal1').modal('hide');
+             window.location.reload(true);
+             },1000);
+          });
+        }
+      });
+    };
+   /* $scope.pai = function($event,paiCount,orderId,goodId,shoutC){
+      $('#Modal1').modal('show');
+      $scope.event = $event.target;
+      $scope.orderId = orderId;
+      $scope.goodId = goodId;
+      $scope.paiCount = parseInt(paiCount);
+      $scope.shouCount = parseInt(shoutC);
+      $('.paiC').val(paiCount);
+    };
+    $scope.payout = function(){
+      if((parseInt($('.paiC').val())+$scope.paiCount) <= $scope.shouCount && (/^[1-9]*$/.test( $('.paiC').val() ))){
+        userService.postRequestWithUrlAndParams('paisongStatus.action',{
+         mobile : localStorage.mobile,
+         order_id : $scope.orderId,
+         goods_id : $scope.goodId,
+         count : $('.paiC').val()
+         }).success(function(response){
+         if(response.code == '0'){
+         //$($scope.event).parent().prev().find('.paL').html($('.paiC').val());
+         commonService.showSuccessMessage('派发成功！');
+         }else{
+         commonService.showErrorMessage('派发失败！');
+         }
+         var timer = $timeout(function(){
+         $('#Modal1').modal('hide');
+         window.location.reload(true);
+         },1000);
+         });
+      }else{
+        commonService.showWarnMessage('请输入1~'+($scope.shouCount-$scope.paiCount)+'之间的正整数！');
+      }
+
+    };*/
+
+  }]
+);
+
+//我粉丝的验证码页
+businessModuleController.controller(
+  'fans_codeCtrl',
+    function ($scope, $stateParams,userService,$state,$interval,$rootScope,commonService) {
+      //获取验证码信息
+      $scope.codeParams = {
+        'key' : ''
+      };
+      $scope.fansCodeList = [];
+      $scope.errMsg = '';
+      function getCodes(params){
+        userService.listCode(params).success(function (response) {
+          switch (response.code){
+            case '0':
+              if(response.data.length > 0){
+                $scope.errMsg = '';
+                $scope.fansCodeList = response.data;
+              }else{
+                $scope.errMsg = '没有相关数据';
+              }
+              break;
+            case '-1':
+              commonService.showWarnMessage("请输入手机号码！");
+              break;
+          }
+        });
+      };
+
+      getCodes($scope.codeParams);
+      /*************************关键字搜索****************/
+      $scope.searchCode = function(){
+        $scope.fansCodeList = [];
+        $scope.codeParams.key = $('.search-input').val();
+        getCodes($scope.codeParams);
+      };
+      //失去焦点时，获取key值
+      $scope.codeBlur = function(){
+        $scope.codeParams.key = $('.search-input').val();
+      };
+
+      $scope.back = function(){
+          history.back();
+      }
+    }
+);
+
+//业务量统计页
+businessModuleController.config(function (ChartJsProvider) {
+  ChartJsProvider.setOptions({ colours : [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'] });
+});
+businessModuleController.controller(
+  'portfolioCtrl',
+  function ($scope, $rootScope,$stateParams, userService,$state,commonService) {
+    //$scope.city_name=sessionStorage.gpscityName;
+
+    userService.postRequestWithUrlAndParams('myServiceCount.action',{
+      city_id:sessionStorage.gpscityId,
+      mobile : localStorage.mobile
+    }).success(function(response){
+
+      switch (response.code){
+        case '0':
+          //吸粉数据
+          $scope.labels = response.data.labels;
+          $scope.series = response.data.fansSeries;
+          $scope.fansData =
+            response.data.fansData
+          ;
+          //特供数据
+          $scope.labels2 = response.data.labels;
+          $scope.series2 = response.data.orderSeries;
+          $scope.specialSupplyData =
+            response.data.orderData;
+
+          //$scope.labels2 = ["January", "February", "March", "April", "May", "June", "July"];
+          //$scope.series2 = ['Series2 A', 'Series2 B'];
+          //$scope.specialSupplyData = [
+          //  [65, 59, 80, 81, 56, 55, 40],
+          //  [28, 48, 40, 19, 86, 27, 90]
+          //];
+          //$scope.onClick = function (points, evt) {
+          //  console.log(points, evt);
+          //};
+          $('#line2').parent().css({'display': 'none'});
+          $scope.fans=function(){
+            $('#line1').parent().parent().css({'display': 'block'});
+            $('#line2').parent().parent().css({'display': 'none'});
+          };
+          $scope.specialSupply=function(){
+            $('#line1').parent().parent().css({'display': 'none'});
+            $('#line2').parent().css({'display': 'block'});
+            $('#line2').parent().parent().css({'display': 'block'});
+          };
+
+          break;
+        case '-1':
+          commonService.showWarnMessage("参数为空！");
+          break;
+        case '-2':
+          commonService.showWarnMessage("参数错误！");
+          break;
+      }
+    });
+
+
+
+
+  }
+);

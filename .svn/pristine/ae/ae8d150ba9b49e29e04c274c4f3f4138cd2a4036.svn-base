@@ -1,0 +1,157 @@
+.main .category-segment{
+  width:100%;
+  position: fixed;
+  top: 50px;
+  left: 0px;
+  border-bottom: 1px solid #dddddd;
+  background: white;
+  z-index: 999;
+}
+
+.main .category-segment select{
+  height:28px;
+  font-size: 13px;
+}
+.deliver_list{
+  width:100%;
+}
+.order{
+  margin-left: 37px;
+}
+.deliveryMain{
+  margin-top:50px;
+  margin-bottom: 50px;
+}
+.sendDate{
+  padding-left:0px;
+  height:28px;
+  font-size:13px;
+  border:1px solid #ddd;
+}
+.deliveryUl ul,.searchDelivery ul,.listByCondition ul{
+  margin-bottom:0px;
+}
+
+.delivery-category{
+  overflow: hidden;
+  width:100%;
+  height:30px;
+  margin-top:50px;
+  position: fixed;
+  top:0;
+  left: 0;
+  background-color: #fff;
+  z-index: 1000;
+}
+.delivery-category select,.delivery-category input{
+  height:100%;
+  font-size:13px;
+}
+
+/******************** 发量 *******************/
+.send-num{
+  margin-left: 10px;
+}
+
+
+/******************** 按钮组 *******************/
+.footer{
+  width: 100%;
+  height: 49px;
+  background: rgb(240, 239, 245)
+}
+
+.fa-block , .cancel-block{
+  width: 100%;
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 5px;
+  float: left;
+}
+
+.btn{
+  padding: 8px;
+}
+
+.footer .send-button , .cancel-button{
+  width: 100%;
+  height: 29px;
+  color: white;
+}
+.goodsName{
+  font-size: 14px;
+}
+.good_status{
+  float:right;
+}
+.time{
+  float: right;
+}
+.fa_float{
+  float:left;
+}
+/*滑动按钮*/
+.btnDelete{
+  position: absolute;
+  top: 0;
+  right: -82px;
+  text-align: center;
+  color: #fff;
+  width: 80px;
+  height:100%;
+  padding: 0;
+}
+.payout,.nopayout{
+  float:left;
+  width:80px;
+  height:130px;
+  line-height: 130px;
+  text-align: center;
+}
+.deli-footer{
+  background-color:#ddd;
+  padding-bottom: 5px;
+}
+.deli-footer .fa-block{
+  padding-left:1rem;
+}
+.deli-footer .fa-block button,.deli-footer .cancel-block button{
+  width:100%;
+}
+.delivery-media .spanCheck img{
+  width:2rem;
+  height:2rem;
+}
+.delivery-img .good-img img{
+  width: 107px;
+  height: 64px;
+}
+
+/*****************服务站分类********************************/
+.sort-total{
+  width:100%;
+  padding:10px 15px;
+  background-color: #ccc;
+}
+.sort-total span:last-child,.service-station-p span:last-child,.good-p span:last-child{
+  float:right;
+}
+.service-station-sort ul li:first-child{
+  background-color: #F0F0F0;
+}
+.delivery-list-item{
+  border-top-left-radius:0px;
+  border-top-right-radius:0px;
+  border:none;
+  border-top:1px solid #ddd;
+  border-bottom:1px solid #ddd;
+}
+.delivery-list-item:last-child{
+  border-bottom-left-radius:0px;
+  border-bottom-right-radius:0px;
+}
+.delivery-list-item:first-child{
+  border-top-left-radius:0px;
+  border-top-right-radius:0px;
+}
+

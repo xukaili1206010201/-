@@ -1,0 +1,30 @@
+.sellerWelfare .tabs{
+  /*border:1px solid red;*/
+  overflow: hidden;
+}
+.sellerWelfare .tabs li{
+  float:left;
+  width:50%;
+  /*padding:5px;*/
+  height: 35px;
+  line-height: 35px;
+  font-size: 1.3rem;
+}
+.sellerWelfare .list-group .list-group-item{
+  border-radius: 0px;
+}
+.good-name{
+  float: left;
+}
+.good-count{
+  float: right;
+}
+.intro{
+  clear: both;
+}
+.redPackage .second span{
+  float:right;
+}
+.red-time{
+  clear:both;
+}

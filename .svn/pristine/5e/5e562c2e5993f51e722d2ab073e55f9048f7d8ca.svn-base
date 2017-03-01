@@ -1,0 +1,203 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <div class="left-item">
+      <img ng-click="backComservice()" class="back-button" src="images/back_button.png">
+
+      <!--<p ng-click="jumpSelectcity()" class="city" style="color: white; padding-right: 5px;">{{city_name}} <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>-->
+      <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+        <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+                ng-options="x.city_id as x.name for x in usercityList">
+        </select>
+      </p>
+    </div>
+
+    <div class="navigationbar-item">
+      <div class="search-button">
+        <img src="images/search_button.png" ng-click="searchByKey()">
+      </div>
+      <div class="search-field-block">
+        <div class="search-input">
+          <input type="text" class="form-control" placeholder="请输入搜索关键字">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="sellerWelfare navMain">
+  <ul class="tabs text-center">
+    <li class="redPacket" ng-click="redPacket()">红包</li>
+    <li class="shop" ng-click="shop()">商城</li>
+  </ul>
+
+  <div>
+    <!--红包-->
+    <div ng-if="redPackageHtml" class="redPackage">
+      <div ng-if="isSearch">
+        <div ng-if="!errMsg" class="contentArea" load-more data="{params : redPacket,repeatFun : '$scope.redPackageFun'}">
+          <ul class="list-group">
+            <li class="list-group-item coupons-row" ng-repeat="k in redPacketList" ng-click="goDetail(k.coupons_id,k.fuwu_type)">
+              <p class="coupons-name">{{k.name}}</p>
+              <p class="coupons-type">{{k.fuwu_type}}&nbsp; {{k.city}}&nbsp;{{k.type}}&nbsp;{{k.number}}</p>
+              <!--<p class="coupons-city">城市</p>-->
+              <p class="coupons-time">{{k.start_date}}~{{k.end_date}}</p>
+            </li>
+          </ul>
+        </div>
+        <div class="text-center" ng-if="errMsg">没有相关数据！</div>
+      </div>
+      <!-------------红包关键字------------->
+      <div ng-if="!isSearch">
+        <div style="text-align: center;font-size:2rem" ng-if="!isShow"><span>sorry,暂无相关数据！</span></div>
+        <div ng-if="isShow">
+          <div class="contentArea" load-more data="{params : redPacket,repeatFun : '$scope.redPackageFun'}">
+            <ul class="list-group">
+              <li class="list-group-item coupons-row" ng-repeat="k in searchRedList" ng-click="goDetail(k.coupons_id,k.fuwu_type)">
+                <p class="coupons-name">{{k.name}}</p>
+                <p class="coupons-type">{{k.fuwu_type}}&nbsp; {{k.city}}&nbsp;{{k.type}}&nbsp;{{k.number}}</p>
+                <!--<p class="coupons-city">城市</p>-->
+                <p class="coupons-time">{{k.start_date}}~{{k.end_date}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--商城-->
+    <div ng-if="shopHtml" class="shop">
+      <div ng-if="isSearch">
+        <div class="contentArea" load-more data="{params : params,repeatFun : '$scope.businessFun'}">
+          <div>
+            <!--轮播图-->
+            <div>
+              <div ng-hide="imgShow">
+                <carousel interval="myInterval" class="carousel-ad-images">
+                  <slide ng-repeat="slide in slides">
+                    <img ng-src="{{slide.image}}" curousel-height class="slideImg">
+                  </slide>
+                </carousel>
+              </div>
+              <!--占位图-->
+              <div ng-if="imgShow">
+                <img src="images/zhanwei.jpg" class="slideImg" curousel-height>
+              </div>
+
+            </div>
+
+            <!--公告-->
+            <div class="marquee_box" ng-show="marqueeContent.length > 0">
+              <!--<div class="marquee-sibling"></div>-->
+              <div class="marquee">
+                <ul class="marquee-content-items">
+                  <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 商家列表 -->
+            <div  class="seller-table">
+              <div class="support-list" ng-show="!errMsg" >
+                <ul class="media-list">
+                  <li class="sup-media"  ng-repeat="b in business">
+                    <div class="media-left">
+                      <!--<a href="#">-->
+                      <img class="media-object" src="{{b.logo}}" alt="...">
+                      <img class="image-tag" ng-show="ishot(a.hot)" src="images/fire.png">
+                      <!--</a>-->
+                    </div>
+                    <div class="media-body" ng-click="jumpgoodslist(b.business_id)" alt="{{b.business_id}}">
+                      <div class="seller-name-num">
+                        <div class="support-seller-content">
+                          <p><b class="support-seller-name" >{{b.name}}</b></p>
+                          <img class="tag-image" ng-show="isnew(b.new)" src="images/newtag.png">
+                        </div>
+                        <p class="goods-num">{{b.goods_count}}个</p>
+                      </div>
+                      <p class="description">{{b.introduction}}</p>
+                      <p class="description">{{b.service}}</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <!--<div ng-if="errMsg"><img src="{{errMsg}}" style="height:100%;width:100%;"  /></div>-->
+              <div class="text-center" ng-if="errMsg">没有相关数据！</div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!------------关键字搜索------------------>
+      <div ng-if="!isSearch" class="searchBus">
+        <div ng-if="!isShow" style="text-align: center;font-size:2rem"><span>sorry,暂无相关数据！</span></div>
+        <div ng-if="isShow" class="contentArea" load-more data="{params : busParams,repeatFun : '$scope.busnissByKey'}">
+          <!--列表无数据的显示-->
+          <!--<div ng-show="errMsg"><img src="{{errMsg}}" style="height:100%;width:100%;margin-left:0px;"/></div>-->
+          <div class="text-center" ng-if="errMsg">没有相关数据！</div>
+          <ul class="media-list">
+            <li class="sup-media search-li"  ng-repeat="b in busList">
+              <div class="media-left">
+                <!--<a href="#">-->
+                <img class="media-object" src="{{b.logo}}" alt="...">
+                <img class="image-tag" ng-show="ishot(a.hot)" src="images/fire.png">
+                <!--</a>-->
+              </div>
+              <div class="media-body" ng-click="jumpgoodslist(b.business_id)" alt="{{b.business_id}}">
+                <div class="seller-name-num">
+                  <div class="support-seller-content">
+                    <p class="support-seller-name" ><b>{{b.name}}</b></p>
+                    <img class="tag-image" ng-show="isnew(b.new)" src="images/newtag.png">
+                  </div>
+                  <p class="goods-num">{{b.goods_count}}个</p>
+                </div>
+                <p class="description">{{b.introduction}}</p>
+                <p class="description">{{b.service}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!--<div class="empty"></div>-->
+
+</div>
+<!-- ************************************ 底部导航栏  ************************************-->
+<div class="navbar-fixed-bottom tabbar">
+  <div class="tabbar-item" ng-click="jumpComservice()">
+    <img src="images/comservice.png">
+    <p class="comservice-button">社区服务</p>
+  </div>
+
+  <div class="tabbar-item">
+    <img src="images/welfare_2.png">
+    <p class="comservice-button">商家福利</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpSociety()">
+    <img src="images/linli.png">
+    <p>邻里社交</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpUsercenter()">
+    <img src="images/usercenter.png">
+    <p>个人中心</p>
+  </div>
+</div>
+
+<script>
+  var contentH = window.screen.availHeight - parseInt($('.navigationbar').css('height'))
+                  - parseInt($('.tabbar').css('height')) - parseInt($('.tabs').css('height'));
+  $('.contentArea').css({
+    'height' : contentH + 'px',
+    'overflow' : 'scroll'
+  });
+
+</script>

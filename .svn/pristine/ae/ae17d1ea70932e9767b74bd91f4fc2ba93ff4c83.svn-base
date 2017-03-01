@@ -1,0 +1,815 @@
+var serviceModuleController = angular.module('serviceModuleController', []);
+
+serviceModuleController.controller(
+  'purchaseCtrl',
+  function ($scope, $stateParams, $rootScope, guanjiaService, userService, commonService, $state, $window, $location, $cookies) {
+    /*********************************** 自定义函数 ***************************************/
+      //获取商品信息
+    guanjiaService.goodsDetail({
+      'goods_id': localStorage.goodsId,
+      'service_station': sessionStorage.station_id,
+      'buy': '1'
+    }).success(function (data) {
+      //console.log($rootScope.goodsId);
+      switch (data.code) {
+        case '0':
+          $scope.goods = data.data;
+
+          var guigeIds = '';
+          for (var i = 0; i < data.data.guige.length; i++) {
+            if (i % 2 != 0) guigeIds += ',';
+            guigeIds += data.data.guige[i].value[0].guige_id;
+          }
+          guanjiaService.getPriceAndInventory({
+            'guige_id': guigeIds,
+            'goods_id': localStorage.goodsId,
+            'service_station': sessionStorage.station_id
+          }).success(function (res) {
+            switch (res.code) {
+              case '0':
+                $scope.goods.sale_price = res.data.sale_price;
+                $scope.goods.old_price = res.data.old_price;
+                $scope.goods.inventory = res.data.inventory;
+                break;
+              case '-1':
+                commonService.showErrorMessage('参数为空');
+                break;
+              case '-2':
+                commonService.showErrorMessage('参数错误');
+                break;
+            }
+          }).error(function (data, status, header, config) {
+            commonService.showErrorMessage('系统错误');
+          });
+
+          break;
+        case '-1':
+          commonService.showWarnMessage('参数为空');
+          break;
+        case '-2':
+          commonService.showErrorMessage('参数错误');
+          break;
+        case '-3':
+          $scope.errMsg = '操作失败，系统异常';
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+    //调用送货方式的接口
+    guanjiaService.listDelivery({'goods_id': localStorage.goodsId}).success(function (data) {
+        $scope.delivery = data.data;
+      }
+    );
+    /************************************** end ******************************************/
+
+
+    //自动获取上次选择的小区,还有一种情况就是用户自己填写的地址而没有从自己的小区列表中选择,
+    //那么这个时候在发出请求的时候需要将填写的地址信息保存到localStorage中
+    var community = localStorage.purchaseAddressCommunity
+    var username = localStorage.purchaseAddressUserName
+    var number = localStorage.purchaseAddressNumber
+    var telphone = localStorage.purchaseAddressTelphone
+    $scope.community = community == undefined ? "" : community
+    $scope.username = username == undefined ? "" : username
+    $scope.number = number == undefined ? "" : (number + "号楼")
+    $scope.telphone = telphone == undefined ? "" : telphone
+
+    /************************************ 初始化  ****************************************/
+    $scope.formData = {};
+    if (null != sessionStorage.obj) {
+      goodsObj = sessionStorage.obj;
+      goodsList = JSON.parse(goodsObj);
+      //console.log(goodsList.goodsCount)
+      if (goodsList.goodsId == localStorage.goodsId) {
+        if (goodsList.goodsCount != null) {
+          $scope.count = parseFloat(goodsList.goodsCount);
+        }
+      } else {
+        $scope.count = 1;
+      }
+    } else {
+      //给商品一个默认的count
+      $scope.count = 1;
+      //给送货方式给一个默认值
+      $scope.selected = '40288047545b001301545c1aeac2001f';
+    }
+
+    //给送货方式给一个默认值
+    //快递送货：8a28d7d854ecbf150154f015afe8000a
+    //上门自提：40288047545b001301545c1b1f500020
+    //服务站：40288047545b001301545c1aeac2001f
+    if (null != sessionStorage.getItem('deliverySelect')) {
+      $scope.selected = sessionStorage.getItem('deliverySelect');
+    } else {
+      $scope.selected = '40288047545b001301545c1aeac2001f';
+    }
+    if (null != sessionStorage.getItem('station_name')) {
+      $scope.station_name = sessionStorage.getItem('station_name');
+    } else {
+      $scope.station_name = '';
+    }
+
+    var parents = sessionStorage.parents;
+    //选择小区后回到购买页面，此时将选择的小区的信息显示出来
+    if (localStorage.mobile != null) {
+      if (parents == 'purchase-choosecommunity') {
+        $scope.userName = sessionStorage.userName;
+        $scope.telphone = sessionStorage.tel;
+        $scope.address = sessionStorage.cityName + sessionStorage.communityName + sessionStorage.floor + "号楼";
+      }
+    }
+    /************************************** end ******************************************/
+
+    /*********************************** 页面事件监听 *************************************/
+      //返回商品详情页
+    $scope.backtogoodsDetail = function (id) {
+      $state.go('service-goodsDetail')
+    };
+
+    //当送货方式更改时
+    $scope.selChange = function () {
+      if ($scope.selected != '40288047545b001301545c1aeac2001f') {
+        sessionStorage.removeItem('station_name');
+        sessionStorage.removeItem('station_id');
+        $scope.station_name = '';
+      }
+      sessionStorage.removeItem('deliverySelect');
+    };
+
+    $scope.selGuigeId = function () {
+      var idStrs = '';
+      var tag = false;
+      $('select').each(function (index, data) {
+        if (index > 0) {
+          if (index % 2 == 0 && !tag) idStrs += ',';
+          if ($(this).val() == '') tag = true;
+          idStrs += $(this).attr('selected', 'selected').val();
+        }
+      });
+      return idStrs;
+    }
+    //当规格改变时，查询对应的价格和库存
+    $scope.changeGuige = function (guige_id) {
+      var idStrs = $scope.selGuigeId();
+      guanjiaService.getPriceAndInventory({
+        'guige_id': idStrs,
+        'service_station': sessionStorage.station_id
+      }).success(function (res) {
+        switch (res.code) {
+          case '0':
+            $scope.goods.sale_price = res.data.sale_price;
+            $scope.goods.old_price = res.data.old_price;
+            $scope.goods.inventory = res.data.inventory;
+            break;
+          case '-1':
+            commonService.showErrorMessage('参数为空');
+            break;
+          case '-2':
+            commonService.showErrorMessage('参数错误');
+            break;
+        }
+      }).error(function (data, status, header, config) {
+        commonService.showErrorMessage('系统错误');
+      });
+    };
+
+    //数量加减
+    $scope.decrease = function () {
+      if ($scope.count > 1) {
+        $scope.count -= 1;
+      }
+    };
+    $scope.increase = function () {
+      $scope.count = parseInt($scope.count) + 1;
+    };
+
+    //输入负数和小数点
+    $scope.inputChange = function ($event) {
+      var elem = $($event.target);
+      if (elem.val() == null || elem.val().trim() == '') {
+        //总额不要让显示为NaN非数字
+      }
+      var val = parseFloat(elem.val());
+      var regx = /^-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
+      if (val < 1 || regx.test(val)) {
+        $scope.count = 1;
+      }
+    }
+
+    //返回到商品详情
+    $scope.jumpGoodsDetail = function () {
+      if ($rootScope.back == 1) {
+        $state.go('guanjia-goodslist', {businessId: $stateParams.businessId});
+      }
+      else
+        $state.go('service-goodsDetail', {
+          id: localStorage.goodsId,
+          businessId:$stateParams.businessId
+        });
+    };
+    //跳转到选择服务站
+    $scope.jumpselectStation = function (id) {
+      //if ($scope.selected == '40288047545b001301545c1aeac2001f') {
+      $state.go('service-selectStation');
+      var goodsList = {goodsId: localStorage.goodsId, goodsCount: $scope.count};
+
+      var goodsObj = JSON.stringify(goodsList);
+      sessionStorage.obj = goodsObj;
+      //}
+      sessionStorage.setItem('deliverySelect', $scope.selected);
+    };
+    //跳转到选择我的小区
+    $scope.jumpToMyCommunitySelect = function () {
+      console.log(111)
+      if ($cookies.get('ticket') == null) {
+        commonService.showNoticeMessage('请登录一下好吗？');
+        $state.go('member-personal-login');
+        //sessionStorage.loginLocation=$window.location.href;
+        sessionStorage.loginLocation = $location.path();
+      } else {
+        $state.go('service-mycommunityselect', {
+          "from": 1
+        });
+        sessionStorage.myCommunityjump = 'purchase'
+      }
+    };
+
+
+    // 加入购物车
+    $scope.addcart = function (id) {
+      var regx = /^\+?[1-9][0-9]*$/;
+      var guigeIDs = $('select[name=guigeID]');
+      if ($scope.selected == '40288047545b001301545c1aeac2001f' && sessionStorage.getItem('station_id') == null) {
+        commonService.showNoticeMessage("请选择服务站");
+      } else if (!regx.test($scope.count)) {
+        commonService.showNoticeMessage('请填写正确数量!');
+        $scope.count = 1;
+      }
+      else if ($scope.userName == null || $scope.telphone == null || $scope.address == null) {
+        commonService.showNoticeMessage('请选择小区！');
+      }
+      else {
+        var idStrs = '';
+        var tag = false;
+        var guige_1 = '';
+        var guige_2 = '';
+        $('select').each(function (index, data) {
+          if (index > 0) {
+            if (index % 2 == 0) {
+              idStrs += ',';
+            }
+            if ($(this).val() == '') tag = true;
+            idStrs += $(this).attr('selected', 'selected').val();
+            if (index == 1) guige_1 = $(this).prev().text() + $(this).find('option:selected').text().trim();
+            else guige_2 = $(this).prev().text() + $(this).find('option:selected').text().trim();
+          }
+        });
+        //调用加入购物车接口
+        guanjiaService.addcart({
+          ticket: $cookies.get('ticket'),
+          mobile: localStorage.mobile,
+          goods_id: localStorage.goodsId,
+          count: $scope.count,
+          guige: idStrs,
+          guige_1: guige_1,
+          guige_2: guige_2,
+          delivery_id: $scope.selected,
+          service_station_id: sessionStorage.station_id,
+          remark: $scope.remark,
+          contact_name: $scope.userName,
+          contact_phone: $scope.telphone,
+          address: $scope.address
+        }).success(function (data) {
+          //$(".seller-name").text(data.data.name);
+          switch (data.code) {
+            case '0':
+              commonService.showSuccessMessage('添加成功');
+              $state.go('service-goodsDetail', {
+                id: localStorage.goodsId
+              });
+              break;
+            case '-1':
+              commonService.showWarnMessage('参数为空');
+              break;
+            case '-2':
+              commonService.showErrorMessage('参数错误');
+              break;
+          }
+        });
+      }
+    };
+    //直接购买
+    $scope.jumptopay = function (id) {
+      var regx = /^\+?[1-9][0-9]*$/;
+      if ($scope.selected == '40288047545b001301545c1aeac2001f' && sessionStorage.getItem('station_id') == null) {
+        commonService.showNoticeMessage("请选择服务站");
+      } else if (!regx.test($scope.count)) {
+        commonService.showNoticeMessage('请填写正确数量!');
+      } else if ($scope.userName == null || $scope.telphone == null || $scope.address == null) {
+        commonService.showNoticeMessage('请选择小区！');
+      }
+      else {
+        //规格
+        var idStrs = '';
+        var tag = false;
+        var guige_1 = '';
+        var guige_2 = '';
+        $('select').each(function (index, data) {
+          if (index > 0) {
+            if (index % 2 == 0) {
+              idStrs += ',';
+            }
+            if ($(this).val() == '') tag = true;
+            idStrs += $(this).attr('selected', 'selected').val();
+            if (index == 1) guige_1 = $(this).prev().text() + $(this).find('option:selected').text().trim();
+            else guige_2 = $(this).prev().text() + $(this).find('option:selected').text().trim();
+          }
+        });
+        //调用下单购买接口
+        var goodsToBuy = [];
+        goodsToBuy.push({
+          "goods_id": localStorage.goodsId,
+          "count": $scope.count,
+          "guige": idStrs,
+          "guige_1": guige_1,
+          "guige_2": guige_2,
+          "delivery_id": $scope.selected,
+          "service_station_id": sessionStorage.getItem('station_id'),
+          "contact_name": $scope.userName,
+          "contact_phone": $scope.telphone,
+          "address": $scope.address
+        });
+        var params = {"mobile": localStorage.mobile, "goods": goodsToBuy};
+        //params = "json=" + JSON.stringify(params);
+
+        userService.postRequestWithUrlAndParams("buy.action", {json: JSON.stringify(params)}).success(function (response) {
+
+          switch (response.code) {
+            case '0':
+              var orderNo = response.data.order_id[0];
+              //下单成功，前往支付页
+              $state.go('guanjia-pay', {
+                from: 3,
+                obj: {
+                  orderIds: orderNo
+                }
+              });
+              break;
+            case '-1':
+              commonService.showWarnMessage('参数为空');
+              break;
+            case '-2':
+              commonService.showErrorMessage('参数错误');
+              break;
+          }
+        });
+      }
+    }
+
+    /************************************** end ******************************************/
+  }
+);
+
+/**
+ * 商品详情数据
+ */
+serviceModuleController.controller(
+  'goodsDetailCtrl',
+  function ($scope, $stateParams, $rootScope, guanjiaService, userService, $state, commonService, $interval, $cookies) {
+    /*********************************** 自定义函数 ***************************************/
+      //卡头切换
+    $('#detail').css({'display': 'block'});
+    $('#sales').css({'display': 'none'});
+    $scope.detail = function () {
+      $('#detail').css({'display': 'block'});
+      $('#sales').css({'display': 'none'});
+      $('#evaluate').css({'display': 'none'});
+    };
+    $scope.sales = function () {
+      $('#sales').css({'display': 'block'});
+      $('#detail').css({'display': 'none'});
+      $('#evaluate').css({'display': 'none'});
+    };
+    $scope.evaluate = function () {
+      $('#evaluate').css({'display': 'block'});
+      $('#sales').css({'display': 'none'});
+      $('#detail').css({'display': 'none'});
+    };
+    $scope.goodsId = $stateParams.id;
+    $scope.businessId=$stateParams.businessId;
+
+    $scope.imgShow = true;
+    //调用商品详情接口
+    guanjiaService.goodsDetail({'goods_id': $scope.goodsId}).success(function (data) {
+
+      //商品开卖倒计时
+      $scope.sellTime = data.data.start_date;
+      if ($scope.sellTime.length > 0) {
+
+        var time_start = new Date().getTime(); //设定当前时间
+        var time_end = new Date($scope.sellTime).getTime(); //设定目标时间
+        // 计算时间差
+        var time = time_end / 1000 - time_start / 1000;
+        if (time < 0) {
+          $scope.showTimeHtml = '';
+        }
+
+        showTime = $interval(function () {
+          if (time <= 1) {
+            $interval.cancel(showTime);
+          } else {
+            var time_start = new Date().getTime();
+            var time_end = new Date($scope.sellTime).getTime();
+            //// 计算时间差
+            var time_distance = time_end - time_start;
+
+            // 天
+            var int_day = Math.floor(time_distance / 86400000);
+            time_distance -= int_day * 86400000;
+            // 时
+            var int_hour = Math.floor(time_distance / 3600000);
+            time_distance -= int_hour * 3600000;
+            // 分
+            var int_minute = Math.floor(time_distance / 60000);
+            time_distance -= int_minute * 60000;
+            // 秒
+            var int_second = Math.floor(time_distance / 1000);
+            // 时分秒为单数时、前面加零
+            if (int_day < 10) {
+              int_day = "0" + int_day;
+            }
+            if (int_hour < 10) {
+              int_hour = "0" + int_hour;
+            }
+            if (int_minute < 10) {
+              int_minute = "0" + int_minute;
+            }
+            if (int_second < 10) {
+              int_second = "0" + int_second;
+            }
+            // 显示时间
+            $scope.showTimeHtml = '开卖倒计时 ' + int_day + '天' + int_hour + '时' + int_minute + '分' + int_second + '秒';
+            time_distance--;
+            time--;
+          }
+        }, 1000);
+      } else {
+        $('.count_down').css({
+          'height': '2px'
+        })
+      }
+
+      switch (data.code) {
+        case '0':
+          $scope.goods = data.data;
+          $scope.slides = $scope.goods.goods_images;
+          if ($scope.slides != '') {
+            //轮播图请求到数据1秒后显示
+            setTimeout(function () {
+              $scope.imgShow = false;
+            }, 1000);
+          }
+          break;
+        case '-1':
+          commonService.showWarnMessage('参数为空');
+          break;
+        case '-2':
+          commonService.showErrorMessage('参数错误');
+          break;
+      }
+    });
+    //评价
+    guanjiaService.listGoodsComment({'goods_id': localStorage.goodsId}).success(function (data) {
+
+      switch (data.code) {
+        case '0':
+          //评价星星图
+          $scope.evaluateList = data.data;
+
+          for (var i = 0; i < $scope.evaluateList.length; i++) {
+            $scope.evaluateList[i].starimgObj = '';
+            for (var j = 0; j < $scope.evaluateList[i].star; j++) {
+              var img = '<img src="images/lightstar.png">';
+              $scope.evaluateList[i].starimgObj += img;
+            }
+          }
+
+
+          for (var x = 0; x < $scope.evaluateList.length; x++) {
+            $scope.evaluateList[x].picture = '';
+            for (var z = 0; j < $scope.evaluateList[x].picture; z++) {
+              var src = $scope.evaluateList[x];
+              var img = '<img src="' + src + '"/>';
+              $scope.evaluateList[x].picture += img;
+            }
+
+            //console.log($scope.evaluateList[0].picture)
+          }
+          //console.log($scope.evaluateList);
+          break;
+        case '-1':
+          commonService.showNoticeMessage('参数为空');
+          break;
+        case '-2':
+          commonService.showErrorMessage('参数错误');
+          break;
+      }
+    });
+
+    //销量数据
+    guanjiaService.getGoodsCount({
+      goods_id: localStorage.goodsId
+    }).success(function (response) {
+
+      switch (response.code) {
+        case '0':
+          $scope.labels = response.data.labels;
+          //$scope.series = ['Series2 A', 'Series2 B'];
+          $scope.salesData = [
+            response.data.data
+          ];
+
+          break;
+        case '-1':
+          commonService.showWarnMessage("参数为空！");
+          break;
+        case '-2':
+          commonService.showWarnMessage("参数错误！");
+          break;
+      }
+    });
+    /************************************** end ******************************************/
+
+    /*********************************** 页面事件监听 *************************************/
+      //返回商品列表
+    $scope.backtogoodslist = function () {
+      $state.go('guanjia-goodslist', {businessId: $scope.businessId})
+    };
+    //进入购买页
+    $scope.jumppurchase = function () {
+      $state.go('service-purchase', {
+        id: $stateParams.id,
+        businessId:$scope.businessId
+      });
+    };
+  }
+
+  /************************************** end ******************************************/
+);
+
+
+serviceModuleController.controller(
+  'selectStationCtrl',
+  function ($scope, $stateParams, guanjiaService, $rootScope, userService, $state, $cookies) {
+    $scope.gpscityName=sessionStorage.gpscityName;
+
+    guanjiaService.listStation({city_id: sessionStorage.gpscityId}).success(function (data) {
+      $scope.station = data.data;
+      console.log($scope.station)
+    });
+    //返回购买页
+    $scope.jumppurchase = function (aa, bb) {
+      $state.go('service-purchase', {
+        id: aa,
+        name: bb
+      });
+      sessionStorage.setItem('station_id', aa);
+      sessionStorage.setItem('station_name', bb);
+    }
+    //跳到站点详情页
+    $scope.jumpStationDetail=function(station_id){
+      $state.go('member-about-stationdetail',{'station_id':station_id});
+    }
+  }
+);
+
+
+//我的小区选择
+serviceModuleController.controller(
+  'mycommunityselectCtrl',
+  function ($scope, $stateParams, userService, $state, commonService, $q, $location, $cookies) {
+    $scope.params = {
+      "mobile": localStorage.mobile,
+      "city_id": sessionStorage.gpscityId,
+      'pageno': '1', //页码
+      'pagesize': '10', //页数
+      "url": 'listUserCommunity.action',
+      "direction": 'up'
+    };
+    if (!$scope.params.mobile) {
+      commonService.showNoticeMessage('请登录一下好吗？');
+      $state.go('member-personal-login');
+      sessionStorage.loginLocation = $location.path();
+    }
+    if (!$scope.params.city_id) {
+      commonService.showNoticeMessage("请选择城市!");
+      return;
+    }
+    var isOver = false; //false:标志数据未加载完成
+    $scope.myCommunityList = [];
+    $scope.CommunityFun = function (params) {
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            if (response.data.length == 0 && params.pageno == '1') {
+              //没有小区数据
+            } else {
+              var tempList = response.data;
+              if (tempList.length < params.pagesize) {
+                isOver = true;//true:标志数据加载完成
+                defer.resolve(isOver);
+              } else {
+                isOver = false;
+                defer.resolve(isOver);
+              }
+              if (params.direction == 'down') {
+                $scope.myCommunityList = response.data;
+              } else {
+                $scope.myCommunityList = $scope.myCommunityList.concat(tempList);
+              }
+              localStorage.myCommunitys = $scope.myCommunityList.length || 0;
+            }
+            commonService.hiddenWeUILoadingHub();
+            break;
+          case '-8':
+            $state.go('member-personal-login');
+            sessionStorage.loginLocation = $location.path();
+            break;
+
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+      return defer.promise;
+    };
+    $scope.CommunityFun($scope.params);
+
+    /*************关键字搜索*******************/
+    $scope.isShowCommunity = true; //true:显示分类的优惠券，false：显示搜索的优惠券
+    var val = '';
+    $scope.CommunityList = [];
+    $scope.searchCom = function () {
+      $scope.CommunityList = [];
+      val = $('.search-input input').val();
+      if (val == '') {
+        $scope.isShowCommunity = true;
+        commonService.showWarnMessage('请输入关键字！');
+      } else {
+        $scope.isShowCommunity = false;
+        $scope.searchParams.key = val;
+        $scope.showSearchCom($scope.searchParams);
+      }
+    };
+    $scope.searchParams = {
+      "mobile": localStorage.mobile,
+      "city_id": sessionStorage.cityId,
+      'pageno': '1', //页码
+      'pagesize': '10', //页数
+      "url": 'listUserCommunity.action',
+      "direction": 'up',
+      "key": ''
+    };
+    var isSearch = false;//false:标志数据未加载完成
+    $scope.isCommunity = true; //false:无相关数据 true：有相关数据
+    $scope.showSearchCom = function (params) {
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var tempList = response.data;
+            if (tempList.length == 0 && params.pageno == '1') {
+              /*判断请求的第一页无数据时，显示暂无数据*/
+              $scope.isCommunity = false;
+              return;
+            } else {
+              $scope.isCommunity = true;
+              if (tempList.length < params.pagesize) {
+                isSearch = true;//true:标志数据加载完成
+                defer.resolve(isSearch);
+              } else {
+                isSearch = false;
+                defer.resolve(isSearch);
+              }
+              if (params.direction == 'down') {
+                $scope.CommunityList = response.data;
+              } else {
+                $scope.CommunityList = $scope.CommunityList.concat(tempList);
+              }
+            }
+            $.getScript('scripts/common/swipeleft.js', function () {
+              addSwipeLeft();
+            });
+            commonService.hiddenWeUILoadingHub();
+            break;
+        }
+      }).error(function (data, status, header, config) {
+        commonService.hiddenWeUILoadingHub();
+      });
+      return defer.promise;
+    };
+
+
+    $scope.goToback = function () {
+      history.back(-1)
+    }
+
+    //获取当前城市名称,然后显示
+    $scope.currentCityName = sessionStorage.gpscityName;
+    console.log(sessionStorage.gpscityName)
+
+    $scope.didSelectedCommunity = function (communityModel) {
+      var community = communityModel.community; //小区名称
+      var username = communityModel.username;  //联系人姓名
+      var number = communityModel.number;    //楼号
+      var telphone = communityModel.telphone;  //联系人的电话
+
+      localStorage.purchaseAddressCommunity = community
+      localStorage.purchaseAddressUserName = username
+      localStorage.purchaseAddressNumber = number
+      localStorage.purchaseAddressTelphone = telphone
+
+      history.back(-1)
+    }
+
+
+  }
+);
+
+serviceModuleController.controller(
+  'goodsPreviewCtrl',
+  function ($scope, $stateParams, $rootScope, guanjiaService, userService, $state, commonService, $interval) {
+    $scope.goodsId = $stateParams.id;
+    guanjiaService.goodsDetail({'goods_id': $scope.goodsId}).success(function (data) {
+      //$(".seller-name").text(data.data.name);
+      //商品开卖倒计时
+      $scope.sellTime = data.data.start_date;
+      if ($scope.sellTime.length > 0) {
+
+        var time_start = new Date().getTime(); //设定当前时间
+        var time_end = new Date($scope.sellTime).getTime(); //设定目标时间
+        // 计算时间差
+        var time = time_end / 1000 - time_start / 1000;
+
+        showTime = $interval(function () {
+          if (time <= 1) {
+            $interval.cancel(showTime);
+            $scope.showTimeHtml = '已开卖,抓紧时间抢购哦！';
+          } else {
+            var time_start = new Date().getTime();
+            var time_end = new Date($scope.sellTime).getTime();
+            //// 计算时间差
+            var time_distance = time_end - time_start;
+
+            // 天
+            var int_day = Math.floor(time_distance / 86400000);
+            time_distance -= int_day * 86400000;
+            // 时
+            var int_hour = Math.floor(time_distance / 3600000);
+            time_distance -= int_hour * 3600000;
+            // 分
+            var int_minute = Math.floor(time_distance / 60000);
+            time_distance -= int_minute * 60000;
+            // 秒
+            var int_second = Math.floor(time_distance / 1000);
+            // 时分秒为单数时、前面加零
+            if (int_day < 10) {
+              int_day = "0" + int_day;
+            }
+            if (int_hour < 10) {
+              int_hour = "0" + int_hour;
+            }
+            if (int_minute < 10) {
+              int_minute = "0" + int_minute;
+            }
+            if (int_second < 10) {
+              int_second = "0" + int_second;
+            }
+            // 显示时间
+            $scope.showTimeHtml = '开卖倒计时 ' + int_day + '天' + int_hour + '时' + int_minute + '分' + int_second + '秒';
+            time_distance--;
+            time--;
+          }
+        }, 1000);
+      } else {
+        $('.count_down').css({
+          'height': '2px'
+        })
+      }
+
+      switch (data.code) {
+        case '0':
+          $scope.goods = data.data;
+          break;
+        case '-1':
+          commonService.showWarnMessage('参数为空');
+          break;
+        case '-2':
+          commonService.showErrorMessage('参数错误');
+          break;
+      }
+    });
+
+  }
+);

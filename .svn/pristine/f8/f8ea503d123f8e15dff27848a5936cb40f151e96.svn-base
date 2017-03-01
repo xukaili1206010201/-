@@ -1,0 +1,172 @@
+
+
+  <script type="text/javascript">
+
+ /*   var lastSelectItem = '.publicservice-default-selected-item';
+    var lastShowTable = '.publicservice-government-table';
+
+    function didSelectedSegementControl(currentItem,currentShowTable,isShowSearchField){
+      $(lastSelectItem).css({
+        'background':'#ddd',
+        'color':'black'
+      })
+      $(currentItem).css({
+        'background':'#7DB343',
+        'color':'white'
+      })
+      $(currentItem).addClass('selected');
+      $(lastSelectItem).removeClass('selected');
+
+      $(lastShowTable).css({
+        'display':'none'
+      })
+      $(currentShowTable).css({
+        'display':'block'
+      })
+
+      lastSelectItem = currentItem;
+      lastShowTable = currentShowTable;
+    }
+
+    function showGovernment(event){
+      didSelectedSegementControl(event.target,".publicservice-government-table",0);
+      $('.navigationbar-government').css({
+        'display':'block'
+      });
+      $('.navigationbar-publicservice').css({
+        'display':'none'
+      })
+    }
+    function showStreet(event){
+      didSelectedSegementControl(event.target,".publicservice-street-table",1);
+      $('.navigationbar-government').css({
+        'display':'none'
+      });
+      $('.navigationbar-publicservice').css({
+        'display':'block'
+      })
+    }
+    function showManager(event){
+      didSelectedSegementControl(event.target,".publicservice-manager-table",1);
+      $('.navigationbar-government').css({
+        'display':'none'
+      });
+      $('.navigationbar-publicservice').css({
+        'display':'block'
+      })
+    }*/
+
+    //iframe高度计算
+    var iframeH = window.screen.availHeight - $('.navigationbar').height() - $('.publicservice-segmentcontrol').height();
+    $('.goverment').css({
+      'height' : iframeH + 'px'
+    });
+    $('.sqLis').css({
+      'height' : iframeH + 'px',
+      'overflow' : 'scroll'
+    });
+    $('.wuye').css({
+      'height' : iframeH + 'px',
+      'overflow' : 'scroll'
+    });
+    $('.sqLis').css({
+      'height' : iframeH + 'px',
+      'overflow' : 'scroll'
+    });
+  </script>
+
+
+
+  <nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+    <div class="navigation-bar">
+      <!-- 返回按钮-->
+      <div class="left-item">
+        <img class="back-button" src="../../../images/back_button.png" ng-click="toBack()">
+
+        <p class="city" style="color: white; padding-right: 5px;">苏州 <span
+          class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>
+      </div>
+
+      <div class="navigationbar-publicservice">
+        <div class="search-button">
+          <img src="images/search_button.png" ng-click="searchbyKey()">
+        </div>
+        <div class="search-field-block">
+          <div class="search-input">
+            <input type="text" class="form-control" placeholder="请输入搜索关键字">
+          </div>
+        </div>
+      </div>
+
+      <div class="navigationbar-government">
+        <p class="item-title">公共服务</p>
+      </div>
+
+    </div>
+  </nav>
+
+
+<div class="publicservice-segmentcontrol">
+  <button type="button" class="btn publicservice-sc-item publicservice-default-selected-item"
+          ng-click="showGovernment($event)">政府平台</button>
+  <button type="button" class="btn publicservice-sc-item" ng-click="showStreet($event)">社区街道
+  </button>
+  <span ng-hide="true">社区街道</span>
+  <button type="button" class="btn publicservice-sc-item" ng-click="showManager($event)">物业管理
+  </button>
+  <span ng-hide="true">物业管理</span>
+</div>
+
+
+<div class="publicservice-content" ng-if="isShowLis">
+
+  <!-- 政府平台  -->
+  <div class="publicservice-government-table">
+    <div ng-if="!governmentUrl" style="text-align: center"><h3>哇哦！平台不存在！</h3></div>
+    <iframe ng-src="{{governmentUrl}}" class="goverment" ng-if="governmentUrl"></iframe>
+  </div>
+
+  <!-- 社区街道 -->
+  <div class="publicservice-street-table">
+    <div class="sqLis" load-more data="{params : shequParams,repeatFun : '$scope.shequFun'}">
+      <ul class="list-group">
+        <li class="list-group-item publicservice-street-row" ng-repeat="shequ in shequLis">
+          <p><span class="publicservice-street-name">{{shequ.name}}</span><span class="publicservice-street-phone">{{shequ.telphone}}</span></p>
+          <p class="publicservice-street-address">{{shequ.address}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="publicservice-manager-table">
+    <div class="wuye" load-more data="{params : wuyeParams,repeatFun : '$scope.wuyeFun'}">
+      <ul class="list-group">
+        <li class="list-group-item publicservice-manager-row" ng-repeat="wuye in wuyeLis">
+          <p><span class="publicservice-manager-name">{{wuye.name}}</span><span class="publicservice-manager-phone">{{wuye.telphone}}</span></p>
+          <p class="publicservice-manager-communityname">{{wuye.community}}</p>
+          <p class="publicservice-manager-address">{{wuye.address}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+</div>
+
+<!----------------关键字搜索-------------------->
+<div class="searchKey" ng-if="!isShowLis">
+  <div ng-if="!isPluc" style="text-align:center;font-size:1.6rem">
+    <span>sorry,暂无相关数据！</span>
+  </div>
+  <div ng-if="isPluc">
+    <div class="sqLis" load-more data="{params : keyParams,repeatFun : '$scope.keyFun'}">
+      <ul class="list-group">
+        <li class="list-group-item publicservice-street-row" ng-repeat="lisKey in listByKey">
+          <p><span class="publicservice-street-name">{{lisKey.name}}</span><span class="publicservice-street-phone">{{lisKey.telphone}}</span></p>
+          <p class="publicservice-manager-communityname" ng-if="lisKey.community">{{lisKey.community}}</p>
+          <p class="publicservice-street-address">{{lisKey.address}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

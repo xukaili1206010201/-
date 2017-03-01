@@ -1,0 +1,165 @@
+'use strict';
+
+var guanjiaService = angular.module('guanjiaService', []);
+
+guanjiaService.factory('guanjiaService', function ($http, commonService, $q, $rootScope) {
+
+  var service = { // our factory definition
+
+    businessDetail: function (params) {
+      var url = commonService.getBaseParams().url + 'getBusiness.action';
+      return $http.post(url, params);
+    },
+
+    listBusiness: function (params) {
+      var url = commonService.getBaseParams().url + 'listBusiness.action';
+      return $http.post(url, params);
+    },
+    listgoods: function (params) {
+      var url = commonService.getBaseParams().url + 'listGoods.action';
+      return $http.post(url, params);
+    },
+    goodsDetail: function (params) {
+      var url = commonService.getBaseParams().url + 'getGoods.action';
+      return $http.post(url, params);
+    },
+    purchase: function (params) {
+      var url = commonService.getBaseParams().url + 'buy.action';
+      return $http.post(url, params);
+    },
+    listGoodsComment: function (params) {
+      var url = commonService.getBaseParams().url + 'listGoodsComment.action';
+      return $http.post(url, params);
+    },
+    addcart: function (params) {
+      var url = commonService.getBaseParams().url + 'addCart.action';
+      return $http.post(url, params);
+    },
+    listad: function (params) {
+      var url = commonService.getBaseParams().url + 'listAd.action';
+      return $http.post(url, params);
+    },
+    listNotice: function (params) {
+      var url = commonService.getBaseParams().url + 'listNotice.action';
+      return $http.post(url, params);
+    },
+    listDelivery: function (params) {
+      var url = commonService.getBaseParams().url + 'listDelivery.action';
+      return $http.post(url, params);
+    },
+    listMarket: function () {
+      var url = commonService.getBaseParams().url + 'listMarket.action';
+      return $http.post(url);
+    },
+    recordMarket: function (params) {
+      var url = commonService.getBaseParams().url + 'addMarketDetail.action';
+      return $http.post(url, params);
+    },
+
+    count: function (params) {
+      var url = commonService.getBaseParams().url + 'count.action';
+      return $http.post(url, params);
+    },
+    listCityService: function (params) {
+      var url = commonService.getBaseParams().url + 'listCityService.action';
+      return $http.post(url, params);
+    },
+    listStation: function (params) {
+      var url = commonService.getBaseParams().url + 'listServiceStation.action';
+      return $http.post(url, params);
+    },
+    listCategory: function (params) {
+      var url = commonService.getBaseParams().url + 'listCategory.action';
+      return $http.post(url, params);
+    },
+    //商品销量
+    getGoodsCount: function (params) {
+      var url = commonService.getBaseParams().url + 'getGoodsCount.action';
+      return $http.post(url, params);
+    },
+
+    //定位
+    gpsCity: function (params) {
+      var url = commonService.getBaseParams().url + 'gpsCity.action';
+      return $http.post(url, params);
+    },
+    //更改规格查询对应价格
+    getPriceAndInventory: function (params) {
+      var url = commonService.getBaseParams().url + 'getPriceAndInventory.action';
+      return $http.post(url, params);
+    },
+
+    //活动召集列表
+    listActivity: function (params) {
+      var url = commonService.getBaseParams().url + 'listActivity.action';
+      return $http.post(url, params);
+    },
+
+    //活动召集详情
+    getActivity: function (params) {
+      var url = commonService.getBaseParams().url + 'getActivity.action';
+      return $http.post(url, params);
+    },
+
+
+    //活动报名
+    activityApply: function (params) {
+      var url = commonService.getBaseParams().url + 'activityApply.action';
+      return $http.post(url, params);
+    },
+    listGovernmentInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getGovernmentInfo.action';
+      return $http.post(url, params);
+    },
+
+    //获取系统和城市的广告
+    getAdverts: function (label) {
+      var defer = $q.defer();
+      var url = commonService.getBaseParams().url + 'listAd.action';
+      $http.post(url, {type: 'system,city', city_id: sessionStorage.gpscityId, label: label}).success(function (data) {
+        var slides = [];
+        for (var i = 0; i < data.data.length; i++) {
+          var src = data.data[i].imageUrl;
+          slides.push({image: src, text: data.data[i].name});
+        }
+        defer.resolve(slides);
+
+        var buttonArray = $(".carousel-ad-images").find(".carousel-control");
+        for (var index = 0; index < buttonArray.length; index++) {
+          var className = buttonArray[index];
+          $(className).css({
+            'display': 'none'
+          });
+        }
+      });
+      return defer.promise;
+    },
+    //获取公告信息
+    getNotice: function (params) {
+      var defer = $q.defer();
+      var url = commonService.getBaseParams().url + 'listNotice.action';
+      $http.post(url, params).success(function (response) {
+        if (response.code == '0') {
+          $.getScript('scripts/common/marquee.js', function () {
+            createMarquee();
+          });
+          defer.resolve(response.data);
+        } else {
+          console.log('获取公告信息有误！guanjiaService->getNotice');
+        }
+
+      });
+      return defer.promise;
+    },
+
+    /**
+     * 获取城市服务的提示信息
+     */
+    getCityServicePrompt: function (params) {
+      var url = commonService.getBaseParams().url + 'getCityService.action';
+      return $http.post(url,params);
+    }
+  };
+  return service;
+
+});

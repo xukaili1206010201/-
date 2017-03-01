@@ -1,0 +1,109 @@
+.reserve-content{
+  width: 100%;
+  margin-top: 90px;
+}
+.reserveErr{
+  margin-top:90px;
+  background: #ffffff;
+}
+.reserve-segmentcontrol{
+  width: 100%;
+  top: 50px;
+  border-bottom: 1px solid #ddd;
+}
+.reserve-order-table{
+  width: 100%;
+  background: #fff;
+}
+/*默认显示全部的预订单 */
+.reserve-order-all{
+  display: block;
+  border-bottom:1px solid #dddddd;
+}
+.reserve-order-waitforservice , .reserve-order-waitforpay , .reserve-order-finished{
+  display: none;
+}
+.reserve-order-list{
+  width:100%;
+  margin-bottom:5px;
+}
+.reserve-order-row{
+  width: 100%;
+  padding:0.5rem 1rem;
+}
+
+.reserve-order-row p{
+  margin: 0;
+}
+.reserve-order-info{
+  overflow: hidden;
+  background-color: #F0EFF6;
+  padding:10px 22px;
+  padding-bottom: 0px;
+}
+.reserve-order-city{
+  float: right;
+}
+
+.reserve-order-service-row{
+  overflow: hidden;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #F0EFF6;
+}
+.reserve-order-service-img{
+  float: left;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+
+.reserve-order-row-right{
+  padding-left: 1rem;
+  overflow: hidden;
+}
+
+
+/* 服务名称 */
+.reserve-order-service-name{
+  font-size: 1.5rem;
+}
+/* 状态 */
+.reserve-order-service-status{
+  float: right;
+}
+
+.reserve-order-service-price{
+  font-size: 1.5rem;
+}
+
+/* 优惠额 */
+.reserve-order-service-discount{
+  float: right;
+  margin-top: 5px;
+}
+
+/* 规格 */
+.reserve-order-service-specification{
+  clear: both;
+  width: 100%;
+  margin-top: 0.2rem;
+}
+
+/* 支付按钮 */
+.reserve-order-info .reserve-order-pay-btn{
+  width: 5rem;
+  height: 2.5rem;
+  padding: 0;
+  float: right;
+  margin:5px;
+}
+
+/* 评价按钮 */
+.reserve-order-service-row .reserve-order-finished-evaluate-btn{
+  width: 5rem;
+  height: 2.5rem;
+  padding: 0;
+  float: right;
+}

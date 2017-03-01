@@ -1,0 +1,71 @@
+
+<script type="text/javascript">
+  $(function(){
+    var screenH = document.documentElement.clientHeight;
+    var segmentH  = parseInt($('.navigationbar').css('height'));
+    var mapH =screenH - segmentH + 20;
+    $('#allmap').css({
+      'width':'100%',
+      'height':mapH + 'px'
+    });
+  });
+</script>
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navcityLeft">
+    <!-- 返回按钮-->
+    <img ng-click="goToUserCenter()" class="back-button" src="images/back_button.png">
+    <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+      <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+              ng-options="x.city_id as x.name for x in usercityList">
+      </select>
+    </p>
+  </div>
+  <div class="stationintro-title navcityText" ng-if="showType">服务站分布图</div>
+  <div class="stationintro-item navcityRight" ng-if="!showType">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchStation()">
+      <input type="text" class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="stationBlur()">
+    </div>
+  </div>
+
+  </div>
+</nav>
+
+<div class="navMain navbar-fixed-top" style="border-bottom: 1px solid #ddd;background: white;">
+  <ul class="fixedTab text-center" fixed-tab="" data="{count:'2'}">
+    <li class="stationintro-map" ng-click="showStationIntro('0')">地图</li>
+    <li class="stationintro-list" ng-click="showStationIntro('1')">列表</li>
+  </ul>
+</div>
+
+<!--地图-->
+<div class="station-map" ng-if="showType">
+  <div id="allmap"></div>
+</div>
+<!--列表-->
+<div class="station-list" ng-if="!showType">
+  <div ng-if="!errMsg">
+    <div class="sort_box">
+      <div ng-click="jumpStationdetail(k.service_station_id,k.latitude,k.longitude)" class="sort_list" ng-repeat="k in stationList">
+        <ul style="height: 60px;border-bottom: 1px solid #dddddd">
+          <li ng-model="k.name" class="num_name">{{k.name}}</li>
+          <li>
+            <span style="float: left;">{{k.address}}{{k.community_address}}</span>
+            <span style="float: right;" ng-click="dailMobile(k.telphone)"><u style="color: #337ab7">{{k.telphone}}</u></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="initials">
+      <ul>
+        <li></li>
+      </ul>
+    </div>
+  </div>
+  <div ng-if="errMsg" class="errMsg">{{errMsg}}</div>
+</div>
+

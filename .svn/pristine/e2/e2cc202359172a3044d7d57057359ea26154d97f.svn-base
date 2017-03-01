@@ -1,0 +1,246 @@
+<script type="text/javascript">
+
+
+  //************************************* 轮播图 begin ***************************************
+  $(function () {
+    $('#owl-demo').owlCarousel({
+      items: 1,
+      autoPlay: 3000,
+      pagination: false
+    });
+  });
+  //************************************* 列表中商家名的长度设置 begin ***************************************
+  //避免商家名过长讲商家的商品数挤下来
+  $(function () {
+    var titlenumW = parseInt($('.seller-name-num').css('width'));
+    var numW = parseInt($('.goods-num').css('width'));
+    var titleMaxW = titlenumW - 10 - numW - 50;
+    $('.seller-name').css({
+      'max-width': titleMaxW + 'px'
+    });
+  })
+  //************************************* 列表中商家名的长度设置 end ***************************************
+
+  function showbreakfast() {
+    $('.breakfast-button').css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+
+    });
+
+    //设置其他的按钮背景为橙色
+    $('.supper-button ,.fruit-button ,.goods-button').css({
+      'background': 'rgb(237, 237, 237)',
+      'color': 'rgb(109, 109, 109)'
+
+    });
+
+  }
+  function showfruit() {
+    $('.fruit-button').css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+
+    });
+
+    //设置其他的按钮背景为橙色
+    $('.breakfast-button ,.supper-button ,.goods-button').css({
+      'background': 'rgb(237, 237, 237)',
+      'color': 'rgb(109, 109, 109)'
+
+    });
+
+  }
+  function showsupper() {
+    $('.supper-button').css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+
+    });
+
+    //设置其他的按钮背景为橙色
+    $('.breakfast-button ,.fruit-button ,.goods-button').css({
+      'background': 'rgb(237, 237, 237)',
+      'color': 'rgb(109, 109, 109)'
+
+    });
+  }
+  function showgoods() {
+    $('.goods-button').css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+
+    });
+
+    //设置其他的按钮背景为橙色
+    $('.breakfast-button ,.fruit-button ,.supper-button').css({
+      'background': 'rgb(237, 237, 237)',
+      'color': 'rgb(109, 109, 109)'
+
+    });
+  }
+
+</script>
+
+<!--</head>-->
+<!--<body>-->
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <div class="left-item">
+      <img ng-click="backtocomservice()" class="back-button" src="images/back_button.png">
+
+      <!--<p ng-click="jumpSelectcity()" class="city" style="color: white; padding-right: 5px;">{{city_name}} <span-->
+      <!--class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>-->
+      <p class="city" usercity-select>
+        <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}</span>
+        <select ng-show="citySelect" usercity-select class="citySelect" ng-model="usercityId"
+                ng-options="x.city_id as x.name for x in usercityList"></select>
+        <!--<span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>-->
+      </p>
+
+    </div>
+
+    <div class="navigationbar-item">
+      <div class="search-button">
+        <img src="images/search_button.png" ng-click="searchBusiness()">
+      </div>
+      <div class="search-field-block">
+        <div class="search-input">
+          <input type="text" class="form-control" placeholder="请输入搜索关键字">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div ng-if="isSearch" class="support-content">
+
+  <!-- 卡头切换-->
+  <div class="sup-segment-control">
+    <div class="breakfast-supper-block">
+      <div class="breakfast-item" ng-repeat="b in fuwu_id">
+
+        <a class="breakfast-button"
+           ng-click="changeServiceTab(b)"
+           change-service
+           data="{parentClass:'.breakfast-supper-block',childClass:'.breakfast-item',
+      childItem:'.breakfast-button',listClass:'.seller-table'}">
+          {{b.name}}
+        </a>
+        <span ng-hide="true">{{$index}}</span>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!--轮播图-->
+  <div ng-if="slides.length > 0">
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides" active="slide.active">
+          <img ng-src="{{slide.image}}" curousel-height class="slideImg">
+          <!--<div class="carousel-caption">-->
+          <!--<p>{{slide.text}}</p>-->
+          <!--</div>-->
+        </slide>
+      </carousel>
+    </div>
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.jpg" curousel-height class="slideImg">
+    </div>
+  </div>
+
+  <!--公告信息-->
+  <div class="marquee-broadcast">
+  </div>
+
+
+  <!-- 城市服务提示信息 -->
+
+  <div class="prompt-service" ng-show="isShowPrompt" ng-click="goStationIntro()">
+    <div class="prompt-content">
+      <ul class="list-unstyled">
+        <li>预定提前截至天数：{{promptData.booking_stop_number}}</li>
+        <li>预订截止时：{{promptData.booking_date}}</li>
+        <li>预订天数：{{promptData.booking_number}}</li>
+        <li>派发开始时：{{promptData.paisong_start_date}}</li>
+        <li>派发截止时：{{promptData.paisong_end_date}}</li>
+        <li ng-if="promptData.xiuxi">周一至周六</li>
+        <li ng-if="!promptData.xiuxi">周一至周日</li>
+      </ul>
+      <span ng-show="promptData.message.length!=''">{{promptData.message}}</span>
+      <div class="clearfix" ng-show="promptData.message==''"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 商家列表 -->
+<div ng-if="isSearch" ng-repeat="count in fuwu_count" class="seller-table show{{count}}">
+  <div class="support-list" ng-show="!errMsg" load-more data="{params : params,repeatFun : '$scope.businessFun'}">
+    <ul class="media-list">
+      <li class="sup-media" ng-repeat="b in business">
+        <div class="media-left">
+          <!--<a href="#">-->
+          <img class="media-object" src="{{b.logo}}" alt="...">
+          <img class="image-tag" ng-show="ishot(a.hot)" src="images/fire.png">
+          <!--</a>-->
+        </div>
+        <div class="media-body" ng-click="jumpgoodslist(b.business_id)" alt="{{b.business_id}}">
+          <div class="seller-name-num">
+            <div class="support-seller-content">
+              <p><b class="support-seller-name">{{b.name}}</b></p>
+              <img class="tag-image" ng-show="isnew(b.new)" src="images/newtag.png">
+            </div>
+            <p class="goods-num">{{b.goods_count}}个</p>
+          </div>
+          <p class="description">{{b.introduction}}</p>
+          <p class="description">{{b.service}}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div ng-if="errMsg" class="errMsg"><img src="{{errMsg}}" style="height:100%;width:100%;"/></div>
+
+</div>
+<!------------关键字搜索------------------>
+<div ng-if="!isSearch">
+  <div ng-if="!isShow" style="text-align: center;font-size:1.6rem"><span>sorry,暂无相关数据！</span></div>
+  <div ng-if="isShow" class="searchBus" load-more data="{params : busParams,repeatFun : '$scope.busnissByKey'}">
+    <!--列表无数据的显示-->
+    <div ng-show="errMsg"><img src="{{errMsg}}" style="height:100%;width:100%;margin-left:0px;"/></div>
+    <ul class="media-list">
+      <li class="sup-media search-li" ng-repeat="b in busList">
+        <div class="media-left">
+          <!--<a href="#">-->
+          <img class="media-object" src="{{b.logo}}" alt="...">
+          <img class="image-tag" ng-show="ishot(a.hot)" src="images/fire.png">
+          <!--</a>-->
+        </div>
+        <div class="media-body" ng-click="jumpgoodslist(b.business_id)" alt="{{b.business_id}}">
+          <div class="seller-name-num">
+            <div class="support-seller-content">
+              <p class="support-seller-name"><b>{{b.name}}</b></p>
+              <img class="tag-image" ng-show="isnew(b.new)" src="images/newtag.png">
+            </div>
+            <p class="goods-num">{{b.goods_count}}个</p>
+          </div>
+          <p class="description">{{b.introduction}}</p>
+          <p class="description">{{b.service}}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  /**********加载更多相关***********/
+  var busHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.searchBus').css({
+    'height': busHeight + 'px',
+    'overflow': 'scroll'
+  });
+</script>

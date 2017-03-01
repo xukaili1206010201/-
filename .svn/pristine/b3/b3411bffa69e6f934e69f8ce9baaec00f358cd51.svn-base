@@ -1,0 +1,177 @@
+/**
+ * Created by sunhaoxuan on 16/7/21.
+ */
+'use strict';
+
+var activitiesModuleController = angular.module('reserveController', []);
+
+activitiesModuleController.controller('reserveCtrl',
+  ['$scope', 'userService', '$state', 'commonService', '$timeout', '$interval', '$q', '$stateParams',
+    function ($scope, userService, $state, commonService, $timeout, $interval, $q, $stateParams) {
+
+      /********************************* 自定义函数 *************************************/
+      $scope.errMsg = '';
+      $scope.reserveLoad = function (params) {
+        var defer = $q.defer();
+        userService.postRequestWithPageNo(params).then(
+          function (resp) {
+            switch (resp.data.code) {
+              case '0':
+                var response=resp.data;
+                var tempList = response.data;
+                if (tempList.length == 0 && params.pageno == '1') {
+                  $scope.errMsg = '没有相关数据';
+                } else {
+                  $scope.errMsg = '';
+                  if (tempList.length < params.pagesize) {
+                    isAll = true;//true:标志数据加载完成
+                    defer.resolve(isAll);
+                  } else {
+                    isAll = false;
+                    defer.resolve(isAll);
+                  }
+                  if (params.direction == 'down')
+                    $scope.reserveList = response.data;
+                  else
+                    $scope.reserveList = $scope.reserveList.concat(tempList);
+                  break;
+                }
+            }
+          },function(response){
+             if(response.status==-1){
+               commonService.showErrorMessage('请求错误，请联系管理员！');
+             }
+          });
+        return defer.promise;
+      };
+
+      //模态框
+      var showModal = function (code, msg) {
+        $('#ensureModal').modal('show');
+        $scope.tipsMessage = msg;
+        $scope.code = code;
+      }
+
+      /********************************* end *****************************************/
+
+
+      /********************************** 初始化 ***************************************/
+        //全部
+      $scope.reserveParams = {
+        mobile: localStorage.mobile,
+        url: 'listOrder.action',
+        type: '家庭',
+        pageno: '1', //页码
+        pagesize: '5', //页数
+        direction: 'up',
+        status: null,
+        key: null
+      };
+      $scope.reserveList = [];
+      var isAll = false;//false:标志数据未加载完成
+      $scope.status = localStorage.showType;  //记住上一次选中的状态
+      var statusElem = localStorage.statusElem;
+      if ($scope.status != null) {
+        $scope.reserveParams.status = $scope.status;
+      }
+      if (statusElem != null) {
+        $(statusElem).addClass('cartHead');
+      } else {
+        $('.reserve-all').addClass('cartHead');
+      }
+      $scope.reserveLoad($scope.reserveParams);
+
+      /*********************************** end ****************************************/
+
+
+      /********************************* 页面事件监听 ***********************************/
+      $scope.changeStatus = function (status, elem) {
+        $scope.status = status;
+        $scope.reserveParams.status = status;
+        $scope.reserveParams.pageno = 1;
+        $scope.reserveList = [];
+        $scope.reserveLoad($scope.reserveParams);
+        localStorage.showType = status;
+        localStorage.statusElem = elem;
+      };
+
+      //返回
+      $scope.back = function () {
+        $state.go('member-personal-usercenter');
+      };
+
+      //搜索
+      $scope.searchReserve = function (keyValue) {
+        $scope.reserveParams.pageno = 1;
+        $scope.reserveList = [];
+        $scope.reserveParams.key = keyValue;
+        $scope.reserveLoad($scope.reserveParams);
+      };
+
+      //点击预约单，进入详情页
+      $scope.goReserveDetail = function (order_id) {
+        $state.go('member-user-orderdetail', {
+          orderId: order_id,
+          from: 'reserve'
+        });
+        localStorage.orderParams = JSON.stringify($scope.orderParams);
+      };
+
+      //失去焦点，获取key的值
+      $scope.reserveBlur = function (keyValue) {
+        $scope.reserveParams.key = keyValue;
+      };
+
+      //评论
+      $scope.product = function (service) {
+        $state.go('member-user-productjudge', {
+          goodId: service.goods_id,
+          goodDetail: {
+            imageUrl: service.imageUrl,
+            name: service.name,
+            guige: service.guige,
+            sale_price: service.sale_price,
+            count: service.count,
+            unit: service.unit,
+            delivery: service.delivery,
+            service_station: service.service_station,
+            coupons: service.coupons,
+            status: service.status,
+            remark: service.remark
+          }
+        });
+
+      };
+
+      //支付
+      $scope.goToPay = function (parent) {
+        //$state.go('guanjia-pay', {
+        //  from: 5,
+        //  obj: {
+        //    orderIds: orderId
+        //  }
+        //});
+      };
+
+
+      //删除  暂未完成
+      $scope.isSureDelete = function (parent) {
+        if ($scope.reserveList.length == 0) {
+          commonService.showErrorMessage("没有相关数据");
+          return;
+        }
+        var reserveType = userService.getSelectedOrdersAndGoods(parent, ["待付款", "已完成"]);
+        var params = reserveType.apiParams;
+        var hadOtherStatusGoods = reserveType.hadInvalidGoods[0];
+        if (hadOtherStatusGoods) {
+          commonService.showErrorMessage("只能删除服务状态为待付款、已完成！");
+        } else if (params.length == 0) {
+          commonService.showErrorMessage("请选择服务！");
+        } else {
+          reserveType = params;
+          showModal(0, "确定删除所选商品?");
+        }
+
+      };
+      /************************************ end ***************************************/
+    }]);

@@ -1,0 +1,78 @@
+<!--****************************************  导航栏   *******************************************-->
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="../images/back_button.png">
+  </div>
+  <div class="navText">个人名片</div>
+
+</nav>
+
+<!--****************************************  content   *******************************************-->
+<div class="user-baisc-info">
+  <div class="bus_property-edit">
+    <label class="property-text">手机号</label>
+    <label ng-model="formData.mobile" class="ver-middle enable-edit">
+      <a class="tellColor" href="tel:{{formData.mobile}}">{{formData.mobile}}</a>
+    </label>
+  </div>
+
+</div>
+
+<form ng-submit="jumpeditUser()">
+  <div class="user-other-info">
+    <div class="bus_property-edit">
+      <label class="property-text">行业</label>
+      <input ng-model="formData.industry" type="text" class="form-control property-field" placeholder="行业">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">工种</label>
+      <input ng-model="formData.work" type="text" class="form-control property-field" placeholder="工种">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">职位</label>
+      <input ng-model="formData.profession" type="text" class="form-control property-field" placeholder="职位">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">学历</label>
+      <input ng-model="formData.xueli" type="text" class="form-control property-field" placeholder="学历">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">大学</label>
+      <input ng-model="formData.university" type="text" class="form-control property-field" placeholder="大学">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">高中</label>
+      <input ng-model="formData.high_school" type="text" class="form-control property-field" placeholder="高中">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">初中</label>
+      <input ng-model="formData.middle_school" type="text" class="form-control property-field" placeholder="初中">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">家乡</label>
+      <input ng-model="formData.home" type="text" class="form-control property-field" placeholder="家乡">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">爱好</label>
+      <input ng-model="formData.hobby" type="text" class="form-control property-field" placeholder="爱好">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">生肖</label>
+      <input ng-model="formData.shengxiao" type="text" class="form-control property-field" placeholder="生肖">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">星座</label>
+      <input ng-model="formData.xingzuo" type="text" class="form-control property-field" placeholder="星座">
+    </div>
+    <div class="bus_property-edit">
+      <label class="property-text">血型</label>
+      <input ng-model="formData.blood" type="text" class="form-control property-field" placeholder="血型">
+    </div>
+  </div>
+  <div class="empty"></div>
+  <div class="navbar navbar-fixed-bottom bottom-operate">
+    <!-- Indicates caution should be taken with this action -->
+    <button type="submit" class="btn btn-success btnRadius">提 交</button>
+  </div>
+</form>

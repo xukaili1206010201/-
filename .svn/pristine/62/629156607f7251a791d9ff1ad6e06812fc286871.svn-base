@@ -1,0 +1,196 @@
+
+
+  <script>
+
+    //设置背景颜色
+    $(function () {
+      var screenW = $(window).width();
+      var screenH = $(window).height() - parseInt($('.navigationbar').css('height')) - parseInt($('.familyservicedetail-footer').css('height'));
+      $('.familyservicedetail-content').css({
+        'height': screenH,
+        'overflow' : 'scroll'
+      })
+    })
+
+
+    $(function () {
+      $('#owl-ad').owlCarousel({
+        items: 1,
+        autoPlay: 3000,
+        pagination: false
+      });
+    });
+
+    //倒计时
+    /*function getRTime(){
+      var EndTime= new Date('2016/07/5 10:00:00'); //截止时间 前端路上 http://www.51xuediannao.com/qd63/
+      var NowTime = new Date();
+      var t =EndTime.getTime() - NowTime.getTime();
+      var day = Math.floor(t/1000/60/60/24);
+      var hour = Math.floor(t/1000/60/60%24);
+      var minute = Math.floor(t/1000/60%60);
+      var second = Math.floor(t/1000%60);
+      document.getElementById("familiservicedetail-countdown").innerHTML = "开卖倒计时:"+day+"天"+hour+"小时"+minute+"分"+second+"秒";
+    }
+    setInterval(getRTime,1000);*/
+
+
+    var lastSelectedItem = '.familyservicedetail-service-default-selected-item';
+    var lastShowView = '.familyservicedetail-service-default-show-view';
+    function didSelectedSegmentItem(currentItem,currentShowView){
+      $(lastSelectedItem).css({
+        "color":"black",
+        "border-bottom": "0.3rem solid rgb(228,228,228)"
+      })
+      $(currentItem).css({
+        "color":"#7DB343",
+        "border-bottom": "0.3rem solid #7DB343"
+      })
+      lastSelectedItem = currentItem;
+
+      $(lastShowView).css({
+        'display':'none'
+      })
+      $(currentShowView).css({
+        'display':'block'
+      })
+      lastShowView = currentShowView;
+
+    }
+    function showServiceDetailView(event){
+      didSelectedSegmentItem(event.target,".familyservicedetail-service-detail-view");
+    }
+
+    function showCommentView(event){
+      didSelectedSegmentItem(event.target,".familyservicedetail-service-comment-view");
+    }
+
+    function showSellNumView(event){
+      didSelectedSegmentItem(event.target,".familyservicedetail-service-sellnum-view");
+    }
+
+  </script>
+
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+
+    <div class="navigationbar-item">
+      <p class="item-title">服务详情</p>
+    </div>
+  </div>
+</nav>
+
+<div class="familyservicedetail-content">
+
+  <!-- 轮播图  -->
+  <div class="familyservicedetail-carousel">
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides" active="slide.active">
+          <img ng-src="{{slide}}" curousel-height class="slideImg">
+        </slide>
+      </carousel>
+    </div>
+
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.jpg" curousel-height class="slideImg">
+    </div>
+
+  </div>
+
+
+  <div class="familyservicedetail-service-info">
+    <p class="familyservicedetail-service-name">{{serviceDetail.business}}</p>
+    <p class="familyservicedetail-service-intro">{{serviceDetail.introduction}}</p>
+    <span class="familyservicedetail-service-currentprice">￥{{serviceDetail.sale_price}}</span>
+    <span class="familyservicedetail-service-unit">/{{serviceDetail.unit}}</span>
+    <span class="glyphicon glyphicon-sort"></span>
+    <span class="familyservicedetail-service-orginalprice">&nbsp;&nbsp;<s>￥{{serviceDetail.old_price}}</s></span>
+    <span class="familyservicedetail-service-sellnum">日销量:{{serviceDetail.day_count}}</span>
+  </div>
+
+  <!--倒计时-->
+  <div class="familyservicedetail-timecount" id="familiservicedetail-countdown" count-down>
+
+  </div>
+
+  <div class="familyservicedetail-service-detail">
+
+    <div class="familyservicedetail-service-segmentcontrol">
+      <button type="button"
+              class="familyservicedetail-service-segmentcontrol-item familyservicedetail-service-default-selected-item" onclick="showServiceDetailView(event)">服务详情</button>
+      <button type="button" class="familyservicedetail-service-segmentcontrol-item"
+              onclick="showCommentView(event)">评价</button>
+      <button type="button" class="familyservicedetail-service-segmentcontrol-item" onclick="showSellNumView(event)">销量
+      </button>
+    </div>
+    <!--商品详情-->
+    <div class="familyservicedetail-service-detail-view familyservicedetail-service-default-show-view">
+      <p ng-bind-html="serviceDetail.description"></p>
+    </div>
+
+    <!--评价-->
+    <div class="familyservicedetail-service-comment-view">
+
+      <div class="service-comment-row" ng-repeat="sComment in serviceComment">
+
+        <div class="service-comment-user-info">
+          <div class="service-comment-user-avatar">
+            <img class="img-responsive" ng-src="{{sComment.headImgurl}}">
+          </div>
+
+          <div class="service-comment-user-namestar">
+            <p class="service-comment-user-name">
+              <span>{{sComment.nickname}}</span>
+              <span class="service-comment-user-time">{{sComment.create_date}}</span></p>
+            <!--<p class="service-comment-user-time">2016-01-01 15:14:13</p>-->
+            <p>
+              <img class="img-responsive service-comment-user-star" ng-if="sComment.star == 1 || sComment.star == 2 || sComment.star == 3 || sComment.star == 4 || sComment.star == 5 " src="images/lightstar.png">
+              <img class="img-responsive service-comment-user-star" ng-if="sComment.star == 2 || sComment.star == 3 || sComment.star == 4 || sComment.star == 5" src="images/lightstar.png">
+              <img class="img-responsive service-comment-user-star" ng-if="sComment.star == 3 || sComment.star == 4 || sComment.star == 5" src="images/lightstar.png">
+              <img class="img-responsive service-comment-user-star" ng-if="sComment.star == 4 || sComment.star == 5" src="images/lightstar.png">
+              <img class="img-responsive service-comment-user-star" ng-if="sComment.star == 5" src="images/lightstar.png">
+            </p>
+          </div>
+
+        </div>
+
+        <div class="service-comment-user-commentcontent">
+          <!-- 评论的图片组  -->
+          <div class="service-comment-image-group">
+            <img class="service-comment-image" ng-repeat="pic in sComment.tupian" ng-src="pic">
+            <!--<img class="service-comment-image" src="../../../images/logo.jpg">-->
+          </div>
+
+          <!-- 评论的文本信息 -->
+          <div class="service-comment-text">
+            <p>{{sComment.content}}</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 销量图表 -->
+    <div class="familyservicedetail-service-sellnum-view">
+      <canvas id="line" class="chart chart-line" chart-data="salesData"
+              chart-labels="labels" chart-legend="true" chart-series="series"
+              chart-click="onClick" >
+      </canvas>
+    </div>
+
+  </div>
+
+
+</div>
+
+<div class="familyservicedetail-footer navbar-fixed-bottom">
+  <button type="button" class="btn btn-success" ng-click="goServiceReserve()">预约</button>
+</div>
+

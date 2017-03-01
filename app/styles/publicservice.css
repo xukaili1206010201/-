@@ -1,0 +1,89 @@
+.publicservice-nav{
+  margin-bottom: 0;
+}
+
+.publicservice-segmentcontrol{
+  width: 100%;
+  height: 40px;
+  border-bottom: 1px solid #ddd;
+}
+
+.publicservice-segmentcontrol .publicservice-sc-item{
+  float: left;
+  height: 40px;
+  line-height: 40px;
+  display:inline-block;
+  text-align: center;
+  font-size:1.3rem;
+  border-bottom:3px solid transparent;
+  color:#666;
+  padding:0 1.5rem;
+}
+.publicservice-segmentcontrol a:first-child{
+  color: #7DB343;
+  border-bottom:3px solid #7DB343;
+}
+
+
+.publicservice-segmentcontrol .publicservice-sc-item:focus{
+  outline: none;
+}
+.publicservice-street-row p{
+  margin: 0;
+}
+
+.publicservice-street-phone{
+  float: right;
+}
+
+/* 社区街道的地址以及电话 */
+.publicservice-street-address , .publicservice-street-phone{
+  font-size: 12px;
+}
+
+.publicservice-manager-row p{
+  margin: 0;
+}
+
+.publicservice-manager-phone{
+  float: right;
+}
+.publicservice-manager-communityname,.publicservice-street-name{
+  font-size:1.5rem;
+}
+/* 小区名、小区地址、物业电话 */
+.publicservice-manager-name , .publicservice-manager-address , .publicservice-manager-phone{
+  font-size: 1.2rem;
+}
+
+/*导航栏样式*/
+.navigationbar-publicservice{
+  /*margin-left: 10px !important;*/
+  /*margin-top: 10.5px;*/
+  /*margin-right: 10px !important;*/
+  /*height: 30px;*/
+  /*overflow: hidden;*/
+  display: none;
+}
+.navigationbar-publicservice .search-button img {
+  /*width: 25px;*/
+  /*height: 25px;*/
+}
+.navigationbar-government{
+  /*width: 80%;*/
+  /*height: 50px;*/
+  /*line-height: 50px;*/
+  /*font-size: 14px;*/
+}
+
+.publicservice-government-table .goverment{
+  width:100%;
+  border:0;
+}
+
+.searchPublic{
+  margin:5px 0;
+}
+.searchPublic input,.searchPublic button{
+  height:35px;
+}

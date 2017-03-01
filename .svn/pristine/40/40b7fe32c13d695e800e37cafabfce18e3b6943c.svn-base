@@ -1,0 +1,55 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navcityLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="backtocomservice()" src="images/back_button.png">
+
+    <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+      <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+              ng-options="x.city_id as x.name for x in usercityList">
+      </select>
+    </p>
+  </div>
+
+  <div class="navcityRight">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchActivity()">
+      <input type="text" class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="activityBlur()">
+    </div>
+  </div>
+</nav>
+
+<div class="navMain callactivity-content">
+  <div class="activity-content" ng-show="!errMsg" load-more
+       data="{params : params,repeatFun : '$scope.getActivityList'}">
+    <ul class="list-group">
+      <li class="list-group-item" ng-repeat="k in listActivity" ng-click="goDetail(k.activity_id)">
+        <div class="media">
+          <div class="media-left">
+            <a href="#">
+              <img class="media-object" ng-src="{{k.logo}}" alt=""/>
+            </a>
+          </div>
+          <div class="media-body callactivity-right">
+            <p class="callactivity-activitytitle">{{k.name}}</p>
+            <p>{{k.introduction}}</p>
+            <p>{{k.start_date}}~{{k.end_date}}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="errMsg" ng-show="errMsg">{{errMsg}}</div>
+</div>
+
+<script>
+  var contentH = window.screen.availHeight - $('.navigationbar').height();
+  console.log(window.screen.availHeight);
+  $('.activity-content').css({
+    'height': contentH + 'px',
+    'overflow': 'scroll'
+  });
+
+</script>

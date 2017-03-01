@@ -1,0 +1,103 @@
+
+/* ******************************** 列表 样式 ******************************** */
+
+/* ******************************** 卡头 样式 ******************************** */
+.segment-control {
+  margin-top: 50px;
+  height: 30px;
+  /*overflow: hidden;*/
+}
+
+.segment-control a {
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+}
+
+.segment-control a:hover {
+  text-decoration: none;
+}
+
+.unread-message-button {
+  width: 50%;
+  height: 100%;
+  background: #84C921;
+  color: white;
+  float: left;
+  text-align: center;
+  display: table;
+}
+
+.readed-message-button {
+  width: 50%;
+  height: 100%;
+  color: black;
+  background: rgb(235, 235, 241);
+  float: left;
+  text-align: center;
+  display: table;
+}
+
+/* ********************************未读消息表 样式 ******************************** */
+.unread-message-table {
+  display: block;
+  margin-top: 81px;
+}
+
+.readed-message-table{
+  display: none;
+  margin-top: 81px;
+}
+
+
+.unread-message-table .line-wrapper{
+  background: white;
+  width: 100%;
+}
+
+.readed-message-table .line-wrapper,.searchMsg .line-wrapper{
+  background: white;
+  width: 100%;
+}
+
+
+.read-time {
+  text-align: right;
+}
+
+
+.message-content {
+  color: #4e4e4e;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  margin-right: 10px;
+  /*font-size: 14px;*/
+  /*最多显示两行*/
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.line-normal-wrapper{
+  position: relative;
+}
+
+.message-city{
+  /*font-size: 12px;*/
+  /*margin-left: 10px;*/
+  position: absolute;
+  left:10px;
+  top:35px;
+}
+
+.message-time{
+  /*font-size: 12px;*/
+  /*float: right;*/
+  /*margin-right: 10px;*/
+  position: absolute;
+  right:10px;
+  /*bottom:0px;*/
+  top:35px;
+}
+

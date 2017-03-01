@@ -1,0 +1,280 @@
+<script>
+
+  var ulHeight = window.screen.availHeight - $('.navigationbar').height()
+    - $('.navbar-fixed-bottom').height() - $('.cart-tab').height();
+  $('.showGoods').css({
+    'height': ulHeight + 'px',
+    'overflow-y': 'scroll'
+  });
+  $('.showByKey').css({
+    'height': ulHeight + 'px',
+    'overflow': 'scroll'
+  });
+
+  $('.cartContent').css({
+    'margin-top': $('.cart-tab').height() + 50 + 'px'
+  });
+</script>
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar" style="border-bottom:none">
+  <div class="navLeft search-set">
+    <img class="back-button" src="images/back_button.png" ng-click="backLastPage()">
+  </div>
+  <div class="navRight">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchGoods()">
+      <input class="search-input form-control" placeholder="请输入关键字搜索" ng-blur="cartBlur()">
+    </div>
+  </div>
+
+
+</nav>
+
+<div class="navbar-fixed-top cart-tab">
+  <button class="btn btn-tab" ng-click="showSelectedData('特供')" cart-tab><i
+    class="glyphicon glyphicon-shopping-cart"></i><span>订购类</span>
+  </button>
+  <button class="btn btn-tab" ng-click="showSelectedData('家庭')" cart-tab><i class="glyphicon glyphicon-time"></i><span>预约类</span>
+  </button>
+</div>
+
+<div class="cartContent">
+  <div>
+    <div ng-if="showType">
+      <!--订购类-->
+      <div class="showGoods orderGoods " ng-if="!errMsg" load-more
+           data="{params : cartParams,repeatFun : '$scope.carList'}">
+
+        <div class="list-group-item" ng-repeat="goods in cartLists">
+          <div class="cart-small-pic ">
+            <img src="images/sure-icon.png" class="sure" ng-click="selectOrNot($event);$event.stopPropagation();">
+          </div>
+          <ul class="order-table" style="margin-bottom:0px;">
+            <li class="cart-row"
+                ng-click="goGoodsDetail(goods.goods.goods_id,goods.cart_id)">
+              <span class="cart-id" style="display: none;">{{goods.cart_id}}</span>
+              <span class="cart-goods-receiver-name" style="display: none;">{{goods.contact_name}}</span> <!-- 收货人姓名 -->
+              <span class="cart-goods-receiver-telphone" style="display: none;">{{goods.contact_phone}}</span>
+              <!-- 收货人电话 -->
+              <span class="cart-goods-receiver-address" style="display: none;">{{goods.address}}</span>   <!-- 收货人地址 -->
+
+              <div class="cart-pic">
+                <!--<div class="cart-small-pic">-->
+                <!--<img src="images/sure-icon.png" class="sure" ng-click="selectOrNot($event);$event.stopPropagation();">-->
+                <!--</div>-->
+                <div class="cart-product-pic">
+                  <img src="{{goods.goods.imageUrl}}">
+                </div>
+              </div>
+
+              <div class="cart-message-text">
+                <!-- 商品id -->
+                <span class="goods-id" style="display: none">{{goods.goods.goods_id}}</span>
+                <!-- 商品规格 -->
+                <span class="cart-good-guige" style="display: none;">{{goods.goods.guige}}</span>
+                <span class="cart-good-guige1" style="display: none;">{{goods.goods.guige_1}}</span>
+                <span class="cart-good-guige2" style="display: none;">{{goods.goods.guige_2}}</span>
+                <!-- 商品配送id -->
+                <span class="cart-good-deliveryId" style="display: none;">{{goods.delivery.delivery_id}}</span>
+                <!-- 服务站id -->
+          <span class="cart-good-serviceStationId" style="display: none;">{{goods.service_station
+            .service_station_id}}</span>
+
+
+                <p style="overflow: hidden">  <!--商品名-->
+                  <span class="cart-product-name">{{goods.goods.name}}</span>
+                <span class="cart-money moneyColor">
+                  &#165<span class="cart-goods-price">{{goods.goods.price}}</span>/{{goods.goods.unit}}
+                </span>
+                </p>
+
+                <p class="cart-city">
+                  <span class="goods-city"> {{goods.goods.city}}</span>
+                  <span class="cart-title">{{goods.goods.business}}</span>
+                <span class="btn-count">
+                  <span ng-click="decrease($event,goods.cart_id);$event.stopPropagation();" class="cart-decrease-button">－</span>
+                   <input ng-keyup="inputChange($event,goods.cart_id)" ng-click=";$event.stopPropagation();" type="number"
+                          class="cart-number-input" value="{{goods.goods_count}}">
+                   <span class="cart-increase-button" ng-click="increase($event,goods.cart_id);$event.stopPropagation();">＋</span>
+                </span>
+                </p>
+
+                <p ng-if="goods.goods.guige_1" style="clear: both;">{{goods.goods.guige_1}}</p>
+                <p ng-if="goods.goods.guige_2">{{goods.goods.guige_2}}</p>
+              </div>
+
+              <div class="cart-other-text">
+                <div class="cart-guige">
+                  <ul class="list-inline">
+                    <li style="display:block">
+                      送货方式：<span style="margin-left:5px;">{{goods.delivery.name}}{{goods.service_station.name==''?'':'('+goods.service_station.name+')'}}</span>
+                    </li>
+                    <li style="display:block;">
+                      订购小区：<span style="margin-left:5px;">{{goods.address}}</span>
+                    </li>
+                    <li>
+                      <span class="cart-buytime">{{goods.create_date}} 选购</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cart-goods-remarks"><p ng-show="goods.remark!=''">备注：{{goods.remark}}</p></div>
+                <p class="cart-send-time">
+                  <span class="cart-goods-status" style="display: none;">{{goods.error}}</span>
+                  <span class="cart-note" ng-show="goods.error.length > 0">失效原因：{{goods.error}}</span>
+                </p>
+
+                <div class="clearfix"></div>
+              </div>
+
+            </li>
+
+          </ul>
+        </div>
+      </div>
+      <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+    </div>
+
+    <div ng-if="!showType">
+      <!--预约类-->
+
+      <div class="showGoods reserveGoods" ng-if="!errMsg" load-more
+           data="{params : cartParams,repeatFun : '$scope.carList'}">
+        <div class="list-group-item" ng-repeat="goods in cartLists">
+          <div class="cart-small-pic">
+            <img src="images/sure-icon.png" class="sure" ng-click="selectOrNot($event);$event.stopPropagation();">
+          </div>
+          <ul class="order-table" style="margin-bottom:0px">
+            <li class="cart-row"
+                ng-click="goGoodsDetail(goods.goods.goods_id,goods.cart_id)">
+              <span class="cart-id" style="display: none;">{{goods.cart_id}}</span>
+              <span class="cart-goods-receiver-name" style="display: none;">{{goods.contact_name}}</span> <!-- 收货人姓名 -->
+              <span class="cart-goods-receiver-telphone" style="display: none;">{{goods.contact_phone}}</span>
+              <!-- 收货人电话 -->
+              <span class="cart-goods-receiver-address" style="display: none;">{{goods.address}}</span>   <!-- 收货人地址 -->
+
+              <div class="cart-pic">
+                <!--<div class="cart-small-pic">-->
+                <!--<img src="images/sure-icon.png" class="sure" ng-click="selectOrNot($event);$event.stopPropagation()">-->
+                <!--</div>-->
+                <div class="cart-product-pic">
+                  <img src="{{goods.goods.imageUrl}}">
+                </div>
+              </div>
+
+              <div class="cart-message-text">
+                <!-- 商品id -->
+                <span class="goods-id" style="display: none">{{goods.goods.goods_id}}</span>
+                <!-- 商品规格 -->
+                <span class="cart-good-guige" style="display: none;">{{goods.goods.guige}}</span>
+                <span class="cart-good-guige1" style="display: none;">{{goods.goods.guige_1}}</span>
+                <span class="cart-good-guige2" style="display: none;">{{goods.goods.guige_2}}</span>
+                <!-- 商品配送id -->
+                <span class="cart-good-deliveryId" style="display: none;">{{goods.delivery.delivery_id}}</span>
+                <!-- 服务站id -->
+          <span class="cart-good-serviceStationId" style="display: none;">{{goods.service_station
+            .service_station_id}}</span>
+
+
+                <p style="overflow: hidden">  <!--商品名-->
+                  <span class="cart-product-name">{{goods.goods.name}}</span>
+                <span class="cart-money moneyColshor">
+                  &#165<span class="cart-goods-price">{{goods.goods.price}}</span>/{{goods.goods.unit}}
+                </span>
+                </p>
+
+                <p class="cart-city">
+                  <span class="goods-city"> {{goods.goods.city}}</span>
+                  <span class="cart-title">{{goods.goods.business}}</span>
+                <span class="btn-count">
+                  <span ng-click="decrease($event,goods.cart_id);$event.stopPropagation();" class="cart-decrease-button">－</span>
+                   <input ng-keyup="inputChange($event,goods.cart_id)" ng-click="$event.stopPropagation();" type="number"
+                          class="cart-number-input" value="{{goods.goods_count}}">
+                   <span class="cart-increase-button" ng-click="increase($event,goods.cart_id);$event.stopPropagation();">＋</span>
+                </span>
+                </p>
+
+                <p ng-if="goods.goods.guige_1" style="clear: both;">{{goods.goods.guige_1}}</p>
+                <p ng-if="goods.goods.guige_2">{{goods.goods.guige_2}}</p>
+              </div>
+
+              <div class="cart-other-text">
+                <div class="cart-guige">
+                  <ul class="list-inline">
+                    <li style="display: block;">
+                      预约小区：<span style="margin-left:5px;">{{goods.address}}</span>
+                    </li>
+                    <li>
+                      <span class="cart-buytime">{{goods.create_date}} 选购</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cart-goods-remarks"><p ng-show="goods.remark!=''">备注：{{goods.remark}}</p></div>
+                <p class="cart-send-time">
+                  <span class="cart-goods-status" style="display: none;">{{goods.error}}</span>
+                  <span class="cart-note" ng-show="goods.error.length > 0">失效原因：{{goods.error}}</span>
+                </p>
+
+                <div class="clearfix"></div>
+              </div>
+
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+    </div>
+  </div>
+
+  <div class="navbar-fixed-bottom cat-fixed-bottom">
+    <div class="cart-button-group-left">
+      <p class="cart-lable-text">
+      <span class=" cart-all-select-button">
+        <img src="images/sure-icon.png" class="check-all" ng-click="selectAllGoods($event)">
+      </span>全选
+      </p>
+      <div class="cart-totals">
+        <b>总额</b>
+        <p class="moneyColor">&#165 <span>{{totalPrice}}</span></p>
+      </div>
+    </div>
+
+    <!--<div class="cart-button-group-right">-->
+    <!--<button type="button" class="btn btn-danger cart-button-del" ng-click="deleteGoods()">删除</button>-->
+    <!--<button type="button" class="btn btn-success cart-button-buy" ng-click="buyOrReserve($event)">{{btnType}}</button>-->
+    <!--</div>-->
+
+    <div class="edit-group">
+      <button type="button" class="btn btn-danger" ng-click="doFactory(0)">删除
+      </button>
+    </div>
+    <div class="edit-group">
+      <button type="button" class="btn btn-success" ng-click="doFactory(1)">{{btnType}}</button>
+    </div>
+
+  </div>
+</div>
+
+<!--提示模态框-->
+<div class="modal fade" id="cartSureModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">购物车</h4>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:1.3rem">{{messageContent}}</p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" ng-click="sureAction(code)">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

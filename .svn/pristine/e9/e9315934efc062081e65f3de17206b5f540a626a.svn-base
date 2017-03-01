@@ -1,0 +1,134 @@
+
+  <script>
+
+    //设置背景颜色
+    $(function () {
+      var screenW = $(window).width();
+      var screenH = $(window).height() - parseInt($('.navigationbar').css('height'));
+      $('.familyservicelist-content').css({
+        'height': screenH
+      })
+    })
+
+
+    var lastSelectedItem = '.familyservicelist-default-selected-item'
+    function didSelectedSegmentItem(currentItem) {
+      $(lastSelectedItem).css({
+        'border-bottom': 'none'
+      })
+      $(currentItem).css({
+        'border-bottom': '2px solid #7DB343'
+      })
+      lastSelectedItem = currentItem;
+    }
+    function showTargetView(event) {
+      didSelectedSegmentItem(event.target)
+    }
+
+    //计算高度
+    var comHeight = window.screen.availHeight - $('.navigationbar').height();
+    $('.servicelist-content').css({
+      'height' : comHeight + 'px',
+      'overflow' : 'scroll'
+    });
+
+  </script>
+
+
+<nav class="navbar navbar-default navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchServiceList()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="inputBlur()">
+    </div>
+  </div>
+
+</nav>
+
+<div class="familyservicelist-content">
+
+  <!-- 商家名称 -->
+  <div class="familyservicelist-sellername-view service-name" ng-click="jumpSellerdetail()" good-height
+       data="{type:'0'}">
+    <span ng-show="city_fuwu_id==null" class="familyservicelist-sellername-text">{{business.name}}</span>
+    <span ng-show="city_fuwu_id!=null" class="seller-name">全部商家</span>
+    <b ng-show="city_fuwu_id==null"><img class="familyservicelist-next-image"  src="images/next.png"></b>
+  </div>
+
+  <!-- 跑马灯 -->
+
+  <div class="marquee-broadcast" ng-show="marqueeContent.length > 0">
+    <marquee behavior="scroll" scrollAmount="{{slide}}">
+      <ul class="list-inline">
+        <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+      </ul>
+    </marquee>
+  </div>
+
+  <div class="filter-block">
+    <select ng-model="selected" class="dropdown familyservicelist-dropdown goodsListSelect"
+            ng-init="selected='up_date'" ng-change="changeSort()">
+      <option value="zong_count">总销量顺序</option>
+      <option value="day_count">日销量顺序</option>
+      <option value="week_count">周销量顺序</option>
+      <option value="score">评分顺序</option>
+      <option value="sale_price">价格顺序</option>
+      <option value="up_date">上架时顺序</option>
+      <option value="goods_name">商品名倒序</option>
+    </select>
+  </div>
+
+  <div class="service-list-tabs">
+    <div class="familyservicelist-segmentcontrol">
+      <button class="familyservicelist-segment-item" cate-change
+              data="{parent : '.familyservicelist-segmentcontrol',child:'.familyservicelist-segment-item',promise : '$scope.promised',goodslist:'.familyservicelist-table'}"
+              ng-repeat="cList in categoryLis" ng-click="showCtagoryContent($index,cList.category_id)">{{cList.name}}
+      </button>
+    </div>
+  </div>
+
+  <!--------------商品列表--------------------->
+  <div class="familyservicelist-table show{{sCount}}" ng-repeat="sCount in serviceCount">
+
+    <div ng-if="!errMsg" class=" common-contentList" load-more
+         data="{params : serviceListParams,repeatFun : '$scope.serviceListFun'}"><!--loadMore-->
+
+      <ul class="media-list goodList-media">
+        <li class="media" ng-repeat="a in serviceList" ng-click="goServiceDetail(a.goods_id)">
+          <div class="media-left"  ng-click="goServiceDetail(a.goods_id)">
+            <img class="media-object list-img" ng-src="{{a.imageUrl}}" alt="...">
+            <img class="image-tag" ng-show="a.hot == 'Y'" src="images/fire.png">
+          </div>
+
+          <div class="media-body goods-list-row-content">
+            <div class="title-cart-block">
+              <div class="goodslist-title-row">
+                <img class="Newimage" ng-show="a.new == 'Y'" src="images/newtag.png">
+                <span>{{a.name}}</span>
+                <img class="goodslist-cart" ng-click="goReserve(a.goods_id)" src="images/cart.jpg">
+              </div>
+            </div>
+            <p class="goods-description">{{a.introduction}}</p>
+
+            <div class="price-num">
+              <span ng-show="a.price_change == 'Y'" class="glyphicon glyphicon-sort moneyColor"></span>
+              <span class="goodslist-goods-price moneyColor">&#165{{a.sale_price}}</span>
+              <span class="goods-danwei moneyColor">/套</span>
+              <s><span class="price_i">&#165{{a.old_price}}</span></s>
+              <span class="goods-xiaoliang">日销量：{{a.day_count}}</span>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+    <div ng-if="errMsg" class="errMsg">{{errMsg}}</div>
+
+  </div>
+
+</div>

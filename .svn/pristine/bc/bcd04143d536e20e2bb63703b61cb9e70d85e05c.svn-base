@@ -1,0 +1,98 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="backTribe()" src="images/back_button.png">
+
+    <div class="navigationbar-item">
+      <p class="item-title">帖子详情</p>
+    </div>
+  </div>
+</nav>
+
+
+<div class="post-content">
+  <div class="base-society">
+    <h4>{{bbsList.title}} <span style="margin-left:20px;font-size: 1.2rem;">{{bbsList.bbs_nickname}}</span></h4>
+    <img class="bbs-head-img" ng-src="{{bbsList.bbs_avatar}}" alt=""/>
+    <div class="bbs-content">
+        {{bbsList.bbs_content}}
+    </div>
+    <!--<div class="bbs-img" ng-bind-html="bbsImg"></div>-->
+    <div class="bbs-img" ng-show="bbsList.bbs_image !=null ">
+      <img ng-src="{{k}}" alt="" ng-repeat="k in bbsList.bbs_image">
+    </div>
+
+  <div style="margin-top:15px;">
+    <p>
+      <span>{{bbsList.city_name}}</span>&nbsp;&nbsp;
+      <span>{{bbsList.buluo_name}}</span>&nbsp;&nbsp;
+      <span>{{bbsList.create_date}}</span>
+      <span class="review-status">
+        <a style="color: #337ab7;" ng-click="goPostReply()">回复</a>
+        <a ng-hide="bbsList.review_status == '未通过'" style="color: #337ab7;" ng-click="goPostEdit()">编辑</a>&nbsp;&nbsp;
+        {{bbsList.review_status}}</span>
+    </p>
+    <p>
+      {{bbsList.review_reason}}
+    </p>
+  </div>
+
+  </div>
+
+</div>
+
+<div class="post-content ng-scope" ng-repeat="k in bbsReplyList" ng-show="bbsReplyList">
+
+  <div class="media content-floor">
+    <div class="media-left">
+      <!--<a href="#">-->
+      <img class="media-object bbs-head-img" ng-src="{{k.avatar}}" alt=""/>
+      <!--</a>-->
+    </div>
+    <div class="media-body">
+      {{$index+1}}楼&nbsp;&nbsp;<span>{{k.nickname}}</span>
+      <div>
+        {{k.content}}
+      </div>
+      <div class="bbsReply-img" ng-show="k.reply_image !=null ">
+        <img ng-src="{{b}}" alt="" ng-repeat="b in k.reply_image">
+      </div>
+    </div>
+
+    <p class="edit">
+      <span>{{k.create_date}}</span>&nbsp;&nbsp;
+        <span>
+          <a ng-click="goPostReply(k.bbsReply_id)">回复</a>
+            <a>删除</a>
+        </span>
+    </p>
+  </div>
+
+  <div class="media content-floor" ng-repeat="b in k.child_array" style=margin-left:10px;>
+    <div class="media-left">
+      <!--<a href="#">-->
+      <img class="media-object bbs-head-img" ng-src="{{b.avatar}}" alt=""/>
+      <!--</a>-->
+    </div>
+    <div class="media-body">
+      {{$index+1}}楼&nbsp;&nbsp;<span>{{b.nickname}}</span>
+      <div>
+        {{b.content}}
+      </div>
+      <div class="bbsReply-img" >
+        <img ng-src="{{z}}" alt="" ng-repeat="z in b.reply_image">
+      </div>
+    </div>
+
+    <p class="edit">
+      <span>{{b.create_date}}</span>&nbsp;&nbsp;
+        <span>
+          <a ng-click="goPostReply(b.bbsReply_id)">回复</a>
+          <a>删除</a>
+        </span>
+    </p>
+  </div>
+
+
+</div>
+<h4 ng-hide="bbsReplyList" class="text-center" style="margin-top:40px;">暂无评论！</h4>

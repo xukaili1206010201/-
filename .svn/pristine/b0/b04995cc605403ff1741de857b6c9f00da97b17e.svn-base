@@ -1,0 +1,28 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <img class="back-button" ng-click="back()" src="images/back_button.png">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png">
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入关键字搜索">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="navMain stationCityName">{{gpscityName}}</div>
+<div class="stationList line-wrapper" ng-repeat="b in station" >
+
+  <div class="line-scroll-wrapper">
+    <div class="line-normal-wrapper">
+      <span class="glyphicon glyphicon-info-sign stationInfo" ng-click="jumpStationDetail(b.service_station_id)"></span>
+      <div style="width:80%;" ng-click="jumppurchase(b)">
+        <div style="font-size: 1.5rem;">{{b.name}}</div>
+        <div style="font-size: 1.2rem;">{{b.community_name}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-center" ng-hide="station.length > 0" style="margin-top:80px;font-size: 1.5rem;">没有相关数据！</div>
+

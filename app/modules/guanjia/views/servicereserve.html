@@ -1,0 +1,169 @@
+<script>
+
+  //设置背景颜色
+  $(function () {
+    var screenW = $(window).width();
+    var screenH = $(window).height() - parseInt($('.navigationbar').css('height'));
+    $('.servicereserve-content').css({
+      'height': screenH
+    });
+  });
+
+</script>
+
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+  </div>
+  <div class="navText">服务预约
+    <i ng-click="goCart()" ng-show="cartCount" class="glyphicon glyphicon-shopping-cart purchase-cart">
+    </i>
+    <span ng-click="goCart()" ng-show="cartCount" class="badge pull-right purchase-badge">{{cartCount}}</span>
+  </div>
+</nav>
+
+<div class="servicereserve-content">
+
+  <ul class="list-group pu-list-group">
+
+    <!-- 商品名称 -->
+    <li class="purchase-goodsName-row">
+      <p class="purchase-goodsName font15">
+        <span class="font15"><b>{{serviceReserve.business}}</b></span>&nbsp;&nbsp;
+        <span class="font15"><b>{{serviceReserve.name}}</b></span>
+      </p>
+    </li>
+
+    <!-- 展示商品信息:图片、价格、原价、销量、库存、商品数量输入框以及对应的总价格 -->
+    <div class="purchase-goods-info">
+
+      <div class="purchase-goods-image">
+        <img class="img-responsive" ng-src="{{serviceReserve.imageUrl}}">
+      </div>
+
+      <!-- 价格，销量，库存 -->
+      <div class="purchase-goods-middle">
+        <div>
+          <span ng-show="serviceReserve.price_change == 'Y'" class="glyphicon glyphicon-sort moneyColor"></span>
+          <span class="purchase-goods-current-price">&#165{{salePrice}}</span> <!-- 当前价格 -->
+          <span class="purchase-goods-price-unit">/{{serviceReserve.unit}}</span>        <!-- 价格单位 -->
+          <span class="purchase-goods-old-price"><s>&#165{{oldPrice}}</s></span>  <!-- 原价 -->
+        </div>
+        <div class="purchase-goods-coun-inventory">
+          <span>日销量：{{serviceReserve.day_count}}</span>&nbsp;&nbsp;
+          <!-- 库存＝-1表示该商品不限库存 -->
+          <span ng-hide="serviceReserve.inventory == -1">库存：{{serviceReserve.inventory}}</span>
+        </div>
+      </div>
+
+      <div class="purchase-goods-right">
+        <div class="purchase-numoperater">
+          <span class="decrease-button" ng-click="decrease()">－</span>
+          <input ng-keyup="inputChange($event)" type="number" ng-model="count" class="pu-number-input">
+          <span class="increase-button" ng-click="increase()">＋</span>
+        </div>
+
+        <div class="purchase-totalprice">
+          总额 <span style="color: #E79D1E;">&#165{{totalPrice}}</span>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <!-- 服务站与选择服务站 -->
+    <li class="list-group-item goods-purchase-detail station-li purchase-servicestation-row"
+        ng-if="delivery.length > 0">
+      <div class="purchase-bottom">
+
+        <!-- 提货方式 -->
+        <div class="purchase-express-type">
+          <select style="height: 100%;margin-left:-3.5px;text-align: right;" ng-change="selChange()"
+                  ng-model="currentSelectedDeliveryId"
+                  class="pu-drop font15" id="purchase-delivery">
+            <option value="{{delObject.delivery_id}}" ng-repeat="delObject in delivery">{{delObject.name}}</option>
+          </select>
+
+        </div>
+
+
+        <!-- 选择服务站 -->
+        <div class="pu-next purchase-selct-servicestation" ng-show="showSelectServiceStation"
+             ng-click="selectStation()">
+          <span class="purchase-stationname font15">{{stationName}}</span>
+          <span style="display: none;">{{stationId}}</span>
+        </div>
+      </div>
+    </li>
+
+
+    <!-- 规格 -->
+    <li class="list-group-item goods-purchase-detail station-li guigeList"
+        ng-repeat="b in serviceReserve.guige">
+
+      <div ng-class="$index+1==serviceReserve.guige.length?'font15 purchase-end':'font15 purchase-bottom'">
+        <span class="purchase-spec-name">{{b.key}}：</span>
+        <select ng-disabled="guige_id==''" ng-change="changeGuige(guige_id)"
+                ng-init="guige_id=serviceReserve.guige[$index]['value'][0]['guige_id']" ng-model="guige_id"
+                name="{{b.key}}"
+                class="font15 dropdown pu-dropdown guigeSelect">
+          <option value="{{a.guige_id}}" class="font15 size"
+                  ng-repeat="a in b.value">{{a.guige_name}}
+          </option>
+        </select>
+      </div>
+    </li>
+
+    <li class="list-group-item goods-purchase-remark">
+      <textarea class="pu-textarea" ng-model="remarks" placeholder="给卖家留言..."></textarea>
+    </li>
+  </ul>
+
+
+  <!-- 我的小区 -->
+  <div class="servicereserve-service-chooseAddress" ng-click="goMyCommunity()">
+    <label class="col-xs-5 control-label">我的小区</label>
+    <div class="col-xs-7 house-next">
+      <img class="next-pic" style="margin-right:18px;" src="images/next.png">
+    </div>
+  </div>
+  <!--<div class="form-group bg-fff-title" ng-click="jumpToMyCommunitySelect(10)">-->
+  <!--<label class="col-xs-5 control-label">我的小区</label>-->
+  <!--<div class="col-xs-7 house-next">-->
+  <!--<img class="next-pic" style="margin-right:18px;" src="images/next.png">-->
+  <!--</div>-->
+  <!--</div>-->
+
+  <div class="servicereserve-service-address">
+
+    <div class="servicereserve-service-address-input">
+      <input class="servicereserve-service-address-inputfield" placeholder="姓名*"
+             ng-model="userName">
+    </div>
+
+    <div class="servicereserve-service-address-input">
+      <input type="tel" class="servicereserve-service-address-inputfield" placeholder="电话*" ng-model="telephone">
+    </div>
+
+    <div class="servicereserve-service-address-input servicereserve-service-address-edit sercicereserve-address-community"
+         ng-click="selecteCommunity()">
+      <input class="servicereserve-service-address-inputfield " placeholder="小区*" ng-model="community" disabled>
+      <span ng-hide="true">{{communityId}}</span>
+    </div>
+
+    <div class="servicereserve-service-address-input servicereserve-service-address-edit">
+      <input class="servicereserve-service-address-inputfield" placeholder="楼房号" ng-model="floor">
+    </div>
+
+  </div>
+  <div class="empty"></div>
+  <div class="navbar navbar-default navbar-fixed-bottom text-center buttonTwo">
+    <button type="button" class="btn btn-success btnRadius" ng-click="insertCart()">放入购物车</button>
+    <button type="button" class="btn btn-success btnRadius" ng-click="straightReserve()">直接预约</button>
+  </div>
+
+</div>
+

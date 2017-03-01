@@ -1,0 +1,245 @@
+<script>
+
+  /*var lastSelectedItem = '.familyservice-default-selected-item';
+   function didSelectedSegementControl(currentItem, currentShowTable) {
+   $(lastSelectedItem).css({
+   'background': '#ddd',
+   'color': 'black'
+   })
+   $(currentItem).css({
+   'background': '#7DB343',
+   'color': 'white'
+   })
+   lastSelectedItem = currentItem
+   }
+
+   function showHousekepping(event) {
+   didSelectedSegementControl(event.target, "")
+   }
+
+   function showDryClean(event) {
+   didSelectedSegementControl(event.target, "")
+   }
+
+   function showRepair(event) {
+   didSelectedSegementControl(event.target, "")
+   }
+
+   function showPension(event) {
+   didSelectedSegementControl(event.target, "")
+   }
+
+   function showWasteRecycling(event) {
+   didSelectedSegementControl(event.target, "")
+   }
+
+   function showBroadband(event) {
+   didSelectedSegementControl(event.target, "")
+   }
+   */
+//  $(function () {
+//    $('#owl-ad').owlCarousel({
+//      items: 1,
+//      autoPlay: 3000,
+//      pagination: false
+//    });
+//  });
+
+</script>
+
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <div class="left-item">
+      <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+
+      <!--<p class="city" style="color: white; padding-right: 5px;" ng-click="jumpSelectcity()">{{city_name}}<span-->
+        <!--class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>-->
+      <p class="city" usercity-select>
+        <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}</span>
+        <select ng-show="citySelect" usercity-select class="citySelect" ng-model="usercityId" ng-options="x.city_id as x.name for x in usercityList"></select>
+        <!--<span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>-->
+      </p>
+    </div>
+
+    <div class="navigationbar-item">
+      <div class="search-button">
+        <img src="images/search_button.png" ng-click="searchFamilyBusiness()">
+      </div>
+      <div class="search-field-block">
+        <div class="search-input">
+          <input type="text" class="form-control" placeholder="请输入搜索关键字">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div ng-if="isFamilySearch" class="familyservice-content">
+
+  <!-- 卡头  -->
+  <div class="familyservice-segementcontrol tab-change-control">
+    <!--familyservice-default-selected-item-->
+    <div class="tab-service" ng-repeat="sType in serviceType">
+      <!--<span ng-hide="true">{{sType.city_fuwu_id}}</span>-->
+      <a
+              change-service
+              data="{parentClass:'.familyservice-segementcontrol',childClass:'.tab-service',
+              childItem:'.familyservice-segmentcontrol-item',listClass:'.familyservice-table'}"
+             class="familyservice-segmentcontrol-item "
+              ng-click="change_tab(sType)">{{sType.name}}
+      </a>
+      <span ng-hide="true">{{$index}}</span>
+    </div>
+  </div>
+
+  <!--&lt;!&ndash;轮播图&ndash;&gt;-->
+  <!--<div class="auto-scroll-block"  cal-height data="{classN : '.business-content'}">-->
+    <!--<div>-->
+      <!--<carousel interval="myInterval" class="carousel-ad-images">-->
+        <!--<slide ng-repeat="slide in slides" active="slide.active">-->
+          <!--<img ng-src="{{slide.image}}" style="margin:auto;width: 100%;height: 150px;">-->
+          <!--<div class="carousel-caption">-->
+            <!--<p>{{slide.text}}</p>-->
+          <!--</div>-->
+        <!--</slide>-->
+      <!--</carousel>-->
+    <!--</div>-->
+
+  <!--</div>-->
+  <!--轮播图-->
+  <div ng-if="slides.length > 0">
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides" active="slide.active">
+          <img ng-src="{{slide.image}}" curousel-height class="slideImg">
+          <!--<div class="carousel-caption">-->
+          <!--<p>{{slide.text}}</p>-->
+          <!--</div>-->
+        </slide>
+      </carousel>
+    </div>
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.jpg" curousel-height class="slideImg">
+    </div>
+  </div>
+
+  <!--跑马灯 -->
+  <div class="marquee-broadcast">
+  </div>
+
+
+  <!--提示区-->
+
+  <div class="prompt-service" ng-show="isShowPrompt" ng-click="goStationIntro()">
+    <div class="prompt-content">
+      <ul class="list-unstyled">
+        <li>预定提前截至天数：{{promptData.booking_stop_number}}</li>
+        <li>预订截止时：{{promptData.booking_date}}</li>
+        <li>预订天数：{{promptData.booking_number}}</li>
+        <li>派发开始时：{{promptData.paisong_start_date}}</li>
+        <li>派发截止时：{{promptData.paisong_end_date}}</li>
+        <li ng-if="promptData.xiuxi">周一至周六</li>
+        <li ng-if="!promptData.xiuxi">周一至周日</li>
+      </ul>
+      <span ng-show="promptData.message.length!=''">{{promptData.message}}</span>
+      <div class="clearfix" ng-show="promptData.message==''"></div>
+    </div>
+  </div>
+</div>
+
+  <!-- 列表 -->
+  <div class="familyservice-table show{{tCount}}" ng-repeat="tCount in tabCount">
+
+    <div ng-show="!errMsg" class="business-content" load-more
+         data="{params : businessParams,repeatFun : '$scope.businessLis'}">
+      <div>
+        <div class="familyservice-row" ng-repeat="bFamily in business_family"
+             ng-click="goServiceList(bFamily.business_id,bFamily.name)">
+
+          <div class="familyservice-row-left">
+            <img ng-src="{{bFamily.logo}}" class="img-responsive">
+            <img class="image-tag" ng-if="bFamily.hot == 'Y'" src="images/fire.png">
+          </div>
+
+          <div class="familyservice-row-right">
+            <p>
+           <span class="familyservice-seller-name">
+           {{bFamily.name}}
+           <img class="img-responsive familyservice-tag" src="images/newtag.png" ng-if="bFamily.new == 'Y'">
+           </span>
+              <span class="familyservice-goods-num">{{bFamily.goods_count}}</span>
+            </p>
+
+            <p class="familyservice-seller-intro">{{bFamily.introduction}}</p>
+
+            <p class="familyservice-seller-service">{{bFamily.service}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="errMsg" class="errMsg"><img src="{{errMsg}}" style="height:100%;width:100%;"/></div>
+
+  </div>
+
+</div>
+
+<!-------------关键字搜索---------------->
+<div class="family-search" ng-if="!isFamilySearch">
+  <div ng-if="!isFamily" style="text-align: center;font-size:1.6rem"><span>sorry,暂无相关数据！</span></div>
+  <div ng-if="isFamily">
+    <div ng-if="!errMsg" class="search-content" load-more
+         data="{params : businessParams,repeatFun : '$scope.businessLis'}"><!--loadMore-->
+      <div>
+        <div class="familyservice-row" ng-repeat="fSearch in familySearchLis"
+             ng-click="goServiceList(fSearch.business_id,fSearch.name)">
+
+          <div class="familyservice-row-left">
+            <img ng-src="{{fSearch.logo}}" class="img-responsive">
+          </div>
+
+          <div class="familyservice-row-right">
+            <p>
+           <span class="familyservice-seller-name">
+           {{fSearch.name}}
+           <img class="img-responsive familyservice-tag" src="images/newtag.png" ng-if="fSearch.new == 'Y'">
+           </span>
+              <span class="familyservice-goods-num">{{fSearch.goods_count}}</span>
+            </p>
+
+            <p class="familyservice-seller-intro">{{fSearch.introduction}}</p>
+
+            <p class="familyservice-seller-service">{{fSearch.service}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="errMsg"><img src="{{errMsg}}" class="errImg"/></div>
+  </div>
+
+</div>
+<script>
+  //计算高度
+  /* var bHeight = window.screen.availHeight - parseInt($('.navigationbar').css('height')) - parseInt($('.familyservice-segementcontrol').css('height'))
+   - $('.familyservice-carousel').height() - parseInt($('.marquee_box').css('height')) - $('.support-prompt').height();
+   $('.business-content').css({
+   'height' : bHeight + 'px',
+   'overflow' : 'scroll',
+   'border' : '1px solid red'
+   });
+
+   $('.errImg').css({
+   'height' : bHeight + 'px',
+   'width' : '100%'
+   });*/
+
+  var sHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.search-content').css({
+    'height': sHeight + 'px',
+    'overflow': 'scroll'
+  });
+
+</script>

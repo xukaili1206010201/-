@@ -1,0 +1,48 @@
+
+
+
+  <script>
+    $(function () {
+      $('#owl-ad').owlCarousel({
+        items: 1,
+        autoPlay: 3000,
+        pagination: false
+      });
+    });
+  </script>
+
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="../../../../../images/back_button.png">
+
+    <div class="navigationbar-item">
+      <p class="item-title">活动详情</p>
+    </div>
+  </div>
+</nav>
+
+<div class="activitiesdetail-content">
+  <!-- 轮播图  -->
+  <div class="activitiesdetail-carousel">
+    <div id="owl-ad" class="owl-carousel">
+      <a class="item"><img src="../../../../../images/1.jpg" alt="111" style="width: 100%;height: 150px"></a>
+      <a class="item"><img src="../../../../../images/2.jpg" alt="111" style="width: 100%;height: 150px"></a>
+    </div>
+  </div>
+
+  <div class="activitiesdetail-info">
+    <p class="activitiesdetail-activity-name">活动名称</p>
+    <p>2016-04-05 13:14:15 ~ 2016-07-08 13:14:15</p>
+    <p>地址</p>
+    <p>简介简介简介简介简介简介简介简介简介</p>
+  </div>
+
+  <div class="activitiesdetail-join-info">
+    <p>报名时间：2016-04-05 13:14:15</p>
+    <p>批准时间：2016-04-05 13:14:15</p>
+  </div>
+
+
+</div>

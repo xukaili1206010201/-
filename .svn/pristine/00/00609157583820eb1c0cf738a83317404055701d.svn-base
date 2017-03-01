@@ -1,0 +1,251 @@
+<script>
+  $(function () {
+    $('.main').on('click', '#showActionSheet', function () {
+      var mask = $('#mask');
+      var weuiActionsheet = $('#weui_actionsheet');
+      weuiActionsheet.addClass('weui_actionsheet_toggle');
+      mask.show()
+          .focus()//加focus是为了触发一次页面的重排(reflow or layout thrashing),使mask的transition动画得以正常触发
+          .addClass('weui_fade_toggle').one('click', function () {
+        hideActionSheet(weuiActionsheet, mask);
+      });
+      $('#actionsheet_cancel').one('click', function () {
+        hideActionSheet(weuiActionsheet, mask);
+      });
+      mask.unbind('transitionend').unbind('webkitTransitionEnd');
+
+    });
+  });
+  function hideAction() {
+    var mask = $('#mask');
+    var weuiActionsheet = $('#weui_actionsheet');
+    hideActionSheet(weuiActionsheet, mask);
+  }
+
+  function hideActionSheet(weuiActionsheet, mask) {
+    weuiActionsheet.removeClass('weui_actionsheet_toggle');
+    mask.removeClass('weui_fade_toggle');
+    mask.on('transitionend', function () {
+      mask.hide();
+    }).on('webkitTransitionEnd', function () {
+      mask.hide();
+    })
+  }
+</script>
+<!--suppress ALL -->
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchDistr()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字" ng-click="distributeBlur()">
+    </div>
+  </div>
+</nav>
+
+<div class="delivery-category">
+  <select class="col-xs-3 fw" ng-change="listByCdt('fuwu')" ng-model="paifa_fuwu">
+    <option value="" ng-if="isFuwu">服务</option>
+    <option ng-repeat="fw in fuwu" value="{{fw.id}}" class="{{fw.xingqi}} test">
+      {{fw.name}}
+    </option>
+  </select>
+
+  <!--<input type="date" id="faDate" class="col-xs-3 sendDate" ng-model="paiDate" ng-change="listByCdt('date')">-->
+  <input type="text" data-field="date" data-format="yyyy-MM-dd" id="faDate"
+         class="col-xs-3 sendDate" ng-model="paiDate"
+         ng-change="listByCdt('date')" readonly>
+
+  <select class="col-xs-3 serviceStation" ng-change="listByCdt('service')" ng-model="paifa_bus">
+    <option value="1" ng-if="isBusiness">服务站</option>
+    <option ng-repeat="service in serviceStation" value="{{service.id}}">{{service.name}}</option>
+  </select>
+
+  <select class="col-xs-3 sort" ng-change="listByCdt('sort')" ng-model="sort"
+          ng-init="sort = 'mobile_sort'">
+    <option value="order_last">订单尾号</option>
+    <option value="business_goods">商家商品</option>
+    <option value="mobile_sort">手机号码</option>
+  </select>
+</div>
+<div id="dtBox"></div>
+<div class="distribute-contents">
+  <div class="distributeUls" ng-if="!errMsg" load-more
+       data="{params : params,repeatFun : '$scope.distributeFun'}">
+    <ul class="distribute-ul">
+      <li class="line-paifa" ng-repeat="distribute in distributeList">
+        <div class="line-scroll-wrapper distributes">
+          <div class="distribute-data">
+            <div class="media">
+              <div class="media-left delivery-media">
+                <span class="spanCheck">
+                  <span ng-hide="true">{{distribute.order_id}}</span>
+                  <img src="images/sure-icon.png" check-one class="sure">
+                  <span ng-hide="true">{{distribute.pai_date}}</span>
+                </span>
+                <span ng-hide="true" class="orderItem">{{distribute.orderItem_id}}</span>
+              </div>
+              <div class="media-left distribute-img">
+                <a href=""><img ng-src="{{distribute.imageUrl}}" alt=""></a>
+              </div>
+              <div class="media-body">
+                <ul>
+                  <li style="overflow: hidden">
+                    <span class="goodsName" style="width:70%;float:left;">{{distribute.name}}</span>
+                    <span style="float:right;" class="pai_status">{{distribute.status}}</span>
+                  </li>
+                  <li>{{distribute.business}}</li>
+                  <li>
+                    <p>{{distribute.guige_1}}</p>
+                    <p>{{distribute.guige_2}}</p>
+                  </li>
+                  <li>
+                    <span>订量：{{distribute.count}}{{distribute.unit}}&nbsp;</span>
+                    <span ng-if="goodType">发量：{{distribute.fa_count}}&nbsp;</span>
+
+                    <span ng-if="goodType">收量: <span>{{distribute.shou_count}}</span>&nbsp;
+                    <span ng-click="shouChange($event,distribute.orderItem_id,distribute.fa_count)"
+                          class="glyphicon glyphicon-edit"></span>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>派量: <span class="paL">{{distribute.pai_count}}</span>&nbsp;
+                    <span class="glyphicon glyphicon-edit"
+                          ng-click="change_pai($event,distribute.orderItem_id,distribute.shou_count,distribute.guige_1,distribute.guige_2)"></span>
+                    </span>
+                  </li>
+                  <li data="{type:'客户',telBelong:'{{distribute.mobile}}',page:'我派发的商品',isSplit:true}"
+                      call-logs>
+                    <a href="tel://{{distribute.mobile}}"
+                       class="tellColor">{{distribute.mobile}}</a>
+                    <span data="{type:'客户',telBelong:'{{distribute.mobile}}',page:'我派发的商品',isSplit:true}"
+                          call-logs ng-if="distribute.telphone!=''">
+                     (<a href="tel://{{distribute.telphone}}" class="tellColor">{{distribute.telphone}}</a>)</span>
+                  </li>
+                  <li>
+                    <span>{{distribute.order_no.substr(0,17-orderNum)}}</span><span
+                          style="color:red;">{{distribute.order_no.substr(17-orderNum,orderNum)}}</span>
+                  </li>
+                  <li ng-if="distribute.pai_date" class="paiDate">派发时:{{distribute.pai_date}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+</div>
+
+<div class="navbar-fixed-bottom navbar-default text-center" style="margin-bottom: 10px;">
+  <button class="btn btn-default btnRadius" style="width:46%;" id="showActionSheet">筛选</button>
+  <button type="button" style="width:46%;" class="btn btn-success btnRadius" ng-click="paiFa()">派发</button>
+</div>
+
+<div id="actionSheet_wrap">
+  <div class="weui_mask_transition" id="mask" style="display: none;"></div>
+  <div class="weui_actionsheet" id="weui_actionsheet" style="z-index: 14">
+    <div class="weui_actionsheet_menu">
+      <div class="weui_actionsheet_cell" onclick="hideAction()" ng-click="selectByStatus('')">全部</div>
+      <div class="weui_actionsheet_cell" onclick="hideAction()" ng-click="selectByStatus('1')">待发货</div>
+      <div class="weui_actionsheet_cell" onclick="hideAction()" ng-click="selectByStatus('3')">已发货</div>
+      <div class="weui_actionsheet_cell" onclick="hideAction()" ng-click="selectByStatus('5')">已完成</div>
+    </div>
+    <div class="weui_actionsheet_action">
+      <div class="weui_actionsheet_cell" id="actionsheet_cancel">取消</div>
+    </div>
+  </div>
+</div>
+
+<div class="weui_dialog_confirm" id="receive" hidden>
+  <div class="weui_mask"></div>
+  <div class="weui_dialog">
+    <div class="weui_dialog_hd"><strong class="weui_dialog_title">收量</strong></div>
+    <div class="weui_dialog_bd">
+      <div class="input-group">
+        <div class="input-group-addon" ng-click="minus($event)">-</div>
+        <input type="number" class="form-control shouCount" ng-model="shouCount">
+        <div class="input-group-addon" ng-click="plus($event,'收量')">+</div>
+      </div>
+    </div>
+    <div class="weui_dialog_ft">
+      <a onclick="$('#receive').css('display','none');"
+         class="weui_btn_dialog default">取消</a>
+      <a ng-click="shouSure()" onclick="$('#receive').css('display','none')"
+         class="weui_btn_dialog primary">确定</a>
+    </div>
+  </div>
+</div>
+
+<div class="weui_dialog_confirm" id="receivePai" hidden>
+  <div class="weui_mask"></div>
+  <div class="weui_dialog">
+    <div class="weui_dialog_hd"><strong class="weui_dialog_title">派量</strong></div>
+    <div class="weui_dialog_bd">
+      <div class="input-group">
+        <div class="input-group-addon" ng-click="minus($event)">-</div>
+        <input type="number" class="form-control paiC" ng-model="paiCount">
+        <div class="input-group-addon" ng-click="plus($event,'派量')">+</div>
+      </div>
+    </div>
+    <div class="weui_dialog_ft">
+      <a onclick="$('#receivePai').css('display','none');"
+         class="weui_btn_dialog default">取消</a>
+      <a ng-click="sure_paiC()" onclick="$('#receivePai').css('display','none')"
+         class="weui_btn_dialog primary">确定</a>
+    </div>
+  </div>
+</div>
+
+<div class="weui_dialog_confirm" id="receiveSure" hidden>
+  <div class="weui_mask"></div>
+  <div class="weui_dialog">
+    <div class="weui_dialog_hd"><strong class="weui_dialog_title">派发</strong></div>
+    <div class="weui_dialog_bd">
+      <p>是否派发选中商品？</p>
+    </div>
+    <div class="weui_dialog_ft">
+      <a onclick="$('#receiveSure').css('display','none');"
+         class="weui_btn_dialog default">取消</a>
+      <a ng-click="sure_paiFa()" onclick="$('#receiveSure').css('display','none')"
+         class="weui_btn_dialog primary">确定</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  /**
+   * 为了解决取消日期时，文本框为空
+   */
+  $(document).ready(function () {
+    var sendDate;
+    $("#dtBox").DateTimePicker({
+      secondsInterval: 5,
+      beforeShow: function (oInputElement) {
+        sendDate = oInputElement.value;
+      },
+      afterHide: function (oInputElement) {
+        if (oInputElement.value == '') {
+          oInputElement.value = sendDate;
+        }
+      }
+    });
+  });
+  var searchHeight = $(window).height() - $('.navigationbar').outerHeight()
+      - $('.navbar-fixed-bottom').outerHeight();
+  var topH = $('.navigationbar').outerHeight() + $('.delivery-category').outerHeight();
+  var disHeight = searchHeight - $('.delivery-category').outerHeight();
+  $('.distributeUls').css({
+    'height': disHeight + 'px',
+    'overflow': 'scroll',
+    'margin-bottom': '50px'
+  });
+  $('.distribute-contents').css({
+    'margin-top': topH + 'px'
+  });
+</script>

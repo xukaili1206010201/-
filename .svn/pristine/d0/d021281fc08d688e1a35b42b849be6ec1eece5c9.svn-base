@@ -1,0 +1,240 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchDel()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字" ng-click="deliveryBlur()">
+    </div>
+  </div>
+</nav>
+
+  <div class="delivery-category">
+    <select class="col-xs-3 category" ng-change="listByConditions()" ng-model="fuwuSelected" >
+      <option value="" ng-if="fuwuLen">服务</option>
+      <option ng-repeat="fw in fuwu" value="{{fw.id}}">{{fw.name}}</option>
+    </select>
+
+    <input type="date" id="faDate" class="col-xs-3 sendDate" ng-model="faDate" ng-change="listByConditions()">
+
+    <select class="col-xs-3 business" ng-change="listByConditions()" ng-model="busSelected">
+      <option value="" ng-if="businessLen">商家</option>
+      <option ng-repeat="bus in business" value="{{bus.id}}">{{bus.name}}</option>
+    </select>
+
+    <select class="col-xs-3 sort" ng-change="listByConditions()" ng-model="sort" ng-init="sort = 'order_sort'">
+      <option value="order_sort">订单号排序</option>
+      <option value="goods_sort">商品名排序</option>
+      <option value="station_sort">服务站排序</option>
+      <option value="mobile_sort">手机号排序</option>
+      <option value="station_category">服务站分类</option>
+      <option value="category_sort">商品分类</option>
+    </select>
+  </div>
+  <!--明细-->
+  <div ng-if="deliveryDetail">
+    <div ng-if="!errMsg" class="deliveryU" load-more data="{params : params,repeatFun : '$scope.deliveryFun'}">
+      <ul class="list-group" style="margin-bottom:0px">
+        <li class="list-group-item" ng-repeat="delivery in deliveryList">
+          <div class="media deliver_list">
+            <div class="media-left delivery-media">
+              <span ng-hide="true" class="pai_date">{{delivery.pai_date}}</span>
+              <span class="spanCheck"><img src="images/sure-icon.png" check-one class="sure"></span>
+              <span ng-hide="true" class="orderItem">{{delivery.orderItem_id}}</span>
+            </div>
+            <div class="media-left delivery-img">
+              <a href="#" class="good-img"><img ng-src="{{delivery.imageUrl}}" alt=""></a>
+            </div>
+            <div class="media-body">
+              <ul>
+                <li class="goodsName" style="overflow: hidden">
+                  <span style="float: left;width:70%;">{{delivery.name}}</span>
+                  <span class="good_status">{{delivery.status}}</span>
+                  <!--<span class="goodId" ng-hide="true">{{delivery.goods_id}}</span>
+                  <span class="orderId" ng-hide="true">{{delivery.order_id}}</span>-->
+                </li>
+                <li>
+                  <p>{{delivery.guige_1}}</p>
+                  <p>{{delivery.guige_2}}</p>
+                </li>
+                <li style="overflow: hidden">
+                  <span class="fa_float">订量：{{delivery.count}}{{delivery.unit}}&nbsp;&nbsp;</span>
+              <span class="send-num" style="overflow: hidden">
+                <span class="fa_float">发量：{{delivery.fa_count}}&nbsp;&nbsp;</span>
+                <span class="glyphicon glyphicon-edit tan fa_edit_btn fa_float" data-toggle="modal" data-target="#Modal"
+                      ng-click="faChange($event,delivery.orderItem_id,delivery.count)" ng-if="delivery.status == '待发货'"
+                      data-toggle="modal" data-target="#Modal"></span>
+              </span>
+                </li>
+                <li>{{delivery.service_station}}&nbsp;&nbsp;&nbsp;
+                  <span ng-if="delivery.fuwu_type == '福利'">{{delivery.mobile}}</span>
+                </li>
+                <li>
+                  <span class="order_no">{{delivery.order_no}}</span>
+                </li>
+                <li ng-if="delivery.fa_date"><span >发货时:{{delivery.fa_date}}</span>
+                <li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--服务站分类-->
+  <!--<div class="service-station-sort" ng-if="serviceStationSort">
+    <p class="sort-total">
+      <span>总计</span>
+      <span>0</span>
+    </p>
+    <ul class="list-group">
+      <li class="list-group-item delivery-list-item">
+        <p class="service-station-p">
+          <span>服务站名称</span>
+          <span>订数合计</span>
+        </p>
+      </li>
+      <li class="list-group-item delivery-list-item">
+        <p class="good-p">
+          <span>商品名称</span>
+          <span>订数小计</span>
+        </p>
+      </li>
+      <li class="list-group-item delivery-list-item">
+        <p class="good-p">
+          <span>商品名称</span>
+          <span>订数小计</span>
+        </p>
+      </li>
+      <li class="list-group-item delivery-list-item">
+        <p class="good-p">
+          <span>商品名称</span>
+          <span>订数小计</span>
+        </p>
+      </li>
+    </ul>
+    <ul class="list-group">
+      <li class="list-group-item delivery-list-item">
+        <p class="service-station-p">
+          <span>服务站名称</span>
+          <span>订数合计</span>
+        </p>
+      </li>
+      <li class="list-group-item delivery-list-item">
+        <p class="good-p">
+          <span>商品名称</span>
+          <span>订数小计</span>
+        </p>
+      </li>
+      <li class="list-group-item delivery-list-item">
+        <p class="good-p">
+          <span>商品名称</span>
+          <span>订数小计</span>
+        </p>
+      </li>
+      <li class="list-group-item delivery-list-item">
+        <p class="good-p">
+          <span>商品名称</span>
+          <span>订数小计</span>
+        </p>
+      </li>
+    </ul>
+  </div>-->
+  <!--商品分类-->
+  <!--<div class="good-sort" ng-if="goodSort">
+    <p>商品分类</p>
+  </div>-->
+
+<!--无数据-->
+  <div class="errMsg errMsgTop" ng-if="errMsg">{{errMsg}}</div>
+
+<!--修改发量----模态框-->
+<div id="Modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">发量</h4>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <div class="input-group-addon" ng-click="jian($event)">-</div>
+          <input type="number" class="form-control temp" ng-model="faCount">
+          <div class="input-group-addon" ng-click="jia($event)">+</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success sureFa" ng-click="faSure()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="navbar navbar-default navbar-fixed-bottom text-center buttonTwo">
+  <button type="button" class="btn send-button btn-success btnRadius" ng-click="sendGoods()">发货</button>
+  <button type="button" class="btn btn-danger btnRadius" ng-click="cancelSend()">撤销发货</button>
+</div>
+
+<div id="faModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">我发货的商品</h4>
+      </div>
+      <div class="modal-body">
+        <p>是否配发所选商品？</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success sureFa" ng-click="sureSendGoods()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cancelFaModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">我发货的商品</h4>
+      </div>
+      <div class="modal-body">
+        <p>是否取消配发所选商品？</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success sureFa" ng-click="cancelSendGoods()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var searchHeight = window.screen.availHeight - $('.navigationbar').outerHeight()
+    - $('.navbar-fixed-bottom').outerHeight();
+
+  var deliveryHeight = searchHeight - $('.delivery-category').outerHeight();
+  console.log(deliveryHeight);
+  var topH = $('.navigationbar').outerHeight() + $('.delivery-category').outerHeight();
+  $('.deliveryU').css({
+    'height': deliveryHeight + 'px',
+    'overflow': 'scroll',
+    'margin-bottom' : '50px'
+  });
+  $('.service-station-sort').css({
+    'height': deliveryHeight + 'px',
+    'overflow': 'scroll',
+    'margin-bottom' : '50px',
+    'background-color' : '#f0eff5'
+  });
+</script>
+

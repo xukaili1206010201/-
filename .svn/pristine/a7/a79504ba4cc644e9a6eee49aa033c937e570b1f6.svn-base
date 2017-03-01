@@ -1,0 +1,64 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png">
+      <input class="search-input form-control" placeholder="请输入搜索关键字">
+    </div>
+  </div>
+
+
+</nav>
+<div class="couponsSeller-content">
+  <div class="content-header basic-coupons">
+    <p class="add-overflow">
+      <span class="coupons-name">{{couponsInfo.name}}</span>
+      <span class="coupons-city-type">{{couponsInfo.status}}&nbsp;&nbsp;{{couponsInfo.city}}</span>
+    </p>
+    <p class="coupons-type">
+      <span class="fuwu_coupons">{{couponsInfo.fuwu_type}}</span>
+      <span class="fontColor">{{couponsInfo.type}}&nbsp;{{couponsInfo.number}}</span>
+    </p>
+    <p class="coupons-time">{{couponsInfo.start_date}}&nbsp;&nbsp;~&nbsp;&nbsp;{{couponsInfo.end_date}}</p>
+  </div>
+
+  <div class="all-bussiness-info" id="coupons-all-business" ng-show="couponsInfo.business.length>0" ng-click="showGoods(couponsInfo.goodsIds,null,'全部')">
+    <span>
+      <span>全部商家</span>&nbsp;&nbsp;{{couponsInfo.business.length}}个
+    </span>
+    <span>商品{{couponsInfo.goodsIds.length}}个
+      <img src="images/next.png">
+    </span>
+  </div>
+
+  <div class="sellers-table">
+
+    <ul class="media-list seller-list">
+      <li class="media" ng-repeat="business in couponsInfo.business" ng-click="showGoods(business.goodIds,business.business_id,business.type)">
+        <div class="media-left">
+          <a>
+            <img class="media-object" ng-src="{{business.logo}}" alt="..." style="width: 64px;height:64px">
+          </a>
+        </div>
+        <div class="media-body couponseseller-row-content">
+          <ul>
+            <li class="seller-name">{{business.name}}
+              <span class="goods-num">{{business.goods_count}}个</span>
+            </li>
+            <li class="seller-intro">{{business.introduction}}</li>
+            <li class="seller-goods">
+              <span ng-repeat="good in business.goods">{{good.name}}&nbsp;&nbsp;</span>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</div>

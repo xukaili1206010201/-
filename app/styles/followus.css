@@ -1,0 +1,128 @@
+
+
+.followus-content {
+    margin-top: 50px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.followus-qrcode {
+    overflow: hidden;
+    padding-top: 0.5rem;
+}
+
+.followus-first-qrcode {
+    float: left;
+    width: 50%;
+}
+
+.followus-second-qrcode {
+    float: left;
+    width: 50%;
+}
+
+.followus-qrcode-left-image {
+    width: 80%;
+    margin-left: 13%;
+    margin-right: 6.6%;
+}
+
+.followus-qrcode-right-image {
+    width: 80%;
+    margin-right: 13%;
+    margin-left: 6.6%;
+}
+
+.followus-qrcode-title {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+.sharetofriends {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 10px;
+    padding-top: 3px;
+    background: white;
+}
+
+.share-block, .recommend-block {
+    margin:10px 10px 0 10px;
+}
+
+.share-block {
+    float:right;
+    margin:10px 18px 10px 0;
+}
+
+#jiathis_weixin_share #jiathis_weixin_modal{
+    left: 55% !important;
+}
+
+.share-block .btn {
+    padding: 0px;
+}
+
+.share-block button {
+    height: 100%;
+}
+
+.qrcode-type {
+    margin-top: 5px;
+}
+
+.recommend-block button {
+    margin-top: 10px;
+}
+
+.recommend {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    background: white;
+}
+
+.followus-share {
+    z-index: 9999999;
+    width: 100%;
+    height: 100%;
+    background: white;
+    /*filter: alpha(opacity =   60);*/
+    /*opacity: 0.6;*/
+    position: absolute;
+    top: 100%;
+    display: none;
+}
+
+.followus-share-cancel {
+    width: 100%;
+    height: 3.5rem;
+    text-align: center;
+    font-size: 1.4rem;
+    background: gray;
+    color: white;
+}
+
+.followus-share-ui {
+
+}
+
+.followus-share-item {
+    float: left;
+    width: 25%;
+    padding: 1rem 1rem;
+}
+
+.followus-share-item-img {
+    width: 100%;
+}
+
+.followus-share-item-title {
+    width: 100%;
+    text-align: center;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+}

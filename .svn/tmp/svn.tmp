@@ -1,0 +1,2617 @@
+/**
+ * Created by crazybear on 16/4/21.
+ */
+'use strict';
+
+var guanjiaModuleController = angular.module('guanjiaModuleController', []);
+
+//社区服务
+guanjiaModuleController.controller(
+  'comServiceCtrl',
+  function ($scope, $rootScope, guanjiaService, userService, $state, $location, commonService, $sce, $http,$cookies) {
+    /************************ 定位 *************************/
+    //报错
+    function showError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("定位失败,用户拒绝请求地理定位");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          //alert("定位失败,位置信息是不可用");
+          break;
+        case error.TIMEOUT:
+          alert("定位失败,请求获取用户位置超时");
+          break;
+        case error.UNKNOWN_ERROR:
+          alert("定位失败,定位系统失效");
+          break;
+      }
+      //commonService.showWarnMessage("请选择城市!");
+      //$rootScope.jump='Selectcity';
+      //$state.go('member-user-selectcity')
+    }
+    function showPosition(position) {
+      //经纬度
+      $scope.lat = position.coords.latitude;
+      $scope.lag = position.coords.longitude;
+      $scope.latlon = $scope.lat + ',' + $scope.lag;
+
+      //baidu
+      var url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location=" + $scope.latlon + "&output=json&pois=0";
+      $.ajax({
+        type: "GET",
+        dataType: "jsonp",
+        url: url,
+        beforeSend: function () {a
+          $("#position").html('正在定位...');
+        },
+        success: function (json) {
+          if (json.status == 0) {
+            $scope.cityResult = json.result.formatted_address;
+            $("#position").html($scope.cityResult);
+
+          }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          $("#position").html($scope.latlon + "地址位置获取失败");
+        }
+      })
+    }
+
+    if(!sessionStorage.gpscityId){
+      if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(showPosition,showError);
+      }else{
+        alert("浏览器不支持地理定位。");
+        //commonService.showWarnMessage("请选择城市!");
+        //$rootScope.jump='Selectcity';
+        //$state.go('member-user-selectcity')
+      }
+
+      //请求定位接口
+      guanjiaService.gpsCity({
+        ticket:$cookies.get('ticket'),
+        mobile: localStorage.mobile,
+        address: $scope.cityResult,
+        longitude: $scope.lag,
+        latitude: $scope.lat
+      }).success(function (data, status, header, config) {
+        $scope.result = data;
+        $scope.city_name = $scope.result.data.name;
+        $scope.city_id = $scope.result.data.city_id;
+
+        switch ($scope.result.code) {
+          case '0':
+            //本地存储定位信息
+            sessionStorage.setItem("gpscityName", $scope.city_name);
+            sessionStorage.setItem("gpscityId", $scope.city_id);
+            break;
+          case '-1':
+            commonService.showWarnMessage("定位失败！");
+            break;
+        }
+
+      }).error(function (data, status, header, config) {
+
+      });
+
+    }
+
+
+
+    //TODO
+    //这里进来时在localStorage中存储一个cityID，方便进入小区时获取数据
+    //上海：40288047542d6b1901542d79ca670002
+    //上海：40288047542d6b1901542d79ca670002
+    //常熟：402880f253eed13b0153eeddfcab0003
+    //sessionStorage.gpscityId = "40288047542d6b1901542d79ca670002";
+    //sessionStorage.gpscityName = "上海";
+    //localStorage.cityId = "40288047542d6b1901542d79ca670002";
+    //localStorage.cityName = "上海";
+
+    //项目圈字
+    //$scope.font='乐生活';
+    //var attr=$scope.font.split('');
+    //$scope.fontHtml='';
+    //for(var i=0;i<attr.length;i++){
+    //  var Html='';
+    //  Html=attr[i];
+    //  $scope.fontHtml= $scope.fontHtml +'<span class="image-title">' + Html + '</span>';
+    //}
+
+
+    //*************广告轮播图**************
+    $scope.imgShow=true;
+    var params = {"type": "system,city","city_id":sessionStorage.city_id};
+
+    userService.postRequestWithUrlAndParams("listAd.action", params).success(function (response) {
+
+      switch (response.code) {
+        case '0':
+          if(response.data){
+            $scope.adList = response.data;
+            //$scope.adList = [{"imageUrl":"images/1.jpg"},{"imageUrl":"images/1.jpg"}];
+
+            $scope.myInterval = 3000;
+            var slides = $scope.slides = [];
+
+            for (var i = 0; i < $scope.adList.length; i++) {
+              var src = $scope.adList[i].imageUrl;
+              slides.push({image: src, text: $scope.adList[i].name});
+            }
+
+            //轮播图请求到数据1秒后显示
+            setTimeout(function(){
+              $scope.imgShow=false;
+            },1000);
+
+            var buttonArray = $(".carousel-ad-images").find(".carousel-control");
+
+            for (var index = 0; index < buttonArray.length; index++) {
+              var className = buttonArray[index];
+              //console.log(className);
+              $(className).css({
+                'display': 'none'
+              });
+            }
+          }
+
+          break;
+        case '-1':
+          console.log("社区服务轮播图参数为空");
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+    //*************end**************
+
+    //进入我的消息
+    $scope.jumpUsermessage = function () {
+      if($cookies.get('ticket') == null){
+        commonService.showNoticeMessage('请登陆一下好吗？');
+        $state.go('member-personal-login');
+        sessionStorage.loginLocation=$location.path();
+      }else{
+        $state.go('member-user-message',{from:'0'});
+      }
+    };
+    //进入我的优惠券
+    $scope.jumpMycoupons = function () {
+      if($cookies.get('ticket') == null){
+        commonService.showNoticeMessage('请登陆一下好吗？');
+        $state.go('member-personal-login');
+        sessionStorage.loginLocation=$location.path();
+      }else {
+        $state.go('member-user-mycoupons');
+      }
+    };
+    //进入我的购物车
+    $scope.jumpCart = function () {
+      if($cookies.get('ticket') == null){
+        commonService.showNoticeMessage('请登陆一下好吗？');
+        $state.go('member-personal-login');
+        sessionStorage.loginLocation=$location.path();
+      }else {
+        $state.go('member-user-cart', {from: 0});
+      }
+    };
+    //进入我的订单
+    $scope.jumpMyorder = function () {
+      if ($cookies.get('ticket') == null) {
+        commonService.showNoticeMessage('请登陆一下好吗？');
+        $state.go('member-personal-login');
+        sessionStorage.loginLocation = $location.path();
+      }else{
+        $state.go('member-user-myorder', {"from": 0});
+      }
+    };
+
+    //进入公共服务
+    $scope.jumpPublicservice = function () {
+      $state.go('guanjia-publicservice');
+    };
+    //进入特供服务
+    $scope.jumpSupport = function () {
+      $state.go('guanjia-support',{from:'0'});
+    };
+    //从顺手早餐到特供服务
+    $scope.jumpSupportHot = function () {
+      $state.go('guanjia-support',{from:'1'});
+    };
+    //进入在线超市
+    $scope.jumpShopping = function () {
+      $state.go('guanjia-shoppingonline');
+    };
+
+    //进入家庭服务
+    $scope.jumpFamilyservice = function () {
+      $state.go('guanjia-familyservice',{from:'0'});
+    };
+    //从干洗到家到家庭服务
+    $scope.jumpFamilyserviceHot = function () {
+      $state.go('guanjia-familyservice',{from:'1'});
+    };
+    //进入家庭金融
+    $scope.jumpFamilyaccount = function () {
+      $state.go('guanjia-familyaccount');
+    };
+    //从车险团购到家庭金融
+    $scope.jumpFamilyaccountHot = function () {
+      $state.go('guanjia-familyaccount');
+    };
+    //进入活动召集
+    $scope.jumpActivity = function(){
+      $state.go('guanjia-callactivity');
+    };
+
+    ////进入个人中心
+    //$scope.jumpUsercenter = function () {
+    //  //判断是否有缓存
+    //  if (localStorage.getItem("mobile") != null) {
+    //    $state.go("member-personal-usercenter");
+    //  } else {
+    //    $state.go("member-personal-usercenterNo");
+    //  }
+    //};
+    //
+    ////进入邻里社交
+    //$scope.jumpSociety = function(){
+    //  $state.go('society-Neighborhood');
+    //};
+    //
+    ////进入商家福利
+    //$scope.jumpWelfare = function(){
+    //  $state.go('welfare-seller');
+    //};
+
+    //统计未读数量
+    if ($cookies.get('ticket')) {
+      guanjiaService.count({
+        ticket:$cookies.get('ticket')
+      }).success(function (response) {
+        //console.log(response)
+       if(response.code == '0'){
+         $scope.cart = response.data.cart;
+         $scope.order = response.data.order;
+         $scope.message = response.data.message;
+         $scope.coupons = response.data.coupons;
+         $scope.isShow = true ;
+       }else{
+         $scope.isShow = false ;
+       }
+      });
+    }
+
+  }
+);
+
+//请求商家列表数据
+guanjiaModuleController.controller(
+  'supportCtrl',
+  function ($scope, $rootScope, guanjiaService, userService, $state, commonService, $q,$cookies,$stateParams) {
+    /************************************ 初始化  ****************************************/
+    $scope.formData = {};
+    $scope.city_name = sessionStorage.gpscityName;
+    $scope.myInterval = 3000; //轮播图播放间隔时间
+    $scope.from=$stateParams.from; //from  0:特供服务  1:顺手早餐
+    console.log(sessionStorage.gpscityName + '特供');
+
+    /**
+     *   获取特供服务的城市服务卡头和对应服务的商家
+     */
+    $scope.specialService=getSpeciaService();
+
+    function getSpeciaService(){
+      var defer = $q.defer();
+      guanjiaService.listCityService({
+        city_id: sessionStorage.gpscityId,
+        type: '特供服务'
+      }).success(function (data) {
+        if (data.data.length > 0) {
+          $scope.fuwu_id = data.data;
+          defer.resolve($scope.fuwu_id);
+          //获取服务id和index分别存入数组$scope.fuwu和fuwu_count
+          $scope.fuwu = [];
+          $scope.fuwu_count = [];
+          $.each($scope.fuwu_id, function (index, info) {
+            $scope.fuwu_count.push(index);
+            $scope.fuwu.push(info.city_fuwu_id);
+          });
+
+          //商家列表
+          if ($scope.from == '0') {
+            $scope.params.city_fuwu_id = $scope.fuwu_id[0].city_fuwu_id;
+
+          } else if ($scope.from == '1') {
+            $scope.breakfastFuwu_id = "4028b8815484f2ad015484f2e16e0001";
+            $scope.params.city_fuwu_id = $scope.breakfastFuwu_id;
+
+            // 早餐所对应的index
+            $.each($scope.fuwu, function (i, value) {
+              if (value == $scope.breakfastFuwu_id) {
+                $scope.drycleanIndex = i;
+              }
+            });
+          }
+
+        } else {
+          commonService.showErrorMessage("该城市暂无相关服务！");
+        }
+        $scope.businessFun($scope.params);
+      });
+      return defer.promise;
+    }
+    /**end*/
+
+
+    /**
+     *  获取公告数据
+     */
+    var noticeParams = {
+      type: 'system,city',
+      city_id: sessionStorage.gpscityId,
+    };
+    guanjiaService.getNotice(noticeParams).then(function(data){
+      $scope.marqueeContent = data;
+    });
+
+
+    //特供服务和早餐请求参数
+    if ($scope.from == '0') {
+      $scope.params = {
+        city_id: sessionStorage.gpscityId,
+        city_fuwu_id: '',
+        pageno: '1', //页码
+        pagesize: '6', //页数
+        url: 'listBusiness.action',
+        direction: 'up',
+        fuwuType: '0' //判断是否首次加载，0：默认为初次加载页面，1：不是初次加载页面
+      };
+    } else {
+      $scope.params = {
+        city_id: sessionStorage.gpscityId,
+        city_fuwu_id: '',
+        pageno: '1', //页码
+        pagesize: '6', //页数
+        url: 'listBusiness.action',
+        direction: 'up',
+        fuwuType: '1'
+      }
+    }
+
+    $scope.business = [];
+    var isOver = false; //false:标志数据未加载完成
+    $scope.businessFun = function (params) {
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        var tempList = response.data;
+        if (tempList.length == 0 && params.pageno == '1') {
+          $scope.errMsg = 'images/nogoods.png';
+        } else {
+          $scope.errMsg = '';
+        }
+        if (tempList.length < params.pagesize) {
+          isOver = true;//true:标志数据加载完成
+          defer.resolve(isOver);
+        } else {
+          isOver = false;
+          defer.resolve(isOver);
+        }
+        if (params.direction == 'down') {
+          $scope.business = response.data;
+        } else {
+          $scope.business = $scope.business.concat(tempList);
+        }
+
+        //判断是否为新商家
+        $scope.isnew = function (value) {
+          if (value == 'Y')
+            return true;
+          else
+            return false;
+        };
+
+
+      });
+      return defer.promise;
+    };
+
+    /************************************** end ******************************************/
+
+    /*********************************** 页面事件监听 *************************************/
+    /**************关键字搜索*******************/
+    $scope.busList = [];
+    var val = '';
+    $scope.isSearch = true;//true:显示分类的商家列表，false：显示搜索的商家列表
+    $scope.searchBusiness = function () {
+      $scope.busList = [];
+      val = $('.search-input input').val();
+      if (val == '') {
+        $scope.isSearch = true;
+        commonService.showWarnMessage('请输入关键字！');
+        return;
+      } else {
+        $scope.isSearch = false;
+        $scope.busParams.key = val;
+        $scope.busnissByKey($scope.busParams);
+      }
+    };
+    $scope.busParams = {
+      city_id: sessionStorage.gpscityId,
+      pageno: '1', //页码
+      pagesize: '10', //页数
+      url: 'listBusiness.action',
+      direction: 'up',
+      key: ''
+    };
+    var isBusiness = false;//false:标志数据未加载完成
+    $scope.isShow = true; //false:无相关数据 true：有相关数据
+    $scope.busnissByKey = function (params) {
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var tempList = response.data;
+            if (tempList.length == 0 && params.pageno == '1') {
+              /*判断请求的第一页无数据时，显示暂无数据*/
+              $scope.isShow = false;
+              return;
+            } else {
+              $scope.isShow = true;
+              if (tempList.length < params.pagesize) {
+                isBusiness = true;//true:标志数据加载完成
+                defer.resolve(isBusiness);
+              } else {
+                isBusiness = false;
+                defer.resolve(isBusiness);
+              }
+              if (params.direction == 'down') {
+                $scope.busList = response.data;
+              } else {
+                $scope.busList = $scope.busList.concat(tempList);
+              }
+              //判断是否为新品
+              $scope.isnew = function (value) {
+                if (value == 'Y')
+                  return true;
+                else
+                  return false;
+              };
+              //判断是否为爆品
+              $scope.ishot = function (value) {
+                if (value == 'Y')
+                  return true;
+                else
+                  return false;
+              };
+            }
+            break;
+        }
+        ;
+      });
+      return defer.promise;
+    };
+
+    //点击按钮卡头更改服务id
+    $scope.change = function (fuwu_id, index) {
+      //$('.seller-table').css('display', 'none');
+      //$('.show' + index).css('display', 'block');
+      $scope.params.fuwuType = '2';
+      $scope.params.pageno = '1';
+      $scope.params.city_fuwu_id = fuwu_id;
+      //console.log(fuwu_id)
+      $scope.business = [];
+      $scope.businessFun($scope.params);
+    };
+
+    //返回上一页
+    $scope.backtocomservice = function () {
+      if ($scope.isSearch) {
+        $state.go('guanjia-comservice')
+      } else {
+        window.location.reload();
+      }
+    };
+
+    //点击商家，跳转到商家列表
+    $scope.jumpgoodslist = function (businessId) {
+      $state.go('guanjia-goodslist', {
+        businessId: businessId,
+        from:'1'
+      });
+    }
+
+    /************************************** end ******************************************/
+  }
+);
+
+//请求商家详情数据
+guanjiaModuleController.controller(
+  'sellerdetailCtrl',
+  function ($scope, $stateParams, $rootScope, guanjiaService, userService, $state,$cookies) {
+    $scope.businessId=$stateParams.businessId;
+    guanjiaService.businessDetail({business_id: $scope.businessId}).success(function (response) {
+      if(response.code == '0'){
+        $scope.business = response.data;
+        $scope.isShowOne = $scope.business.goods.length > 0 || $scope.business.location.length > 0 || $scope.business.work.length > 0;
+        $scope.isShowTwo = $scope.business.ad != '' || $scope.business.content != '';
+        $scope.isShowThree = $scope.business.introduction != '' || $scope.business.license.length > 0;
+      }else{
+        console.log('请求商家详情接口有误！ '+response.data);
+      }
+    });
+
+  }
+);
+
+guanjiaModuleController.controller(
+  'goodslistCtrl',
+  function ($scope, $stateParams, $rootScope, guanjiaService, userService, $state, $q, commonService,$cookies) {
+
+    //from 判断从哪个页面跳转到此页
+    // 0 商家福利  1  特供服务
+    $scope.from=$stateParams.from;
+
+    $scope.businessId=$stateParams.businessId;
+
+    //返回到商家列表
+    $scope.backtosupport = function () {
+      if ($scope.isSearch) {
+        if($scope.from == '0'){
+          $state.go('welfare-seller')
+        }else{
+          $state.go('guanjia-support')
+        }
+      } else {
+        window.location.reload();
+      }
+    };
+    //调用跑马灯信息接口
+    $scope.noticeParams = {
+      type: 'business',
+      business_id: $stateParams.businessId
+    };
+
+    //调用分类接口
+    guanjiaService.listCategory({business_id: $scope.businessId}).success(function (data) {
+      $scope.category = data.data;
+      //获取分类的index，保存在数组$scope.category_count中
+      $scope.category_count = [0];
+      $.each($scope.category, function (index, info) {
+        $scope.category_count.push(++index);
+      });
+      var len = data.data.length;
+      var wid = parseInt($('.goods-segment-control').width());
+      var bw = wid / (len + 1);
+      //分类按钮
+      $scope.sty =
+        'width:' + bw + 'px;';
+    });
+    //商品列表
+    /*guanjiaService.listgoods({business_id: localStorage.businessId}).success(function (data) {
+     if(data.data.length==0){
+     $scope.errMsg='images/nogoods.png'
+     }else{
+     $scope.errMsg='';
+     }
+     $scope.goodslist = data.data;
+     //判断是否为新品
+     $scope.isnew = function (value) {
+     if (value == 'Y')
+     return true;
+     else
+     return false;
+     };
+     //判断是否为爆品
+     $scope.ishot = function (value) {
+     if (value == 'Y')
+     return true;
+     else
+     return false;
+     };
+     });*/
+    //select的默认值
+    //$scope.selected = 'week_count';
+    $scope.direction='up';
+
+    $scope.params = {
+      business_id: $scope.businessId,
+      pageno: '1', //页码
+      pagesize: '5', //页数
+      direction: $scope.direction,
+      url: 'listGoods.action',
+      category_id: null,
+      sort:$scope.selected
+    };
+
+    $scope.goodslist = [];
+    var isOver = false;//false:标志数据未加载完成
+    $scope.goodsListFun = function (params) {
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        var tempList = response.data;
+        if (tempList.length == 0 & params.pageno == '1') {
+          $scope.errMsg = 'images/nogoods.png'
+        } else {
+          $scope.errMsg = '';
+        }
+        if (tempList.length < params.pagesize) {
+          isOver = true;//true:标志数据加载完成
+          defer.resolve(isOver);
+        } else {
+          isOver = false;
+          defer.resolve(isOver);
+        }
+        if (params.direction == 'down') {
+          $scope.goodslist = response.data;
+        } else {
+          $scope.goodslist = $scope.goodslist.concat(tempList);
+        }
+        //初次进入该页面，显示全部的信息
+        if (!params.category_id) {
+          $('.goods-table').css('display', 'none');
+          $('.show0').css('display', 'block');
+        }
+
+        //判断是否为新品
+        $scope.isnew = function (value) {
+          if (value == 'Y')
+            return true;
+          else
+            return false;
+        };
+        //判断是否为爆品
+        $scope.ishot = function (value) {
+          if (value == 'Y')
+            return true;
+          else
+            return false;
+        };
+      });
+      return defer.promise;
+    };
+
+
+    $scope.changeSelected=function(){
+      $scope.params.sort=$('.filter-block .dropdown').val();
+      $scope.params.direction='down';
+      $scope.goodsListFun($scope.params);
+    };
+
+
+    $scope.goodsListFun($scope.params);
+
+    /***********************关键字搜索******************************************/
+    $scope.goodsByKey = [];
+    var val = '';
+    $scope.isSearch = true;//true:显示分类的商品列表，false：显示搜索的商品列表
+    $scope.searchGoods = function () {
+      $scope.goodsByKey = [];
+      val = $('.search-input input').val();
+      if (val == '') {
+        $scope.isSearch = true;
+        commonService.showWarnMessage('请输入关键字！');
+        return;
+      } else {
+        $scope.isSearch = false;
+        $scope.goodParams.key = val;
+        $scope.goodsListByKey($scope.goodParams);
+      }
+    };
+    $scope.goodParams = {
+      pageno: '1', //页码
+      pagesize: '10', //页数
+      url: 'listGoods.action',
+      business_id: $scope.businessId,
+      direction: 'up',
+      key: ''
+    };
+    var isShow = false;//false:标志数据未加载完成
+    $scope.isGoods = true; //false:无相关数据 true：有相关数据
+    $scope.goodsListByKey = function (params) {
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var tempList = response.data;
+            if (tempList.length == 0 && params.pageno == '1') {
+              /*判断请求的第一页无数据时，显示暂无数据*/
+              $scope.isGoods = false;
+              return;
+            } else {
+              $scope.isGoods = true;
+              if (tempList.length < params.pagesize) {
+                isShow = true;//true:标志数据加载完成
+                defer.resolve(isShow);
+              } else {
+                isShow = false;
+                defer.resolve(isShow);
+              }
+              if (params.direction == 'down') {
+                $scope.goodsByKey = response.data;
+              } else {
+                $scope.goodsByKey = $scope.goodsByKey.concat(tempList);
+              }
+              //判断是否为新品
+              $scope.isnew = function (value) {
+                if (value == 'Y')
+                  return true;
+                else
+                  return false;
+              };
+              //判断是否为爆品
+              $scope.ishot = function (value) {
+                if (value == 'Y')
+                  return true;
+                else
+                  return false;
+              };
+            }
+        }
+        ;
+      });
+      return defer.promise;
+    };
+    //分类按钮的点击效果
+    $scope.changecate = function (id, index, type) {
+      if (type == '非全部') {
+        index++;
+      }
+      $scope.goodslist = [];
+      $scope.params.pageno = '1';
+      $scope.params.category_id = id;
+      $scope.goodsListFun($scope.params);
+      $('.goods-table').css('display', 'none');
+      $('.show' + index).css('display', 'block');
+      //$scope.cate = id;
+      /*guanjiaService.listgoods({
+       business_id: localStorage.businessId,
+       category_id: $scope.cate
+       }).success(function (data) {
+       if(data.data.length==0){
+       $scope.errMsg='images/nogoods.png'
+       }else{
+       $scope.errMsg='';
+       }
+       $scope.goodslist = data.data;
+       });*/
+    };
+    //商家详情
+    guanjiaService.businessDetail({business_id: $scope.businessId}).success(function (data) {
+
+      $scope.business = data.data;
+    });
+    //跳转到卖家详情
+    $scope.jumpSellerdetail = function () {
+      $state.go('guanjia-sellerdetail',{businessId:$scope.businessId});
+    };
+    //跳转到支付页面
+    $scope.jumppurchase = function (id) {
+      $state.go('service-purchase', {
+        id: id,
+      });
+      $rootScope.back=1;
+      localStorage.goodsId = id;
+    };
+    //跳转到商品详情
+    $scope.jumpgoodsDetail = function (id) {
+      $rootScope.back=0;
+      $state.go('service-goodsDetail', {
+        id: id,
+        businessId : $scope.businessId
+      });
+      localStorage.goodsId = id;
+    }
+  }
+);
+
+guanjiaModuleController.controller(
+  'payCtrl',
+  function ($scope, $stateParams, guanjiaService, userService, $state, commonService, $timeout,$cookies) {
+
+    $scope.orderSumPay = 0;
+    $scope.needsPay = 0;
+    /*
+     *@params:from 判断页面从哪儿跳转来
+     * from = 1; 从购物车下单成功后跳转
+     * from = 2; 从我的订单-未支付订单选择支付跳转
+     * from = 3; 从我的购买页直接支付跳转
+     */
+    var from = $stateParams.from;
+    var orderIds = $stateParams.obj.orderIds;
+    if (from == 1) {
+      console.log("从购物车来");
+    }
+    if (from == 2) {
+      console.log("从我的订单来");
+    }
+    if (from == 3) {
+      console.log("从我的购买页来");
+    }
+
+    var params = {mobile: localStorage.mobile,order_id: orderIds};
+    //var urlStr = "getOrderByPay.action?mobile="+$cookies.get('ticket')+"&order_id="+orderIds;
+    //请求用户订单
+    userService.postRequestWithUrlAndParams("getOrderByPay.action", params).success(function (response) {
+      if (response.code == 0) {
+
+        //订单列表
+        $scope.orderList = response.data.order;
+        var sunTmp = 0.0;
+        for (var index = 0; index < $scope.orderList.length; index++) {
+          var orderPrice = parseFloat($scope.orderList[index].sum);
+          sunTmp += orderPrice;
+        }
+        $scope.orderSumPay = sunTmp;
+
+        var userBanlance = parseInt($('.banlaneUsed').val());
+        $scope.needsPay = $scope.orderSumPay - userBanlance >= 0 ? ($scope.orderSumPay - userBanlance) : 0;
+
+
+        //支付方式列表,默认选中第一个
+        $scope.paymentTypeList = response.data.payment;
+        $timeout(function () {
+          if ($scope.paymentTypeList.length) {
+            var payTypeList = $('.pay-paytype').find('.choosePaymentPlatform');
+            var fisrtPayType = payTypeList[0];
+            $(fisrtPayType).attr('checked', true);
+          }
+        }, 200);
+
+      }
+      if (response.code == -1) {
+        commonService.showErrorMessage("参数为空");
+      }
+      if (response.code == -2) {
+        commonService.showErrorMessage("参数错误");
+      }
+
+
+    }).error(function (data, status, header, config) {
+
+    });
+
+
+    //请求接口获取使用优惠券后应该支付的总金额
+    function getTotalPriceToPay(){
+      var orderArray = [];
+      var orderList = $('.list-group').find('.pay-order-row');
+      for(var index= 0; index <orderList.length;index++){
+        var orderId = $(orderList[index]).find('.pay-order-id').html();
+
+        var couponsArray = [];
+        var couponsList = $(orderList[index]).find('.coupons-table-row');
+        for (var i = 0 ; i < couponsList.length;i++){
+          var couponsName = $(couponsList[i]).find('.pay-coupons-name').html();
+          var couponsSize = $(couponsList[i]).find('.numbermodify-number').val();
+
+          if(couponsSize != '0'){
+            var couponsDict = {};
+            couponsDict['name'] =  couponsName;
+            couponsDict['size'] =  couponsSize;
+            couponsArray.push(couponsDict);
+          }
+
+        }
+
+
+
+        var orderCouponsDict = {};
+        orderCouponsDict['order_id'] = orderId;
+        orderCouponsDict['coupons'] = couponsArray;
+        orderArray.push(orderCouponsDict);
+        //if(couponsArray.length){
+        //}
+
+      }
+      var params = {
+        mobile: localStorage.mobile,
+        json : JSON.stringify(orderArray)
+      };
+      userService.postRequestWithUrlAndParams('getOrderByCoupons.action',params).success(function(response){
+        console.log(response);
+        if(response.code == '0'){
+          $scope.needsPay = 0;
+          $.each(response.data,function(index,info){
+            $scope.needsPay += info.sum;
+          });
+        }
+      });
+
+      console.log("*********************************");
+      console.log(orderArray);
+      console.log("*********************************");
+    }
+
+    //减少优惠券的使用数量
+    $scope.minusCouponsNumberAction = function ($event) {
+      var elem = $($event.target).next();
+      var val = parseFloat(elem.val());
+      if (val > 0) {
+        elem.val(--val);
+
+        getTotalPriceToPay();
+
+
+        //找到点击的优惠券对应的可以使用的商品
+        //var couponsUsedGoodsIdList = [{'goods_id': '402880ec54a953370154a955fa390003', 'goods_price': '1'}]
+        //var goodsList = $('.pay-goods-table').find('.pay-goods-row')
+        //var couponsUsed = {};
+        //for (var i = 0; i < goodsList.length; i++) {
+        //
+        //  var goodsId = $(goodsList[i]).find('.pay-goods-id').html();
+        //
+        //  var goodsPrice = []
+        //  for (var j = 0; j < couponsUsedGoodsIdList.length; j++) {
+        //
+        //    var couponsGoodsId = couponsUsedGoodsIdList[j]['goods_id'];
+        //    //找到对应的商品，记录商品的价格以及优惠券的金额
+        //    if (goodsId == couponsGoodsId) {
+        //      goodsPrice.push(couponsUsedGoodsIdList[j]['goods_price']);
+        //    }
+        //
+        //  }
+        //
+        //  if (goodsPrice.length > 0) {
+        //    couponsUsed["couponsSum"] = couponsDiscount;
+        //    couponsUsed["couponsType"] = couponsType;
+        //    couponsUsed["goodsPriceList"] = goodsPrice;
+        //  }
+        //}
+
+        //如果是抵数，那么直接找到对应的最大价值的商品
+        //var goodsPriceList = couponsUsed["goodsPriceList"];
+        //if(goodsPriceList){
+        //  //找出该优惠券对应的商品中价值最大的商品
+        //  //1.先判断该优惠券是否是抵数
+        //  if (couponsType == '抵数') {
+        //    if (goodsPriceList.length == 1) {
+        //      var price = goodsPrice[0]; //取出商品的价格，从总价格中减去
+        //      $scope.needsPay = $scope.needsPay - price >= 0 ? $scope.needsPay - price : 0;
+        //    } else {
+        //      //找出最大价值的商品价格
+        //      var max = Math.max.apply(Math, goodsPriceList);
+        //      $scope.needsPay = $scope.needsPay - max >= 0 ? $scope.needsPay - max : 0;
+        //    }
+        //
+        //  } else if (couponsType == '现金') {
+        //
+        //    //找出最大价值的商品价格
+        //    var max = Math.max.apply(Math, goodsPriceList);
+        //    //比较商品价格与优惠券可以抵扣的价格
+        //    if (parseInt(couponsDiscount) > parseInt(max)){
+        //      //如果优惠券抵消额比商品价格高，那么减去商品的价格
+        //      $scope.needsPay = $scope.needsPay - max >= 0 ? $scope.needsPay - max : 0;
+        //    }else{
+        //      //如果优惠券的抵消额比商品的价格低，那么减去优惠券的价格
+        //      $scope.needsPay = $scope.needsPay - parseInt(couponsDiscount) >= 0 ? $scope.needsPay - parseInt(couponsDiscount) : 0;
+        //    }
+        //
+        //  }else if(couponsType == '折扣'){
+        //    //找出最大价值的商品价格
+        //    var max = Math.max.apply(Math, goodsPriceList);
+        //    $scope.needsPay =  $scope.needsPay * parseFloat(couponsDiscount).toFixed(2);
+        //
+        //  }
+        //}
+      }
+    }
+
+    //增加优惠券的使用数量
+    $scope.addCouponsNumberAction = function ($event) {
+      var elem = $($event.target).prev();
+      var val = parseFloat(elem.val());
+
+      //获取当前增加优惠券的类型(现金、打折、抵数)
+      var couponsType = $($event.target).parent().parent().find('.pay-coupons-info').find('.pay-coupons-type').html();
+      //获取当前增加优惠券的金额(现金数、折扣数、抵数)
+      var couponsDiscount = $($event.target).parent().parent().find('.pay-coupons-info').find('.pay-coupons-discount').html();
+      //获取当前增加优惠券的名称
+      var couponsName = $($event.target).parent().parent().find('.pay-coupons-info').find('.pay-coupons-name').html();
+      //获取该类型优惠券的总数量
+      var couponsNum = $($event.target).parent().parent().find('.pay-coupons-info').find('.pay-coupons-num').html();
+      couponsNum = parseInt(couponsNum);
+      //获取该优惠券当前已选择的数量
+      var couponsUsedNum = $($event.target).parent().find('.numbermodify-number').val();
+
+      console.log("点击优惠券的类型  ：" + couponsType);
+      console.log("点击优惠券的折扣数：" + couponsDiscount);
+      console.log("点击优惠券的名称  ：" + couponsName);
+      console.log("点击优惠券的总数量：" + couponsNum);
+
+      var couponsEnabledUseNum = 0;
+      //循环遍历，找到该优惠券其他订单下的使用情况
+      var payOrderRowList = $('.order-table').find('.pay-order-row');
+
+
+      for (var index = 0; index < payOrderRowList.length; index++) {
+        //console.log(payOrderRowList[index])
+        var couponsRowList = $(payOrderRowList[index]).find('.coupons-table-row');
+        for (var i = 0; i < couponsRowList.length; i++) {
+
+          var showCouponsType = $(couponsRowList[i]).find('.pay-coupons-type').html();
+          var showCouponsDiscount = $(couponsRowList[i]).find('.pay-coupons-discount').html();
+          var showCouponsName = $(couponsRowList[i]).find('.pay-coupons-name').html();
+
+          if (showCouponsType == couponsType && showCouponsDiscount == couponsDiscount && couponsName == showCouponsName) {
+            var showCouponsUsedNum = $(couponsRowList[i]).find('.numbermodify-number').val();
+            showCouponsUsedNum = parseInt(showCouponsUsedNum);
+            //console.log("使用数量     ：" + couponsUsedNum);
+            //console.log("显示的使用数量：" + showCouponsUsedNum);
+            couponsEnabledUseNum += showCouponsUsedNum;
+            //console.log("总的使用数量  ：" + couponsUsedNum);
+          }
+
+        }
+
+      }
+
+      //找到当前选择增加的优惠券的数量
+
+      var couponsMaxNum = couponsNum - couponsEnabledUseNum + parseInt(couponsUsedNum);
+      console.log("可添加最大数：" + couponsMaxNum);
+
+
+      if (val < couponsMaxNum) {
+        elem.val(++val);
+
+        getTotalPriceToPay();
+        //找到点击的优惠券对应的可以使用的商品,并且和该订单下的商品列表中的商品进行比较
+        //var couponsUsedGoodsIdList = $($event.target).parent().find('.pay-coupons-goodsIdList').html()
+        ////var couponsUsedGoodsIdList = [{'goods_id': '402880ec54a953370154a955fa390003', 'goods_price': '1'}]
+        //var goodsList = $($event.target).parent().parent().parent().parent().parent().find('.pay-goods-row')
+        //console.log("**********************")
+        //console.log(couponsUsedGoodsIdList);
+        //console.log("**********************")
+        //var couponsUsed = {};
+        //for (var i = 0; i < goodsList.length; i++) {
+        //
+        //  var goodsId = $(goodsList[i]).find('.pay-goods-id').html();
+        //
+        //  var goodsPrice = []
+        //  for (var j = 0; j < couponsUsedGoodsIdList.length; j++) {
+        //
+        //    var couponsGoodsId = couponsUsedGoodsIdList[j]['goods_id'];
+        //
+        //    //找到对应的商品，记录商品的价格以及优惠券的金额
+        //    if (goodsId == couponsGoodsId) {
+        //      goodsPrice.push(couponsUsedGoodsIdList[j]['goods_price']);
+        //    }
+        //
+        //  }
+        //
+        //  if (goodsPrice.length > 0) {
+        //    couponsUsed["couponsSum"] = couponsDiscount;
+        //    couponsUsed["couponsType"] = couponsType;
+        //    couponsUsed["goodsPriceList"] = goodsPrice;
+        //  }
+        //}
+
+
+
+        //var goodsPriceList = couponsUsed["goodsPriceList"];
+        //console.log(goodsPriceList);
+        ////当优惠券商品列表中没有商品可以优惠时(这种情况一般不会出现)
+        //if(goodsPriceList){
+        ////  找出该优惠券对应的商品中价值最大的商品
+        //  //1.先判断该优惠券是否是抵数
+        //  if (couponsType == '抵数') {
+        //    //如果是抵数，那么直接找到对应的最大价值的商品
+        //
+        //    //if (goodsPriceList.length == 1) {
+        //    //  var price = goodsPrice[0]; //取出商品的价格，从总价格中减去
+        //    //  $scope.needsPay = $scope.needsPay - price >= 0 ? $scope.needsPay - price : 0;
+        //    //} else {
+        //    //  //找出最大价值的商品价格
+        //    //  var max = Math.max.apply(Math, goodsPriceList);
+        //    //  $scope.needsPay = $scope.needsPay - max >= 0 ? $scope.needsPay - max : 0;
+        //    //}
+        //
+        //    //找出最大价值的商品价格
+        //    var max = Math.max.apply(Math, goodsPriceList);
+        //    $scope.needsPay = $scope.needsPay - max >= 0 ? $scope.needsPay - max : 0;
+        //
+        //  } else if (couponsType == '现金') {
+        //
+        //    //找出最大价值的商品价格
+        //    var max = Math.max.apply(Math, goodsPriceList);
+        //    //比较商品价格与优惠券可以抵扣的价格
+        //    if (parseInt(couponsDiscount) > parseInt(max)){
+        //      //如果优惠券抵消额比商品价格高，那么减去商品的价格
+        //      $scope.needsPay = $scope.needsPay - max >= 0 ? $scope.needsPay - max : 0;
+        //    }else{
+        //      //如果优惠券的抵消额比商品的价格低，那么减去优惠券的价格
+        //      $scope.needsPay = $scope.needsPay - parseInt(couponsDiscount) >= 0 ? $scope.needsPay - parseInt(couponsDiscount) : 0;
+        //    }
+        //
+        //  }else if(couponsType == '折扣'){
+        //    //找出最大价值的商品价格
+        //    var max = Math.max.apply(Math, goodsPriceList);
+        //    $scope.needsPay =  $scope.needsPay * parseFloat(couponsDiscount).toFixed(2);
+        //
+        //  }
+        //}
+
+      }
+
+
+    }
+
+
+//前往支付
+    $scope.payAction = function () {
+
+
+
+      //获取优惠券的使用情况
+      var orderCouponsInfoList = [];
+
+      var couponseUsedList = $('.list-group').find('.pay-order-row');
+
+      for (var index = 0; index < couponseUsedList.length; index++) {
+
+        //订单号
+        var orderId = $(couponseUsedList[index]).find('.pay-order-id').html();
+        var remark = $(couponseUsedList[index]).find('.remark-field').html();
+
+        var order = {"order_id": orderId, "remark": remark};
+        orderCouponsInfoList.push(JSON.stringify(order));
+
+        //找到优惠券的使用
+        //var couponsInfoList = [];
+        //var couponsUsedList = $(couponseUsedList[index]).find('.coupons-table').find('.coupons-table-row');
+        //for (var i = 0; i < couponsUsedList.length; i++) {
+        //
+        //  //获取优惠券的id以及使用的数量
+        //  var couponsUsedId = "123456";
+        //  var couponsUsedNum = $(couponseUsedList[i]).find('.numbermodify-number').val(); //优惠券使用数量
+        //  var couponsUsedType = $(couponseUsedList[i]).find('.pay-coupons-type').html();  //优惠券类型
+        //  var couponsUsedDiscount = $(couponseUsedList[i]).find('.pay-coupons-discount').html();  //优惠券金额
+        //
+        //  //当选择使用了优惠券
+        //  if(couponsUsedNum){
+        //    var couponsInfo = {};
+        //    couponsInfo['id'] = couponsUsedId;
+        //    couponsInfo['count'] = couponsUsedNum;
+        //    couponsInfo['type'] = couponsUsedType;
+        //    couponsInfo['number'] = couponsUsedDiscount;
+        //
+        //    couponsInfoList.push(couponsInfo);
+        //  }
+        //}
+
+        //var orderCouponsInfo = {};
+        //orderCouponsInfo['no'] = orderNo;
+        //orderCouponsInfo['coupons'] = couponsInfoList;
+        //orderCouponsInfoList.push(orderCouponsInfo);
+      }
+
+      var orderArray = [];
+      var orderList = $('.list-group').find('.pay-order-row');
+      for(var index= 0; index <orderList.length;index++){
+        var orderId = $(orderList[index]).find('.pay-order-id').html();
+
+        var couponsArray = [];
+        var couponsList = $(orderList[index]).find('.coupons-table-row');
+        for (var i = 0 ; i < couponsList.length;i++){
+          var couponsName = $(couponsList[i]).find('.pay-coupons-name').html();
+          var couponsSize = $(couponsList[i]).find('.numbermodify-number').val();
+
+          if(couponsSize != '0'){
+            var couponsDict = {};
+            couponsDict['name'] =  couponsName;
+            couponsDict['size'] =  couponsSize;
+            couponsArray.push(couponsDict);
+          }
+
+        }
+
+
+
+        var orderCouponsDict = {};
+        orderCouponsDict['order_id'] = orderId;
+        orderCouponsDict['coupons'] = couponsArray;
+        orderArray.push(orderCouponsDict);
+        //if(couponsArray.length){
+        //}
+
+      }
+
+      //获取用户选择的支付方式
+      var paySelectedPayId = $('input:radio:checked').val(); //支付方式id
+      var params = {mobile: localStorage.mobile,"payment_id": paySelectedPayId,"json": JSON.stringify(orderArray)};
+      //var paramsStr = "payment_id="+paySelectedPayId+"&json=["+orderCouponsInfoList.toString()+"]";
+      //var payUrl = "http://192.168.0.199/leshenghuoServer/interface/pay.action?"+paramsStr;
+      //window.open(payUrl);
+
+      //支付
+      userService.postRequestWithUrlAndParams("pay.action", params).success(function (response) {
+
+        console.log(response);
+
+        sessionStorage.alipayHtml = response;
+        $state.go("ali-pay");
+
+        //$(".alipay-html").html(response);
+        //$(".alipay-html").css({
+        //  'display': 'block'
+        //});
+
+      }).error(function (data, status, header, config) {
+        console.log("支付出错");
+      });
+
+
+      //返回按钮点击
+      $scope.back = function () {
+        $state.go("member-user-myorder", {"from": 1});
+      };
+
+
+    }
+
+
+  })
+;
+
+//在线超市
+guanjiaModuleController.controller('shoppingCtrl', ['$scope', 'guanjiaService', '$sce','$cookies', function ($scope, guanjiaService, $sce,$cookies) {
+  guanjiaService.listMarket().success(function (response) {
+    $scope.marketList = response.data;
+    $scope.url_1 = $sce.trustAsResourceUrl($scope.marketList[0].url);
+    $scope.url_2 = $sce.trustAsResourceUrl($scope.marketList[1].url);
+  });
+
+  $scope.record = function (mId) {
+    if ($cookies.get('ticket')) {
+      guanjiaService.recordMarket({
+        market_id: mId
+      }).success(function (response) {
+        console.log(response.code);
+      });
+    }
+  };
+
+  //返回
+  $scope.goBack = function () {
+    history.back();
+  }
+
+}]);
+
+//支付宝支付页面
+guanjiaModuleController.controller('alipayCtrl', ['$scope', 'guanjiaService', '$sce', '$stateParams', '$state', '$cookies',function ($scope, guanjiaService, $sce, $stateParams, $state,$cookies) {
+
+  //$scope.alipayHtml = sessionStorage.alipayHtml;
+  $(".alipay-html").html(sessionStorage.alipayHtml);
+
+  $scope.backPay = function () {
+    $state.go('member-user-myorder');
+  }
+
+}]);
+
+//活动召集页
+guanjiaModuleController.controller('activityCtrl',['$scope','$state','guanjiaService','commonService','$cookies','$rootScope',function($scope,$state,guanjiaService,commonService,$cookies,$rootScope){
+  $scope.city_name = sessionStorage.gpscityName;
+
+  //返回首页
+  $scope.backtocomservice = function () {
+    $state.go('guanjia-comservice')
+  };
+  //活动召集列表
+  guanjiaService.listActivity({
+    'city_id':sessionStorage.gpscityId,
+    'pageno':'1',
+    'pagesize':'6',
+    'key':''
+  }).success(function(response){
+    switch (response.code){
+      case '0':
+        $scope.listActivity=response.data;
+        console.log($scope.listActivity);
+        break;
+      case '-1':
+        commonService.showWarnMessage('参数为空');
+        break;
+      case '-2':
+        commonService.showWarnMessage('参数错误');
+        break;
+    }
+
+  });
+
+  //跳转到活动详情页
+  //从某个页面跳转到活动详情
+  //from = 0 活动召集页
+  //from = 1 我报名的活动页
+  $scope.goDetail = function(activityId){
+    sessionStorage.activityId=activityId;
+    $state.go('guanjia-activitydetail',{
+      'activityId':activityId,
+      'from':'0'
+    });
+  };
+}]);
+
+//活动详情页
+guanjiaModuleController.controller('activityDetailCtrl',['$scope','guanjiaService','commonService','$stateParams','$rootScope','$state','$location','$cookies',function($scope,guanjiaService,commonService,$stateParams,$rootScope,$state,$location,$cookies){
+
+  $scope.activityId=$stateParams.activityId;
+  $scope.form=$stateParams.from;
+
+  //返回某个页面
+  //from = 0 活动召集页
+  //from = 1 我报名的活动页
+  $scope.activitydetailBack=function(){
+    if($scope.form == '1'){//我报名的活动页
+      $state.go('member-user-myactivities')
+    }else{//活动召集页或登录
+      $state.go('guanjia-callactivity')
+
+    }
+  };
+  //活动召集详情
+  guanjiaService.getActivity({
+    'activity_id':$scope.activityId
+  }).success(function(response){
+    switch (response.code){
+      case '0':
+        $scope.activityDetail=response.data;
+        $scope.jiemuList=$scope.activityDetail.jiemuArray;
+        break;
+      case '-1':
+        commonService.showWarnMessage('参数为空');
+        break;
+      case '-2':
+        commonService.showWarnMessage('参数错误');
+        break;
+    }
+
+  });
+
+  //活动报名
+  $scope.activityApply=function(valid){
+    $scope.valid=valid;
+
+    if($cookies.get('ticket') == null){
+      $('.modal-backdrop').hide();
+      commonService.showNoticeMessage('请登陆一下好吗？');
+      $state.go('member-personal-login',{
+        'from':'3'
+      });
+      sessionStorage.loginLocation=$location.path();
+      sessionStorage.loginValue=$location.search().activityId;
+    }else{
+      guanjiaService.activityApply({
+        'ticket':$cookies.get('ticket'),
+        'activity_id':$scope.activityId,
+        'mobile':$scope.mobile,
+        'valid':$scope.valid
+        //'user_community_id'
+      }).success(function(response){
+        console.log(response);
+        switch (response.code){
+          case '0':
+            if($scope.valid == 0){
+              commonService.showWarnMessage('报名成功！');
+              //$state.go("member-user-myactivities");
+            }else if($scope.valid == 1){
+              commonService.showWarnMessage('取消报名！');
+            }
+
+            break;
+          case '-1':
+            commonService.showWarnMessage('参数为空');
+            break;
+          case '-2':
+            commonService.showWarnMessage('参数错误');
+            break;
+          case '-3':
+            if($scope.valid == 0){
+              commonService.showWarnMessage('已经报名！');
+            }else if($scope.valid == 1){
+              commonService.showWarnMessage('未报名！');
+            }
+            break;
+          case '-4':
+            commonService.showWarnMessage('活动已经结束啦！');
+            break;
+          case '-8':
+            $state.go('member-personal-login',{
+              'from':'3'
+            });
+            break;
+        }
+
+      });
+
+    }
+
+  }
+}]);
+
+
+//家庭服务
+guanjiaModuleController.controller('familyserviceCtrl',['$scope','guanjiaService','commonService','$q','userService','$state','$cookies','$stateParams','$rootScope',function($scope,guanjiaService,commonService,$q,userService,$state,$cookies,$stateParams,$rootScope){
+  //获取当前城市
+  $scope.city_name = sessionStorage.gpscityName;
+  $scope.imgShow=true;
+
+  $scope.from=$stateParams.from; //from  0:家庭服务  1:干洗到家
+
+  function getCityService(){
+    var defer = $q.defer();
+    $scope.tabCount = [];//存放选项卡index
+    guanjiaService.listCityService({
+      city_id: sessionStorage.gpscityId,
+      type:'家庭服务'
+    }).success(function(response){
+      if(response.code == '0'){
+        $scope.serviceType = response.data;
+        defer.resolve($scope.serviceType);
+
+        //获取服务id和index分别存入数组$scope.fuwu和tabCount
+        $scope.fuwu = [];
+        $scope.tabCount = [];
+        $.each($scope.serviceType, function (index, info) {
+          $scope.tabCount.push(index);
+          $scope.fuwu.push(info.city_fuwu_id);
+        });
+
+        if($scope.from == '0'){
+          $scope.businessParams.city_fuwu_id = $scope.serviceType[0].city_fuwu_id;
+
+        }else if($scope.from == '1'){
+          $scope.drycleanFuwu_id="40288047559104870155910bae160002";
+          $scope.businessParams.city_fuwu_id=$scope.drycleanFuwu_id;
+
+          // 早餐所对应的index
+          $.each($scope.fuwu, function(i, value) {
+            if (value == $scope.drycleanFuwu_id) {
+              $scope.drycleanIndex= i ;
+            }
+          });
+
+        }
+
+
+
+        $scope.business_family = [];
+        $scope.businessLis($scope.businessParams);
+      }else{
+        console.log('error!');
+      }
+    });
+    return defer.promise;
+  }
+  //动态获取选项卡
+  $scope.service_promise = getCityService();
+  /*****************获取商家列表*****************************************/
+  $scope.businessParams = {
+    city_id: sessionStorage.gpscityId,
+    city_fuwu_id: '',
+    pageno: '1', //页码
+    pagesize: '6', //页数
+    url: 'listBusiness.action',
+    direction: 'up'
+  };
+  $scope.business_family = [];
+  var isOver = false; //false:标志数据未加载完成
+  $scope.businessLis = function(params){
+    var defer = $q.defer();
+    userService.postRequestWithPageNo(params).success(function(response){
+      var tempList = response.data;
+      if (tempList.length == 0 & params.pageno == '1') {
+        $scope.errMsg = 'images/nogoods.png';
+      } else {
+        $scope.errMsg = '';
+      }
+      if (tempList.length < params.pagesize) {
+        isOver = true;//true:标志数据加载完成
+        defer.resolve(isOver);
+      } else {
+        isOver = false;
+        defer.resolve(isOver);
+      }
+
+      if (params.key) {
+        /*判断请求的第一页无数据时，显示暂无数据*/
+        if (tempList.length == 0 && params.pageno == '1') {
+          $scope.isFamily = false;
+          return;
+        } else {
+          $scope.isFamily = true;
+          if (params.direction == 'down') {
+            $scope.familySearchLis = response.data;
+          } else {
+            $scope.familySearchLis = $scope.familySearchLis.concat(tempList);
+          }
+        }
+      }else{
+        if (params.direction == 'down') {
+          $scope.business_family = tempList;
+        } else {
+          $scope.business_family = $scope.business_family.concat(tempList);
+        }
+
+      }
+
+    });
+    return defer.promise;
+  };
+  //点击选项卡，切换内容
+  $scope.change_tab = function(fuwu_id,index){
+    $scope.businessParams.city_fuwu_id = fuwu_id;
+    $scope.business_family = [];
+    $scope.businessLis($scope.businessParams);
+  };
+
+  /******************关键字搜索**********************************/
+  $scope.isFamilySearch = true;//true:显示分类的商家列表，false：显示搜索的商家列表
+  var val = '';
+  $scope.isFamily = true; //false:无相关数据 true：有相关数据
+  $scope.familySearchLis = [];
+  //点击关键字搜索按钮
+  $scope.searchFamilyBusiness = function () {
+    $scope.familySearchLis = [];
+    val = $('.search-input input').val();
+    if (val == '') {
+      $scope.isFamilySearch = true;
+      commonService.showWarnMessage('请输入关键字！');
+      return;
+    } else {
+      $scope.isFamilySearch = false;
+      $scope.searchFamilyParams.key = val;
+      $scope.businessLis($scope.searchFamilyParams);
+    }
+  };
+
+  $scope.searchFamilyParams = {
+    city_id: sessionStorage.gpscityId,
+    pageno: '1', //页码
+    pagesize: '10', //页数
+    url: 'listBusiness.action',
+    direction: 'up',
+    key: ''
+  };
+
+  //点击返回按钮
+  $scope.goBack = function(){
+    if ($scope.isFamilySearch) {
+      $state.go('guanjia-comservice')
+    } else {
+      window.location.reload();
+    }
+  };
+
+  //点击商家，跳转到服务列表页
+  $scope.goServiceList = function(businessId,businessName){
+    $state.go('guanjia-familyservicelist',{
+      businessId : businessId,
+      businessName : businessName
+    });
+    sessionStorage.businessId = businessId;
+    sessionStorage.businessName = businessName;
+  };
+
+////轮播图播放间隔时间
+// $scope.myInterval = 3000;
+
+  //获取公告数据
+  var noticeParams = {
+    type: 'system,city',
+    city_id: sessionStorage.gpscityId
+  };
+  guanjiaService.getNotice(noticeParams).then(function(data){
+    $scope.marqueeContent = data;
+  });
+
+  guanjiaService.getAdverts(noticeParams).then(function(data){
+    $scope.myInterval = 3000;
+    $scope.adList = data;
+    var slides = $scope.slides = [];
+
+    for (var i = 0; i < $scope.adList.length; i++) {
+      var src = $scope.adList[i].image;
+      slides.push({image: src, text: $scope.adList[i].name});
+    }
+
+    //轮播图请求到数据1秒后显示
+    setTimeout(function(){
+      //$scope.imgShow=false;
+    },1000);
+
+  });
+
+  /*  //获取公告数据
+   guanjiaService.listNotice({
+   type: 'system,city',
+   city_id: sessionStorage.cityId
+   }).success(function (data) {
+   data.data.length > 0 ? $scope.isLength = true : $scope.isLength = false;
+   $scope.marqueeContent = '';
+   $.each(data.data,function(index,info){
+   $scope.marqueeContent += info.content + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+   });
+   });*/
+
+}]);
+//服务列表
+guanjiaModuleController.controller('familyservicelistCtrl',['$scope','$stateParams','guanjiaService','$q','userService','commonService','$state','$cookies',function($scope,$stateParams,guanjiaService,$q,userService,commonService,$state,$cookies){
+  $scope.bName = $stateParams.businessName;
+  //获取商品分类
+  function getCategory(){
+    $scope.serviceCount = [];//存放商品分类index
+    var defer = $q.defer();
+    guanjiaService.listCategory({
+      business_id : $stateParams.businessId
+    }).success(function(response){
+      if(response.code == '0'){
+        $scope.categoryLis = response.data;
+        defer.resolve($scope.categoryLis);
+        $.each($scope.categoryLis,function(index,info){
+          $scope.serviceCount.push(index);
+        });
+        //数值为$scope.categoryLis.length表示全部
+        $scope.serviceCount.push($scope.categoryLis.length);
+        //默认加载全部商品列表
+        $scope.serviceListParams.sort = $scope.selected;
+        $scope.serviceList = [];
+        $scope.serviceListFun($scope.serviceListParams);
+      }else{
+        console.log('获取商品分类失败!');
+      }
+    });
+    return defer.promise;
+  }
+  $scope.promised = getCategory();
+
+  //点击分类按钮
+  $scope.showCtagoryContent = function(index,cateId){
+    if(index == '全部'){
+      $scope.index = $scope.categoryLis.length;
+      $scope.serviceListParams.category_id = null;
+    }else{
+      $scope.index = index;
+      $scope.serviceListParams.category_id = cateId;
+    }
+    $scope.serviceListParams.sort = $scope.selected;
+    $scope.serviceList = [];
+    $scope.serviceListFun($scope.serviceListParams);
+  };
+
+  $scope.serviceListParams = {
+    business_id: $stateParams.businessId,
+    pageno: '1', //页码
+    pagesize: '5', //页数
+    direction: 'up',
+    url: 'listGoods.action',
+    category_id: null,
+    sort:null
+  };
+  $scope.serviceList = [];
+  var isOver = false;//false:标志数据未加载完成
+  $scope.serviceListFun = function(params){
+    var defer = $q.defer();
+    userService.postRequestWithPageNo(params).success(function(response){
+      var tempList = response.data;
+      if (tempList.length == 0 & params.pageno == '1') {
+        $scope.errMsg = 'images/nogoods.png';
+      } else {
+        $scope.errMsg = '';
+      }
+      if (tempList.length < params.pagesize) {
+        isOver = true;//true:标志数据加载完成
+        defer.resolve(isOver);
+      } else {
+        isOver = false;
+        defer.resolve(isOver);
+      }
+
+      if (params.key) {
+        /*判断请求的第一页无数据时，显示暂无数据*/
+        if (tempList.length == 0 && params.pageno == '1') {
+          $scope.isServiceList = false;
+          return;
+        } else {
+          $scope.isServiceList = true;
+          if (params.direction == 'down') {
+            $scope.serviceListByKey = response.data;
+          } else {
+            $scope.serviceListByKey = $scope.serviceListByKey.concat(tempList);
+          }
+        }
+      }else{
+        if (params.direction == 'down') {
+          $scope.serviceList = response.data;
+        } else {
+          $scope.serviceList = $scope.serviceList.concat(tempList);
+        }
+      }
+    });
+    return defer.promise;
+  };
+
+  //选择下拉列表选项
+  var oldSelected = '';
+  var txt = '';
+  $scope.changeSort = function(){
+    oldSelected = txt;
+    txt = $('.familyservicelist-dropdown option:selected').text();
+    if(oldSelected && oldSelected != txt){
+      $scope.serviceListParams.sort = $scope.selected;
+      $scope.serviceList = [];
+      $scope.serviceListFun($scope.serviceListParams);
+    }
+  }
+
+  /*****************关键字搜索**************************************/
+  $scope.serviceListByKey = [];
+  var val = '';
+  $scope.isserviceSearch = true;//true:显示分类的商品列表，false：显示搜索的商品列表
+  $scope.isServiceList = true;//false:无相关数据 true：有相关数据
+  $scope.searchServiceList = function(){
+    $scope.serviceListByKey = [];
+    val = $('.search-input input').val();
+    if (val == '') {
+      $scope.isSearch = true;
+      commonService.showWarnMessage('请输入关键字！');
+      return;
+    } else {
+      $scope.isserviceSearch = false;
+      $scope.searchParams.key = val;
+      $scope.serviceListFun($scope.searchParams);
+    }
+  };
+  $scope.searchParams = {
+    business_id: $stateParams.businessId,
+    pageno: '1', //页码
+    pagesize: '5', //页数
+    direction: 'up',
+    url: 'listGoods.action',
+    key : ''
+  };
+
+  //返回按钮
+  $scope.goBack = function(){
+    if($scope.isserviceSearch){
+      $state.go('guanjia-familyservice');
+    }else{
+      window.location.reload();
+    }
+  };
+
+  //点击服务，进入服务详情页
+  $scope.goServiceDetail = function(goodsId){
+    $state.go('guanjia-familyservicedetail',{
+      goodsId : goodsId
+    });
+  };
+
+  //点击预约，进入服务预约页
+  $scope.goReserve = function($event,goodsId){
+    $event.stopPropagation();
+    $state.go('guanjia-servicereserve',{
+      goodsId : goodsId
+    });
+    //本地保存goodsId,以便服务预约中选择小区后跳转回预约页用
+    localStorage.reserveGoodId = goodsId;
+  }
+
+  //获取公告数据
+  $scope.noticeParams = {
+    type: 'business',
+    business_id: $stateParams.businessId
+  };
+
+  //跳转到卖家详情
+  $scope.jumpSellerdetail = function () {
+    $state.go('guanjia-sellerdetail',{businessId:$stateParams.businessId});
+  };
+
+}]);
+//服务详情
+guanjiaModuleController.controller('familyservicedetailCtrl',['$scope','$stateParams','guanjiaService','$interval','$q','$state','$cookies',function($scope,$stateParams,guanjiaService,$interval,$q,$state,$cookies){
+  function getServiceDetail(){
+    var defer = $q.defer();
+    guanjiaService.goodsDetail({
+      goods_id : $stateParams.goodsId
+    }).success(function(response){
+      if(response.code == '0'){
+        $scope.serviceDetail = response.data;
+        defer.resolve($scope.serviceDetail);
+      }else{
+        console.log('服务详情接口有错误！');
+      }
+    });
+    return defer.promise;
+  }
+  //服务详情
+  $scope.detailPromise = getServiceDetail();
+  //评价
+  guanjiaService.listGoodsComment({
+    goods_id : $stateParams.goodsId
+  }).success(function(response){
+    if(response.code == '0'){
+      $scope.serviceComment = response.data;
+    }else{
+      console.log('评价接口由错误！');
+    }
+  });
+
+  //销量
+  guanjiaService.getGoodsCount({
+    goods_id : $stateParams.goodsId
+  }).success(function(response){
+    console.log(response);
+    if(response.code == '0'){
+      $scope.salesData = [response.data.data];
+      $scope.labels = response.data.labels;
+    }else{
+      console.log('销量接口有错误！');
+    }
+  });
+
+  //点击预约，跳转到服务预约页
+  $scope.goServiceReserve = function(){
+    $state.go('guanjia-servicereserve',{
+      goodsId : $stateParams.goodsId
+    });
+  }
+
+}]);
+
+//服务预约
+guanjiaModuleController.controller('servicereserveCtrl',['$scope','guanjiaService','$stateParams','commonService','$state','$timeout','userService','$cookies',function($scope,guanjiaService,$stateParams,commonService,$state,$timeout,userService,$cookies){
+  guanjiaService.goodsDetail({
+    goods_id : $stateParams.goodsId
+  }).success(function(response){
+    if(response.code == '0'){
+      $scope.serviceReserve = response.data;
+      $scope.totalPrice = $scope.serviceReserve.sale_price;
+      //console.log($scope.serviceReserve);
+      /*$scope.serviceReserve.guige = [{
+       key:"分量",
+       value : [
+       {guige_id:'1',guige_name:'大'},
+       {guige_id:'2',guige_name:'小'}
+       ]
+       },{
+       key:"分量",
+       value : [
+       {guige_id:'1',guige_name:'大'},
+       {guige_id:'2',guige_name:'小'}
+       ]
+       }];*/
+    }else{
+      console.log('服务预约接口有问题！');
+    }
+  });
+
+  //增减数量
+  $scope.changeCount = function($event){
+    if($($event.target).val() == 'add'){
+      $scope.count++;
+    }else{
+      if($scope.count > 0){
+        $scope.count--;
+      }else{
+        commonService.showWarnMessage('亲，没啦，不用点啦！');
+      }
+    }
+    $scope.totalPrice = parseFloat($scope.serviceReserve.sale_price)*parseInt($scope.count);
+  };
+
+  //跳转到我的小区页
+  $scope.goMyCommunity = function(){
+    if($cookies.get('ticket') == null){
+      commonService.showNoticeMessage('请登录一下好吗？');
+      $state.go('member-personal-login');
+    }else{
+      $state.go('member-user-mycommunity',{
+        from : 2
+      });
+    }
+  };
+
+  //选择完小区后，跳转回服务预约页
+  if($cookies.get('ticket') != null){
+    if(sessionStorage.parents == 'serviceReserve'){
+      $scope.userName = sessionStorage.userName;
+      $scope.telephone = sessionStorage.tel;
+      $scope.address = sessionStorage.cityName + sessionStorage.communityName + sessionStorage.floor + "号楼";
+    }
+  }
+
+  var guige1,guige2;
+  function getParams(){
+    if(!(/^[1-9]*$/.test($scope.count))){
+      commonService.showNoticeMessage('数量只能是正整数！');
+    }else if(!$scope.userName){
+      commonService.showNoticeMessage('请输入收货人姓名');
+    }else if(!$scope.telephone){
+      commonService.showNoticeMessage('请输入收货人联系电话');
+    }else if(!$scope.address){
+      commonService.showNoticeMessage('请输入收货人地址');
+    }else{
+      var guiges = $('.servicereserve-service-specification').find('.servicereserve-service-specification-row');
+      if(guiges.length > 0){
+        $.each(guiges,function(index,elem){
+          var key = $(elem).children('.servicereserve-service-specification-name').html();
+          var select = $(elem).find('.servicereserve-dropdown');
+          var value = $(select).find('option:selected').text();
+          if(index == 0){
+            guige1 = key + value;
+          }else{
+            guige2 = key + value;
+          }
+        });
+      }
+      return true;
+    }
+    return false;
+  }
+
+  //放入购物车
+  $scope.insertCart = function(){
+    var isContinue = getParams();
+    if(isContinue){
+      var params = {
+        ticket:$cookies.get('ticket'),
+        mobile: localStorage.mobile,
+        goods_id : $scope.serviceReserve.goods_id,
+        count : $scope.count,
+        guige_1 : guige1,
+        guige_2 : guige2,
+        remark : $scope.message,
+        contact_name : $scope.userName,
+        contact_phone : $scope.telephone,
+        address : $scope.address
+      };
+      console.log(params);
+      guanjiaService.addcart(params).success(function(response){
+        if(response.code == '0'){
+          commonService.showSuccessMessage('成功加入购物车！');
+          $timeout(function(){
+            $state.go('guanjia-familyservicelist',{
+              businessId : sessionStorage.businessId,
+              businessName : sessionStorage.businessName
+            });
+          },500);
+        }
+      });
+    }
+  };
+
+  //直接预约
+  $scope.straightReserve = function(){
+    var isContinue = getParams();
+    if(isContinue){
+      var goodsReserve = [];
+      goodsReserve.push({
+        goods_id : $scope.serviceReserve.goods_id,
+        count : $scope.count,
+        guige_1 : guige1,
+        guige_2 : guige2,
+        contact_name : $scope.userName,
+        contact_phone : $scope.telephone,
+        address : $scope.address
+      });
+      var params = {"mobile": localStorage.mobile, "goods": goodsReserve};
+      params = {json: JSON.stringify(params)};
+      userService.postRequestWithUrlAndParams("buy.action", params).success(function(response){
+        if(response.code == '0'){
+          commonService.showSuccessMessage('预约成功！');
+          $timeout(function(){
+            $state.go('guanjia-familyservicelist',{
+              businessId : sessionStorage.businessId,
+              businessName : sessionStorage.businessName
+            });
+          },500);
+        }else if(response.code == '-4'){
+          commonService.showWarnMessage('铛铛，商家休息了！');
+        }else{
+          console.log('直接预约接口有错误！');
+        }
+      });
+    }
+  }
+
+}]);
+
+//公共服务
+guanjiaModuleController.controller('publicserviceCtrl',['$scope','guanjiaService','$sce','userService','$q','commonService','$state','$cookies','$rootScope',function($scope,guanjiaService,$sce,userService,$q,commonService,$state,$cookies,$rootScope){
+  //选项卡切换
+  var lastSelectItem = '.publicservice-default-selected-item';
+  var lastShowTable = '.publicservice-government-table';
+
+  function didSelectedSegementControl(currentItem,currentShowTable,isShowSearchField){
+    $(lastSelectItem).css({
+      'background':'#ddd',
+      'color':'black'
+    });
+    $(currentItem).css({
+      'background':'#7DB343',
+      'color':'white'
+    });
+    $(currentItem).addClass('selected');
+    $(lastSelectItem).removeClass('selected');
+
+    $(lastShowTable).css({
+      'display':'none'
+    });
+    $(currentShowTable).css({
+      'display':'block'
+    });
+
+    lastSelectItem = currentItem;
+    lastShowTable = currentShowTable;
+  }
+
+  $scope.showGovernment = function ($event){
+    console.log('政府');
+    $scope.isShowLis = true;
+    didSelectedSegementControl($event.target,".publicservice-government-table",0);
+    $('.navigationbar-government').css({
+      'display':'block'
+    });
+    $('.navigationbar-publicservice').css({
+      'display':'none'
+    })
+  }
+  $scope.showStreet = function ($event){
+    console.log('社区');
+    $scope.isShowLis = true;
+    didSelectedSegementControl($event.target,".publicservice-street-table",1);
+    $('.navigationbar-government').css({
+      'display':'none'
+    });
+    $('.navigationbar-publicservice').css({
+      'display':'block'
+    })
+  }
+  $scope.showManager = function($event){
+    console.log('物业管理');
+    $scope.isShowLis = true;
+    didSelectedSegementControl($event.target,".publicservice-manager-table",1);
+    $('.navigationbar-government').css({
+      'display':'none'
+    });
+    $('.navigationbar-publicservice').css({
+      'display':'block'
+    })
+  }
+
+  //获取政府URL
+  guanjiaService.listGovernmentInfo({
+    city_id: sessionStorage.gpscityId
+  }).success(function(response){
+    if(response.code == '0'){
+      $scope.governmentUrl = $sce.trustAsResourceUrl(response.data.url);
+    }else{
+      console.log('this is error!');
+    }
+  });
+
+  //社区街道
+  $scope.shequParams = {
+    "city_id": sessionStorage.gpscityId,
+    'pageno': '1', //页码
+    'pagesize': '10', //页数
+    "url": 'listShequ.action',
+    direction: 'up'
+  };
+  $scope.shequLis = [];
+  var isOver = false; //false:标志数据未加载完成
+  $scope.shequFun = function(params){
+    var defer = $q.defer();
+    userService.postRequestWithPageNo(params).success(function(response){
+      switch (response.code) {
+        case '0':
+          if (response.data.length == 0 && params.pageno == '1') {
+            commonService.showNoticeMessage("暂无数据！");
+          } else {
+            var tempList = response.data;
+            if(tempList.length < params.pagesize){
+              isOver = true;//true:标志数据加载完成
+              defer.resolve(isOver);
+            }else{
+              isOver = false;
+              defer.resolve(isOver);
+            }
+
+
+            if(params.direction == 'down'){
+              $scope.shequLis = response.data;
+            }else{
+              $scope.shequLis = $scope.shequLis.concat(tempList);
+            }
+          }
+          break;
+      }
+    });
+    return defer.promise;
+  };
+  $scope.shequFun($scope.shequParams);
+
+  //物业管理
+  $scope.wuyeParams = {
+    "city_id": sessionStorage.gpscityId,
+    'pageno': '1', //页码
+    'pagesize': '10', //页数
+    "url": 'listWuye.action',
+    direction: 'up'
+  };
+  $scope.wuyeLis = [];
+  var isWY = false; //false:标志数据未加载完成
+  $scope.wuyeFun = function(params){
+    var defer = $q.defer();
+    userService.postRequestWithPageNo(params).success(function(response){
+      switch (response.code) {
+        case '0':
+          if (response.data.length == 0 && params.pageno == '1') {
+            commonService.showNoticeMessage("暂无数据！");
+          } else {
+            var tempList = response.data;
+            if(tempList.length < params.pagesize){
+              isOver = true;//true:标志数据加载完成
+              defer.resolve(isOver);
+            }else{
+              isOver = false;
+              defer.resolve(isOver);
+            }
+
+            if(params.direction == 'down'){
+              $scope.wuyeLis = response.data;
+            }else{
+              $scope.wuyeLis = $scope.wuyeLis.concat(tempList);
+            }
+          }
+          break;
+      }
+    });
+    return defer.promise;
+  };
+  $scope.wuyeFun($scope.wuyeParams);
+
+  //关键字搜索
+  $scope.isShowLis = true; //true:显示某个选项卡下的信息，false：显示某选项卡下的搜索信息
+  var val = '';
+  $scope.listByKey = [];
+  $scope.isPluc = true; //false:无相关数据 true：有相关数据
+  $scope.searchbyKey = function () {
+    $scope.listByKey = [];
+    val = $('.search-input input').val();
+    if (val == '') {
+      $scope.isShowLis = true;
+      commonService.showWarnMessage('请输入关键字！');
+    } else {
+      $scope.isShowLis = false;
+      var txt = '';
+      //获取当前选项卡选中的按钮文本
+      $.each($('.publicservice-sc-item'),function(index,domEl){
+        if($(domEl).hasClass('selected')){
+          txt = $(domEl).next().html();
+          return;
+        }
+      });
+      $scope.keyParams.key = val;
+      if(txt == '社区街道'){
+        $scope.keyParams.url = 'listShequ.action';
+      }
+      if(txt == '物业管理'){
+        $scope.keyParams.url = 'listWuye.action';
+      }
+      $scope.keyFun($scope.keyParams);
+    }
+
+  };
+
+  $scope.keyParams = {
+    "city_id": sessionStorage.gpscityId,
+    'pageno': '1', //页码
+    'pagesize': '10', //页数
+    "url": '',
+    'direction': 'up',
+    'key': ''
+  };
+  var isKey = false;//false:标志数据未加载完成
+  $scope.keyFun = function(params){
+    console.log(params);
+    var defer = $q.defer();
+    userService.postRequestWithPageNo(params).success(function(response){
+      switch (response.code) {
+        case '0':
+          console.log(response);
+          var tempList = response.data;
+          if(tempList.length < params.pagesize){
+            isKey = true;//true:标志数据加载完成
+            defer.resolve(isKey);
+          }else{
+            isKey = false;
+            defer.resolve(isKey);
+          }
+
+          /*判断请求的第一页无数据时，显示暂无数据*/
+          if (tempList.length == 0 && params.pageno == '1') {
+            $scope.isPluc = false;
+            return;
+          } else {
+            $scope.isPluc = true;
+            if (params.direction == 'down') {
+              $scope.listByKey = response.data;
+            } else {
+              $scope.listByKey = $scope.listByKey.concat(tempList);
+            }
+          }
+
+          break;
+      }
+    });
+    return defer.promise;
+  };
+
+  //返回
+  $scope.toBack = function(){
+    if($scope.isShowLis){
+      $state.go("guanjia-comservice");
+    }else{
+      window.location.reload();
+    }
+  }
+
+}]);
+
+//家庭金融
+guanjiaModuleController.controller('familyaccountCtrl',['$scope','guanjiaService','$state','commonService', '$cookies','userService','$q','$rootScope',function($scope,guanjiaService,$state,commonService,$cookies,userService,$q,$rootScope){
+
+  $scope.city_name = sessionStorage.gpscityName;
+  //返回首页
+  $scope.backtocomservice = function () {
+    if(!$scope.isShowAccount){
+      window.location.reload();
+    }else{
+      $state.go('guanjia-comservice');
+    }
+  };
+
+
+  //广告轮播图播放的时间间隔
+  $scope.myInterval = 3000;
+
+  //获取公告数据
+  guanjiaService.listNotice({
+    type: 'city',
+    city_id: sessionStorage.gpscityId
+  }).success(function (data) {
+    $scope.marqueeContent = data.data;
+
+    $.getScript('scripts/common/marquee.js', function () {
+      createMarquee();
+    });
+  });
+
+  //金融机构列表
+  $scope.familyaccountList = [];
+  $scope.params = {
+    city_id: sessionStorage.gpscityId,
+    pageno: '1', //页码
+    pagesize: '6', //页数
+    url : 'listBusinessByFinance.action',
+    direction : 'up'
+  };
+  var isOver = false; //false:标志数据未加载完成
+  $scope.familyAccount = function(params){
+    var defer = $q.defer();
+    userService.postRequestWithPageNo(params).success(function(response){
+      switch (response.code){
+        case '0':
+          var tempList = response.data;
+          if (tempList.length == 0 & params.pageno == '1') {
+            commonService.showWarnMessage("该城市无金融服务！");
+            return;
+          }
+          if(tempList.length < params.pagesize){
+            isOver = true;//true:标志数据加载完成
+            defer.resolve(isOver);
+          }else{
+            isOver = false;
+            defer.resolve(isOver);
+          }
+
+          if(params.key){
+            if(params.direction == 'down'){//下拉刷新
+              $scope.searchAccountList = response.data;
+            }else{//上拉加载
+              $scope.searchAccountList = $scope.searchAccountList.concat(tempList);
+            }
+          }else{
+            if(params.direction == 'down'){//下拉刷新
+              $scope.familyaccountList = response.data;
+            }else{//上拉加载
+              $scope.familyaccountList = $scope.familyaccountList.concat(tempList);
+            }
+          }
+
+          break;
+        case '-1':
+          commonService.showErrorMessage("参数为空");
+          break;
+        case '-2':
+          commonService.showErrorMessage("金融服务不存在");
+          break;
+      }
+    });
+    return defer.promise;
+  };
+
+  $scope.familyAccount($scope.params);
+
+  /***********************关键字搜索*****************************************/
+  $scope.isShowAccount = true; //true:显示分类的金融，false：显示搜索的金融
+  var val = '';
+  $scope.searchAccountList = [];
+  $scope.searchAccount = function(){
+    $scope.searchAccountList = [];
+    val = $('.search-input input').val();
+    if(val == ''){
+      commonService.showWarnMessage('请输入关键字！');
+      $scope.isShowAccount = true;
+    }else{
+      $scope.isShowAccount = false;
+      $scope.params.key = val;
+      $scope.params.pageno = 1;
+      $scope.params.pagesize = 10;
+      $scope.familyAccount($scope.params);
+    }
+  };
+
+  $scope.jumpaccountlist=function(name,id){
+    $state.go('guanjia-familyaccountlist', {
+      businessName:name,
+      businessId: id
+    });
+  }
+
+}]);
+//金融商品列表
+guanjiaModuleController.controller('familyaccountlistCtrl',['$scope','guanjiaService','$stateParams','userService','commonService','$state','$cookies','$q',function($scope,guanjiaService,$stateParams,userService,commonService,$state,$cookies,$q){
+  $scope.accountbusinessName=$stateParams.businessName;
+  $scope.accountbusinessId=$stateParams.businessId;
+  //返回金融机构列表
+  $scope.backtofamilyaccount = function () {
+    if($scope.isCategory){
+      $state.go('guanjia-familyaccount');
+    }else{
+      window.location.reload();
+    }
+  };
+
+  //调用分类接口
+  guanjiaService.listCategory({business_id: $scope.accountbusinessId}).success(function (data) {
+    if(data.code == '0'){
+      $scope.category = data.data;
+      //获取分类的index，保存在数组$scope.category_count中
+      $scope.category_count = [0];
+      $.each($scope.category, function (index, info) {
+        $scope.category_count.push(++index);
+      });
+
+      var len = data.data.length;
+      var wid = parseInt($('.goods-segment-control').width());
+      var bw = wid / (len + 1);
+      //分类按钮
+      $scope.sty =
+        'width:' + bw + 'px;';
+    }else{
+      console.log('获取分类信息有误！');
+    }
+  });
+
+  $scope.params = {
+    business_id: $scope.accountbusinessId,
+    pageno: '1', //页码
+    pagesize: '10', //页数
+    url: 'listGoods.action',
+    category_id: null,
+    sort:'up_date',
+    direction : 'up',
+    key : ''
+  };
+
+  $scope.accountList = [];
+  var isOver = false;//false:标志数据未加载完成
+  $scope.accountListFun = function (params) {
+    var defer = $q.defer();
+    userService.postRequestWithPageNo(params).success(function (response) {
+      if(response.code == '0'){
+        var tempList = response.data;
+        if (tempList.length == 0 & params.pageno == '1') {
+          commonService.showWarnMessage("暂无商品信息！");
+          return;
+        }
+
+        if (tempList.length < params.pagesize) {
+          isOver = true;//true:标志数据加载完成
+          defer.resolve(isOver);
+        } else {
+          isOver = false;
+          defer.resolve(isOver);
+        }
+        if(params.key){
+          if (params.direction == 'down') {
+            $scope.searchList = response.data;
+          } else {
+            $scope.searchList = $scope.searchList.concat(tempList);
+          }
+        }else{
+          if (params.direction == 'down') {
+            $scope.accountList = response.data;
+          } else {
+            $scope.accountList = $scope.accountList.concat(tempList);
+          }
+        }
+        //初次进入该页面，显示全部的信息
+        if (!params.category_id && !params.key) {
+          $('.familyaccountlist-table').css('display', 'none');
+          $('.show0').css('display', 'block');
+        }
+      }else{
+        console.log('familyaccoutlistCtrl 获取信息失败！');
+      }
+    });
+    return defer.promise;
+  };
+  $scope.accountListFun($scope.params);
+
+  //获取公告信息
+  $scope.noticeParams = {
+    type: 'business',
+    business_id: $scope.accountbusinessId
+  };
+
+  //分类按钮的点击效果
+  $scope.changecate = function (id, index, type) {
+    if (type == '非全部') {
+      index++;
+    }
+    $scope.accountList = [];
+    $scope.params.pageno = 1;
+    $scope.params.category_id = id;
+    $('.familyaccountlist-table').css('display', 'none');
+    $('.show' + index).css('display', 'block');
+    $scope.accountListFun($scope.params);
+  };
+
+  /**********************关键字搜索************************************/
+  var val = '';
+  $scope.searchList = [];
+  $scope.isCategory = true;//true:显示分类的商品列表，false：显示搜索的商品列表
+  $scope.searchAccount = function(){
+    $scope.searchList = [];
+    val = $('.search-input input').val();
+    if (val == '') {
+      $scope.isCategory = true;
+      commonService.showWarnMessage('请输入关键字！');
+      return;
+    } else {
+      $scope.isCategory = false;
+      $scope.params.pageno = 1;
+      $scope.params.category_id = '';
+      $scope.params.key = val;
+      $scope.accountListFun($scope.params);
+    }
+  };
+
+  //进入商品详情
+  $scope.jumpaccountDetail = function(id,name){
+    $state.go('guanjia-familyaccountdetail', {
+      goodsId: id,
+      goodsName:name
+      //businessId: $scope.accountbusinessId,
+      //businessName: $scope.accountbusinessName
+    });
+  }
+
+  //跳转到卖家详情
+  $scope.jumpSellerdetail = function () {
+    $state.go('guanjia-sellerdetail',{businessId:$scope.accountbusinessId});
+  };
+}]);
+
+//金融商品详情
+guanjiaModuleController.controller('familyaccountdetailCtrl',['$scope','guanjiaService','$interval','$stateParams','$state','commonService','$cookies',function($scope,guanjiaService,$interval,$stateParams,$state,commonService,$cookies){
+  $scope.accountgoodsId=$stateParams.goodsId;
+  $scope.accountgoodsName=$stateParams.goodsName;
+  //$scope.accountbusinessId=$stateParams.businessId;
+  //$scope.accountbusinessName=$stateParams.businessName;
+
+  //返回商品列表
+  //$scope.backtofamilyaccountlist=function(){
+  //  $state.go('guanjia-familyaccountlist',{
+  //    businessName:$scope.accountbusinessName,
+  //    businessId: $scope.accountbusinessId
+  //  })
+  //};
+  $scope.goodsId=$stateParams.goodsId;
+
+  //调用商品详情接口
+  guanjiaService.goodsDetail({'goods_id': $scope.accountgoodsId}).success(function (data) {
+
+    //商品开卖倒计时
+    $scope.sellTime = data.data.start_date;
+    console.log( $scope.sellTime)
+    if ($scope.sellTime.length > 0) {
+
+      var time_start = new Date().getTime(); //设定当前时间
+      var time_end = new Date($scope.sellTime).getTime(); //设定目标时间
+      // 计算时间差
+      var time = time_end / 1000 - time_start / 1000;
+
+      $scope.showTime = $interval(function () {
+        if (time <= 1) {
+          $interval.cancel(showTime);
+          $scope.showTimeHtml = '已开卖,抓紧时间抢购哦！';
+        } else {
+          var time_start = new Date().getTime();
+          var time_end = new Date($scope.sellTime).getTime();
+          //// 计算时间差
+          var time_distance = time_end - time_start;
+
+          // 天
+          var int_day = Math.floor(time_distance / 86400000);
+          time_distance -= int_day * 86400000;
+          // 时
+          var int_hour = Math.floor(time_distance / 3600000);
+          time_distance -= int_hour * 3600000;
+          // 分
+          var int_minute = Math.floor(time_distance / 60000);
+          time_distance -= int_minute * 60000;
+          // 秒
+          var int_second = Math.floor(time_distance / 1000);
+          // 时分秒为单数时、前面加零
+          if (int_day < 10) {
+            int_day = "0" + int_day;
+          }
+          if (int_hour < 10) {
+            int_hour = "0" + int_hour;
+          }
+          if (int_minute < 10) {
+            int_minute = "0" + int_minute;
+          }
+          if (int_second < 10) {
+            int_second = "0" + int_second;
+          }
+          // 显示时间
+          $scope.showTimeHtml = '开卖倒计时 ' + int_day + '天' + int_hour + '时' + int_minute + '分' + int_second + '秒';
+          time_distance--;
+          time--;
+        }
+      }, 1000);
+    } else {
+      console.log('12')
+      $('.count_down').css({
+        'height':'2px'
+      })
+    }
+
+    switch (data.code) {
+      case '0':
+        if(data.data != ''){
+          $scope.accountgoodsList=data.data;
+          console.log($scope.accountgoodsList)
+        }else{
+          commonService.showWarnMessage("暂无商品信息！");
+        }
+        break;
+      case '-1':
+        commonService.showWarnMessage('参数为空');
+        break;
+      case '-2':
+        commonService.showErrorMessage('参数错误');
+        break;
+    }
+  });
+}]);

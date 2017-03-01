@@ -1,0 +1,35 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navcityLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+    <p class="city">
+      <select class="citySelect" ng-model="selectedCity" ng-change="selectCity()">
+        <option value="{{city.city_id}}" ng-repeat="city in allCityData">{{city.name}}</option>
+      </select>
+    </p>
+  </div>
+  <div class="navcityText">业务量统计</div>
+
+</nav>
+<div class="navMain">
+  <ul class="text-center portfolio fixedTab" role="tablist" fixed-tab="" data="{count:'2'}">
+    <li ng-click="fans()" role="presentation" class="cartHead">吸粉</li>
+    <li ng-click="specialSupply()" role="presentation" class="">特供</li>
+  </ul>
+
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" ng-if="fansPanel">
+      <canvas id="line1" class="chart chart-line" chart-data="fansData"
+              chart-labels="labels" chart-legend="false" chart-series="series"
+              chart-click="onClick">
+      </canvas>
+    </div>
+    <div role="tabpanel" class="tab-pane active specialSupply" ng-if="supplyPanel">
+      <canvas id="line2" class="chart chart-line" chart-data="specialSupplyData"
+              chart-labels="labels2" chart-legend="false" chart-series="series2"
+              chart-click="onClick" >
+      </canvas>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,265 @@
+
+.form-control {
+  height: 30px;
+}
+
+/* ******************************** navigationbar with back-button   end ******************************** */
+
+.support-content {
+  margin-top: 50px;
+}
+
+/* ******************************** 卡头   begin ******************************** */
+.sup-segment-control {
+  width: 100%;
+  background: white;
+  overflow-x: scroll;
+  background: white;
+}
+
+.breakfast-supper-block {
+  height: 3.6rem;
+  overflow-x: scroll;
+  display: inline-flex;
+  padding: 0 2rem;
+}
+
+.breakfast-item {
+  float: left;
+  line-height:3.6rem;
+  margin-right:3rem;
+  text-align: center;
+}
+.breakfast-supper-block .breakfast-item:last-child{
+  margin-right:0px;
+}
+
+.breakfast-button {
+  display: block;
+  font-size: 1.3rem;
+}
+
+.breakfast-item > a:hover, .breakfast-item > a:active, .breakfast-item > a:focus {
+  color: rgb(125, 179, 67);
+}
+
+.typeActive {
+  color: white;
+  background-color: rgb(125, 179, 67);
+  outline: none;
+}
+
+/* ******************************** 卡头   end ******************************** */
+
+/* ******************************** 轮播图   begin ******************************** */
+.auto-scroll-block img {
+  margin-top: 40px;
+  width: 100%;
+  height: 100px;
+}
+
+/* ******************************** 轮播图   end ******************************** */
+
+/* ******************************** 跑马灯   begin ******************************** */
+.sup-container {
+  padding-left: 0px;
+  padding-right: 0px;
+  width: 100%;
+  /*margin-left: 0px;*/
+}
+
+/*.marquee {*/
+/*/!* required styles *!/*/
+/*display: block;*/
+/*padding: 0;*/
+/*margin: 0;*/
+/*list-style: none;*/
+/*/!*line-height: 1;*!/*/
+/*position: relative;*/
+/*overflow: hidden;*/
+
+/*/!* optional styles for appearance *!/*/
+/*width: 500px;*/
+/*height: 35px; /!* height should be included to reserve visual space for the marquee *!/*/
+/*line-height: 35px;*/
+/*background-color: #f2f2ff;*/
+/*border: 1px solid #08084d;*/
+/*}*/
+
+/*.marquee li {*/
+/*/!* required styles *!/*/
+/*position: absolute;*/
+/*top: -999em;*/
+/*left: 0;*/
+/*display: block;*/
+/*white-space: nowrap; /!* keep all text on a single line *!/*/
+
+/*/!* optional styles for appearance *!/*/
+/*font: 14px Arial, Helvetica, sans-serif;*/
+/*padding: 3px 5px;*/
+/*}*/
+.marquee_box {
+  width: 100%;
+  /*float: left;*/
+  display: inline-block;
+  overflow: hidden;
+  box-sizing: border-box;
+  height: 35px;
+  line-height: 35px;
+  position: relative;
+  cursor: pointer;
+  color: rgb(213, 179, 84);
+}
+
+.marquee-sibling {
+  padding: 0;
+  /*width: 4%;*/
+  height: 35px;
+  line-height: 35px;
+  float: left;
+  left: 0;
+  z-index: 2000;
+}
+
+.mt {
+  margin-top: 90px;
+}
+
+.marquee,
+*[class^="marquee"] {
+  display: inline-block;
+  white-space: nowrap;
+  position: absolute;
+}
+
+.marquee {
+  margin-left: 25%;
+}
+
+/* ******************************** 跑马灯   end ******************************** */
+
+/********************************提示**********************************************/
+
+.prompt-service {
+  background: rgb(243, 156, 18);
+  color: #FFFFFF;
+  margin-top: 2rem;
+  margin-bottom: -2rem;
+}
+
+.prompt-service .prompt-content > i {
+  font-size: 1.8rem;
+  margin-top: 0.5rem;
+  width: 2.3rem;
+  margin-left: 1rem;
+  float: left;
+}
+
+.prompt-service .prompt-content .prompt-title {
+  font-weight: bolder;
+  font-size: 1.8rem;
+  margin-left: 3.6rem;
+  padding-top: 0.1rem;
+}
+
+.prompt-service .prompt-content div:last-child {
+  padding-bottom: .3rem;
+}
+
+.prompt-service .prompt-content .prompt-xiuxi {
+  margin-left: 3.6rem;
+}
+
+.prompt-service .prompt-content .prompt-xiuxi span:first-child {
+  font-weight: bold;
+}
+
+.prompt-service .prompt-content .prompt-xiuxi .prompt-go {
+  color: #ecf0f1;
+  float: right;
+  letter-spacing: 0.3rem;
+  margin-right: 1.2rem;
+}
+
+.prompt-service .prompt-content .prompt-order {
+  margin-left: 3.6rem;
+  font-weight: 500;
+}
+
+.prompt-service .prompt-content .prompt-message {
+  margin-left: 3.6rem;
+  font-weight: 500;
+}
+
+/***********************************end***********************************************/
+
+/************************************* 商家列表 begin ***************************************/
+.seller-table {
+  margin-top: 2rem;
+}
+
+.seller-table ul img {
+  width: 64px;
+  height: 64px;
+  margin-left: 10px;
+}
+
+.seller-table p {
+  margin: 0px;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+
+.sup-media {
+  /*border-top: 1px solid #dddddd;*/
+  border-bottom: 1px solid #dddddd;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 0px;
+}
+
+.seller-name-num {
+  overflow: hidden;
+}
+
+.description {
+  color: #999999;
+}
+
+.seller-name-num .support-seller-content {
+  float: left;
+  font-size: 17px;
+}
+
+.seller-name-num .support-seller-content b {
+  color: #515151;
+}
+
+.seller-name-num .support-seller-content p, .seller-name-num .support-seller-content img {
+  float: left;
+}
+
+.seller-name-num .support-seller-content img {
+  width: 32px;
+  height: 16px;
+  margin-top: 4px;
+}
+
+.seller-name-num .goods-num {
+  float: right;
+  margin-right: 10px;
+  margin-top: 3px;
+  color: #515151;
+}
+
+.search-li {
+  padding-left: .5rem;
+  padding-right: .5rem;
+}
+
+/************************************* 商家列表 end ***************************************/
+
+/*</style>*/

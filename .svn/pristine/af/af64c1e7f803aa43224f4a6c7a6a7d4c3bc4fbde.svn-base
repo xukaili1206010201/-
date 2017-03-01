@@ -1,0 +1,30 @@
+.activityDetail .action-time{
+  float: right;
+}
+.activityDetail .detail{
+  padding:10px 15px;
+}
+.activityDetail .action-attached{
+  background-color: #ddd;
+  border-radius: 4px;
+  margin:10px 15px;
+  padding:10px 15px;
+  font-size:1.5rem;
+}
+.activityDetail .action-enter{
+  background-color: #ddd;
+  padding:5px 10px;
+  position:fixed;
+  bottom: 0;
+  left:0;
+  width:100%;
+}
+.activityDetail .action-enter div{
+  width:50%;
+  float:left;
+  padding:0px 5px;
+}
+.activityDetail .action-enter .btn{
+  width:100%;
+  border-radius: 4px;
+}

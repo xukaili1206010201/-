@@ -1,0 +1,92 @@
+
+
+.content{
+  margin-top: 5.1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+
+.logo-block{
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.contactus-logo{
+  width: 8rem;
+  height: 8rem;
+}
+
+/*.logo-block img{*/
+  /*width: 25%;*/
+  /*height: 25%;*/
+/*}*/
+
+.project-name{
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+
+.current-time{
+  font-size: 1.4rem;
+  text-align: left;
+  /*margin-left: 10px;*/
+}
+
+
+.feedback-field{
+  margin-top: 1rem;
+  /*margin-left: 1rem;*/
+  /*margin-right: 1rem;*/
+  height: 100px;
+  border: 1px solid #dddddd;
+  background: white;
+  font-size: 1.3rem;
+  width: 100%;
+  resize: none;
+  font-size: 1.4rem;
+  /*color: black;*/
+}
+
+/*textarea[placeholder], [placeholder], *[placeholder] {*/
+  /*color:gray !important;*/
+/*}*/
+
+.user-info-block{
+  margin-top: 1rem;
+  /*margin-left: 1rem;*/
+  /*margin-right: 1rem;*/
+}
+
+.user-info-block input{
+  margin-top: 1rem;
+  font-size: 1.4rem;
+  padding: 1rem 0;
+}
+
+.footer{
+  background: #dddddd;
+  bottom: 0rem;
+  height: 3.5rem;
+  overflow: hidden;
+}
+
+.subdiv{
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+.submit-button-size{
+  margin-top: 2rem;
+  /*margin-left: 10px;*/
+  /*margin-right: 10px;*/
+  height: 3rem;
+}
+
+.contact-button-size{
+  margin-top: 0.5rem;
+  height: 2.5rem;
+}
+
+

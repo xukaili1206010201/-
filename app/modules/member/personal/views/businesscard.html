@@ -1,0 +1,165 @@
+<!--****************************************  导航栏   *******************************************-->
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="../images/back_button.png">
+  </div>
+  <div class="navText">个人名片</div>
+
+</nav>
+
+<!--****************************************  content   *******************************************-->
+
+<form ng-submit="jumpeditUser()" class="user-basic-info">
+  <div class="weui_cells userInfoList">
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>手机号</p>
+      </div>
+      <div class="weui_cell_ft">{{formData.mobile}}</div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>行业</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.industry" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入行业">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>工种</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.work" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入工种">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>职位</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.profession" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入职位">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>学历</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.xueli" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入学历">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>大学</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.university" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入大学">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>高中</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.high_school" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入高中">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>初中</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.middle_school" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入初中">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>家乡</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.home" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入家乡">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>爱好</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.hobby" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入爱好">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>生肖</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.shengxiao" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入生肖">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>星座</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.xingzuo" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入星座">
+      </div>
+    </div>
+
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>血型</p>
+      </div>
+      <div class="weui_cell_ft">
+        <input ng-model="formData.blood" class="weui_input"
+               style="text-align: right;" type="text"
+               placeholder="请输入血型">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="weui_cells weui_cells_access">
+    <a class="weui_cell" ng-click="jumpeditUser()">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>保存</p>
+      </div>
+    </a>
+  </div>
+
+</form>

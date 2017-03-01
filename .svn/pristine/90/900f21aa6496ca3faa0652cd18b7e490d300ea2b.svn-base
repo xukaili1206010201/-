@@ -1,0 +1,234 @@
+
+<script>
+
+  //********************************************** 卡头按钮颜色的切换 begin *******************************************//
+  var lastSelectButton = '.unused-button';
+  var lastShowTable = '.unused-table';
+  var currentShowTable;
+
+  function showOrHiddenButtonAndTable(target) {
+
+    //上次选中按钮样式
+    $(lastSelectButton).css({
+      'color': 'black',
+      'border': 'none',
+      'background-color': 'white'
+    });
+
+    //当前选中按钮样式
+    $(target).css({
+      'color': 'white',
+      'background-color': '#85C820'
+    });
+
+    $(lastShowTable).css({
+      'display': 'none'
+    });
+
+    $(currentShowTable).css({
+      'display': 'block'
+    });
+
+    //记录当前选中按钮
+    lastSelectButton = target;
+    lastShowTable = currentShowTable;
+
+  }
+
+  // 显示未用的优惠券列表
+  function showUnusedCoupons(event) {
+    currentShowTable = '.unused-table';
+    showOrHiddenButtonAndTable(event.target);
+  }
+
+  //显示已用的优惠券列表
+  function showUsedCoupons(event) {
+
+    currentShowTable = '.used-table';
+    showOrHiddenButtonAndTable(event.target);
+  }
+
+  //显示过期的优惠券列表
+  function showOutdateCoupons(event) {
+
+    currentShowTable = '.outdate-table';
+    showOrHiddenButtonAndTable(event.target);
+  }
+  //显示未领的优惠券列表
+  function showUnreceiveCoupons(event) {
+
+    currentShowTable = '.unreceive-table';
+    showOrHiddenButtonAndTable(event.target);
+  }
+  //********************************************** 卡头按钮颜色的切换 end *********************************************//
+
+  //设置优惠券列表的高度
+  var totalHt = window.innerHeight;
+  var ht = totalHt - $('.navbar').height() - $('.segement-control').height();
+  $('.coupons-content').css({
+    'height' : ht+'px'
+  });
+
+  $('.unused-table').css({
+    'height' : ht + 'px',
+    'overflow' : 'scroll'
+  });
+  $('.unreceive-lis').css({
+    'height' : ht + 'px',
+    'overflow' : 'scroll'
+  });
+  $('.outdate-lis').css({
+    'height' : ht + 'px',
+    'overflow' : 'scroll'
+  });
+  $('.used-lis').css({
+    'height' : ht + 'px',
+    'overflow' : 'scroll'
+  });
+
+  var searchHeight = window.screen.availHeight - $('.navbar').height();
+  $('.searchCoupons').css({
+    'height' : searchHeight + 'px',
+    'overflow' : 'scroll'
+  });
+
+
+</script>
+
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchCoupons()">
+
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字" >
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="navbar-fixed-top segement-control" ng-if="isShowCoupons">
+  <a class="segmentbutton unused-button" onclick="showUnusedCoupons(event)">未用</a>
+  <a class="segmentbutton used-button" onclick="showUsedCoupons(event)">已用</a>
+  <a class="segmentbutton outdate-button" onclick="showOutdateCoupons(event)">过期</a>
+  <a class="segmentbutton unreceive-button" onclick="showUnreceiveCoupons(event)">未领</a>
+</div>
+
+<div class="coupons-content" ng-if="isShowCoupons">
+
+  <!-- ********************************************** 未用优惠券列表 *************************************************-->
+  <div class="unused-table" load-more data="{params : unuseParams,repeatFun : '$scope.coupons'}">
+    <ul  class="list-group">
+      <li class="list-group-item coupons-row" ng-repeat="couponsModel in unusedCouponsList" ng-click="goDetail(couponsModel.coupons_id,couponsModel.fuwu_type)">
+        <p class="coupons-name">{{couponsModel.name}}</p>
+        <p class="coupons-type">
+          <span class="fuwu_coupons">{{couponsModel.fuwu_type}}</span>
+          {{couponsModel.city}}&nbsp;&nbsp;{{couponsModel.type}}&nbsp;{{couponsModel.number}}
+        </p>
+        <p class="coupons-time">{{couponsModel.start_date}}~{{couponsModel.end_date}}</p>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- ********************************************** 已用优惠券列表 *************************************************-->
+  <div class="used-table">
+    <div class="used-lis" load-more data="{params : usedParams,repeatFun : '$scope.coupons'}">
+      <ul class="list-group">
+        <li class="list-group-item coupons-row" ng-repeat="used in usedCouponsList" ng-click="goDetail(used.coupons_id,used.fuwu_type)">
+          <div class="coupons-info">
+            <p class="coupons-name">{{used.name}}</p>
+
+            <p class="coupons-type">
+              <span class="fuwu_coupons">{{used.fuwu_type}}</span>
+              {{used.city}}&nbsp;&nbsp;{{used.type}}&nbsp;{{used.number}}
+            </p>
+            <!--<p class="coupons-city">城市</p>-->
+            <p class="coupons-time">{{used.start_date}}~{{used.end_date}}</p>
+          </div>
+          <!--<div class="goodsInfo">
+            &lt;!&ndash; 商品列表&ndash;&gt;
+            <ul class="media-list">
+              <li class="media media-li">
+                <div class="media-left">
+                  <a href="#">
+                    <img class="media-object" src="images/logo.jpg" alt="...">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <div class="goods-content-top">
+                    <p class="goods-name">商品名称</p>
+
+                    <p class="goods-price">￥30</p>
+                  </div>
+                  <div class="goods-content-bottom">
+                    <p>商品规格</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>-->
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ********************************************** 过期优惠券列表 *************************************************-->
+  <div class="outdate-table" >
+    <div class="outdate-lis" load-more data="{params : outdateParams,repeatFun : '$scope.coupons'}">
+      <ul class="list-group">
+        <li class="list-group-item coupons-row" ng-repeat="outdateLis in outdateCouponsList" ng-click="goDetail(outdateLis.coupons_id,outdateLis.fuwu_type)">
+          <p class="coupons-name">{{outdateLis.name}}</p>
+
+          <p class="coupons-type">
+            <span class="fuwu_coupons">{{outdateLis.fuwu_type}}</span>
+            {{outdateLis.city}}&nbsp;&nbsp;{{outdateLis.type}}&nbsp;{{outdateLis.number}}
+          </p>
+          <!--<p class="coupons-city">城市</p>-->
+          <p class="coupons-time">{{outdateLis.start_date}}~{{outdateLis.end_date}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ********************************************** 未领优惠券列表 *************************************************-->
+  <div class="unreceive-table">
+    <div class="unreceive-lis" load-more data="{params : unreceiveParams,repeatFun : '$scope.coupons'}">
+      <ul class="list-group">
+        <li class="list-group-item coupons-row" ng-repeat="unreceiveList in unreceiveCouponsList" ng-click="goDetail(unreceiveList.coupons_id,unreceiveList.fuwu_type)">
+          <p class="coupons-name">{{unreceiveList.name}}</p>
+          <p class="coupons-type">
+            <span class="fuwu_coupons">{{unreceiveList.fuwu_type}}</span>
+            {{unreceiveList.city}}&nbsp;&nbsp;{{unreceiveList.type}}&nbsp;{{unreceiveList.number}}
+          </p>
+          <!--<p class="coupons-city">城市</p>-->
+          <p class="coupons-time">{{unreceiveList.start_date}}~{{unreceiveList.end_date}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<!--关键字搜索-->
+  <div ng-if="!isShowCoupons">
+    <div ng-if="!isCoupons" style="text-align: center;font-size:1.6rem"><span >sorry,暂无相关数据！</span></div>
+    <div ng-if="isCoupons">
+      <div class="unreceive-lis searchCoupons" load-more data="{params : couponsParams,repeatFun : '$scope.couponsSearch'}">
+        <ul class="list-group">
+          <li class="list-group-item coupons-row" ng-repeat="coupons in couponsList" ng-click="goDetail(coupons.coupons_id,coupons.fuwu_type)">
+            <p class="coupons-name">{{coupons.name}}</p>
+            <p class="coupons-type">{{coupons.city}}&nbsp;&nbsp;{{coupons.type}}&nbsp;{{coupons.number}}</p>
+            <!--<p class="coupons-city">城市</p>-->
+            <p class="coupons-time">{{coupons.start_date}}~{{coupons.end_date}}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>

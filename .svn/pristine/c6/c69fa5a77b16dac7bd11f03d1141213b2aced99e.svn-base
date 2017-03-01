@@ -1,0 +1,105 @@
+<nav class="navbar-fixed-top societyTribeNav">
+  <div class="societyTribeNavLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="backSociety()" src="images/back_button.png">
+
+    <!--<p ng-click="jumpSelectcity()" ng-model="city_name" class="city" style="color: white; padding-right: 5px;">{{city_name}} <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>-->
+    <p class="city" usercity-select>
+          <span ng-if="!citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+      <select ng-if="citySelect" class="citySelect" ng-model="usercityId"
+              ng-options="x.city_id as x.name for x in usercityList">
+      </select>
+    </p>
+  </div>
+
+  <div class="societyTribeNavMiddle">
+    <input type="text" class="societyTribesearch-input" placeholder="请输入搜索关键字" ng-blur="societyBlur()">
+  </div>
+
+  <div class="societyTribeNavRight fr">
+    <img class="societyTribesearch-button" src="images/search_button.png" ng-click="searchSociety()">
+    <img ng-click="goEdit(buluoId)" class="societyTribeseadd-image" src="images/add_white.png">
+  </div>
+
+</nav>
+
+<div class="tribe-content" ng-if="tribeContent">
+  <div class="navMain societyTribeContent" load-more data="{params : param,repeatFun : '$scope.listBBSFun'}">
+    <div>
+      <!--部落信息-->
+      <ul class="list-group" style="margin-bottom: 0;">
+        <li class="list-group-item societyTribe">
+          <div class="media">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object bbs-head-img" ng-src="{{tribe.buluo_image}}" alt=""/>
+              </a>
+            </div>
+            <div class="media-body tieInfo">
+              <span>{{tribe.buluo_name}}</span>
+              <p class="tie-count">{{tribe.new_count}}/{{tribe.count}}</p>
+              <div class="own">
+                <div>
+                  <input
+                    bs-switch
+                    ng-model="formData.ownCheck"
+                    type="checkbox"
+                    switch-on-text="自己"
+                    switch-off-text="全部"
+                    switch-off-color="success"
+                    switch-on-color="success"
+                    switch-size="small"
+                    ng-true-value="1"
+                    ng-false-value="2"
+                    switch-change="ownChange()"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <!--帖子列表-->
+      <ul class="list-group" ng-if="bbsContent" style="margin-bottom: 0;">
+        <li class="list-group-item" ng-repeat="k in listBBS" ng-click="goPostDetail(k.bbs_id)">
+          <div class="media">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object bbs-head-img" ng-src="{{k.avatar}}" alt=""/>
+                <p class="text-center">{{k.nickname}}</p>
+              </a>
+            </div>
+            <div class="media-body">
+              <p class="BBS_title">
+                <span>{{k.title}}</span>
+                <img ng-if="k.isTop == '0'" src="images/top.jpg" alt="">
+              </p>
+              <p class="BBS_info">
+                <span>{{k.create_date}}</span>
+                <span>{{k.reply_count}}回复</span>
+                <span>{{k.review_status}}</span>
+              </p>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div ng-if="!bbsContent" class="errMsg">没有相关数据</div>
+    </div>
+
+  </div>
+
+  <!--<div class="express-tie">-->
+  <!--<button class="btn btn-success" ng-click="goEdit(buluoId)">发表帖子</button>-->
+  <!--</div>-->
+
+</div>
+<div ng-if="!tribeContent" class="errMsg">没有相关数据</div>
+<script>
+  var contentH = window.screen.availHeight - $('.navigationbar').height() - $('.express-tie').height();
+  $('.societyTribeContent').css({
+    'height': contentH + 'px',
+    'overflow': 'scroll'
+  });
+</script>

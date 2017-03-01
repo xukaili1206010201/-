@@ -1,0 +1,52 @@
+/* ******************************** navigation with search   begin  ******************************** */
+
+/*.navigation-bar {*/
+  /*/!*background: green;*!/*/
+  /*overflow: hidden;*/
+  /*background-color: #7DB343;*/
+  /*height: 50px;*/
+/*}*/
+
+/* ******************************** 返回按钮样式 ******************************** */
+
+/*.back-button {*/
+  /*/!*background: green;*!/*/
+  /*width: 30px;*/
+  /*height: 30px;*/
+  /*margin-left: 10px;*/
+  /*/!* 51/2 - 30/3  *!/*/
+  /*margin-top: 10.5px;*/
+  /*float: left;*/
+/*}*/
+
+/* ******************************** 输入框组样式 ******************************** */
+.search-group {
+  /*position: relative;*/
+  height: 30px;
+  margin-left: 50px;
+  margin-top: 10.5px;
+  margin-right: 10px;
+  overflow: hidden;
+}
+
+/* 搜索按钮样式 */
+.search-button {
+  width: 25px;
+  height: 25px;
+  margin-right: 0px;
+  float: right;
+}
+
+.search-input {
+  /*background: red;*/
+  margin-right: 35px;
+  height: 30px;
+}
+
+.search-input input {
+  height: 30px;
+  margin-right: 10px;
+  margin-left: 0px;
+}
+
+/* ******************************** navigation with search   end  ******************************** */

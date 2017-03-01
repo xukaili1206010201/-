@@ -1,0 +1,67 @@
+/*/!* ******************************** navigation with search   begin  ******************************** *!/*/
+
+/*.navigation-bar{*/
+    /*/!*background: green;*!/*/
+    /*overflow: hidden;*/
+/*}*/
+
+/*/!* ******************************** 返回按钮样式 ******************************** *!/*/
+
+/*.back-button{*/
+    /*/!*background: green;*!/*/
+    /*width: 30px;*/
+    /*height: 30px;*/
+    /*margin-left: 10px;*/
+    /*/!* 51/2 - 30/3  *!/*/
+    /*margin-top: 10.5px;*/
+    /*float: left;*/
+/*}*/
+
+/*/!* ******************************** 输入框组样式 ******************************** *!/*/
+/*.search-group{*/
+    /*/!*position: relative;*!/*/
+    /*height: 30px;*/
+    /*margin-left: 50px;*/
+    /*margin-top: 10.5px;*/
+    /*margin-right: 10px;*/
+    /*overflow: hidden;*/
+/*}*/
+
+
+/*.search-button{*/
+    /*width: 30px;*/
+    /*height: 30px;*/
+    /*margin-right: 0px;*/
+    /*float: right;*/
+/*}*/
+
+/*.search-input{*/
+    /*/!*background: red;*!/*/
+    /*margin-right: 35px;*/
+    /*height: 30px;*/
+/*}*/
+
+/*.search-input input{*/
+    /*height: 30px;*/
+    /*margin-right: 10px;*/
+    /*margin-left: 0px;*/
+/*}*/
+
+/*/!* ******************************** navigation with search   end  ******************************** *!/*/
+
+
+
+.now_city{
+  margin-top:51px;
+  background: white;
+  font-size: 15px;
+}
+.hot_community{
+  padding-left: 10px;
+  background-color: #ddd;
+}
+.sort_list span{
+  float:right;
+  margin-right: 20px;
+  margin-top:0px;
+}

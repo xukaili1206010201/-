@@ -1,0 +1,1065 @@
+<script>
+
+  var lastSelectButton = '.all-message-button';
+  var lastSelectTable = '.all-message-table';
+  var currentShowTable;
+
+
+  function showOrHidden(targetButton) {
+
+    $(lastSelectButton).css({
+      'background': 'rgb(235,235,241)',
+      'color': 'rgb(109, 109, 109)'
+    });
+
+    $(targetButton).css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+    });
+
+    $(lastSelectTable).css({
+      'display': 'none'
+    });
+
+    $(currentShowTable).css({
+      'display': 'block'
+    });
+
+    lastSelectButton = targetButton;
+    lastSelectTable = currentShowTable;
+
+  }
+
+
+  //显示全部订单
+  function showallMessage(event) {
+    currentShowTable = '.all-message-table';
+    showOrHidden(event.target);
+
+
+  }
+
+  //显示待付款
+  function showtopayMessage(event) {
+    currentShowTable = '.topay-message-table';
+    showOrHidden(event.target);
+  }
+
+
+  function showtosendMessage(event) {
+    currentShowTable = '.tosend-message-table';
+    showOrHidden(event.target);
+  }
+
+
+  function showtobackmoneyMessage(event) {
+    currentShowTable = '.tobackmoney-message-table';
+    showOrHidden(event.target);
+  }
+
+
+  function showalsendMessage(event) {
+    currentShowTable = '.alsend-message-table';
+    showOrHidden(event.target);
+  }
+
+
+  function showtobakMessage(event) {
+    currentShowTable = '.toback-message-table';
+    showOrHidden(event.target);
+  }
+
+
+  function showfinishMessage(event) {
+    currentShowTable = '.finish-message-table';
+    showOrHidden(event.target);
+  }
+
+
+  function showalbackMessage(event) {
+    currentShowTable = '.alback-message-table';
+    showOrHidden(event.target);
+  }
+
+
+  var allHeight = window.screen.availHeight - $('.navigationbar').height()
+    - $('.segment-control').height() - $('.my-button-group').height();
+  $('.all-msg').css({
+    'height': allHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.topay-msg').css({
+    'height': allHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.tosend-msg').css({
+    'height': allHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.tobackmoney-msg').css({
+    'height': allHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.alsend-msg').css({
+    'height': allHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.toback-msg').css({
+    'height': allHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.finish-msg').css({
+    'height': allHeight + 'px',
+    'overflow': 'scroll'
+  });
+  $('.alback-msg').css({
+    'height': allHeight + 'px',
+    'overflow': 'scroll'
+  });
+  var searchHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.searchOrd').css({
+    'height': searchHeight + 'px',
+    'overflow': 'scroll',
+    'background-color': '#F0EFF5'
+  });
+</script>
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchOrder()">
+
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入关键字搜索">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!--显示关键字搜索后的订单-->
+<div ng-if="!isShowOrders">
+  <div ng-if="!isOrd" style="text-align: center;font-size: 1.6rem">
+    <span>sorry,暂无相关数据！</span>
+  </div>
+  <div ng-if="isOrd">
+    <div class="searchOrd" load-more data="{params : searchParams,repeatFun : '$scope.searchOrderLis'}">
+      <div>
+        <ul class="list-group" ng-repeat="sOrder in searchOrd">
+
+          <li class="list-group-item line">
+
+            <div class="message-pic">
+              <img src="images/sure-icon.png" class="sure orderSure" check-all data="{type : '订单'}">
+              <span ng-hide="true">{{sOrder.order_id}}</span>
+            </div>
+
+            <div class="order-message-text" ng-click="goOrderDetail(sOrder.order_id)">
+              <p>{{sOrder.city}}<span class="myorder-shop">{{sOrder.business}}</span></p>
+
+              <p>订单号:{{sOrder.order_no}}</p>
+
+              <p>下单时:{{sOrder.order_date}}</p>
+
+              <p>支付时:{{sOrder.pay_date}}</p>
+
+              <p>
+                <span class="order-status">{{sOrder.status}}</span>
+                <span class="allmoney" ng-if="sOrder.status != '已完成'">&#165 {{sOrder.sum}}</span>
+                <!--<span class="allmoney" ng-if="sOrder.status == '已完成'">优惠:&#165 {{sOrder.youhui}}  贴现:&#165 {{sOrder.tiexian}}  实付:&#165 {{sOrder.shifu}}</span>-->
+                <span class="allmoney" ng-if="finishGood.youhui">优惠:&#165 {{finishGood.youhui}}  </span>
+                <span class="allmoney" ng-if="finishGood.tiexian">贴现:&#165 {{finishGood.tiexian}}</span>
+                <span class="allmoney" ng-if="finishGood.shifu">实付:&#165 {{finishGood.shifu}}</span>
+              </p>
+
+              <p>备注：{{sOrder.remark}}</p>
+            </div>
+          </li>
+          <li class="list-group-item" ng-repeat="good in sOrder.goods">
+            <div class="pic">
+              <div class="message-pic">
+                <p>
+                  <span ng-hide="true">{{good.status}}</span>
+                  <img src="images/sure-icon.png" class="sure" check-good>
+                </p>
+
+                <p><img src="images/code.png"></p>
+              </div>
+              <div class="product-pic">
+                <img ng-src="{{good.imageUrl}}">
+              </div>
+
+            </div>
+            <div class="list-text">
+              <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+              <p class="myorder-time"><span
+                class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+              <p>{{good.coupons}}</p>
+            </div>
+
+            <!--规格-->
+            <div class="size row">
+              <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                <div class="row"></div>
+                <div class="row">
+                  <p>{{good.guige_1}}</p>
+                  <p>{{good.guige_2}}</p>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                <div class="row">{{good.delivery}}</div>
+                <div class="row">{{good.service_station}}</div>
+              </div>
+            </div>
+
+            <div class="note-message">
+              <p class="notetext">
+                <span ng-if="good.remark">备注:{{good.remark}}</span>
+                <span class="station">{{good.status}}</span>
+              </p>
+              <p ng-if="myorder.status == '已完成'">
+                <button type="button" class="btn judge" ng-if="good.comment == 'N'" ng-click="goJudge(good,sOrder.order_id)">评价</button>
+                <span class="judge" ng-if="good.comment == 'Y'">已评价</span>
+              </p>
+            </div>
+          </li>
+
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gray-body" ng-if="isShowOrders">
+  <!--<div class="order-segment">-->
+  <div class="navbar-fixed-top  segment-control">
+    <div class="all-message-button" onclick="showallMessage(event)">
+      <p class="title">全部</p>
+    </div>
+    <div class="topay-message-button" onclick="showtopayMessage(event)">
+      <p class="title">待付款</p>
+    </div>
+    <div class="tosend-message-button" onclick="showtosendMessage(event)">
+      <p class="title">待发货</p>
+    </div>
+    <div class="tobackmoney-message-button" onclick="showtobackmoneyMessage(event)">
+      <p class="title">待退款</p>
+    </div>
+    <div class="alsend-message-button" onclick="showalsendMessage(event)">
+      <p class="title">已发货</p>
+    </div>
+    <div class="toback-message-button" onclick="showtobakMessage(event)">
+      <p class="title">待退货</p>
+    </div>
+    <div class="finish-message-button" onclick="showfinishMessage(event)">
+      <p class="title">已完成</p>
+    </div>
+    <div class="alback-message-button" onclick="showalbackMessage(event)">
+      <p class="title">已退货</p>
+    </div>
+  </div>
+
+  <!--</div>-->
+
+  <div class="order-container">
+    <!--**********************************************全部************************************************************** -->
+    <div class="all-message-table">
+      <div class="all-msg" load-more data="{params : allParams,repeatFun : '$scope.allOrders'}">
+        <div>
+          <ul class="list-group" ng-repeat="myorder in myOrders">
+
+            <li class="list-group-item line">
+
+              <div class="message-pic">
+                <img src="images/sure-icon.png" class="sure orderSure" check-all data="{type : '订单'}">
+                <span ng-hide="true">{{myorder.order_id}}</span>
+              </div>
+
+              <div class="order-message-text" ng-click="goOrderDetail(myorder.orde已升已升级到最级到最r_id)">
+                <p>{{myorder.city}}<span class="myorder-shop">{{myorder.business}}</span></p>
+
+                <p>订单号:{{myorder.order_no}}</p>
+
+                <p>下单时:{{myorder.order_date}}</p>
+
+                <p>支付时:{{myorder.pay_date}}</p>
+
+                <p>
+                  <span class="order-status">{{myorder.status}}</span>
+                  <span class="allmoney" ng-if="myorder.status != '已完成'">&#165 {{myorder.sum}}</span>
+                  <!--<span class="allmoney" ng-if="myorder.status == '已完成'">优惠:&#165 {{myorder.youhui}}  贴现:&#165 {{myorder.tiexian}}  实付:&#165 {{myorder.shifu}}</span>-->
+                  <span class="allmoney" ng-if="finishGood.youhui">优惠:&#165 {{finishGood.youhui}}  </span>
+                  <span class="allmoney" ng-if="finishGood.tiexian">贴现:&#165 {{finishGood.tiexian}}</span>
+                  <span class="allmoney" ng-if="finishGood.shifu">实付:&#165 {{finishGood.shifu}}</span>
+                </p>
+
+                <p>备注：{{myorder.remark}}</p>
+              </div>
+            </li>
+            <li class="list-group-item" ng-repeat="good in myorder.goods">
+              <div class="pic">
+                <div class="message-pic">
+                  <p>
+                    <span ng-hide="true">{{good.status}}</span>
+                    <img src="images/sure-icon.png" class="sure" check-good>
+                  </p>
+
+                  <p><img src="images/code.png"></p>
+                </div>
+                <div class="product-pic">
+                  <img ng-src="{{good.imageUrl}}">
+                </div>
+
+              </div>
+              <div class="list-text">
+                <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+                <p class="myorder-time">
+                  <span class="myorder-count">*{{good.count}}{{good.unit}}</span>
+                </p>
+                <p>{{good.coupons}}</p>
+              </div>
+
+              <!--规格-->
+              <div class="size row">
+                <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                  <div class="row"></div>
+                  <div class="row">
+                    <p>{{good.guige_1}}</p>
+                    <p>{{good.guige_2}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                  <div class="row">{{good.delivery}}</div>
+                  <div class="row">{{good.service_station}}</div>
+                </div>
+              </div>
+
+              <div class="note-message">
+                <p class="notetext">
+                  <span ng-if="good.remark">备注:{{good.remark}}</span>
+                  <span class="station">{{good.status}}</span>
+                </p>
+                <p ng-if="myorder.status == '已完成'">
+                  <button type="button" class="btn judge" ng-if="good.comment == 'N'" ng-click="goJudge(good)">评价
+                  </button>
+                  <span class="judge" ng-if="good.comment == 'Y'">已评价</span>
+                </p>
+              </div>
+            </li>
+
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="navbar-fixed-bottom my-button-group">
+        <div class="button-group-left1">
+          <p class="labletext"><span class="message-pic all-select-button">
+        <img src="images/sure-icon.png" check-all data="{type : '全选',range : '.all-message-table'}" class="all"></span>全选
+          </p>
+        </div>
+
+        <div class="button-group-right1">
+          <div class="edit-group">
+            <button type="button" class=" btn btn-danger" ng-click="deleteOrders('删除','.all-message-table')">删除</button>
+          </div>
+          <!--<div class="edit-group">-->
+          <!--<button type="button" class="btn btn-success" ng-click="goToPay('支付','.topay-message-table')">支付</button>-->
+          <!--</div>-->
+        </div>
+      </div>
+
+    </div>
+
+
+    <!--/*------------------------------ 待付款-------------------------------------------*/-->
+    <div class="topay-message-table">
+      <div class="topay-msg" load-more data="{params : obliParams,repeatFun : '$scope.allOrders'}">
+        <div>
+          <ul class="list-group" ng-repeat="obligation in obligations">
+
+            <li class="list-group-item line">
+              <div class="message-pic">
+                <img src="images/sure-icon.png" check-all data="{type : '订单'}" class="sure orderSure">
+                <span class="myOrder-orderId" ng-hide="true">{{obligation.order_id}}</span>
+              </div>
+
+              <div class="order-message-text" ng-click="goOrderDetail(obligation.order_id)">
+                <p class="">{{obligation.city}}<span class="myorder-shop">{{obligation.business}}</span></p>
+                <p class="">订单号:{{obligation.order_no}}</p>
+
+                <p class="">下单时:{{obligation.order_date}}</p>
+
+                <p class="">支付时:{{obligation.pay_date}}</p>
+
+                <p class="">
+                  <span class="order-status">{{obligation.status}}</span>
+                  <span class="allmoney">&#165 {{obligation.sum}}</span></p>
+
+                <p class="" ng-if="obligation.remark">备注：{{obligation.remark}}</p>
+              </div>
+            </li>
+            <li class="list-group-item" ng-repeat="good in obligation.goods">
+              <div class="pic">
+                <div class="message-pic">
+                  <p>
+                    <span ng-hide="true">{{good.status}}</span>
+                    <img src="images/sure-icon.png" class="sure" check-good>
+                  </p>
+
+                  <p><img src="images/code.png"></p>
+                </div>
+                <div class="product-pic">
+                  <img ng-src="{{good.imageUrl}}">
+                </div>
+
+              </div>
+              <div class="list-text">
+                <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+                <p class="myorder-time"><span
+                  class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+                <p>{{good.coupons}}</p>
+              </div>
+              <!--规格-->
+              <div class="size row">
+                <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                  <div class="row"></div>
+                  <div class="row">
+                    <p>{{good.guige_1}}</p>
+                    <p>{{good.guige_2}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                  <div class="row">{{good.delivery}}</div>
+                  <div class="row">{{good.service_station}}</div>
+                </div>
+              </div>
+
+              <div class="note-message">
+                <p class="notetext">
+                  <span ng-if="good.remark">备注:{{good.remark}}</span>
+                  <span class="station">{{good.status}}</span>
+                </p>
+              </div>
+            </li>
+
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="navbar-fixed-bottom my-button-group ">
+        <div class="button-group-left1">
+          <p class="labletext"><span class="message-pic all-select-button">
+        <img src="images/sure-icon.png" check-all data="{type : '全选',range : '.topay-message-table'}"
+             class="all"></span>全选</p>
+        </div>
+
+        <div class="button-group-right1">
+          <div class="edit-group">
+            <button type="button" class="btn btn-danger" ng-click="deleteOrders('删除','.topay-message-table')">删除
+            </button>
+          </div>
+          <div class="edit-group">
+            <button type="button" class="btn btn-success" ng-click="goToPay('支付','.topay-message-table')">支付</button>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <!---------------------------------待退款--------------------------------------------->
+    <div class="tobackmoney-message-table">
+      <div class="tobackmoney-msg" load-more data="{params : waitRefundParams,repeatFun : '$scope.allOrders'}">
+        <div>
+          <ul class="list-group" ng-repeat="waitRefund in waitRefunds">
+
+            <li class="list-group-item line">
+
+              <div class="message-pic">
+                <img src="images/sure-icon.png" class="sure order-status orderSure" check-all data="{type : '订单'}">
+                <span ng-hide="true">{{waitRefund.order_id}}</span>
+              </div>
+
+              <div class="order-message-text" ng-click="goOrderDetail(waitRefund.order_id)">
+                <p class="">{{waitRefund.city}}<span class="myorder-shop">{{waitRefund.business}}</span></p>
+
+                <p class="">订单号:{{waitRefund.order_no}}</p>
+
+                <p class="">下单时:{{waitRefund.order_date}}</p>
+
+                <p class="">支付时:{{waitRefund.pay_date}}</p>
+
+                <p class="">{{waitRefund.status}}<span class="allmoney">&#165 {{waitRefund.sum}}</span></p>
+
+                <p class="" ng-if="waitRefund.remark">备注：{{waitRefund.remark}}</p>
+              </div>
+            </li>
+            <li class="list-group-item" ng-repeat="good in waitRefund.goods">
+              <div class="pic">
+                <div class="message-pic">
+                  <p>
+                    <span ng-hide="true">{{good.status}}</span>
+                    <img src="images/sure-icon.png" class="sure img-status" check-good>
+                    <span ng-hide="true">{{good.goods_id}}</span>
+                  </p>
+
+                  <p>
+                    <img src="images/code.png">
+                  </p>
+                </div>
+                <div class="product-pic">
+                  <img ng-src="{{good.imageUrl}}">
+                </div>
+
+              </div>
+              <div class="list-text">
+                <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+                <p class="myorder-time"><span
+                  class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+                <p>{{good.coupons}}</p>
+              </div>
+
+              <!--规格-->
+              <div class="size row">
+                <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                  <div class="row"></div>
+                  <div class="row">
+                    <p>{{good.guige_1}}</p>
+                    <p>{{good.guige_2}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                  <div class="row">{{good.delivery}}</div>
+                  <div class="row">{{good.service_station}}</div>
+                </div>
+              </div>
+
+              <div class="note-message">
+                <p class="notetext">
+                  <span ng-if="good.remark">{{good.remark}}</span>
+                  <span class="station good-status">{{good.status}}</span></p>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+      <div class="navbar-fixed-bottom my-button-group ">
+        <div class="button-group-left2">
+          <p class="labletext"><span class="message-pic all-select-button">
+        <img src="images/sure-icon.png" check-all data="{type : '全选',range : '.tobackmoney-message-table'}" class="all"></span>全选
+          </p>
+        </div>
+
+        <div class="button-group-right2">
+          <button type="button" class="btn button-cancel btn-danger" ng-click="cancelRefund()">取消退款</button>
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <!-------------------------------待发货-------------------------------------------->
+    <div class="tosend-message-table">
+      <div class="tosend-msg" load-more data="{params : waitParams,repeatFun : '$scope.allOrders'}">
+        <div>
+          <ul class="list-group" ng-repeat="waitDelivery in waitDeliverys">
+
+            <li class="list-group-item line">
+
+              <div class="message-pic">
+                <img src="images/sure-icon.png" class="sure order-status orderSure" check-all data="{type : '订单'}">
+                <span ng-hide="false">{{waitDelivery.order_id}}</span>
+              </div>
+
+              <div class="order-message-text" ng-click="goOrderDetail(waitDelivery.order_id)">
+                <p class="">{{waitDelivery.city}}<span class="myorder-shop">{{waitDelivery.business}}</span></p>
+
+                <p class="">订单号:{{waitDelivery.order_no}}</p>
+
+                <p class="">下单时:{{waitDelivery.order_date}}</p>
+
+                <p class="">支付时:{{waitDelivery.pay_date}}</p>
+
+                <p class="">{{waitDelivery.status}}<span class="allmoney">&#165 {{waitDelivery.sum}}</span></p>
+
+                <p class="" ng-if="waitDelivery.remark">备注：{{waitDelivery.remark}}</p>
+              </div>
+            </li>
+            <li class="list-group-item" ng-repeat="good in waitDelivery.goods">
+              <div class="pic">
+                <div class="message-pic">
+                  <p>
+                    <span ng-hide="true">{{good.status}}</span>
+                    <img src="images/sure-icon.png" class="sure img-status" check-good>
+                    <span ng-hide="true">{{good.goods_id}}</span>
+                  </p>
+
+                  <p><img src="images/code.png"></p>
+                </div>
+                <div class="product-pic">
+                  <img ng-src="{{good.imageUrl}}">
+                </div>
+
+              </div>
+              <div class="list-text">
+                <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+                <p class="myorder-time"><span
+                  class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+                <p>{{good.coupons}}</p>
+              </div>
+
+              <!--规格-->
+              <div class="size row">
+                <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                  <div class="row"></div>
+                  <div class="row">
+                    <p>{{good.guige_1}}</p>
+                    <p>{{good.guige_2}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                  <div class="row">{{good.delivery}}</div>
+                  <div class="row">{{good.service_station}}</div>
+                </div>
+              </div>
+
+              <div class="note-message">
+                <p class="notetext">
+                  <span ng-if="good.remark">备注：{{good.remark}}</span>
+                  <span class="station good-status">{{good.status}}</span>
+                </p>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+      <div class="navbar-fixed-bottom my-button-group ">
+        <div class="button-group-left2">
+          <p class="labletext"><span class="message-pic all-select-button">
+        <img src="images/sure-icon.png" check-all data="{type : '全选',range : '.tosend-message-table'}"
+             class="all"></span>全选</p>
+        </div>
+
+        <div class="button-group-right2">
+          <button type="button" class="btn button-cancel btn-danger" ng-click="goRefund()">退款</button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!----------------------------------已发货--------------------------------------------->
+    <div class="alsend-message-table">
+      <div class="alsend-msg" load-more data="{params : alreadyParams,repeatFun : '$scope.allOrders'}">
+        <div>
+          <ul class="list-group" ng-repeat="alreadyDelivery in alreadyDeliverys">
+
+            <li class="list-group-item line">
+
+              <div class="message-pic">
+                <img src="images/sure-icon.png" class="sure order-status orderSure" check-all data="{type : '订单'}">
+                <span ng-hide="true">{{alreadyDelivery.order_id}}</span>
+              </div>
+
+              <div class="order-message-text" ng-click="goOrderDetail(alreadyDelivery.order_id)">
+                <p class="">{{alreadyDelivery.city}}<span class="myorder-shop">{{alreadyDelivery.business}}</span></p>
+
+                <p class="">订单号:{{alreadyDelivery.order_no}}</p>
+
+                <p class="">下单时:{{alreadyDelivery.order_date}}</p>
+
+                <p class="">支付时:{{alreadyDelivery.pay_date}}</p>
+
+                <p class="">{{alreadyDelivery.status}}<span class="allmoney">&#165 {{alreadyDelivery.sum}}</span></p>
+
+                <p class="" ng-if="alreadyDelivery.remark">备注：{{alreadyDelivery.remark}}</p>
+              </div>
+            </li>
+            <li class="list-group-item" ng-repeat="good in alreadyDelivery.goods">
+              <div class="pic">
+                <div class="message-pic">
+                  <p>
+                    <span ng-hide="true">{{good.status}}</span>
+                    <img src="images/sure-icon.png" class="sure img-status" check-good>
+                    <span ng-hide="true">{{good.goods_id}}</span>
+                  </p>
+
+                  <p class="good-type" ng-hide="true">{{good.time}}</p>
+
+                  <p><img src="images/code.png"></p>
+                </div>
+                <div class="product-pic">
+                  <img ng-src="{{good.imageUrl}}">
+                </div>
+
+              </div>
+              <div class="list-text">
+                <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+                <p class="myorder-time"><span
+                  class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+                <p>{{good.coupons}}</p>
+              </div>
+
+              <!--规格-->
+              <div class="size row">
+                <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                  <div class="row"></div>
+                  <div class="row">
+                    <p>{{good.guige_1}}</p>
+                    <p>{{good.guige_2}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                  <div class="row">{{good.delivery}}</div>
+                  <div class="row">{{good.service_station}}</div>
+                </div>
+              </div>
+
+              <div class="note-message">
+                <p class="notetext">
+                  <span ng-if="good.remark">备注：{{good.remark}}{{showText}}</span>
+                  <span class="station good-status spanStatus">{{good.status}}</span>
+                  <button class="station btn btn-success statusHide cancelConfirm" style="color:#fff"
+                          ng-click="cancelConfirm()">取消确认收货
+                  </button>
+                </p>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+      <div class="navbar-fixed-bottom my-button-group ">
+        <div class="button-group-left1">
+          <p class="labletext"><span class="message-pic all-select-button">
+        <img src="images/sure-icon.png" check-all data="{type : '全选',range : '.alsend-message-table'}"
+             class="all"></span>全选</p>
+        </div>
+
+        <div class="button-group-right1">
+          <div class="edit-group">
+            <button type="button" class="btn btn-danger" ng-click="returnGoods()">退货</button>
+          </div>
+          <div class="edit-group">
+            <button type="button" class="btn btn-success" ng-click="confirmGoods()">确认收货</button>
+            <input type="hidden"/>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-----------------------------------待退货------------------------------------------------>
+    <div class="toback-message-table">
+      <div class="toback-msg" load-more data="{params : refundGParams,repeatFun : '$scope.allOrders'}">
+        <div>
+          <ul class="list-group" ng-repeat="refundGood in refundGoods">
+
+            <li class="list-group-item line">
+
+              <div class="message-pic">
+                <img src="images/sure-icon.png" class="sure order-status orderSure" check-all data="{type : '订单'}">
+                <span ng-hide="true">{{refundGood.order_id}}</span>
+              </div>
+
+              <div class="order-message-text" ng-click="goOrderDetail(refundGood.order_id)">
+                <p class="">{{refundGood.city}}<span class="myorder-shop">{{refundGood.business}}</span></p>
+
+                <p class="">订单号:{{refundGood.order_no}}</p>
+
+                <p class="">下单时:{{refundGood.order_date}}</p>
+
+                <p class="">支付时:{{refundGood.pay_date}}</p>
+
+                <p class="">{{refundGood.status}}<span class="allmoney">&#165 {{refundGood.sum}}</span></p>
+
+                <p class="" ng-if="refundGood.remark">备注：{{refundGood.remark}}</p>
+              </div>
+            </li>
+            <li class="list-group-item" ng-repeat="good in refundGood.goods">
+              <div class="pic">
+                <div class="message-pic">
+                  <p>
+                    <span ng-hide="true">{{good.status}}</span>
+                    <img src="images/sure-icon.png" class="sure img-status" check-good>
+                    <span ng-hide="true">{{good.goods_id}}</span>
+                  </p>
+
+                  <p><img src="images/code.png"></p>
+                </div>
+                <div class="product-pic">
+                  <img ng-src="{{good.imageUrl}}">
+                </div>
+
+              </div>
+              <div class="list-text">
+                <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+                <p class="myorder-time"><span
+                  class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+                <p>{{good.coupons}}</p>
+              </div>
+
+              <!--规格-->
+              <div class="size row">
+                <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                  <div class="row"></div>
+                  <div class="row">
+                    <p>{{good.guige_1}}</p>
+                    <p>{{good.guige_2}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                  <div class="row">{{good.delivery}}</div>
+                  <div class="row">{{good.service_station}}</div>
+                </div>
+              </div>
+
+              <div class="note-message">
+                <p class="notetext">
+                  <span ng-if="good.remark">备注：{{good.remark}}</span>
+                  <span class="station good-status">{{good.status}}</span></p>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="navbar-fixed-bottom my-button-group ">
+        <div class="button-group-left2">
+          <p class="labletext"><span class="message-pic all-select-button">
+        <img src="images/sure-icon.png" check-all data="{type : '全选',range : '.toback-message-table'}"
+             class="all"></span>全选</p>
+        </div>
+
+        <div class="button-group-right2">
+          <button type="button" class="btn btn-danger button-cancel" ng-click="cancelReturn()">取消退货</button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!--------------------------------------已完成------------------------------------------->
+    <div class="finish-message-table">
+      <div class="finish-msg" load-more data="{params : finishParams,repeatFun : '$scope.allOrders'}">
+        <div>
+          <ul class="list-group" ng-repeat="finishGood in finishGoods">
+
+            <li class="list-group-item line">
+
+              <div class="message-pic">
+                <img src="images/sure-icon.png" class="sure orderSure" check-all data="{type : '订单'}">
+                <span ng-hide="true">{{finishGood.order_id}}</span>
+              </div>
+
+              <div class="order-message-text" ng-click="goOrderDetail(finishGood.order_id)">
+                <p class="">{{finishGood.city}}<span class="myorder-shop">{{finishGood.business}}</span></p>
+
+                <p class="">订单号:{{finishGood.order_no}}</p>
+
+                <p class="">下单时:{{finishGood.order_date}}</p>
+
+                <p class="">支付时:{{finishGood.pay_date}}</p>
+
+                <p class="">
+                  <span class="order-status">{{finishGood.status}}</span>
+                  <span class="allmoney" ng-if="finishGood.youhui">优惠:&#165 {{finishGood.youhui}}  </span>
+                  <span class="allmoney" ng-if="finishGood.tiexian">贴现:&#165 {{finishGood.tiexian}}</span>
+                  <span class="allmoney" ng-if="finishGood.shifu">实付:&#165 {{finishGood.shifu}}</span>
+                </p>
+                <p class="" ng-if="finishGood.remark">{{finishGood.remark}}</p>
+              </div>
+            </li>
+            <li class="list-group-item" ng-repeat="good in finishGood.goods">
+              <div class="pic">
+                <div class="message-pic">
+                  <p>
+                    <span ng-hide="true">{{good.status}}</span>
+                    <img src="images/sure-icon.png" class="sure" check-good>
+                  </p>
+
+                  <p><img src="images/code.png"></p>
+                </div>
+                <div class="product-pic">
+                  <img ng-src="{{good.imageUrl}}">
+                </div>
+
+              </div>
+              <div class="list-text">
+                <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+                <p class="myorder-time"><span
+                  class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+                <p>{{good.coupons}}</p>
+              </div>
+
+              <!--规格-->
+              <div class="size row">
+                <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                  <div class="row"></div>
+                  <div class="row">
+                    <p>{{good.guige_1}}</p>
+                    <p>{{good.guige_2}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                  <div class="row">{{good.delivery}}</div>
+                  <div class="row">{{good.service_station}}</div>
+                </div>
+              </div>
+
+              <div class="note-message">
+                <p class="notetext">
+                  <span ng-if="good.remark">备注：{{good.remark}}</span>
+                  <span class="station">{{good.status}}</span>
+                </p>
+
+                <p>
+                  <button type="button" class="btn judge" ng-if="good.comment == 'N'" ng-click="goJudge(good)">评价
+                  </button>
+                  <span class="judge" ng-if="good.comment == 'Y'">已评价</span>
+                </p>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="navbar-fixed-bottom my-button-group ">
+        <div class="button-group-left1">
+          <p class="labletext"><span class="message-pic all-select-button">
+        <img src="images/sure-icon.png" check-all data="{type : '全选',range : '.finish-message-table'}"
+             class="all"></span>全选</p>
+        </div>
+
+        <div class="button-group-right1">
+          <div class="edit-group">
+            <button type="button" class="btn btn-danger button-cancel"
+                    ng-click="deleteOrders('删除','.finish-message-table')">删除
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!--------------------------------------已退货------------------------------------------->
+    <div class="alback-message-table">
+      <div class="alback-msg" load-more data="{params : finishReParams,repeatFun : '$scope.allOrders'}">
+        <div>
+          <ul class="list-group" ng-repeat="finishRefund in finishRefunds">
+
+            <li class="list-group-item line">
+
+              <div class="message-pic">
+                <img src="images/sure-icon.png" class="sure orderSure" check-all data="{type : '订单'}">
+                <span ng-hide="true">{{finishRefund.order_id}}</span>
+              </div>
+
+              <div class="order-message-text" ng-click="goOrderDetail(finishRefund.order_id)">
+                <p class="">{{finishRefund.city}}<span class="myorder-shop">{{finishRefund.business}}</span></p>
+
+                <p class="">订单号:{{finishRefund.order_no}}</p>
+
+                <p class="">下单时:{{finishRefund.order_date}}</p>
+
+                <p class="">支付时:{{finishRefund.pay_date}}</p>
+
+                <p class="">
+                  <span class="order-status">{{finishRefund.status}}</span>
+                  <span class="allmoney">&#165 {{finishRefund.sum}}</span></p>
+
+                <p class="" ng-if="finishRefund.remark">备注：{{finishRefund.remark}}</p>
+              </div>
+            </li>
+            <li class="list-group-item" ng-repeat="good in finishRefund.goods">
+              <div class="pic">
+                <div class="message-pic">
+                  <p>
+                    <span ng-hide="true">{{good.status}}</span>
+                    <img src="images/sure-icon.png" class="sure" check-good>
+                  </p>
+
+                  <p><img src="images/code.png"></p>
+                </div>
+                <div class="product-pic">
+                  <img ng-src="{{good.imageUrl}}">
+                </div>
+
+              </div>
+              <div class="list-text">
+                <p class="product-name">{{good.name}}<span class="price">&#165 {{good.sale_price}}</span></p>
+
+                <p class="myorder-time"><span
+                  class="myorder-count">*{{good.count}}{{good.unit}}</span></p>
+                <p>{{good.coupons}}</p>
+              </div>
+
+              <!--规格-->
+              <div class="size row">
+                <div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 guige">
+                  <div class="row"></div>
+                  <div class="row">
+                    <p>{{good.guige_1}}</p>
+                    <p>{{good.guige_2}}</p>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                  <div class="row">{{good.delivery}}</div>
+                  <div class="row">{{good.service_station}}</div>
+                </div>
+              </div>
+
+              <div class="note-message">
+                <p class="notetext">
+                  <span ng-if="good.remark">备注:{{good.remark}}</span>
+                  <span class="station">{{good.status}}</span></p>
+              </div>
+            </li>
+
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="navbar-fixed-bottom my-button-group">
+        <div class="button-group-left2">
+          <p class="labletext"><span class="message-pic all-select-button">
+        <img src="images/sure-icon.png" check-all data="{type : '全选',range : '.alback-message-table'}"
+             class="all"></span>全选</p>
+        </div>
+
+        <div class="button-group-right2">
+          <button type="button" class="btn btn-danger button-cancel"
+                  ng-click="deleteOrders('删除','.alback-message-table')">删除
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

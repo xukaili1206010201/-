@@ -1,0 +1,122 @@
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="backtogoodslist()" src="images/back_button.png">
+
+    <div class="navigationbar-item">
+      <p class="item-title">商品详情</p>
+    </div>
+  </div>
+</nav>
+
+<div class="goods-detail-content">
+    <!--<img class="img-responsive good-img" style="width: 100%" src="{{goods.imageUrl}}" alt="">-->
+  <!--商品详情轮播图-->
+  <div>
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides">
+          <img ng-src="{{slide}}" curousel-height class="slideImg">
+        </slide>
+      </carousel>
+    </div>
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.jpg" class="slideImg" curousel-height>
+    </div>
+  </div>
+
+
+  <div class="goodsdetail goods-detail">
+    <ul>
+      <li class="goods_title">
+        <b>{{goods.name}}</b>
+      </li>
+      <li class="goods_body">
+        <p style="color:#000;font-size: 1.1rem;">{{goods.business}}</p>
+        <p>{{goods.introduction}}</p>
+      </li>
+      <li style="overflow:hidden">
+        <ul class="number">
+          <li class="sale_count">
+            <b>¥{{goods.sale_price}}</b>
+            <b style="font-size: 10px;margin-right: 5px;">/{{goods.unit}}</b>
+            </b>
+         <s>  <span class="old_price">¥{{goods.old_price}}</span></s>
+            <span ng-if="goods.priceRange.length > 0">({{goods.priceRange[0]}},{{goods.priceRange[1]}})</span>
+          </li>
+          <li class="today_sales">
+            日销量：
+            <span>{{goods.day_count}}</span>
+          </li>
+          <li class="repertory" ng-if="goods.inventory >= 0">
+            库存：
+            <span>{{goods.inventory}}</span>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p ng-repeat="guige in goods.guige">
+          {{guige.key}}:
+          <span ng-repeat="val in guige.value">{{val.guige_name}}</span>
+        </p>
+      </li>
+    </ul>
+  </div>
+  <div class="count_down" ng-if="showTimeHtml != ''">
+    {{showTimeHtml}}
+  </div>
+
+  <ul class="nav text-center goodsdetail" role="tablist">
+    <li ng-click="detail()" role="presentation" class="col-xs-4 active"><a style="" href="" role="tab" data-toggle="tab">商品详情</a></li>
+    <li ng-click="sales()" role="presentation" class="col-xs-4"><a style="" href="" role="tab" data-toggle="tab">销量</a></li>
+    <li ng-click="evaluate()" role="presentation" class="col-xs-4"><a style="" href="" role="tab" data-toggle="tab">评价</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="detail">
+      <p class="goods-description" ng-bind-html="goods.description"></p>
+    </div>
+    <!-- 销量图表 -->
+    <div role="tabpanel" class="tab-pane active" id="sales" style="height: 100%;">
+      <canvas id="line" class="chart chart-line" chart-data="salesData"
+              chart-labels="labels" chart-legend="true" chart-series="series"
+              chart-click="onClick" >
+      </canvas>
+    </div>
+
+    <!-- 评论列表 -->
+    <div role="tabpanel" class="tab-pane" id="evaluate" style="width: 100%">
+        <div class="media goodsdetail-comment-row" ng-repeat="k in evaluateList">
+          <div class="media-left media-top">
+            <img ng-src="{{k.headImgurl}}" alt="">
+          </div>
+          <div class="media-body">
+            <h5 class="media-heading">
+             {{k.nickname}}
+              <span class="time rt">{{k.create_date}}</span>
+            </h5>
+            <div ng-if="k.star > 0" ng-bind-html="k.starimgObj" class="goodsDetail-star-pic"></div>
+          </div>
+          <div class="evaluate">
+            {{k.content}}
+          </div>
+          <!--<img ng-if="k.tupian.length > 0" ng-src="{{k.tupian[0]}}" style="width: 80px;height: 80px;" class="evaluate_img">-->
+          <div class="evaluate_imgBox" ng-if="k.tupian.length > 0" ng-bind-html="k.tupianObj"></div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="navbar-fixed-bottom fotter_btn">
+  <button class="btn btn-block btn-success goods-detail-buy-button" ng-click="jumppurchase(business_id)"><b>购买</b></button>
+</div>
+
+<script>
+  var w = window.screen.availWidth;
+  var h = 3*w/5;
+  $('.good-img').css({
+    'height' : h + 'px'
+  });
+</script>

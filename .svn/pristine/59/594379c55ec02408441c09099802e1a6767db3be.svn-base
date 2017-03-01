@@ -1,0 +1,502 @@
+<script>
+
+  //设置背景颜色
+  $(function () {
+    var screenW = $(window).width();
+    var screenH = $(window).height();
+    $('.reserve-content').css({
+      'height': screenH
+    })
+  })
+
+  var lastSelectedItem = '.reserve-default-selected-segmentcontrl-item';
+
+  function didSelectedItem(event, currentShowView) {
+    var target = event.target;
+    $(lastSelectedItem).css({
+      'background': '#F0EFF6',
+      'color': 'black'
+    })
+    $(target).css({
+      'background': '#7DB343',
+      'color': '#fff'
+    })
+
+    lastSelectedItem = target;
+  }
+
+  function showAllReserveOrder(event) {
+    didSelectedItem(event, ".reserve-order-all");
+  }
+  function showWaitForServiceReserveOrder(event) {
+    didSelectedItem(event, ".reserve-order-waitforservice");
+  }
+  function showWaitForPayReserveOrder(event) {
+    didSelectedItem(event, ".reserve-order-waitforpay");
+  }
+  function showFinishedReserveOrder(event) {
+    didSelectedItem(event, ".reserve-order-finished");
+  }
+
+
+  // ************************************上拉刷新，下拉加载 **************************************************
+  var unreadHeight = window.screen.availHeight - parseInt($('.navigationbar').css('height'))
+    - parseFloat($('.reserve-segmentcontrol').css('height'));
+  $('.reserve-content').css({
+    'height': unreadHeight + 'px',
+    'overflow': 'scroll'
+  });
+
+  //  var searchHeight = window.screen.availHeight - $('.navigationbar').height();
+  //  $('.searchMsg').css({
+  //    'height' : searchHeight + 'px',
+  //    'overflow' : 'scroll'
+  //  });
+
+</script>
+
+<nav class="navbar navbar-default navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="back()" src="/images/back_button.png">
+
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="/images/search_button.png" ng-click="searchReserve(keyValue)">
+      <div class="search-input">
+        <input class="form-control" ng-model="keyValue" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div ng-if="reserveParams.key==null" ng-init="tag=true" class="navbar-fixed-top reserve-segmentcontrol">
+  <button type="button" class="reserve-segmentcontrol-item reserve-default-selected-segmentcontrl-item"
+          onclick="showAllReserveOrder(event)" ng-click="changeStatus(null)">全部
+  </button>
+  <button type="button" class="reserve-segmentcontrol-item"
+          onclick="showWaitForServiceReserveOrder(event)" ng-click="changeStatus('0')">待服务
+  </button>
+  <button type="button" class="reserve-segmentcontrol-item" onclick="showWaitForPayReserveOrder(event)"
+          ng-click="changeStatus('1')">待付款
+  </button>
+  <button type="button" class="reserve-segmentcontrol-item" onclick="showFinishedReserveOrder(event)
+  " ng-click="changeStatus('2')">已完成
+  </button>
+</div>
+
+<!--搜索 -->
+<div ng-if="reserveParams.key!=null">
+  <div load-more
+       data="{params : reserveParams,repeatFun : '$scope.reserveLoad'}">
+    <!--全部-->
+    <div class="reserve-order-table reserve-order-all">
+
+      <div class="reserve-order-list" ng-repeat="reserve in reserveList">
+        <div class="reserve-order-info">
+          <p>
+            <span>{{reserve.city}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span>{{reserve.business}}</span>
+          </p>
+          <p>
+            <span>预约单号:</span>
+            <span>{{reserve.order_no}}</span>
+          </p>
+          <p>
+            <span>下单时:</span>
+            <span>{{reserve.order_date}}</span>
+          </p>
+          <p>
+            <span>服务时:</span>
+            <span>{{reserve.pay_date}}</span>
+          </p>
+          <p>
+            <span>支付时:</span>
+            <span>{{reserve.ok_date}}</span>
+          </p>
+          <!--<p>状态</p>-->
+          <p>
+            <span>总额：</span>
+            <span>{{reserve.sum}}</span>
+          </p>
+          <!--<p>优惠额</p>-->
+          <!--<p>贴现额</p>-->
+          <!--<p>实付额</p>-->
+          <!--<p>备注</p>-->
+          <p ng-if="status==1">
+            <button type="button" class="btn btn-success reserve-order-pay-btn">支付</button>
+          </p>
+        </div>
+        <div class="reserve-order-row">
+
+          <div class="reserve-order-service-row" ng-repeat="service in reserve.goods">
+            <div class="reserve-order-service-img">
+              <img class="img-responsive" src="{{service.imageUrl}}">
+            </div>
+
+            <div class="reserve-order-row-right">
+              <p>
+                <span class="reserve-order-service-name">{{service.name}}</span>
+                <span class="reserve-order-service-status">{{service.status}}</span>
+              </p>
+              <p>
+                <span class="reserve-order-service-price">￥{{service.sale_price}}</span>
+                <span>/套</span>
+                <span>&nbsp;&nbsp;x{{service.count}}</span>
+                <span class="reserve-order-service-discount">优惠额:￥{{service.coupons==''?0:service.coupons}}</span>
+              </p>
+            </div>
+            <div class="reserve-order-service-specification">
+              <p>
+                <span>{{service.guige1}}</span>
+                <span>{{service.guige2}}</span>
+              </p>
+            </div>
+            <p class="reserve-order-service-remarks">
+              {{service.remark}}
+            </p>
+            <p ng-if="status==2">
+              <button class="btn btn-success reserve-order-finished-evaluate-btn">评价</button>
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!--全部 -->
+<div ng-if="status==null&&reserveParams.key==null">
+  <div class="reserve-content" load-more
+       data="{params : reserveParams,repeatFun : '$scope.reserveLoad'}">
+    <!--全部-->
+    <div class="reserve-order-table reserve-order-all">
+
+      <div class="reserve-order-list" ng-repeat="reserve in reserveList">
+        <div class="reserve-order-info">
+          <p>
+            <span>{{reserve.city}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span>{{reserve.business}}</span>
+          </p>
+          <p>
+            <span>预约单号:</span>
+            <span>{{reserve.order_no}}</span>
+          </p>
+          <p>
+            <span>下单时:</span>
+            <span>{{reserve.order_date}}</span>
+          </p>
+          <p>
+            <span>服务时:</span>
+            <span>{{reserve.pay_date}}</span>
+          </p>
+          <p>
+            <span>支付时:</span>
+            <span>{{reserve.ok_date}}</span>
+          </p>
+          <!--<p>状态</p>-->
+          <p>
+            <span>总额：</span>
+            <span>{{reserve.sum}}</span>
+          </p>
+          <!--<p>优惠额</p>-->
+          <!--<p>贴现额</p>-->
+          <!--<p>实付额</p>-->
+          <!--<p>备注</p>-->
+          <p ng-if="status==1">
+            <button type="button" class="btn btn-success reserve-order-pay-btn">支付</button>
+          </p>
+        </div>
+        <div class="reserve-order-row">
+
+          <div class="reserve-order-service-row" ng-repeat="service in reserve.goods">
+            <div class="reserve-order-service-img">
+              <img class="img-responsive" src="{{service.imageUrl}}">
+            </div>
+
+            <div class="reserve-order-row-right">
+              <p>
+                <span class="reserve-order-service-name">{{service.name}}</span>
+                <span class="reserve-order-service-status">{{service.status}}</span>
+              </p>
+              <p>
+                <span class="reserve-order-service-price">￥{{service.sale_price}}</span>
+                <span>/套</span>
+                <span>&nbsp;&nbsp;x{{service.count}}</span>
+                <span class="reserve-order-service-discount">优惠额:￥{{service.coupons==''?0:service.coupons}}</span>
+              </p>
+            </div>
+            <div class="reserve-order-service-specification">
+              <p>
+                <span>{{service.guige1}}</span>
+                <span>{{service.guige2}}</span>
+              </p>
+            </div>
+            <p class="reserve-order-service-remarks">
+              {{service.remark}}
+            </p>
+            <p ng-if="status==2">
+              <button class="btn btn-success reserve-order-finished-evaluate-btn">评价</button>
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!--待服务 -->
+<div ng-if="status==0&&reserveParams.key==null">
+  <div class="reserve-content" load-more
+       data="{params : reserveParams,repeatFun : '$scope.reserveLoad'}">
+    <!--全部-->
+    <div class="reserve-order-table reserve-order-all">
+
+      <div class="reserve-order-list" ng-repeat="reserve in reserveList">
+        <div class="reserve-order-info">
+          <p>
+            <span>{{reserve.city}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span>{{reserve.business}}</span>
+          </p>
+          <p>
+            <span>预约单号:</span>
+            <span>{{reserve.order_no}}</span>
+          </p>
+          <p>
+            <span>下单时:</span>
+            <span>{{reserve.order_date}}</span>
+          </p>
+          <p>
+            <span>服务时:</span>
+            <span>{{reserve.pay_date}}</span>
+          </p>
+          <p>
+            <span>支付时:</span>
+            <span>{{reserve.ok_date}}</span>
+          </p>
+          <!--<p>状态</p>-->
+          <p>
+            <span>总额：</span>
+            <span>{{reserve.sum}}</span>
+          </p>
+          <!--<p>优惠额</p>-->
+          <!--<p>贴现额</p>-->
+          <!--<p>实付额</p>-->
+          <!--<p>备注</p>-->
+          <p ng-if="status==1">
+            <button type="button" class="btn btn-success reserve-order-pay-btn">支付</button>
+          </p>
+        </div>
+        <div class="reserve-order-row">
+
+          <div class="reserve-order-service-row" ng-repeat="service in reserve.goods">
+            <div class="reserve-order-service-img">
+              <img class="img-responsive" src="{{service.imageUrl}}">
+            </div>
+
+            <div class="reserve-order-row-right">
+              <p>
+                <span class="reserve-order-service-name">{{service.name}}</span>
+                <span class="reserve-order-service-status">{{service.status}}</span>
+              </p>
+              <p>
+                <span class="reserve-order-service-price">￥{{service.sale_price}}</span>
+                <span>/套</span>
+                <span>&nbsp;&nbsp;x{{service.count}}</span>
+                <span class="reserve-order-service-discount">优惠额:￥{{service.coupons==''?0:service.coupons}}</span>
+              </p>
+            </div>
+            <div class="reserve-order-service-specification">
+              <p>
+                <span>{{service.guige1}}</span>
+                <span>{{service.guige2}}</span>
+              </p>
+            </div>
+            <p class="reserve-order-service-remarks">
+              {{service.remark}}
+            </p>
+            <p ng-if="status==2">
+              <button class="btn btn-success reserve-order-finished-evaluate-btn">评价</button>
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!--待付款 -->
+  <div ng-if="status==1&&reserveParams.key==null">
+  <div class="reserve-content" load-more
+       data="{params : reserveParams,repeatFun : '$scope.reserveLoad'}">
+    <!--全部-->
+    <div class="reserve-order-table reserve-order-all">
+
+      <div class="reserve-order-list" ng-repeat="reserve in reserveList">
+        <div class="reserve-order-info">
+          <p>
+            <span>{{reserve.city}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span>{{reserve.business}}</span>
+          </p>
+          <p>
+            <span>预约单号:</span>
+            <span>{{reserve.order_no}}</span>
+          </p>
+          <p>
+            <span>下单时:</span>
+            <span>{{reserve.order_date}}</span>
+          </p>
+          <p>
+            <span>服务时:</span>
+            <span>{{reserve.pay_date}}</span>
+          </p>
+          <p>
+            <span>支付时:</span>
+            <span>{{reserve.ok_date}}</span>
+          </p>
+          <!--<p>状态</p>-->
+          <p>
+            <span>总额：</span>
+            <span>{{reserve.sum}}</span>
+          </p>
+          <!--<p>优惠额</p>-->
+          <!--<p>贴现额</p>-->
+          <!--<p>实付额</p>-->
+          <!--<p>备注</p>-->
+          <p ng-if="status==1">
+            <button type="button" ng-click="pay(reserve.order_id)" class="btn btn-success reserve-order-pay-btn">支付</button>
+          </p>
+        </div>
+        <div class="reserve-order-row">
+
+          <div class="reserve-order-service-row" ng-repeat="service in reserve.goods">
+            <div class="reserve-order-service-img">
+              <img class="img-responsive" src="{{service.imageUrl}}">
+            </div>
+
+            <div class="reserve-order-row-right">
+              <p>
+                <span class="reserve-order-service-name">{{service.name}}</span>
+                <span class="reserve-order-service-status">{{service.status}}</span>
+              </p>
+              <p>
+                <span class="reserve-order-service-price">￥{{service.sale_price}}</span>
+                <span>/套</span>
+                <span>&nbsp;&nbsp;x{{service.count}}</span>
+                <span class="reserve-order-service-discount">优惠额:￥{{service.coupons==''?0:service.coupons}}</span>
+              </p>
+            </div>
+            <div class="reserve-order-service-specification">
+              <p>
+                <span>{{service.guige1}}</span>
+                <span>{{service.guige2}}</span>
+              </p>
+            </div>
+            <p class="reserve-order-service-remarks">
+              {{service.remark}}
+            </p>
+            <p ng-if="status==2">
+              <button class="btn btn-success reserve-order-finished-evaluate-btn">评价</button>
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!--已完成-->
+<div ng-if="status==2&&reserveParams.key==null">
+  <div class="reserve-content" load-more
+       data="{params : reserveParams,repeatFun : '$scope.reserveLoad'}">
+    <!--全部-->
+    <div class="reserve-order-table reserve-order-all">
+
+      <div class="reserve-order-list" ng-repeat="reserve in reserveList">
+        <div class="reserve-order-info">
+          <p>
+            <span>{{reserve.city}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span>{{reserve.business}}</span>
+          </p>
+          <p>
+            <span>预约单号:</span>
+            <span>{{reserve.order_no}}</span>
+          </p>
+          <p>
+            <span>下单时:</span>
+            <span>{{reserve.order_date}}</span>
+          </p>
+          <p>
+            <span>服务时:</span>
+            <span>{{reserve.pay_date}}</span>
+          </p>
+          <p>
+            <span>支付时:</span>
+            <span>{{reserve.ok_date}}</span>
+          </p>
+          <!--<p>状态</p>-->
+          <p>
+            <span>总额：</span>
+            <span>{{reserve.sum}}</span>
+          </p>
+          <!--<p>优惠额</p>-->
+          <!--<p>贴现额</p>-->
+          <!--<p>实付额</p>-->
+          <!--<p>备注</p>-->
+          <p ng-if="status==1">
+            <button type="button" class="btn btn-success reserve-order-pay-btn">支付</button>
+          </p>
+        </div>
+        <div class="reserve-order-row">
+
+          <div class="reserve-order-service-row" ng-repeat="service in reserve.goods">
+            <div class="reserve-order-service-img">
+              <img class="img-responsive" src="{{service.imageUrl}}">
+            </div>
+
+            <div class="reserve-order-row-right">
+              <p>
+                <span class="reserve-order-service-name">{{service.name}}</span>
+                <span class="reserve-order-service-status">{{service.status}}</span>
+              </p>
+              <p>
+                <span class="reserve-order-service-price">￥{{service.sale_price}}</span>
+                <span>/套</span>
+                <span>&nbsp;&nbsp;x{{service.count}}</span>
+                <span class="reserve-order-service-discount">优惠额:￥{{service.coupons==''?0:service.coupons}}</span>
+              </p>
+            </div>
+            <div class="reserve-order-service-specification">
+              <p>
+                <span>{{service.guige1}}</span>
+                <span>{{service.guige2}}</span>
+              </p>
+            </div>
+            <p class="reserve-order-service-remarks">
+              {{service.remark}}
+            </p>
+            <p ng-if="status==2">
+              <button ng-click="product(service)" class="btn btn-success reserve-order-finished-evaluate-btn">评价</button>
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+

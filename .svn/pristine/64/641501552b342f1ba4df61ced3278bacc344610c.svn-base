@@ -1,0 +1,22 @@
+.post-edit-content{
+  width:100%;
+  padding:10px;
+}
+.post-edit-content .property-edit textarea{
+  width:78%;
+}
+.post-edit-content #contentTie{
+  height:80px;
+  resize: none;
+}
+.post-edit-content .img-bg{
+  background-color: rgb(240, 239, 245);
+}
+.post-edit-content .btn{
+  border-radius: 4px;
+  width:40%;
+}
+.editBbsImg{
+  width:79px;
+  height:79px;
+}

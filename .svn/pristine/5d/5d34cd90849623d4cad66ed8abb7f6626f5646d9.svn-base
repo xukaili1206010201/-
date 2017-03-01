@@ -1,0 +1,131 @@
+
+.familyaccountlist-content {
+  margin-top: 50px;
+  width: 100%;
+  background: #F0EFF6;
+}
+
+.familyaccountlist-sellername-view {
+  height: 3rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  vertical-align: middle;
+}
+
+.familyaccountlist-sellername-text {
+  height: 2rem;
+  line-height: 2rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.familyaccountlist-next-image {
+  width: 2rem;
+  margin-top: 0;
+  height: auto;
+  float: right;
+}
+
+.familyaccountlist-marquee {
+  width: 100%;
+  height: 3rem;
+}
+
+.familyaccountlist-marquee ul.marquee {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 3rem;
+}
+.familyaccountlist-marquee ul.marquee li {
+  position: absolute;
+  top: -999em;
+  left: 0;
+  display: block;
+  white-space: nowrap;
+  height: 3rem;
+  line-height: 3rem;
+  text-indent:0.8em;
+}
+
+.familyaccountlist-segmentcontrol {
+  width: 100%;
+  height: 30px;
+  background: white;
+}
+
+.familyaccountlist-segment-item {
+  background: white;
+  width: 50%;
+  height: 100%;
+  border: none;
+  outline: none;
+  float: left;
+}
+
+.familyaccountlist-default-selected-item {
+  border-bottom: 2px solid #7DB343;
+}
+
+.familyaccountlist-row {
+  padding: 1rem;
+  background: white;
+  margin-top: 1px;
+  overflow: hidden;
+}
+
+.familyaccountlist-row-left {
+  float: left;
+}
+
+/*.familyaccountlist-row-left img {*/
+  /*width: 5rem;*/
+  /*height: auto;*/
+/*}*/
+
+.familyaccountlist-row-right{
+  overflow: hidden;
+}
+
+.familyaccountlist-content-top{
+  overflow: hidden;
+  padding-left: 1rem;
+}
+
+/*.familyaccountlist-content-top-left {*/
+  /*float: left;*/
+/*}*/
+
+.familyaccountlist-content-top-left p {
+  margin: 0;
+}
+
+.familyaccountlist-service-name{
+  font-size: 1.4rem;
+  /*font-weight: bold;*/
+}
+
+.familyaccountlist-service-intro{
+  /*font-size: 1.2rem;*/
+  color: #818181;
+}
+.family-account-list-all{
+  border-top:1px solid #ddd;
+  border-bottom:1px solid #ddd;
+}
+.family-account-list-category{
+  height:2.8rem;
+  line-height:2.8rem;
+  font-size:1.3rem;
+  overflow-x: scroll;
+  display: inline-flex;
+  padding-left:1rem;
+}
+.account-list-cate{
+  width:4.5rem;
+  margin-right:1rem;
+  text-align: center;
+  height:2.7rem;
+  line-height: 2.7rem;
+}

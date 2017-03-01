@@ -1,0 +1,124 @@
+'use strict';
+
+var appFilter = angular.module('appFilter', []);
+
+appFilter
+    .filter('split', function () {
+      return function (str, splitChar, splitIndex) {
+        // do some bounds checking here to ensure it has that index
+        if (str != null) {
+          return str.split(splitChar)[splitIndex];
+        } else {
+          return str;
+        }
+        ;
+
+      };
+    });
+
+appFilter
+    .filter('resize', function () {
+      return function (size, oldWidth, width) {
+        // do some bounds checking here to ensure it has that index
+        if (size != null) {
+          size = size * (width / oldWidth);
+          return size;
+        } else {
+          return size;
+        }
+        ;
+
+      };
+    });
+appFilter.filter('dateFilter', function () {
+  return function (str) {
+    if (null != str && str.trim() != '') {
+      return str.substr(0, str.lastIndexOf(':'));
+    }
+    return null;
+  }
+});
+appFilter
+    .filter('subTo', function () {
+      return function (str, subLen, suffix) {
+        // do some bounds checking here to ensure it has that index
+        if (str.length <= subLen) {
+          return str;
+        } else {
+          return str.substring(0, subLen) + suffix;
+        }
+        ;
+
+      };
+    });
+
+appFilter
+    .filter('subDateToZh', function () {
+      return function (str) {
+        // do some bounds checking here to ensure it has that index
+        str = str.replace("-", "年");
+        str = str.replace("-", "月");
+        return str;
+      };
+    });
+
+appFilter
+    .filter('dateToZh', function () {
+      return function (str) {
+        // do some bounds checking here to ensure it has that index
+        str = str.replace("-", "年");
+        str = str.replace("-", "月");
+        str = str + "日";
+        return str;
+      };
+    });
+
+appFilter
+    .filter('reverseStr', function () {
+      return function (str) {
+        // do some bounds checking here to ensure it has that index
+        str = str.split("").reverse().join("");
+        return str;
+      };
+    });
+appFilter.filter('reverseArray', function () {
+  return function (arr) {
+    return arr.slice().reverse();
+  }
+});
+appFilter
+    .filter('getDay', function () {
+      return function (str) {
+        // do some bounds checking here to ensure it has that index
+        str = str.replace(/-/g, "/");
+        var date = new Date(str);
+        return date.getDate();
+      };
+    });
+
+appFilter
+    .filter('getDayZh', function () {
+      return function (str) {
+        // do some bounds checking here to ensure it has that index
+        str = str.replace(/-/g, "/");
+        var date = new Date(str);
+        return date.getDate() + "日";
+      };
+    });
+
+
+//身份证转出生日期
+appFilter
+    .filter('idReverse', function () {
+      return function (input) {
+        var out = "";
+
+        if (input != null && input.length == 18) {
+          var year = input.substring(6, 10);
+          var month = input.substring(10, 12);
+          var date = input.substring(12, 14);
+          out = year + "-" + month + "-" + date;
+        }
+        return out;
+      }
+    });

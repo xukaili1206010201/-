@@ -1,0 +1,39 @@
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goToUserCenter()">
+    <!-- 搜索框组-->
+    <div class="navigationbar-item">
+      <p class="item-title">联系我们</p>
+    </div>
+  </div>
+</nav>
+
+<div class="content">
+  <div class="logo-block">
+    <img src="images/logo.jpg">
+    <p class="project-name">乐生活</p>
+    <p class="current-time">{{todayDate}}</p>
+  </div>
+
+  <div ng-model="advice" class="feedback-field" contenteditable="true">
+    您的建议对我们很重要。
+  </div>
+
+  <div class="user-info-block">
+    <!--<input type="text" class="form-control" placeholder="姓名">-->
+    <input ng-model="userInfo" type="text" class="form-control" placeholder="您的姓名、手机号等联系方式">
+  </div>
+
+  <div class="contact-button-size">
+    <button type="submit" class="btn btn-block btn-success" ng-click="submitAdvice()">提交</button>
+  </div>
+
+  <div class="contact-us navbar-fixed-bottom KBheight">
+    <a class="link-button" href="tel://{{companyTel}}">客服电话：{{showCompanyTel}}</a>
+  </div>
+
+</div>
+
+

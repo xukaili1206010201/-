@@ -1,0 +1,21 @@
+
+  /* ******************************** navigationbar with back-button   begin ******************************** */
+/* ******************************** navigationbar item样式 ******************************** */
+.portfolio-item{
+  height: 30px;
+  margin-left: 50px;
+  margin-top: 10.5px;
+  margin-right: 50px;
+  /*background: red;*/
+  padding-top: 5px;
+
+}
+
+.portfolio-title{
+  margin-left:20%;
+  font-size: 16px;
+  color: white;
+}
+.tab-content{
+  margin:10px 10px;
+}

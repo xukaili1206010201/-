@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Page Not Found :(</title>
+    <style>
+      html {
+        font-size: 20px;
+        line-height: 1.4;
+        color: #737373;
+        background: #f0f0f0;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      html,
+      input {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        max-width: 500px;
+        padding: 30px 20px 50px;
+        border-radius: 4px;
+        margin: 0 auto;
+        height:100%;
+        box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+      }
+
+      h4 {
+        text-align: center;
+        margin-top:30px;
+        color:#6A6A6A;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img style="width:100%;" ng-src="{{errorImg}}"/>
+      <h4>{{errorMsg}}</h4>
+      <h4>预计恢复时间：{{maintenance_date | dateFilter}}</h4>
+      <script>
+        var GOOG_FIXURL_LANG = (navigator.language || '').slice(0,2),GOOG_FIXURL_SITE = location.host;
+      </script>
+      <!--<script src="//linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script>-->
+    </div>
+  </body>
+</html>

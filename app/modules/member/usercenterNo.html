@@ -1,0 +1,64 @@
+<!--<nav class="navbar navbar-fixed-top navigationbar">-->
+<!--<p class="navbar-text text-center">个人中心</p>-->
+<!--</nav>-->
+
+<div class="no-user" ng-click="jumpLogin()">
+  <img class="no-user-avatar" src="images/user-icon.png">
+  <div class="user-info">
+    <b>登录</b>
+  </div>
+  <div class="pull-right"><i class="fa fa-angle-right"></i></div>
+</div>
+
+<div class="table-view">
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default panel-border-none">
+      <div class="panel-heading" role="tab" id="headingThree" role="button" data-toggle="collapse"
+           data-parent="#accordion" href="#collapseThree"
+           aria-expanded="false" aria-controls="collapseThree">
+        <div class="panel-title" class="collapsed">
+          <p class="panel-ico"><i class="glyphicon glyphicon-cloud ico-warn"></i></p>
+          <span>
+            关于我们
+          </span>
+        </div>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel"
+           aria-labelledby="headingThree">
+        <div class="panel-body content-padding">
+          <ul>
+            <li ng-click="goToStationintro()"><a href=""><i class="fa fa-map-marker ico-info"></i>站点介绍</a>
+            </li>
+            <li ng-click="goToFollowUs()"><a href=""><i class="fa fa-qrcode"></i>关注我们</a></li>
+            <li ng-click="goToContactUs()"><a href=""><i class="fa fa-edit ico-success"></i>联系我们</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="navbar-fixed-bottom tabbar">
+  <div class="tabbar-item" ng-click="jumpComservice()">
+    <img src="images/comservice.png">
+    <p>社区服务</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpWelfare()">
+    <img src="images/welfare.png">
+    <p>商家福利</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpSociety()">
+    <img src="images/linli.png">
+    <p>邻里社交</p>
+  </div>
+
+  <div class="tabbar-item">
+    <img src="images/usercenter_select.png">
+    <p>个人中心</p>
+  </div>
+</div>
+

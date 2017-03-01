@@ -1,0 +1,27 @@
+
+
+
+.now_city{
+  margin-top:51px;
+  background: white;
+  font-size: 15px;
+}
+.hot_community{
+  padding-left: 10px;
+  background-color: #ddd;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.4rem;
+}
+
+.selectcommunity-hotcommunity{
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.4rem;
+}
+
+.sort_list span{
+  float:right;
+  margin-right: 20px;
+  margin-top:0px;
+}

@@ -1,0 +1,9 @@
+/* ******************************** navigationbar with back-button   begin ******************************** */
+.tab-content {
+    margin: 10px 10px;
+}
+
+.chart-legend, .bar-legend, .line-legend, .pie-legend, .radar-legend,
+.polararea-legend, .doughnut-legend {
+    text-align: left !important;
+}

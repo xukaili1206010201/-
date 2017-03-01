@@ -1,0 +1,54 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="backMyCommunitySet()" class="back-button" src="images/back_button.png">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchCity()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="cityBlur()">
+    </div>
+  </div>
+
+
+</nav>
+
+
+<div style="margin-top:50px">
+  <div ng-if="!errMsg && !isShowSearch">
+    <div>
+      <p class="hot_city">
+        热门城市
+      </p>
+      <ul ng-repeat="hotCity in hotCityList track by $index" class="text-center" style="word-break:keep-all;/* 不换行 */
+  white-space:nowrap;/* 不换行 */text-overflow:ellipsis;">
+        <li ng-bind="hotCity.name" ng-click="selectCity(hotCity)" class="col-xs-4 selectcity-hotcity">{{hotCity
+          .name}}
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="sort_box" ng-if="!errMsg">
+
+    <div ng-repeat="cityModel in cityList" class="sort_list">
+      <ul>
+        <li ng-click="selectCity(cityModel)" class="num_name selectcity-cityName">{{cityModel.name}}
+          <span class="status">已开通</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+</div>
+
+<div class="initials" ng-show="cityList.length > 0">
+  <ul>
+    <!--<li></li>-->
+  </ul>
+</div>
+

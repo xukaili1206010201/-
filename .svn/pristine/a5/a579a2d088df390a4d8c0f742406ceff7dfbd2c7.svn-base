@@ -1,0 +1,39 @@
+
+  /* ******************************** navigationbar with back-button   begin ******************************** */
+a{
+  color:#666;
+}
+
+/* ******************************** navigationbar item样式 ******************************** */
+.portfolio-item{
+  height: 30px;
+  margin-left: 50px;
+  margin-top: 10.5px;
+  margin-right: 50px;
+  /*background: red;*/
+  padding-top: 5px;
+
+}
+
+.portfolio-title{
+  margin-left:20%;
+  font-size: 16px;
+  color: white;
+}
+/*******************************************************/
+.nav .col-xs-5{
+  margin:5px 4%;
+  border-radius: 5px;
+  padding-left:0px;
+  padding-right: 0px;
+}
+.nav .col-xs-5 a{
+  padding:5px 1%;
+  outline: none;
+}
+.portfolio > li > a:hover, .portfolio > li > a:focus,.portfolio .active{
+  /*background: rgba(161, 206, 42, 1);*/
+  /*color: white;*/
+  /*border-radius: 5px;*/
+  /*outline: none;*/
+}

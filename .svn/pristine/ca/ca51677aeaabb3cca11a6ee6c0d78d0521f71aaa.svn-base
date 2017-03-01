@@ -1,0 +1,215 @@
+.servicereserve-content{
+  width: 100%;
+  margin-top: 50px;
+  background: #F0EFF6;
+}
+
+.servicereserve-detail{
+  margin: 1rem 1rem 0 1rem;
+  border-top: 1rem solid #F0EFF6;
+  background: white;
+}
+
+.servicereserve-name{
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.servicereserve-name p{
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.5rem;
+  margin: 0;
+  border-bottom: 1px solid #F0EFF6;
+}
+
+.servicereserve-info{
+  padding: 1rem;
+  overflow: hidden;
+  /*border-bottom: 1px solid #F0EFF6;*/
+}
+
+.servicereserve-service-img{
+  width: 4rem;
+  height: 4rem;
+  float: left;
+}
+
+.servicereserve-service-info{
+  padding-left: 8px;
+  overflow: hidden;
+}
+
+.servicereserve-service-info-top{
+  overflow: hidden;
+}
+
+/* 售价 */
+.servicereserve-service-currentprice{
+  color: rgb(255,192,83);
+  font-size: 1.6rem;
+}
+
+/* 单位 */
+.servicereserve-service-uint{
+  color: rgb(255,192,83);
+  font-size: 1.2rem;
+}
+
+/* 原价 */
+.servicereserve-service-orginalprice{
+  font-size: 1.4rem;
+}
+
+.servicereserve-service-editnum{
+  float: right;
+  height: 2rem;
+  /*width: 4.8rem;*/
+  border: 1px solid rgb(199,199,199);
+  border-radius: 2px;
+}
+
+.servicereserve-service-editnum button{
+  padding: 0;
+  margin: 0;
+  border: none;
+  width: 1.8rem;
+  height: 100%;
+  background: white;
+
+}
+
+.servicereserve-service-numinput{
+  width: 2rem;
+  /*height: 2rem;*/
+  /*line-height: 2rem;*/
+  border: none;
+  border-left: 1px solid rgb(199,199,199);
+  border-right: 1px solid rgb(199,199,199);
+  text-align: center;
+  outline: none;
+}
+
+.servicereserve-service-info-bottom{
+  padding-top: 3px;
+  overflow: hidden;
+}
+.servicereserve-service-sellnum{
+  margin-top: 4px;
+  float: left;
+}
+
+.servicereserve-service-totalmoney{
+  float: right;
+  font-size: 1.5rem;
+  color: rgb(255,192,83);
+}
+
+.servicereserve-service-specification{
+  padding: 0 1rem;
+}
+.servicereserve-service-specification-row{
+  border-top: 1px solid #F0EFF6;
+  padding: 1rem 0;
+  font-size: 1.4rem;
+  overflow: hidden;
+}
+
+/* 规格名称 */
+.servicereserve-service-specification-name{
+  float: left;
+}
+
+/* 规格下拉列表 */
+.servicereserve-service-dropdown select{
+  height: 2.5rem;
+}
+
+.servicereserve-dropdown-view{
+  overflow: hidden;
+  /*background: url(../../../images/down.png) no-repeat right white;*/
+}
+
+.servicereserve-dropdown{
+  outline: none;
+  width: 70%;
+}
+
+.servicereserve-remarks{
+  width: 100%;
+  padding: 1rem;
+  border-top: 1px solid #F0EFF6;
+}
+
+.servicereserve-remarks-input{
+  width: 100%;
+  height: 4rem;
+  border: 1px solid #F0EFF6;
+  border-radius: 3px;
+  padding: 0.3rem;
+  outline: none;
+}
+
+.servicereserve-service-chooseAddress{
+  width: 100%;
+  height: 3rem;
+  padding:0 2rem;
+  overflow: hidden;
+}
+
+.servicereserve-service-myAddress{
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.4rem;
+}
+
+.servicereserve-chooseaddress-img{
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.5rem;
+  float: right;
+}
+
+.servicereserve-service-address{
+  padding: 0 1rem;
+  margin: 0 1rem;
+  background: white;
+  border-radius: 3px;
+  font-size: 1.4rem;
+}
+
+.servicereserve-service-address-input{
+  height: 3.5rem;
+}
+
+.servicereserve-service-address-input span{
+  height: 100%;
+  line-height: 3.5rem;
+  width: 10%;
+}
+
+.servicereserve-service-address-input input{
+  outline: none;
+  width: 85%;
+}
+
+.servicereserve-service-address-edit{
+  border-top: 1px solid #F0EFF6;
+  border-bottom: 1px solid #F0EFF6;
+}
+
+.servicereserve-btngroup{
+  position: fixed;
+  left:0px;
+  bottom: 0px;
+  width: 100%;
+  overflow: hidden;
+  padding:10px 0px;
+  background-color: #ddd;
+}
+
+.servicereserve-btngroup button{
+  width: 44.75%;
+  margin-left: 3.5%;
+  float: left;
+}

@@ -1,0 +1,132 @@
+/* ******************************** 内容样式 ******************************** */
+.detail-content{
+  margin-top: 51px;
+}
+.basic_attribute , .user_attribute{
+  margin:0px;
+}
+.add-overflow{
+  overflow: hidden;
+}
+.p-Padding{
+  padding:0px 5px;
+}
+.coupons-name{
+  font-size: 1.4rem;
+  width:70%;
+  float:left;
+  display: inline-block;
+}
+.basic-coupons{
+  background-color: #EBEBF1;
+}
+.coupons-city-type{
+  float: right;
+}
+.fontColor{
+  color:#F7AF0D;
+}
+.detail-content .coupons-time{
+  text-align: left;
+}
+
+.user_attribute{
+  background-color: white;
+  padding-left: 0px;
+}
+
+.user_attribute li{
+  margin-left: 15px;
+}
+
+.user_attribute .group-property{
+  background-color: #dddddd;
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-left: 10px;
+  font-size: 15px;
+}
+
+.coupons-goods-table{
+  background: #dddddd;
+  padding-left: 0px;
+}
+
+#coupons-goods-show{
+  margin-left: 0px;
+  overflow: hidden;
+}
+
+.goods-image{
+  float: left;
+}
+
+.goods-image img{
+  width: 64px;
+  height: 64px;
+}
+
+.goods-info{
+  float: left;
+  margin-left: 5px;
+}
+
+.goods-name{
+  margin-top: 10px;
+}
+
+.goods-price{
+  margin-top: 10px;
+  margin-bottom: 0px;
+  color: orange;
+}
+
+
+/* ******************************** 优惠券操作样式 ******************************** */
+.coupons-operate-block{
+  height: 44px;
+  background: white;
+}
+
+.coupons-unused-block{
+  overflow: hidden;
+}
+
+.use-block{
+  float: left;
+  width: 45%;
+  margin-left: 3.3%;
+  margin-right: 3.3%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.send-block{
+  float: left;
+  width: 45%;
+  margin-right: 3.3%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.receive-block{
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.order_num{
+  float: right;
+  margin-right: 10px;
+}
+.using,.coupons-unreceive-block{
+  position:fixed;
+  left: 0;
+  bottom:0;
+  width:100%;
+}
+.unUsing{
+  width:96%;
+  margin-left:2%;
+}

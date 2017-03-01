@@ -1,0 +1,83 @@
+/*body{*/
+  /*background-color: #F0EFF5;*/
+/*}*/
+/*html{*/
+  /*font-size: 10px;*/
+/*}*/
+
+/*.navigation-bar{*/
+  /*!*background: green;*!*/
+  /*overflow: hidden;*/
+/*}*/
+/*.navigationbar {*/
+  /*background: rgb(161, 216, 34);*/
+/*}*/
+
+/* ******************************** 返回按钮样式  ******************************** */
+
+/*.back-button{*/
+  /*!*background: green;*!*/
+  /*width: 12px;*/
+  /*height: 18px;*/
+  /*margin-left: 10px;*/
+  /*!* 51/2 - 30/3  *!*/
+  /*margin-top: 15px;*/
+  /*float: left;*/
+/*}*/
+
+/* ******************************** 输入框组样式 ******************************** */
+/*.search-group{*/
+  /*/!*position: relative;*!/*/
+  /*height: 30px;*/
+  /*margin-left: 50px;*/
+  /*margin-top: 10.5px;*/
+  /*margin-right: 10px;*/
+  /*overflow: hidden;*/
+/*}*/
+
+
+/*.search-button{*/
+  /*width: 30px;*/
+  /*height: 30px;*/
+  /*margin-right: 0px;*/
+  /*float: right;*/
+/*}*/
+
+/*.search-input{*/
+  /*/!*background: red;*!/*/
+  /*margin-right: 35px;*/
+  /*height: 30px;*/
+/*}*/
+
+/*.search-input input{*/
+  /*height: 30px;*/
+  /*margin-right: 10px;*/
+  /*margin-left: 0px;*/
+/*}*/
+
+/*--------------列表样式--------------*/
+.st-city{
+  margin-top: 50px;
+  margin-left: 20px;
+}
+.st-city-text{
+  font-size: 15px;
+}
+.st-list-group{
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: white;
+
+}
+.st-station-name{
+  font-size: 15px;
+}
+.st-station-name ,.st-cover-house{
+  margin-left: 10px;
+  height: 16px;
+}
+.st-cover-house{
+  margin-top: 4px;
+  font-size: 12px;
+}

@@ -1,0 +1,181 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navcityLeft">
+    <!-- 返回按钮-->
+    <img ng-click="backComservice()" class="back-button" src="images/back_button.png">
+
+    <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+      <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+              ng-options="x.city_id as x.name for x in usercityList">
+      </select>
+    </p>
+  </div>
+
+  <div class="navcityRight">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchByKey()">
+      <input type="text" class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="welfareBlur()">
+    </div>
+  </div>
+
+</nav>
+
+<div class="sellerWelfare navMain">
+  <ul class="tabs text-center">
+    <li class="redPacket" ng-click="redPacket(true)">红包</li>
+    <li class="shop" ng-click="shop(false)">商城</li>
+  </ul>
+
+  <div>
+    <!--红包-->
+    <div ng-if="redPackageHtml" class="redPackage">
+      <div>
+        <div class="contentArea" load-more
+             data="{params : redPacket,repeatFun : '$scope.redPackageFun'}">
+          <div>
+            <!--轮播图-->
+            <div>
+              <div ng-hide="imgShow">
+                <carousel interval="myInterval" class="carousel-ad-images">
+                  <slide ng-repeat="slide in slides">
+                    <img ng-src="{{slide.image}}" curousel-height class="slideImg">
+                  </slide>
+                </carousel>
+              </div>
+              <!--占位图-->
+              <div ng-if="imgShow">
+                <img src="images/zhanwei.jpg" class="slideImg" curousel-height>
+              </div>
+
+            </div>
+
+            <!--公告-->
+            <div class="marquee-broadcast" ng-show="marqueeContent.length > 0">
+              <marquee behavior="scroll"  scrollAmount="{{slide}}">
+                <ul class="list-inline">
+                  <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+                </ul>
+              </marquee>
+            </div>
+
+            <!--红包列表-->
+            <ul class="list-group" ng-if="!errMsg">
+              <li class="list-group-item coupons-row" ng-repeat="k in redPacketList"
+                  ng-click="goDetail(k.coupons_id,k.fuwu_type)">
+                <p class="coupons-name">{{k.name}}</p>
+                <p class="coupons-type">{{k.fuwu_type}}&nbsp; {{k.city}}&nbsp;{{k.type}}&nbsp;{{k.number}}</p>
+                <!--<p class="coupons-city">城市</p>-->
+                <p class="coupons-time">{{k.start_date}}~{{k.end_date}}</p>
+              </li>
+            </ul>
+            <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+          </div>
+
+        </div>
+        <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+      </div>
+    </div>
+    <!--商城-->
+    <div ng-if="shopHtml" class="shop">
+      <div>
+        <div class="contentArea" load-more data="{params : params,repeatFun : '$scope.businessFun'}">
+          <div>
+            <!--轮播图-->
+            <div>
+              <div ng-hide="imgShow">
+                <carousel interval="myInterval" class="carousel-ad-images">
+                  <slide ng-repeat="slide in slides">
+                    <img ng-src="{{slide.image}}" curousel-height class="slideImg">
+                  </slide>
+                </carousel>
+              </div>
+              <!--占位图-->
+              <div ng-if="imgShow">
+                <img src="images/comserviceZhanwei.png" class="slideImg" curousel-height>
+              </div>
+
+            </div>
+
+            <!--公告-->
+            <div class="marquee-broadcast" ng-show="marqueeContent.length > 0">
+              <marquee behavior="scroll"  scrollAmount="{{slide}}">
+                <ul class="list-inline">
+                  <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+                </ul>
+              </marquee>
+            </div>
+
+            <!-- 商家列表 -->
+            <div class="seller-table">
+              <div class="support-list" ng-show="!errMsg">
+                <ul class="media-list">
+                  <li class="sup-media" ng-repeat="b in business">
+                    <div class="media-left">
+                      <!--<a href="#">-->
+                      <img class="media-object" src="{{b.logo}}" alt="...">
+                      <img class="image-tag" ng-show="ishot(a.hot)" src="images/fire.png">
+                      <!--</a>-->
+                    </div>
+                    <div class="media-body" ng-click="jumpgoodslist(b.business_id)" alt="{{b.business_id}}">
+                      <div class="seller-name-num">
+                        <div class="support-seller-content">
+                          <p><b class="support-seller-name">{{b.name}}</b></p>
+                          <img class="tag-image" ng-show="isnew(b.new)" src="images/newtag.png">
+                        </div>
+                        <p class="goods-num">{{b.goods_count}}个</p>
+                      </div>
+                      <p class="description">{{b.introduction}}</p>
+                      <p class="description">{{b.service}}</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+
+            </div>
+
+          </div>
+        </div>
+        <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+<!-- ************************************ 底部导航栏  ************************************-->
+<div class="navbar-fixed-bottom tabbar">
+  <div class="tabbar-item" ng-click="jumpComservice()">
+    <img src="images/comservice.png">
+    <p>社区服务</p>
+  </div>
+
+  <div class="tabbar-item">
+    <img src="images/welfare_select.png">
+    <p>商家福利</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpSociety()">
+    <img src="images/linli.png">
+    <p>邻里社交</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpUsercenter()">
+    <img src="images/usercenter.png">
+    <p>个人中心</p>
+  </div>
+</div>
+
+<script>
+  var contentH = window.screen.availHeight - parseInt($('.navigationbar').css('height'))
+    - parseInt($('.tabbar').css('height')) - parseInt($('.tabs').css('height'));
+  $('.contentArea').css({
+    'height': contentH + 'px',
+    'overflow': 'scroll'
+  });
+
+</script>

@@ -1,0 +1,183 @@
+/*.button-background-color {*/
+/*background: rgba(161, 206, 42, 1);*/
+/*color: white;*/
+/*}*/
+
+/*.button-background-color:focus , .button-background-color .focus , .button-background-color:hover{*/
+/*color: white;*/
+/*}*/
+
+/*.link-button{*/
+/*color: deepskyblue;*/
+/*outline: none;*/
+/*text-decoration: none;*/
+/*}*/
+
+/*.link-button:hover{*/
+/*color: deepskyblue;*/
+/*}*/
+
+/* ******************************** 包含返回按钮的导航栏样式 ******************************** */
+/******* 导航栏背景颜色 **********/
+.navigationbar {
+  /*background: rgb(164, 214, 40);*/
+  background-color: #7DB343;
+  color: white;
+  font-size: 15px;
+}
+
+.navbar{
+  margin-bottom: 0px;
+}
+/* ******************************** 返回按钮样式 ******************************** */
+
+
+/* *********** 搜索框+返回  ************** */
+.navigation-bar{
+  overflow: hidden;
+}
+.back-button {
+  /*background: green;*/
+  width: 12px;
+  height: 18px;
+  margin-left: 10px;
+  /* 51/2 - 30/3  */
+  margin-top: 15px;
+  float: left;
+}
+/* 输入框组样式  */
+.search-group {
+  /*position: relative;*/
+  height: 30px;
+  margin-left: 50px;
+  margin-top: 10.5px;
+  margin-right: 10px;
+  overflow: hidden;
+}
+/* 搜索按钮样式 */
+.search-button {
+  width: 25px;
+  height: 25px;
+  margin-right: 0px;
+  float: right;
+}
+.search-input {
+  /*background: red;*/
+  margin-right: 35px;
+  height: 30px;
+}
+.search-input input {
+  height: 30px;
+  margin-right: 10px;
+  margin-left: 0px;
+  float: left;
+}
+
+/*******************搜索框+城市+返回****************/
+/* 城市 */
+.city{
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+/* 添加按钮样式  */
+.add-image{
+  width: 25px;
+  height: 25px;
+  margin-top: 13px;
+  margin-right: 10px;
+  float: right;
+}
+.navigationbar-item .search-button img {
+  width: 25px;
+  height: 25px;
+}
+/*******************标题+返回****************/
+.navigationbar-item {
+  margin-left: 10px !important;
+  margin-top: 10.5px;
+  margin-right: 10px !important;
+  height: 30px;
+  overflow: hidden;
+}
+.item-title{
+  text-align: center;
+  font-size: 15px;
+  color: white;
+}
+/*******************城市+返回****************/
+.city-title{
+  width: 70%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 14px;
+}
+/* ******************************** 灰色的背景 ******************************** */
+.gray-body{
+  background: #F0EFF5;
+}
+
+
+/* ******************************** 字体大小 ******************************** */
+@media only screen and (max-device-width: 1080px), only screen and (max-width: 1080px) {
+  html, body {
+    font-size: 33.75px
+  }
+}
+
+@media only screen and (max-device-width: 960px), only screen and (max-width: 960px) {
+  html, body {
+    font-size: 30px
+  }
+}
+
+@media only screen and (max-device-width: 750px), only screen and (max-width: 750px) {
+  html, body {
+    font-size: 23.4375px
+  }
+}
+
+@media only screen and (max-device-width: 720px), only screen and (max-width: 720px) {
+  html, body {
+    font-size: 22.5px
+  }
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-width: 640px) {
+  html, body {
+    font-size: 20px
+  }
+}
+
+@media only screen and (max-device-width: 540px), only screen and (max-width: 540px) {
+  html, body {
+    font-size: 16.875px
+  }
+}
+
+@media only screen and (max-device-width: 480px), only screen and (max-width: 480px) {
+  html, body {
+    font-size: 13px
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  html, body {
+    font-size: 12.5px
+  }
+}
+
+@media only screen and (max-width: 360px), only screen and (max-width: 320px) {
+  html, body {
+    font-size: 11.25px
+  }
+}
+
+@media only screen and (max-width: 320px), only screen and (max-device-width: 320px) {
+  html, body {
+    font-size: 10px
+  }
+}

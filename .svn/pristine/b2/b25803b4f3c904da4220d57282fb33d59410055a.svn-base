@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <loading-label></loading-label>
+
+        <ul class="list-group data-list" style="transform: translateY(59px);">
+            <li class="list-group-item " ng-repeat="record in list">
+                <span>{{$index + 1}}</span>--{{record.name}}
+            </li>
+        </ul>
+    </div>
+</div>
+

@@ -1,0 +1,65 @@
+.message-detail-content{
+  margin-top: 51px;
+}
+
+.message-title{
+  font-size: 1.3rem;
+  padding-left: 10px;
+}
+.sender-time{
+  float: right;
+  margin-right: 10px;
+}
+
+.msg-detail-font{
+  font-size:1.1rem;
+}
+.sender-info .city{
+  float: left;
+}
+
+.sender-info .sender-time{
+  float: right;
+}
+
+.message-image{
+  width: 100%;
+  text-align: center;
+}
+
+.message-image img{
+  width: 100px;
+  height: 100px;
+}
+.msg-detail-head{
+  padding-top:10px;
+  background-color: #EBEBF1;
+  overflow: hidden;
+}
+.message-detail-block{
+  clear: both;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow: hidden;
+  font-size:1.4rem;
+}
+
+.message-detail-block .message-detail{
+  float: left;
+  margin: 0px;
+}
+
+.message-detail-block .link{
+  color: #0088cc;
+  text-align: right;
+  margin-bottom: 0px;
+}
+.read-time{
+  float:right;
+  margin-right: 10px;
+}
+

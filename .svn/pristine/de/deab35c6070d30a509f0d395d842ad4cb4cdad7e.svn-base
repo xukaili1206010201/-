@@ -1,0 +1,350 @@
+/*body {*/
+    /*background: rgb(240, 239, 245);*/
+/*}*/
+
+/*.button-background-color{*/
+    /*background: rgba(161,206,42,1);*/
+    /*color: white;*/
+/*}*/
+
+/*html {*/
+    /*font-size: 10px;*/
+/*}*/
+
+/*.navigation-bar {*/
+    /*/!*background: green;*!/*/
+    /*overflow: hidden;*/
+/*}*/
+
+/*.navigationbar {*/
+    /*background: rgb(161, 216, 34);*/
+/*}*/
+
+/*/!* ******************************** 返回按钮样式 ******************************** *!/*/
+
+/*.back-button {*/
+    /*/!*background: green;*!/*/
+    /*width: 30px;*/
+    /*height: 30px;*/
+    /*margin-left: 10px;*/
+    /*/!* 51/2 - 30/3  *!/*/
+    /*margin-top: 10.5px;*/
+    /*float: left;*/
+/*}*/
+
+/*/!* ******************************** 输入框组样式 ******************************** *!/*/
+/*.search-group {*/
+    /*/!*position: relative;*!/*/
+    /*height: 30px;*/
+    /*margin-left: 50px;*/
+    /*margin-top: 10.5px;*/
+    /*margin-right: 10px;*/
+    /*overflow: hidden;*/
+/*}*/
+
+/*.search-button {*/
+    /*width: 30px;*/
+    /*height: 30px;*/
+    /*margin-right: 0px;*/
+    /*float: right;*/
+/*}*/
+
+/*.search-input {*/
+    /*/!*background: red;*!/*/
+    /*margin-right: 35px;*/
+    /*height: 30px;*/
+/*}*/
+
+/*.search-input input {*/
+    /*height: 30px;*/
+    /*margin-right: 10px;*/
+    /*margin-left: 0px;*/
+/*}*/
+
+/*.order-segment {
+    *//*margin-top: 50px;*//*
+}*/
+.topay-msg,.tosend-msg,.tobackmoney-msg,.alsend-msg,.toback-msg,.finish-msg,.alback-msg{
+  background: #F0EFF5;
+}
+/*--************************************* segment-control ****************************-->*/
+.segment-control {
+    /*margin-top: 50px;*/
+    /*height: 40px;*/
+    background: white;
+    /*overflow: hidden;*/
+}
+
+.title {
+    font-size: 1rem;
+}
+
+/*  <!-- ***********全部**************** -->*/
+.all-message-button, .topay-message-button, .tobackmoney-message-button, .tosend-message-button, .alsend-message-button, .toback-message-button, .finish-message-button, .alback-message-button {
+    width: 12.5%;
+    /*margin-top: 5px;*/
+    /*margin-bottom: 5px;*/
+    height: 30px;
+    line-height: 30px;
+    color: rgb(109, 109, 109);
+    background: rgb(237, 237, 237);
+    float: left;
+    text-align: center;
+    /*display: table;*/
+}
+
+.all-message-button {
+    /*background-color: orange;*/
+    color: rgb(109, 109, 109);
+    background: rgb(161, 216, 34);
+
+}
+
+.all-message-button, .topay-message-button p, .tobackmoney-message-button p, .tosend-message-button p, .alsend-message-button p, .toback-message-button p, .finish-message-button p, .alback-message-button p {
+    color: rgb(109, 109, 109);
+    /*display: table-cell;*/
+    /*vertical-align: middle;*/
+}
+
+.all-message-button {
+    color: white;
+}
+.order-container{
+  margin-top:80px;
+}
+.all-message-table {
+    margin-top: 10px;
+    background-color: #f0eff5;
+}
+.order-container ul,.searchOrd ul{
+  margin-bottom: 0px;
+  padding-bottom: 20px;
+}
+/*/!* ******************************** 其他表 样式 ******************************** *!/*/
+.topay-message-table, .tobackmoney-message-table, .tosend-message-table, .alsend-message-table, .toback-message-table, .finish-message-table, .alback-message-table {
+    /*margin-top: 10px;*/
+    display: none;
+    border: 0;
+    background-color: #f0eff5;
+}
+
+.note-message .judge{
+  float:right;
+  padding:.1rem .5rem;
+  border-radius: 5px;
+  background: rgb(161, 216, 34);
+  color:white;
+}
+/*--------------金额列表样式------------------*/
+/*.all-message-table .price-type {*/
+    /*margin-top: 5px ;*/
+    /*margin-bottom: 60px ;*/
+/*}*/
+/*.alsend-message-table .price-type{*/
+    /*margin-top: 5px;*/
+    /*margin-bottom: 60px;*/
+/*}*/
+/*.finish-message-table .price-type{*/
+    /*margin-top: 5px;*/
+    /*margin-bottom: 60px;*/
+/*}*/
+.price-type{
+  /*margin-top: 5px !important;*/
+  margin-bottom: 60px !important;
+}
+.foot-price{
+    color: red;
+}
+.text-align{
+    text-align: center;
+}
+
+
+/*---------------列表样式---------------------*/
+/*.list-group {*/
+    /*margin-top: 80px;*/
+/*}*/
+/*.list-group-item {*/
+    /*overflow: hidden;*/
+/*}*/
+.line{
+    border-bottom: 1px solid #9e9898;
+}
+
+.order-message-text {
+    margin-left: 20px;
+    font-size:1rem;
+}
+.order-message-text .myorder-city, .ordernum, .ordertime, .paytime, .myorder-shop, .state, .allmoney, .myorder-note {
+    height: 15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.allmoney {
+    margin-left:8px;
+    color: red;
+}
+
+.list-text {
+    margin-left: 90px;
+    margin-right: 0px;
+}
+.row{
+  margin-left:0px;
+}
+/*.list-text .product-name, .time, .size, .sendway, .notetext,.count {*/
+    /*height: 15px;*/
+    /*/!*margin-top: 0px;*!/*/
+    /*/!*margin-bottom: 0px;*!/*/
+/*}*/
+.myorder-count{
+    float: right;
+    color: red;
+}
+.note-message {
+    margin-top: 5px;
+    clear:both;
+}
+.product-name ,.myorder-time , .size{
+    margin-bottom: 5px !important;
+}
+.col{
+  padding-right: 0px;
+  padding-left:0px;
+}
+/*.size .guige{
+  padding-right: 0px;
+  padding-left:.5rem;
+}*/
+
+/*.size, .sendway, .notetext {*/
+    /*font-size: 12px;*/
+    /*margin-bottom: 0px;*/
+/*}*/
+
+.myorder-shop {
+    margin-left: 20px;
+}
+
+.sendway {
+    margin-left: 10px;
+}
+
+.message-pic {
+    float: left;
+    margin-top: 20px;
+}
+
+.product-pic {
+    height: 100%;
+    float: right;
+    width: 60px;
+    margin-left: 5px;
+}
+
+.product-pic img {
+    width: 60px;
+    height: 60px;
+}
+
+.pic {
+    float: left;
+}
+
+.message-pic img {
+    width: 20px;
+    height: 20px;
+}
+
+.price {
+    float: right;
+    color: red;
+    font-size: 15px;
+}
+
+.station {
+    float: right;
+    color: red;
+    font-size: 12px;
+}
+
+.judge-button {
+    float: left;
+    width: 60px;
+    height: 18px;
+    font-size: 10px;
+}
+
+.judge-price {
+    float: right;
+}
+
+/*-------------最下方的按键------------------------*/
+.my-button-group {
+    /*position:fixed;*/
+    /*width: 100%;*/
+    bottom: 0;
+    /*overflow: hidden;*/
+    height: 60px;
+    background-color: #c4e3f3;
+}
+
+.button-group-left1 {
+    float: left;
+    width: 40%;
+    height: 100%;
+    background-color: #c4e3f3;
+}
+
+.button-group-right1 {
+    float: left;
+    width: 60%;
+    height: 100%;
+}
+.button-group-left2 {
+    float: left;
+    width: 70%;
+    height: 100%;
+    background-color: #c4e3f3;
+}
+
+.button-group-right2 {
+    float: left;
+    width: 30%;
+    height: 100%;
+}
+
+.button-cancel {
+    width: 100%;
+    height: 100%;
+}
+.button-margin{
+  margin-top: 60px;
+}
+
+.edit-group {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.edit-group button {
+    width: 100%;
+    height: 100%;
+}
+
+.labletext {
+    text-align: center;
+    margin-left: 5px;
+    margin-top: 20px;
+}
+
+.all-select-button {
+    float: inherit;
+    margin-right: 5px;
+}
+
+.statusHide{
+  display: none;
+}

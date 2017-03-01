@@ -1,0 +1,195 @@
+html,body,div,ul,li,ol,a,input,textarea,p,dl,dt,dd{margin:0;padding:0;}
+ul li{list-style: none;}
+a{text-decoration: none;cursor: pointer;}
+html{height: 100%;}
+/*TODO*/
+/*body{height: 100%;background: #f5f5f5;position: relative;font-family: '微软雅黑';max-width: 640px;margin:auto;}*/
+a,input,img,textarea,span,div{outline: 0;-webkit-tap-highlight-color:rgba(255,0,0,0);}
+header{
+    width:100%;
+    height: 45px;
+    background: #ececea;
+    border-bottom: 1px solid #ddd;
+}
+header.fixed{
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 99;
+}
+.header{
+    margin:0 20px;
+    text-align: center;
+    color: #4e4a49;
+    font-size: 1em;
+    height: 45px;
+    line-height: 45px;
+    position: relative;
+}
+/*#letter{*/
+    /*width: 100px;*/
+    /*height: 100px;*/
+    /*border-radius: 5px;*/
+    /*font-size: 75px;*/
+    /*color: #555;*/
+    /*text-align: center;*/
+    /*line-height: 100px;*/
+    /*background: rgba(145,145,145,0.6);*/
+    /*position: fixed;*/
+    /*left: 50%;*/
+    /*top: 50%;*/
+    /*margin:-50px 0px 0px -50px;*/
+    /*z-index: 99;*/
+    /*display: none;*/
+/*}*/
+/*#letter img{*/
+    /*width: 50px;*/
+    /*height: 50px;*/
+    /*float: left;*/
+    /*margin:25px 0px 0px 25px;*/
+/*}*/
+.sort_box{
+    /*margin-top: 51px;*/
+    width: 100%;
+    /*padding-top: 51px;*/
+    overflow: hidden;
+}
+.sort_list{
+    padding:0px 10px 0px 10px;
+    position: relative;
+    /*height: 55px;*/
+    /*line-height: 65px;*/
+    /*border-bottom:1px solid #ddd;*/
+}
+
+/*.sort_list .num_logo{*/
+    /*width: 50px;*/
+    /*height: 50px;*/
+    /*border-radius: 10px;*/
+    /*overflow: hidden;*/
+    /*position: absolute;*/
+    /*top: 5px;*/
+    /*left: 20px;*/
+/*}*/
+/*.sort_list .num_logo img{*/
+    /*width: 50px;*/
+    /*height: 50px;*/
+/*}*/
+.sort_list .num_name{
+    height: 3rem;
+    /*margin-top: 5px;*/
+    color: #000;
+    /*background: red;*/
+    border-bottom: 1px solid #ddd;
+  font-size: 1.4rem;
+  line-height: 3rem;
+}
+
+.selectcity-hotcity{
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.4rem;
+}
+
+.status{
+    height: 20px;
+    margin-top: 5px;
+    font-size: 12px;
+    /*background: green;*/
+}
+
+.sort_letter{
+    height: 20px;
+    line-height: 20px;
+    padding-left: 10px;
+    color:#787878;
+    font-size: 14px;
+    background: #ddd;
+    /*border-bottom:1px solid #ddd;*/
+}
+.initials{
+    position: fixed;
+    top: 47px;
+    right: 0px;
+    height: 100%;
+    width: 15px;
+    padding-right: 10px;
+    text-align: center;
+    font-size: 12px;
+    z-index: 99;
+    background: rgba(145,145,145,0);
+}
+.initials li img{
+    width: 14px;
+}
+
+
+
+
+
+
+
+/*.navigation-bar{*/
+    /*/!*background: green;*!/*/
+    /*overflow: hidden;*/
+/*}*/
+
+/*/!* ******************************** 返回按钮样式 ******************************** *!/*/
+
+/*.back-button{*/
+    /*/!*background: green;*!/*/
+    /*width: 30px;*/
+    /*height: 30px;*/
+    /*margin-left: 10px;*/
+    /*/!* 51/2 - 30/3  *!/*/
+    /*margin-top: 10.5px;*/
+    /*float: left;*/
+/*}*/
+
+/*/!* ******************************** 输入框组样式 ******************************** *!/*/
+/*.search-group{*/
+    /*/!*position: relative;*!/*/
+    /*height: 30px;*/
+    /*margin-left: 50px;*/
+    /*margin-top: 10.5px;*/
+    /*margin-right: 10px;*/
+    /*overflow: hidden;*/
+/*}*/
+
+
+/*.search-button{*/
+    /*width: 30px;*/
+    /*height: 30px;*/
+    /*margin-right: 0px;*/
+    /*float: right;*/
+/*}*/
+
+/*.search-input{*/
+    /*/!*background: red;*!/*/
+    /*margin-right: 35px;*/
+    /*height: 30px;*/
+/*}*/
+
+/*.search-input input{*/
+    /*height: 30px;*/
+    /*margin-right: 10px;*/
+    /*margin-left: 0px;*/
+/*}*/
+
+/*.now_city{*/
+  /*margin-top:51px;*/
+  /*background: white;*/
+  /*font-size: 15px;*/
+/*}*/
+.hot_city{
+  margin-top:51px;
+  padding-left: 10px;
+  background-color: #ddd;
+}
+.sort_list span{
+  float:right;
+  margin-right: 20px;
+  margin-top:0px;
+}
+
+

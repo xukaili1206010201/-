@@ -1,0 +1,74 @@
+.share-main {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    top: 0;
+    background: #f8f8f8;
+}
+
+.share-templates .share-prompt {
+    text-align: center;
+    clear: both;
+}
+
+.share-templates .share-prompt img {
+    width: 6rem;
+}
+
+.share-templates .share-prompt p {
+    color: #ffffff;
+}
+
+.share-templates {
+    position: absolute;
+    z-index: 12;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: rgba(0, 0, 0, .4);
+}
+
+.share-templates .prompt-img {
+    width: 6rem;
+    position: absolute;
+    top: 0;
+    right: 20px;
+}
+.share-goods-detail {
+    background: #ffffff;
+    margin-top: 28%;
+    margin-left:10px;
+    margin-right:10px;
+    box-shadow: 0 0 5px #C6C6C6;
+}
+.share-goods-detail .share-good .share-business{
+    background:#ECECEC;
+    padding:3px 10px;
+    border-top:1px solid #ECECEC;
+    border-bottom:1px solid #ECECEC;
+}
+.share-goods-detail .share-good .share-business span{
+    font-weight:bold;
+    margin-left:5px;
+    vertical-align: middle;
+    letter-spacing: 2px;
+}
+.share-goods-detail .share-good .share-business >img{
+    width:3rem;
+    height:3rem;
+}
+.share-goods-detail .share-good{
+    text-align: left;
+    width:100%;
+}
+.share-goods-detail .share-good .share-good-content{
+    padding-left:10px;
+}
+
+.share-goods-detail .share-good-content p{
+    padding-top:5px;
+}
+.share-goods-detail .share-good-content p:last-child{
+    color:#ff6600;
+    padding-bottom: 5px;
+}

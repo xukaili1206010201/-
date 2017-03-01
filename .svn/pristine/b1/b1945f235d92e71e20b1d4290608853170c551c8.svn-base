@@ -1,0 +1,91 @@
+
+/*html{*/
+  /*font-size: 10px;*/
+/*}*/
+
+a:hover {
+  text-decoration: none;
+}
+
+/*头部用户信息展示样式*/
+.no-user {
+  /*margin-top: 51px;*/
+  overflow: hidden;
+  background:#7DB343;
+  padding-left:5px;
+  color: #ffffff;
+}
+.no-user b{
+  color: #ffffff;
+  font-size:22px;
+}
+.no-user .user-info{
+  float: left;
+  overflow: hidden;
+  max-width: 60%;
+  margin-top:23px;
+  margin-left:4px;
+}
+.no-user .pull-right>i{
+  line-height:85px;
+  font-weight:bold;
+  margin-right:15px;
+  font-size:30px;
+}
+/*用户头像*/
+.no-user-avatar {
+  width: 62px;
+  height:62px;
+  display: block;
+  margin: 10px;
+  float: left;
+  -webkit-border-radius: 31px;
+  -moz-border-radius: 31px;
+  border-radius: 31px;;
+}
+
+.no-user .login-button-block{
+  float: left;
+  text-align: center;
+  width: 80%;
+}
+
+.no-user .login-button-block .login-button{
+  width: 50%;
+}
+/******************************列表*******************************/
+
+ul{
+  margin-bottom: 0px;
+}
+
+.content-padding ul .last-row{
+  border-bottom: 1px solid white;
+}
+
+.content-padding{
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.content-padding ul {
+  padding-left: 10px;
+  /*background: red;*/
+}
+
+.content-padding ul li {
+  border-bottom: 1px solid #dddddd;
+  padding-right: 10px;
+}
+
+.content-padding ul li a {
+  display: block;
+  height: 44px;
+  line-height: 44px;
+  overflow: hidden;
+  font-size: 14px;;
+  background: url("../images/next.png") right center no-repeat;
+  background-size: auto 15px;
+}
+
+

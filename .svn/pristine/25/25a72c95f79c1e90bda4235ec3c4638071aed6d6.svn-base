@@ -1,0 +1,212 @@
+<script>
+  //************************************* 跑马灯 begin ***************************************
+
+
+  //************************************* 下拉列表 begin ***************************************
+  $(function () {
+    var listW = parseInt($('.btn-group').css('width'));
+    var listButtonW = parseInt($('.list-button').css('width'));
+    //总长度-图片与右边的边距-图片的宽度-图片与文本的边距-文本与左边的边距
+    var showButtonW = listW - listButtonW;
+    $('.show-button').css({
+      'width': showButtonW + 'px'
+    });
+  })
+  //************************************* 下拉列表 end ***************************************
+
+
+
+  //************************************* 卡头切换效果 begin ***************************************
+  var lastSelectButton = '.all-button';
+
+  function setSelectButton(target) {
+
+    //上次选中按钮样式
+    $(lastSelectButton).css({
+      'color': '#000',
+      'border-bottom': '3px solid white'
+    });
+
+    //当前选中按钮样式
+    $(target).css({
+      'color': 'rgb(125, 179, 67)',
+      'border-bottom': '3px solid  rgb(125, 179, 67)'
+    });
+
+    lastSelectButton = target;
+  }
+
+  function showAllTable(event) {
+    setSelectButton(event.target);
+  }
+
+  function showPackageTable() {
+    setSelectButton(event.target);
+  }
+
+  function showSingleTable() {
+    setSelectButton(event.target);
+  }
+
+  function showDrinkTable() {
+    setSelectButton(event.target);
+  }
+  //************************************* 卡头切换效果 end ***************************************
+
+  /******************关键字搜索相关***************************/
+  var searchHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.searchGoods').css({
+    'height' : searchHeight + 'px',
+    'overflow' : 'scroll'
+  });
+  /*var goodsHeight = searchHeight - $('.seller-name-block').height() - $('.marquee_box').height()
+                    - $('.filter-block').height() - $('.goods-segment-control').height();
+  $('.goods-list').css({
+    'height' : (goodsHeight-12) + 'px',
+    'overflow' : 'scroll'
+  });*/
+
+</script>
+
+
+<nav class="navbar navbar-default navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img ng-click="backtosupport()" class="back-button" src="images/back_button.png">
+
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchGoods()">
+
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div ng-if="isSearch" class="goodslist-content" style="margin-top: 0;">
+  <!--<div class="select-block">-->
+  <!-- 商家-->
+  <div class="seller-name-block service-name" good-height data="{type:'0'}">
+    <p class="seller-name" ng-click="jumpSellerdetail(business_id)">{{business.name}}</p>
+    <b><img ng-click="jumpSellerdetail(business_id)" src="images/next.png"></b>
+  </div>
+
+
+    <!-- ************************************ 跑马灯 ********************************* -->
+    <div class="marquee_box" ng-show="marqueeContent.length > 0">
+      <div class="marquee">
+        <ul class="marquee-content-items">
+          <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ************************************ 下拉列表 ********************************* -->
+    <div class="filter-block select-items">
+      <select ng-model="selected"  class="dropdown" ng-change="changeSelected()" ng-init="selected='day_count'">
+        <option value="zong_count">总销量优先</option>
+        <option value="week_count">周销量优先</option>
+        <option value="day_count">日销量优先</option>
+        <option value="score">评分优先</option>
+        <option value="sale_price">价格优先</option>
+        <option value="up_date">上架时优先</option>
+        <option value="goods_name">商品名优先</option>
+      </select>
+    </div>
+  <!--</div>-->
+
+  <!-- ************************************ 卡头 ********************************* -->
+  <div class="goods-segment-control change-tabs">
+    <button  class="all-button a" style="{{sty}}" ng-click="changecate('',0,'全部')" onclick="showAllTable(event)">全部<span style="width: 1px;height: 24px;background: #dddddd;float: left;margin-top: 8px"></span></button>
+
+    <button  class="package-button a" style="{{sty}}" ng-click="changecate(a.category_id,$index,'非全部')" onclick="showPackageTable(event)" ng-repeat="a in category">{{a.name}}</button>
+  </div>
+
+
+  <div ng-show="!errMsg" class="goods-table show{{count}}" ng-repeat="count in category_count">
+    <div class="goods-list common-contentList" load-more data="{params : params,repeatFun : '$scope.goodsListFun'}">
+      <ul class="media-list goodList-media">
+        <li class="media" ng-repeat="a in goodslist">
+          <div class="media-left">
+            <a href="#">
+              <img class="media-object list-img" ng-src="{{a.imageUrl}}" alt="...">
+              <img class="image-tag" ng-show="ishot(a.hot)" src="images/fire.png">
+            </a>
+          </div>
+
+          <div class="media-body goods-list-row-content" ng-click="jumpgoodsDetail(a.goods_id)" style="margin-right: 50px">
+            <div class="title-cart-block" >
+              <div class="goodslist-title-row">
+                <span><b>{{a.name}}</b></span>
+                <img ng-show="isnew(a.new)" src="images/newtag.png"
+                     style="width: 25px;height: 13px;margin-top:5px;margin-left: 5px;float: left;">
+              </div>
+            </div>
+            <p class="goods-description"><small>{{a.introduction}}</small></p>
+
+            <div class="price-num">
+              <span class="goodslist-goods-price"><span class="price_i">¥</span>{{a.sale_price}}</span>
+              <span class="goods-danwei">/套</span>
+              <s><span class="price_i">¥{{a.old_price}}</span></s>
+              <span>&nbsp;&nbsp;</span>
+              <span class="goods-xiaoliang">日销量:{{a.day_count}}</span>
+            </div>
+          </div>
+          <div class="media-right">
+            <img class="goodslist-cart" ng-click="jumppurchase(a.goods_id)" src="images/cart.jpg">
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+
+  <div ng-show="errMsg"><img src="{{errMsg}}" style="height:100%;width:100%;"  /></div>
+
+
+</div>
+<!---------------关键字搜索-------------------->
+  <div ng-if="!isSearch">
+    <div ng-if="!isGoods" style="text-align: center;font-size: 1.6rem"><span>sorry,暂无相关数据！</span></div>
+    <div ng-if="isGoods" class="searchGoods" load-more data="{params : goodParams,repeatFun : '$scope.goodsListByKey'}">
+      <ul class="media-list goodList-media">
+
+        <li class="media" ng-repeat="a in goodsByKey">
+
+          <div class="media-left">
+            <a href="#">
+              <img class="media-object list-img" ng-src="{{a.imageUrl}}" alt="...">
+              <img class="image-tag" ng-show="ishot(a.hot)" src="images/fire.png">
+            </a>
+          </div>
+
+          <div class="media-body goods-list-row-content" ng-click="jumpgoodsDetail(a.goods_id)" style="margin-right: 50px">
+            <div class="title-cart-block" >
+              <div class="goodslist-title-row">
+                <span style="float: left;">{{a.name}}</span>
+                <img ng-show="isnew(a.new)" src="images/newtag.png"
+                     style="width: 25px;height: 13px;margin-top:5px;margin-left: 5px;float: left;">
+              </div>
+            </div>
+            <p class="goods-description">{{a.introduction}}</p>
+
+            <div class="price-num">
+              <span class="goodslist-goods-price">￥{{a.sale_price}}</span>
+              <span class="goods-danwei">/套</span>
+              <s>￥{{a.old_price}}</s>
+              <span>&nbsp;&nbsp;</span>
+              <span class="goods-xiaoliang">日销量:{{a.day_count}}</span>
+            </div>
+          </div>
+          <div class="media-right">
+            <img class="goodslist-cart" ng-click="jumppurchase(a.goods_id,1)" src="images/cart.jpg">
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </div>

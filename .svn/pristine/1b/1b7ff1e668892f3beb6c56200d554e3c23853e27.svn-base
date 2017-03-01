@@ -1,0 +1,60 @@
+'use strict';
+
+var reserveCacheService = angular.module('reserveCacheService', []);
+
+//通用服务方法
+reserveCacheService.factory('reserveCacheService',
+  function ($http, $state, $q, $uibModal) {
+
+    //定义参数对象
+    var serviceServiceInfo = {};
+
+    /**
+     * 定义传递数据的setter函数
+     * @param {type} xxx
+     * @returns {*}
+     * @private
+     */
+    var _setter = function (data) {
+      serviceServiceInfo = data;
+      var serviceServiceInfoStr = JSON.stringify(serviceServiceInfo);
+      sessionStorage.serviceServiceInfo = serviceServiceInfoStr;
+    };
+
+    /**
+     * 定义获取数据的getter函数
+     * @param {type} xxx
+     * @returns {*}
+     * @private
+     */
+    var _getter = function () {
+      var serviceServiceInfoStr = sessionStorage.serviceServiceInfo;
+      var dict = JSON.parse(serviceServiceInfoStr);
+      return dict;
+    };
+
+    var _setProperty = function (key,value) {
+      serviceServiceInfo[key] = value
+      var serviceServiceInfoStr = JSON.stringify(serviceServiceInfo);
+      sessionStorage.serviceServiceInfo = serviceServiceInfoStr;
+    }
+
+    var _getProperty = function (key) {
+      var serviceServiceInfoStr = sessionStorage.serviceServiceInfo;
+      var dict = JSON.parse(serviceServiceInfoStr);
+      var value = dict[key];
+      return value
+    }
+
+    // Public APIs
+    // 在controller中通过调setter()和getter()方法可实现提交或获取参数的功能
+    return {
+      setter: _setter,
+      getter: _getter,
+      setProperty: _setProperty,
+      getProperty: _getProperty
+    };
+
+  }
+);
+

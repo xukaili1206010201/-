@@ -1,0 +1,163 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="jumpCenter()" class="back-button" src="images/back_button.png">
+  </div>
+  <div class="navText">个人信息设置</div>
+
+</nav>
+
+<div class="main" style="background:#EFEFEF">
+  <!-- 头像-->
+  <div class="weui_uploader_files edit-image" delete-headimg>
+    <input class="weui_uploader_input js_file inputBox" type="file"
+           accept="image/jpg,image/jpeg,image/png,image/gif"
+           id="edituserinfo-img-upload">
+    <div class="imgBox"></div>
+  </div>
+
+  <form name="form" ng-submit="jumpTo()">
+    <div class="info-input">
+
+      <div class="weui_cells">
+
+        <div class="weui_cells_access">
+          <div class="weui_cell" ng-click="editmobile()">
+            <div class="weui_cell_bd weui_cell_primary">
+              <p>手机号</p>
+            </div>
+            <div class="weui_cell_ft" id="editmobile" ng-model="formData.mobile">
+              {{formData.mobile}}
+            </div>
+          </div>
+        </div>
+
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>昵称</p>
+          </div>
+          <div class="weui_cell_ft">
+            <input id="nickname" ng-model="formData.nickname" class="weui_input"
+                   style="text-align: right" type="text" placeholder="请输入昵称">
+          </div>
+        </div>
+
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>姓名</p>
+          </div>
+          <div class="weui_cell_ft">
+            <input id="username" ng-model="formData.username" class="weui_input"
+                   style="text-align: right" type="text" placeholder="请输入姓名">
+          </div>
+        </div>
+
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>性别</p>
+          </div>
+          <div class="weui_cell_ft">
+            <div>
+              <input
+                      bs-switch
+                      ng-model="formData.sex"
+                      type="checkbox"
+                      switch-on-text="男"
+                      switch-off-text="女"
+                      switch-on-color="success"
+                      switch-off-color="danger"
+                      ng-true-value="1"
+                      ng-false-value="2">
+            </div>
+          </div>
+        </div>
+
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>身份证号</p>
+          </div>
+          <div class="weui_cell_ft">
+            <input ng-model="formData.id_number" class="weui_input"
+                   style="text-align: right" name="id_number" type="text"
+                   ng-blur="birthdayBlur()"
+                   placeholder="请输入身份证号">
+          </div>
+        </div>
+
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>生日</p>
+          </div>
+          <div class="weui_cell_ft">
+            <input ng-model="formData.birthday" class="weui_input"
+                   style="text-align: right;" type="text"
+                   id="birthday"
+                   placeholder="请输入生日">
+          </div>
+        </div>
+
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>电子邮箱</p>
+          </div>
+          <div class="weui_cell_ft">
+            <input ng-model="formData.email" type="email" class="weui_input"
+                   style="text-align: right;" type="text"
+                   id="email"
+                   placeholder="请输入电子邮箱">
+          </div>
+        </div>
+
+
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>余额</p>
+          </div>
+          <div class="weui_cell_ft">
+            {{formData.balance | currency : '￥'}}
+          </div>
+        </div>
+
+        <div class="weui_cell">
+        </div>
+
+        <div class="weui_cells_access" style="margin-top: -1.17647059em">
+          <a class="weui_cell" ng-click="editusercard()">
+            <div class="weui_cell_bd weui_cell_primary">
+              <p>个人名片</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+          </a>
+          <a class="weui_cell" ng-click="editPasswordreset()">
+            <div class="weui_cell_bd weui_cell_primary">
+              <p>修改密码</p>
+            </div>
+            <div class="weui_cell_ft">
+              ********
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="weui_cells weui_cells_access">
+        <a class="weui_cell" ng-click="jumpTo()">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>保存</p>
+          </div>
+        </a>
+        <a class="weui_cell" ng-click="editcenterNo()">
+          <div class="weui_cell_bd weui_cell_primary">
+            <p>注销</p>
+          </div>
+        </a>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>
+
+

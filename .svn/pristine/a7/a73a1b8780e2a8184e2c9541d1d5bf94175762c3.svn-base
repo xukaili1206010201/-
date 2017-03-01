@@ -1,0 +1,43 @@
+<div class="share-main">
+  <div class="share-templates" ng-click="methods.closePrompt()">
+    <div class="share-prompt">
+      <img src="/images/present.png"/>
+      <div ng-if="data.intiShare">
+        <p>*\( ^ v ^ )/*YES！买到几件好货！</p>
+        <p>快去分享给小伙伴们吧！</p>
+      </div>
+      <div style="margin-top:10px;" ng-if="!data.intiShare">
+        <p style="color: #ff6600 !important;">\( ^ v ^ )/哦耶！在买买买的路上越战越勇~</p>
+      </div>
+    </div>
+    <img ng-if="data.intiShare" class="prompt-img" src="images/prompt.png"/>
+  </div>
+  <div class="share-goods-detail">
+    <uib-carousel id="carousel" interval="3500" class="carousel-ad-images">
+      <uib-slide active="" ng-repeat="good in data.goodsList">
+        <div class="share-good"
+             ng-click="methods.goGoodsDetail(good.type,good.goods_id,good.business_id)">
+          <div>
+            <span ng-if="good.goods_images.length==0">
+              <img ng-src="{{good.imageUrl}}" class="slideImg">
+            </span>
+            <span ng-if="good.goods_images.length>0">
+              <img ng-src="{{good.goods_images[0]}}" curousel-height="" class="slideImg">
+            </span>
+          </div>
+          <div class="share-business"><img ng-src="{{good.business_logo}}"/>
+            <span>{{good.business_name}}</span>
+          </div>
+          <div class="share-good-content">
+            <p>{{good.name}}</p>
+            <p style="color:#8c8c8c" ng-repeat="guige in good.guige">
+              <span ng-repeat="v in guige.value">{{v.guige_name}}
+                <span ng-if="$index<guige.value.length-1">，</span></span>
+            </p>
+            <p>￥{{good.sale_price}}/{{good.unit}}</p>
+          </div>
+        </div>
+      </uib-slide>
+    </uib-carousel>
+  </div>
+</div>

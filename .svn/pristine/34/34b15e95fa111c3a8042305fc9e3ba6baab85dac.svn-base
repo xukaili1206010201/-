@@ -1,0 +1,234 @@
+/*body {*/
+/*background: rgb(240, 239, 245);*/
+
+/*}*/
+
+/*.navigationbar {*/
+/*background: rgb(161, 216, 34);*/
+/*}*/
+
+.goodslist-content {
+    background: #F0EFF5;
+}
+
+/* ******************************** 商家 begin ******************************** */
+.seller-name-block {
+    margin-top: 0px;
+    background: white;
+    width: 100%;
+    height: 40px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1000;
+}
+
+.seller-name-block img {
+    float: right;
+    width: 20px;
+    height: 20px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.seller-name-block p {
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    margin: 0px;
+    margin-left: 10px;
+    width: 85%;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+/* ******************************** 商家 end ******************************** */
+
+/* ******************************** 跑马灯   begin ******************************** */
+.ma-container {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.marquee_box {
+    width: 100%;
+    float: left;
+    display: inline-block;
+    overflow: hidden;
+    box-sizing: border-box;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    cursor: pointer;
+    color: orange;
+    background-color: #F0EFF5;
+}
+
+/* ******************************** 下拉选择列表   begin ******************************** */
+.filter-block {
+    /*margin-bottom:5px;*/
+    border-top: 1px solid #fff;
+    position: relative;
+    z-index: 1000;
+    background-color: #F0EFF5;
+}
+
+.filter-block .goodsListSelect {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;;
+    width: 96%;
+    height: 30px;
+    margin: 5px 2%;
+    border: 1px solid #7DB343;
+    padding-left: 3%;
+    background: url(../images/drop_down.png) no-repeat right #FFFFFF;
+}
+
+/* ******************************** 下拉选择列表   end ******************************** */
+
+/* ******************************** 卡头   begin ******************************** */
+.goods-segment-control {
+    background: white;
+    height: 2.8rem;
+    position: relative;
+    z-index: 1000;
+}
+
+.goods-list-tabs {
+    height: 2.8rem;
+    font-size: 1.2rem;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    color: #000;
+}
+
+.goods-list-tabs .classify {
+    height: 2.8rem;
+    border: none;
+    text-align: center;
+    line-height: 2.8rem;
+    background: #FFFFFF;
+    margin-right: 1rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+}
+
+.goods-list-tabs a:hover {
+    text-decoration: none;
+}
+
+/*.goods-list-tabs .all-button{
+  color:  rgb(125, 179, 67);
+  border-bottom: 3px solid  rgb(125, 179, 67);
+}*/
+/* ******************************** 卡头   end ******************************** */
+
+/* ******************************** 列表样式 begin ******************************** */
+.goods-table {
+    /*margin-top: 7px;*/
+}
+
+.list-img {
+    width: 107px !important;
+    height: 64px !important;
+}
+
+.media-list {
+    border-top: 1px solid #dddddd;
+}
+
+.goodList-media > .media {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #dddddd;
+    background: white;
+    margin: 0px;
+}
+
+.media-body {
+    /*background: red;*/
+    padding-left: 10px;
+}
+
+.media-left {
+    position: relative;
+    padding: 0px;
+    margin: 0px;
+}
+
+.goods-list-row-content {
+    /*padding-right: 10px;*/
+}
+
+.image-tag {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 30px !important;
+    height: 20px !important;
+}
+
+.title-cart-block {
+    /*overflow: hidden;*/
+    font-size: 1.4rem;
+    line-height: 1.6rem
+}
+
+.title-cart-block .goodslist-title-row {
+    overflow: hidden;
+    width: 100%;
+}
+
+.media .goodslist-cart {
+    width: 3rem;
+    height: 2.5rem;
+    float: right;
+}
+
+.goods-description {
+    color: #818181;
+    margin-top: 6px;
+}
+
+.price-num {
+    line-height: 1.2rem;
+}
+
+.price-num .goodslist-goods-price {
+    /*color: #E79D1E;*/
+    font-size: 1.3rem;
+}
+
+.goodslist-goods-price {
+    margin-top: 0px;
+}
+
+.price-num .goods-danwei {
+    /*color:#E79D1E;*/
+    font-size: 1rem;
+}
+
+.price-num .goods-xiaoliang {
+    font-size: 1.2rem;
+    color: #818181;
+    margin-left: 1rem;
+}
+
+.price-num s {
+    font-size: 15px;
+}
+
+.price-num .price_i {
+    color: #999;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* ******************************** 列表样式 end ******************************** */

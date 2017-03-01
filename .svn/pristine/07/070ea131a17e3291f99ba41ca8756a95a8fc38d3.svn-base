@@ -1,0 +1,93 @@
+
+<script>
+
+    //设置背景颜色
+    $(function () {
+      var screenW = $(window).width();
+      var screenH = $(window).height() - parseInt($('.navigationbar').css('height'));
+      $('.familyaccountlist-content').css({
+        'height': screenH
+      })
+    })
+
+
+    $(function(){
+      $("#marquee").marquee({
+        scrollSpeed:12,
+        pauseSpeed:1000
+      });
+    });
+
+</script>
+
+
+
+<nav class="navbar navbar-default navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="backtofamilyaccount()">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchAccount()">
+        <input class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="accountlistBlur()">
+    </div>
+  </div>
+
+</nav>
+
+<div class="familyaccountlist-content">
+
+  <!-- 商家名称 -->
+  <div class="familyaccountlist-sellername-view service-name" ng-click="jumpSellerdetail()">
+    <span ng-show="null==business"class="familyaccountlist-sellername-text">全部商家</span>
+    <span ng-show="null!=business"  class="familyaccountlist-sellername-text">{{business.name}}</span>
+    <img ng-show="null!=business"  class="familyaccountlist-next-image" src="images/next.png">
+  </div>
+
+  <div class="marquee-broadcast" ng-show="marqueeContent.length > 0">
+    <marquee behavior="scroll"  scrollAmount="{{slide}}">
+      <ul class="list-inline">
+        <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+      </ul>
+    </marquee>
+  </div>
+
+  <div class="goods-segment-control family-account-list-all">
+    <div class="family-account-list-category">
+      <a  class="package-button account-list-cate" ng-click="changecate(a.category_id,$index)"  ng-repeat="a in category" cate-change
+          data="{parent : '.family-account-list-category',child:'.account-list-cate',promise : '$scope.accountlistPromise',goodslist:'.familyaccountlist-table'}"
+      >{{a.name}}</a>
+    </div>
+  </div>
+
+  <div class="familyaccountlist-table show{{count}}" ng-repeat=" count in category_count">
+    <div class="accountLists common-contentList" ng-if="!errMsg" load-more data="{params : params,repeatFun : '$scope.accountListFun'}">
+      <div>
+        <div class="familyaccountlist-row" ng-repeat="k in accountList" ng-click="jumpaccountDetail(k.goods_id,k.name)">
+          <div class="familyaccountlist-row-left" style="position: relative;">
+            <img ng-src={{k.imageUrl}} class="list-img ">
+            <img class="image-tag" ng-show="k.hot == 'Y'" src="images/fire.png">
+          </div>
+
+          <div class="familyaccountlist-row-right">
+
+            <div class="familyaccountlist-content-top">
+
+              <div class="familyaccountlist-content-top-left">
+                <p class="familyaccountlist-service-name">{{k.name}}
+                  <img class="img-responsive familyservice-tag" src="images/newtag.png" ng-show="k.new == 'Y'">
+                </p>
+                <p class="familyaccountlist-service-intro">{{k.introduction}}</p>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="errMsg" ng-if="errMsg" style="background:#F0EFF6;">{{errMsg}}</div>
+  </div>
+</div>

@@ -1,0 +1,171 @@
+
+<script>
+  //设置优惠券列表的高度
+  var marginH = $('.navigationbar').outerHeight() + $('.segment-control').outerHeight();
+  var ht = window.screen.availHeight - marginH;
+
+  $('.coupons-content').css({
+    'height' : ht+'px',
+    'margin-top' : marginH + 'px'
+  });
+
+  $('.unused-table').css({
+    'height' : ht + 'px',
+    'overflow' : 'scroll'
+  });
+  $('.unreceive-lis').css({
+    'height' : ht + 'px',
+    'overflow' : 'scroll'
+  });
+  $('.outdate-lis').css({
+    'height' : ht + 'px',
+    'overflow' : 'scroll'
+  });
+  $('.used-lis').css({
+    'height' : ht + 'px',
+    'overflow' : 'scroll'
+  });
+
+  var searchHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.searchCoupons').css({
+    'height' : searchHeight + 'px',
+    'overflow' : 'scroll'
+  });
+
+
+</script>
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <input class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="couponsBlur()">
+      <img src="images/search_button.png" class="search-button" ng-click="searchCoupons()">
+    </div>
+  </div>
+
+</nav>
+
+<div class="navbar-fixed-top segment-control">
+  <ul class="fixedTab text-center coupons-data" fixed-tab data="{count:'4'}">
+    <li class="segmentbutton unused-button cartHead" ng-click="showCoupons('1')">未用</li>
+    <li class="segmentbutton used-button" ng-click="showCoupons('2')">已用</li>
+    <li class="segmentbutton outdate-button" ng-click="showCoupons('3')">过期</li>
+    <li class="segmentbutton unreceive-button" ng-click="showCoupons('0')">未领</li>
+  </ul>
+</div>
+
+<div class="coupons-content">
+
+  <!-- ********************************************** 未用优惠券列表 *************************************************-->
+  <div ng-if="showType == '1'">
+    <div class="unused-table" ng-if="!errMsg" load-more data="{params : couponsParams,repeatFun : '$scope.coupons'}">
+      <ul  class="list-group">
+        <li class="list-group-item coupons-row line-wrapper" ng-repeat="couponsModel in couponsList" >
+          <div class="line-scroll-wrapper">
+            <div class="line-normal-wrapper" ng-click="goDetail(couponsModel.coupons_id,couponsModel.fuwu_type)">
+              <p class="add-overflow p-Padding">
+                <span class="coupons-name">{{couponsModel.name}}</span>
+                <span class="coupons-city-type">{{couponsModel.city}}</span>
+              </p>
+              <p class="coupons-type p-Padding">
+                <span class="fuwu_coupons">{{couponsModel.fuwu_type}}</span>
+                <span class="fontColor">{{couponsModel.type}}&nbsp;{{couponsModel.number}}</span>
+              </p>
+              <p class="coupons-time p-Padding">{{couponsModel.start_date}}&nbsp;&nbsp;~&nbsp;&nbsp;{{couponsModel.end_date}}</p>
+            </div>
+            <div class="line-btn-delete" ng-click="deleteCoupons(couponsModel.userCoupons_id,$event)">
+              <button>删除</button>
+            </div>
+          </div>
+
+        </li>
+
+      </ul>
+    </div>
+    <div ng-if="errMsg" class="errMsg">{{errMsg}}</div>
+  </div>
+
+  <!-- ********************************************** 已用优惠券列表 *************************************************-->
+  <div class="used-table" ng-if="showType == '2'">
+    <div class="used-lis" ng-if="!errMsg" load-more data="{params : couponsParams,repeatFun : '$scope.coupons'}">
+      <ul class="list-group">
+        <li class="list-group-item coupons-row line-wrapper" ng-repeat="used in couponsList">
+          <div class="line-scroll-wrapper">
+            <div class="coupons-info line-normal-wrapper" ng-click="goDetail(used.coupons_id,used.fuwu_type)">
+              <p class="add-overflow p-Padding">
+                <span class="coupons-name">{{used.name}}</span>
+                <span class="coupons-city-type">{{used.city}}</span>
+              </p>
+
+              <p class="coupons-type p-Padding">
+                <span class="fuwu_coupons">{{used.fuwu_type}}</span>
+                <span class="fontColor">{{used.type}}&nbsp;{{used.number}}</span>
+              </p>
+              <p class="coupons-time p-Padding">{{used.start_date}}&nbsp;&nbsp;~&nbsp;&nbsp;{{used.end_date}}</p>
+            </div>
+            <div class="line-btn-delete" ng-click="">
+              <button>删除</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div ng-if="errMsg" class="errMsg">{{errMsg}}</div>
+  </div>
+
+  <!-- ********************************************** 过期优惠券列表 *************************************************-->
+  <div class="outdate-table" ng-if="showType == '3'">
+    <div class="outdate-lis" ng-if="!errMsg" load-more data="{params : couponsParams,repeatFun : '$scope.coupons'}">
+      <ul class="list-group">
+        <li class="list-group-item coupons-row line-wrapper" ng-repeat="outdateLis in couponsList">
+          <div class="line-scroll-wrapper">
+            <div class="line-normal-wrapper" ng-click="goDetail(outdateLis.coupons_id,outdateLis.fuwu_type)">
+              <p class="add-overflow p-Padding">
+                <span class="coupons-name">{{outdateLis.name}}</span>
+                <span class="coupons-city-type">{{outdateLis.city}}</span>
+              </p>
+              <p class="coupons-type p-Padding">
+                <span class="fuwu_coupons">{{outdateLis.fuwu_type}}</span>
+                <span class="fontColor">{{outdateLis.type}}&nbsp;{{outdateLis.number}}</span>
+              </p>
+              <p class="coupons-time p-Padding">{{outdateLis.start_date}}&nbsp;&nbsp;~&nbsp;&nbsp;{{outdateLis.end_date}}</p>
+            </div>
+            <div class="line-btn-delete" ng-click="">
+              <button>删除</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div ng-if="errMsg" class="errMsg">{{errMsg}}</div>
+  </div>
+
+
+  <!-- ********************************************** 未领优惠券列表 *************************************************-->
+  <div class="unreceive-table" ng-if="showType == '0'">
+    <div class="unreceive-lis" ng-if="!errMsg" load-more data="{params : couponsParams,repeatFun : '$scope.coupons'}">
+      <ul class="list-group">
+        <li class="list-group-item coupons-row" ng-repeat="unreceiveList in couponsList" ng-click="goDetail(unreceiveList.coupons_id,unreceiveList.fuwu_type)">
+            <div class="unreceive-content">
+              <p class="add-overflow p-Padding">
+                <span class="coupons-name">{{unreceiveList.name}}</span>
+                <span class="coupons-city-type">{{unreceiveList.city}}</span>
+              </p>
+              <p class="coupons-type p-Padding">
+                <span class="fuwu_coupons">{{unreceiveList.fuwu_type}}</span>
+                <span class="fontColor">{{unreceiveList.type}}&nbsp;{{unreceiveList.number}}</span>
+              </p>
+              <p class="coupons-time p-Padding">{{unreceiveList.start_date}}&nbsp;&nbsp;~&nbsp;&nbsp;{{unreceiveList.end_date}}</p>
+            </div>
+        </li>
+      </ul>
+    </div>
+    <div ng-if="errMsg" class="errMsg">{{errMsg}}</div>
+  </div>
+
+</div>

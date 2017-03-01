@@ -1,0 +1,56 @@
+.content{
+  margin-top: 51px;
+}
+
+/* ******************************** navigationbar with back-button   begin ******************************** */
+
+.stationintro-item .search-button{
+  float: right;
+}
+
+.stationintro-item .search-button img{
+  width: 30px;
+  height: 30px;
+}
+
+
+.stationintro-item .search-field-block{
+  margin-left: 10px;
+  height: 100%;
+}
+
+
+.form-control{
+  height: 30px;
+}
+
+/* ******************************** navigationbar with back-button   end ******************************** */
+
+
+.segment-control .btn{
+  padding: 0px;
+}
+
+.station-list,.searchStation{
+  margin-top: 85px;
+}
+
+.station-map{
+  margin-top: 85px;
+  width:100%;
+}
+.station-list .sort_box .sort_list .num_name{
+  margin-top: 0;
+  font-size: 16px;
+  border-bottom: none;
+}
+
+.address{
+  border-top: none;
+  border-bottom: 1px solid #dddddd;
+}
+.initials{
+  /*margin-top:10px;*/
+}
+
+#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}

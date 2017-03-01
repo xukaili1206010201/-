@@ -1,0 +1,201 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="back()" src="images/back_button.png">
+  </div>
+  <div class="navText">帖子回复</div>
+
+</nav>
+
+<div class="navMain post-reply-content">
+  <form class="form-horizontal">
+    <div class="property-edit">
+      <label for="titleTie" class="property-text">标题</label>
+      <input ng-model="title" type="text" class="form-control property-field" id="titleTie" placeholder="请输入标题"
+             readonly/>
+    </div>
+    <div class="property-edit">
+      <label for="contentTie" class="property-text">内容</label>
+      <textarea ng-model="content" name="" id="contentTie" class="form-control"></textarea>
+    </div>
+    <div class="property-edit">
+      <label for="" class="property-text">图片</label>
+      <div class="">
+        <div class="weui_cells weui_cells_form" style="margin: 0px">
+          <div class="weui_cell" style="padding:10px 0px;">
+            <div class="weui_cell_bd weui_cell_primary">
+              <div class="weui_uploader">
+                <div class="weui_uploader_bd" style="margin: 0px">
+                  <ul class="weui_uploader_files" long-press style="margin-bottom: 0px;">
+                    <!-- 预览图插入到这 -->
+                  </ul>
+                  <div class="weui_uploader_input_wrp" style="margin-bottom: 0px;">
+                    <input class="weui_uploader_input js_file" type="file"
+                           accept="image/jpg,image/jpeg,image/png,image/gif"
+                           multiple="" id="uploadImage">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="navbar-fixed-bottom navbar-default text-center buttonOne">
+      <button type="submit" class="btn btn-success btnRadius" ng-click="replyBBS()">提交</button>
+    </div>
+  </form>
+</div>
+
+
+<script>
+  $.weui = {};
+  $.weui.alert = function (options) {
+    options = $.extend({title: '警告', text: '警告内容'}, options);
+    var $alert = $('.weui_dialog_alert');
+    $alert.find('.weui_dialog_title').text(options.title);
+    $alert.find('.weui_dialog_bd').text(options.text);
+    $alert.on('touchend click', '.weui_btn_dialog', function () {
+      $alert.hide();
+    });
+    $alert.show();
+  };
+  //**************************** 上传图片 ****************************//
+  // 允许上传的图片类型
+  var allowTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+  // 1024KB，也就是 1MB
+  var maxSize = 1024 * 1024 * 2;
+  // 图片最大宽度
+  var maxWidth = 500;
+  // 最大上传图片数量
+  var maxCount = 5;
+
+  function selectedImages(eventP) {
+    var files = eventP.target.files;
+    // 如果没有选中文件，直接返回
+    if (files.length === 0) {
+      return;
+    }
+
+
+    for (var i = 0, len = files.length; i < len; i++) {
+      var file = files[i];
+      var reader = new FileReader();
+
+      // 如果类型不在允许的类型范围内
+      if (allowTypes.indexOf(file.type) === -1) {
+        $.weui.alert({text: '该类型不允许上传'});
+        continue;
+      }
+
+      if (file.size > maxSize) {
+        $.weui.alert({text: '图片太大，不允许上传'});
+        alert('图片太大，不允许上传')
+        continue;
+      }
+
+      if ($('.weui_uploader_file').length >= maxCount) {
+        $.weui.alert({text: '最多只能上传' + maxCount + '张图片'});
+        return;
+      }
+
+      var Orientation;
+      //获取照片方向角属性，用户旋转控制
+      //1 ： 0°
+      //6 ： 顺时针90°
+      //8 ： 逆时针90°
+      //3 ：  180°
+      EXIF.getData(file, function () {
+        EXIF.getAllTags(this);
+//        alert(EXIF.getTag(this, 'Orientation'));
+        Orientation = EXIF.getTag(this, 'Orientation');
+      });
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.src = e.target.result;
+        var base64;
+        img.onload = function () {
+          if(img.width > maxWidth){
+            var scaleMum=maxWidth/img.width; //缩放比例
+          }else{
+            var scaleMum = 1;
+          }
+          var w = img.width*scaleMum;
+          var h = img.height*scaleMum;
+          var canvas = document.createElement('canvas');
+          var ctx = canvas.getContext('2d');
+
+          if (Orientation != "" && Orientation != 1 && Orientation!=null) {
+            switch (Orientation) {
+              case 6:
+                //alert('需要顺时针（向左）90度旋转');
+                canvas.width = h;
+                canvas.height = w;
+                ctx.scale(scaleMum,scaleMum);
+                ctx.rotate(Math.PI / 2);
+                ctx.drawImage(img, 0, -img.height);
+                break;
+            }
+          }else{
+            //设置 canvas 的宽度和高度
+            canvas.width = w;
+            canvas.height = h;
+            ctx.drawImage(img, 0, 0, w, h);
+          }
+          base64 = canvas.toDataURL('image/png');
+
+          // 插入到预览区
+          var $preview = $('<li class="weui_uploader_file weui_uploader_status" style="background-image:url(' +
+            base64 + ');"><!-- <div class="weui_uploader_status_content">0%</div> --></li>');
+          $('.weui_uploader_files').append($preview);
+          var num = $('.weui_uploader_file').length;
+          $('.js_counter').text(num + '/' + maxCount);
+
+//               然后假装在上传，可以post base64格式，也可以构造blob对象上传，也可以用微信JSSDK上传
+
+          var progress = 0;
+
+          function uploading() {
+            $preview.find('.weui_uploader_status_content').text(++progress + '%');
+            if (progress < 100) {
+              setTimeout(uploading, 20);
+            }
+            else {
+              // 如果是失败，塞一个失败图标
+              //$preview.find('.weui_uploader_status_content').html('<i class="weui_icon_warn"></i>');
+              $preview.removeClass('weui_uploader_status').find('.weui_uploader_status_content').remove();
+            }
+          }
+
+          setTimeout(uploading, 20);
+
+        };
+      };
+      reader.readAsDataURL(file);
+
+
+    }
+
+    var jqObj = $("#uploadImage");
+    jqObj.val("");
+    var domObj = jqObj[0];
+    domObj.outerHTML = domObj.outerHTML;
+    var newJqObj = jqObj.clone();
+    jqObj.before(newJqObj);
+    jqObj.remove();
+
+    $('#uploadImage').on('change', function (event) {
+      selectedImages(event)
+    });
+
+  }
+
+
+  $('#uploadImage').on('change', function (event) {
+    selectedImages(event)
+  });
+
+
+</script>

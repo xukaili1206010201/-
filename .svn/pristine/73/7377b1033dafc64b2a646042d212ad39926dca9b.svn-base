@@ -1,0 +1,524 @@
+'use strict';
+
+var userService = angular.module('userService', []);
+
+userService.factory('userService', function ($http, commonService, $q,$timeout,$cookies,$state) {
+
+  var service = { // our factory definition
+
+    getIOSInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getIOSInfo.action';
+      return $http.get(url, params);
+    },
+
+    getIOSSyncInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getIOSInfo.action';
+      return commonService.handleSyncData(url, params);
+    },
+
+
+    //获取项目配置信息
+    getProjectConfigInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getProjectConfigInfo.action';
+      return $http.post(url, params);
+    },
+
+    //添加令牌
+    dynamicAddParamsOfTicket:function(params){
+
+      var apiParams = new Array();
+      var ticketKey = 'ticket';
+      var ticketValue = $cookies.get('ticket');
+      //添加令牌参数到参数组中
+      //var str = "params." + key + "=" + ticket + "";
+      //// //使用eval执行
+      //console.log(str);
+      //eval(str);
+      for (var key in params) {
+        apiParams[key] = params[key];
+      }
+      apiParams[ticketKey] = ticketValue;
+      return apiParams;
+    },
+
+
+    //登录
+    memberLogin: function (params) {
+      var url = commonService.getBaseParams().url + 'login.action';
+      return $http.post(url, params);
+    },
+    //获取微信用户的openId
+    getOpenId: function (params) {
+      var url = commonService.getBaseParams().url + 'getOpenId.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+    //注销登录
+    loginOut: function (params) {
+      console.log(params)
+      var url = commonService.getBaseParams().url + 'loginOut.action';
+      return $http.post(url, params);
+    },
+    //注册
+    memberRegister: function (params) {
+      var url = commonService.getBaseParams().url + 'register.action';
+      return $http.post(url, params);
+    },
+
+    //获取验证码
+    getSMSCode: function (params) {
+      var url = commonService.getBaseParams().url + 'getSMSCode.action';
+
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //密码设置
+    editPassword: function (params) {
+      var url = commonService.getBaseParams().url + 'editPassword.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //个人信息设置
+    editUserInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'editUserInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //手机号码设置
+    editMobileInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'editMobile.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //获取用户信息
+    getUserInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getUserInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+    //获取系统配置信息
+    getSystemConfigInfo: function (params) {
+      var url = commonService.getBaseParams().url + 'getSystemConfigInfo.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //头像上传
+    editHeadImgurl: function (params) {
+      var url = commonService.getBaseParams().url + 'editHeadImgurl.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //订单详情
+    getOrder: function (params) {
+      var url = commonService.getBaseParams().url + 'getOrder.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //删除订单
+    givingUserCoupons: function (params) {
+      var url = commonService.getBaseParams().url + 'givingUserCoupons.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    /********我的业务***********/
+    //我粉丝的验证码
+    listCode: function (params) {
+      var url = commonService.getBaseParams().url + 'listCode.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //我报名的活动
+    listActivityBaoming: function (params) {
+      var url = commonService.getBaseParams().url + 'listActivityBaoming.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    //用户城市列表
+    listUserCity: function (params) {
+      var url = commonService.getBaseParams().url + 'listUserCity.action';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    save: function (params) {
+      var url = commonService.getBaseParams().url + 'datas/audio/workset/save';
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+    saveSync: function (params) {
+      var url = commonService.getBaseParams().url + 'datas/audio/workset/save';
+      return commonService.handleSyncData(url, this.dynamicAddParamsOfTicket(params));
+    },
+
+
+    postRequestWithUrlAndParams: function (apiUrl, params) {
+
+      if (apiUrl.length == 0) {
+        return;
+      }
+
+      var url = commonService.getBaseParams().url + apiUrl;
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+    postRequestWithPageNo: function (params) {
+      if (params.url.length == 0) {
+        console.log("post请求url不能为空");
+        return;
+      }
+      var url = commonService.getBaseParams().url + params.url;
+      return $http.post(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+
+    getRequestWithUrlAndParams: function (apiUrl, params) {
+
+      if (apiUrl.length == 0) {
+        console.log("get请求url不能为空");
+        return;
+      }
+      var url = commonService.getBaseParams().url + apiUrl;
+
+      return $http.get(url, this.dynamicAddParamsOfTicket(params));
+
+    },
+
+
+    getReceive: function (params) {
+      var defer = $q.defer();
+      $http.post(commonService.getBaseParams().url + 'editUserCoupons.action', this.dynamicAddParamsOfTicket(params))
+        .success(function (response) {
+          defer.resolve(response);
+        }).error(function (response) {
+          defer.reject();
+        });
+      return defer.promise;
+    },
+
+
+    handleOrder : function(goodLis,orderLis,goodS,changeGoodS,oparate,url,orderType){
+      var orderIdArr = [];
+      var goodIdArr = [];
+      var isContinue = true;
+      var isType = false;
+      var dateTime;
+      //遍历商品，获取选中的商品的goods_id
+      $.each(goodLis,function(index,domEl){
+        if($(domEl).hasClass('checked')){
+          var good_type = $(domEl).parent().next().html();
+          //判断商品的状态是否符合相应操作需要的状态
+          if($(domEl).prev().html() != goodS){
+            isContinue = false;
+            return false;
+          }else if((oparate == '确认收货' || oparate == '取消确认收货') && good_type == 'Y'){ //商品为已发货且是定时商品
+            isContinue = false;
+            isType = true;
+            return false;
+          }else{
+            goodIdArr.push($(domEl).next().html());
+          }
+        }
+      });
+
+      if(orderType == '我的订单'){
+        //遍历订单，获取选中订单的order_id
+        $.each(orderLis,function(index,domEl){
+          if($(domEl).hasClass('checked')){
+            orderIdArr.push($(domEl).next().html());
+          }
+        });
+      }else{//如果是订单详情页，则直接获取order_id(即orderLis=order_id)
+        if($('.orderSure').hasClass('checked')){
+          orderIdArr.push(orderLis);
+        }
+      }
+
+      if(isContinue){
+        var params = {
+          'mobile' : localStorage.mobile,
+          'order_id' : orderIdArr.join(),
+          'goods_id' : goodIdArr.join()
+        };
+
+        $http.post(commonService.getBaseParams().url + url, params)
+          .success(function (response) {
+            console.log(response.code);
+            if(response.code == '0'){
+              commonService.showSuccessMessage(oparate+'申请成功！');
+              dateTime = new Date();
+              $.each(goodLis,function(index,domEl){
+                if($(domEl).hasClass('checked')){
+                  if(oparate == '确认收货'){
+                    //确认收货一分钟内显示取消确认收货按钮
+                      $('.cancelConfirm').removeClass('statusHide');
+                      $('.spanStatus').css('display','none');
+                      $(domEl).prev().html(changeGoodS);
+                    $(domEl).parents('.list-group-item').find('.good-status').html(changeGoodS);
+                    $timeout(function(){
+                      $('.cancelConfirm').addClass('statusHide');
+                      $('.spanStatus').css('display','block');
+                    },60000);
+                  }else if(oparate == '取消确认收货'){
+                    $(domEl).parents('.list-group-item').find('.good-status').html(changeGoodS);
+                    $('.cancelConfirm').addClass('statusHide');
+                    $('.spanStatus').css('display','block');
+                  }else{
+                    $(domEl).parents('.list-group-item').find('.good-status').html(changeGoodS);
+                  }
+                }
+              });
+
+            }else{
+              commonService.showErrorMessage(oparate+'操作失败！');
+            }
+          });
+      }else if(goodS == '已发货' && isType){
+        commonService.showWarnMessage('选择商品中有定时商品，无法执行该操作！');
+      }else{
+        commonService.showWarnMessage('选择商品中有非'+goodS+'状态，无法执行该操作！');
+      }
+    },
+
+    showMap : function(array){
+      //地图
+      var lastIndex; //保存上一次点击的div中的span的id值
+      var lastDetailDiv; //保存上一次点击创建的覆盖物二
+      locateCity(array);
+      function locateCity(array){
+        // 百度地图API功能
+        var mp = new BMap.Map("allmap");
+        mp.centerAndZoom(new BMap.Point(array[0].longitude,array[0].latitude), 11);
+        mp.enableScrollWheelZoom(true);
+
+        // 复杂的自定义覆盖物
+        function ComplexCustomOverlay(point, text,id){
+          this._point = point;
+          this._text = text;
+          this._id = id;
+        }
+        ComplexCustomOverlay.prototype = new BMap.Overlay();
+        ComplexCustomOverlay.prototype.initialize = function(map){
+          this._map = map;
+          var div = this._div = document.createElement("div");
+          div.style.position = "absolute";
+          div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+          div.style.backgroundColor = "#EE5D5B";
+          div.style.border = "1px solid #BC3B3A";
+          div.style.color = "white";
+          div.style.height = "18px";
+          div.style.padding = "0px 2px 0px 2px";
+          div.style.lineHeight = "18px";
+          div.style.whiteSpace = "nowrap";
+          div.style.MozUserSelect = "none";
+          div.style.fontSize = "12px";
+          var span = this._span = document.createElement("span");
+          div.appendChild(span);
+          span.appendChild(document.createTextNode(this._text));
+          span.id = "'"+this._id+"'";
+          span.addEventListener('click',function(event){
+            var i = event.target.id;
+            i = parseInt(i.substr(1,1));
+            if(lastIndex != i){
+              var thisPoint = new BMap.Point(array[i].longitude,array[i].latitude);
+              var fuwuContent = array[i].content;
+              var detailW = new DetailWindow(thisPoint,array[i].name,fuwuContent,array[i].telphone,array[i].service_station_id);
+              map.addOverlay(detailW);
+              if(lastDetailDiv){
+                lastDetailDiv.hide();
+              }
+            }
+            lastDetailDiv = detailW;
+            lastIndex = i;
+          });
+          //移动端
+          span.addEventListener('touchstart',function(event){
+            var i = event.target.id;
+            i = parseInt(i.substr(1,1));
+            if(lastIndex != i){
+              var thisPoint = new BMap.Point(array[i].longitude,array[i].latitude);
+              var fuwuContent = array[i].content;
+              var detailW = new DetailWindow(thisPoint,array[i].name,fuwuContent,array[i].telphone,array[i].service_station_id);
+              map.addOverlay(detailW);
+              if(lastDetailDiv){
+                lastDetailDiv.hide();
+              }
+            }
+            lastDetailDiv = detailW;
+            lastIndex = i;
+          });
+
+          var that = this;
+
+          var arrow = this._arrow = document.createElement("div");
+          arrow.style.background = "url(http://map.baidu.com/fwmap/upload/r/map/fwmap/static/house/images/label.png) no-repeat";
+          arrow.style.position = "absolute";
+          arrow.style.width = "11px";
+          arrow.style.height = "10px";
+          arrow.style.top = "17px";
+          arrow.style.left = "10px";
+          arrow.style.overflow = "hidden";
+          div.appendChild(arrow);
+
+          div.onmouseout = function(){
+            this.style.backgroundColor = "#EE5D5B";
+            this.style.borderColor = "#BC3B3A";
+            this.getElementsByTagName("span")[0].innerHTML = that._text;
+            arrow.style.backgroundPosition = "0px 0px";
+          };
+
+          mp.getPanes().labelPane.appendChild(div);
+
+          return div;
+        };
+        ComplexCustomOverlay.prototype.draw = function(){
+          var map = this._map;
+          var pixel = map.pointToOverlayPixel(this._point);
+          this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
+          this._div.style.top  = pixel.y - 30 + "px";
+        };
+        //添加监听事件
+        ComplexCustomOverlay.prototype.addEventListener = function(event,fun){
+          this._div['on'+event] = fun;
+        };
+        var myCompOverlay;
+        for (var i = 0; i < array.length; i ++) {
+          var txt = array[i].name;
+          myCompOverlay = new ComplexCustomOverlay(new BMap.Point(array[i].longitude,array[i].latitude), txt,i);
+          mp.addOverlay(myCompOverlay);
+        }
+      };
+
+      //自定义覆盖物二
+      //定义自定义覆盖物的构造函数
+      function DetailWindow(point,fuwuName,fuwuContent,tel,stationId){
+        this._point = point;
+        this._fuwuName = fuwuName;
+        this._fuwuContent = fuwuContent;
+        this._tel = tel;
+        this._stationId = stationId;
+      };
+      //继承API的BMap.Overlay
+      DetailWindow.prototype = new BMap.Overlay();
+      //实现初始化
+      DetailWindow.prototype.initialize = function(map){
+        this._map = map;
+        var div = document.createElement('div');
+        this._div = div;
+        div.style.position = "absolute";
+        div.style.width = '200px';
+        //div.style.height = '200px';
+        div.style.border = '2px solid #1BAFF9';
+        div.style.background = '#6AD8F3';
+        div.style.fontSize = '1.2rem';
+
+        var fuwuDiv = document.createElement('div');
+        var h5 = document.createElement('h5');
+        h5.style.float = 'left';
+        h5.style.margin = '0';
+        h5.style.padding = '0';
+        h5.style.height = '30px';
+        h5.style.lineHeight = '30px';
+        h5.appendChild(document.createTextNode(this._fuwuName));
+        var imgDiv = document.createElement('div');
+        imgDiv.style.float = 'right';
+        imgDiv.style.height = '30px';
+        imgDiv.style.lineHeight = '30px';
+        var img = document.createElement('img');
+        img.src = '../../../images/next.png';
+        img.style.width = '25px';
+        imgDiv.appendChild(img);
+
+        fuwuDiv.style.overflow = 'hidden';
+        fuwuDiv.style.background = 'pink';
+        fuwuDiv.style.color = 'red';
+        fuwuDiv.style.paddingLeft = '0.2rem';
+        fuwuDiv.style.height = '30px';
+        fuwuDiv.appendChild(imgDiv);
+        fuwuDiv.appendChild(h5);
+
+        var lat = document.createElement('span');
+        lat.appendChild(document.createTextNode(this._point.lat));
+        lat.style.display = 'none';
+        lat.className = 'lat';
+        fuwuDiv.appendChild(lat);
+        var lng = document.createElement('span');
+        lng.appendChild(document.createTextNode(this._point.lng));
+        lng.style.display = 'none';
+        lng.className = 'lng';
+        fuwuDiv.appendChild(lng);
+
+        var span = document.createElement('span');
+        span.appendChild(document.createTextNode(this._stationId));
+        span.style.display = 'none';
+        fuwuDiv.appendChild(span);
+
+        div.appendChild(fuwuDiv);
+        //兼容移动端
+        fuwuDiv.addEventListener('touchstart',function(){
+          $state.go('member-about-stationdetail',{
+            station_id : this.lastChild.textContent,
+            lat : document.getElementsByClassName('lat')[0].innerHTML,
+            lon : document.getElementsByClassName('lng')[0].innerHTML
+          });
+          sessionStorage.stationTab='map';
+        });
+        fuwuDiv.addEventListener('click',function(event){
+          console.log(this.lastChild.textContent);
+
+          $state.go('member-about-stationdetail',{
+            station_id : this.lastChild.textContent,
+          });
+          sessionStorage.stationTab='map';
+        });
+
+        var p = document.createElement('p');
+        p.appendChild(document.createTextNode(this._fuwuContent));
+        p.style.color = 'white';
+        p.style.padding = '0 0.2rem';
+
+        div.appendChild(p);
+
+        var p = document.createElement('p');
+        p.style.fontStyle = 'italic';
+        p.style.padding = '0 1rem';
+        p.style.color = 'white';
+        var span = document.createElement('span');
+        span.appendChild(document.createTextNode('电话:'));
+        span.style.float = 'right';
+        var a = document.createElement('a');
+        a.appendChild(document.createTextNode(this._tel));
+        a.style.float = 'right';
+        a.href='tel://'+this._tel;
+        a.style.color = 'white';
+        if(this._tel){
+          p.appendChild(a);
+          p.appendChild(span);
+          div.appendChild(p);
+        }
+
+
+        map.getPanes().floatPane.appendChild(div);
+        return div;
+      };
+      DetailWindow.prototype.draw = function(){
+        var map  = this._map;
+        var position = this._map.pointToOverlayPixel(this._point);
+        this._div.style.left = position.x + 'px';
+        this._div.style.top = position.y + 'px';
+      };
+
+      DetailWindow.prototype.hide = function(){
+        if(this._div){
+          this._div.style.display = 'none';
+        }
+      };
+      DetailWindow.prototype.show = function(){
+        if(this._div){
+          this._div.style.display = '';
+        }
+      };
+    }
+
+  };
+  return service;
+
+});

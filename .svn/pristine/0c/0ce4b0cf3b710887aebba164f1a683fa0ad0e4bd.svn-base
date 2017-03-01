@@ -1,0 +1,47 @@
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+    <!--<span ng-click="jumpSelectcity()" ng-model="city_name" class="city">{{city_name}} <span class="glyphicon glyphicon-menu-down"></span></span>-->
+    <p class="city" usercity-select>
+      <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}</span>
+      <select ng-show="citySelect" usercity-select class="citySelect" ng-model="usercityId" ng-options="x.city_id as x.name for x in usercityList"></select>
+      <!--<span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>-->
+    </p>
+    <div class="portfolio-item">
+      <span class="portfolio-title">业务量统计</span>
+    </div>
+  </div>
+</nav>
+<div class="main">
+  <ul class="nav text-center portfolio" role="tablist">
+    <li ng-click="fans()" role="presentation" class="col-xs-5 active"><a href=""  role="tab" data-toggle="tab">吸粉</a></li>
+    <li ng-click="specialSupply()" role="presentation" class="col-xs-5"><a href=""  role="tab" data-toggle="tab">特供</a></li>
+  </ul>
+
+  <!--<div class="tab-content" style="height: 200px" >-->
+    <!--<div role="tabpanel" class="tab-pane active"  style="height:100%;">-->
+      <!--<div id="echarts1" style="height: 100%"></div>-->
+    <!--</div>-->
+    <!--<div role="tabpanel" class="tab-pane active" style="height: 100%">-->
+      <!--<div id="echarts2" style="height: 100%"></div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+  <div class="tab-content" >
+    <div role="tabpanel" class="tab-pane active">
+      <canvas id="line1" class="chart chart-line" chart-data="fansData"
+              chart-labels="labels" chart-legend="true" chart-series="series"
+              chart-click="onClick" >
+      </canvas>
+    </div>
+    <div role="tabpanel" class="tab-pane active specialSupply">
+      <canvas id="line2" class="chart chart-line" chart-data="specialSupplyData"
+              chart-labels="labels2" chart-legend="true" chart-series="series2"
+              chart-click="onClick" >
+      </canvas>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,29 @@
+.tabbar {
+  width: 100%;
+  height: 49px;
+  background: white;
+  overflow: hidden;
+  border-top: 1px solid #dddddd;
+}
+
+.tabbar-item{
+  width: 25%;
+  height: 100%;
+  text-align: center;
+  float: left;
+  margin-top: 3px;
+}
+
+.tabbar-item img{
+  width: 30%;
+  height: 25px;
+}
+
+.tabbar-item p{
+  /*margin-top: 5px;*/
+  font-size: 12px;
+}
+
+.tabbar-item .usercenter-button{
+  color: rgb(161, 216, 34);
+}

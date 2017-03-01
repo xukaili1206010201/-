@@ -1,0 +1,82 @@
+
+
+  <script>
+    $(function () {
+//        隐藏滚动条
+      function myBrowser(){
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+        var isOpera = userAgent.indexOf("Opera") > -1;
+        if (isOpera) {
+          return "Opera"
+        }; //判断是否Opera浏览器
+        if (userAgent.indexOf("Firefox") > -1) {
+          return "FF";
+        } //判断是否Firefox浏览器
+        if (userAgent.indexOf("Chrome") > -1){
+          return "Chrome";
+        }
+        if (userAgent.indexOf("Safari") > -1) {
+          return "Safari";
+        } //判断是否Safari浏览器
+        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+          return "IE";
+        }; //判断是否IE浏览器
+      }
+
+      var mb = myBrowser();
+
+      var width = $(window).width();
+      var height = $(window).height();
+      var webViewWidth = width + 16;
+      var webViewHeight = height + 20;
+      if ("FF" == mb) {
+        $('.webView_box').css({
+          'overflow': 'hidden',
+          'width': width + 'px',
+          'height': height + 'px'
+
+        });
+        $('.webView').css({
+          'overflow': 'auto',
+          'width': webViewWidth + 'px',
+          'height': webViewHeight + 'px'
+        });
+      }
+      if ("Safari" == mb) {
+        console.log(height)
+        $('.webView').css({
+          'width': width + 'px',
+          'height': height + 'px'
+        });
+      }
+    });
+
+    /*************************************** 卡头点击 begin *****************************************/
+
+
+    /*************************************** 卡头点击 end *****************************************/
+  </script>
+
+</head>
+<body>
+<nav class="navbar navbar-fixed-top navigationbar">
+  <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+  <p class="navbar-text text-center title-item">在线超市</p>
+</nav>
+
+<div class="shopping-content">
+  <div class="shopping-tabs">
+    <div class="shopping-segment-control">
+      <a class="shopping-segment-item" shop-tab ng-repeat="item in segItems" ng-click="marketShow(item)">{{item.name}}</a>
+    </div>
+  </div>
+
+  <div class="webView_box">
+    <div class="webView">
+      <iframe id="tttweb" ng-src={{currentShowMarketUrl}}></iframe>
+    </div>
+  </div>
+
+
+</div>
+

@@ -1,0 +1,17 @@
+{
+    "sessionId": "20160326",
+    "user": {
+        "id": 1,
+        "name": "df",
+        "role": {
+            "roleName": "admin",
+            "roleResources": [
+                "/",
+                "/login.htm",
+                "/not-found.htm",
+                "/blank/basic.htm",
+                "/blank/list.htm"
+            ]
+        }
+    }
+}

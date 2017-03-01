@@ -1,0 +1,101 @@
+<script>
+  var screen = $(window).width();
+  $('.navMain img:first-child').css({
+    width: '100%',
+    height: screen / 16 * 9 + 'px'
+  });
+</script>
+<div>
+  <nav class="navbar navbar-fixed-top navigationbar">
+    <div class="navLeft">
+      <!-- 返回按钮-->
+      <img class="back-button" ng-click="activitydetailBack()" src="images/back_button.png">
+    </div>
+    <div class="navText">活动详情</div>
+
+  </nav>
+
+  <div class="navMain activityDetail">
+    <div class="activityInfo">
+      <img ng-src="{{activityDetail.imageUrl}}" alt=""/>
+
+      <div class="activityInfoList">
+        <center><p>{{activityDetail.name}}</p></center>
+        <p style="margin-top: 5px">{{activityDetail.introduction}}</p>
+
+        <p>{{activityDetail.start_date}}&nbsp;~&nbsp;{{activityDetail.end_date}}</p>
+      </div>
+    </div>
+
+    <div ng-if="jiemuList.length>0" class="action-item">活动</div>
+    <div class="active-list" ng-repeat="k in jiemuList">
+
+      <p>{{k.name}}<span class="action-time">{{k.date}}</span></p>
+
+      <p>
+        {{k.content}}
+      </p>
+
+    </div>
+
+    <!---->
+    <div class="action-attached" data="{type:'活动联系人',telBelong:'$scope.activityDetail.name',page:'活动详情'}" call-logs>
+      <p>地址：{{activityDetail.address}}</p>
+
+      <p>报名起始日：{{activityDetail.baoming_start_date}}</p>
+
+      <p>报名截止日：{{activityDetail.baoming_end_date}}</p>
+
+      <p>联系人：{{activityDetail.contact}}</p>
+      <p>联系电话：
+        <a class="link-button tellColor" href="tel:{{activityDetail.telphone}}">{{activityDetail.telphone}}</a>
+      </p>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-default navbar-fixed-bottom action-enter">
+    <div ng-if="activityStart">
+      <button class="btn" disabled>活动报名未开始！</button>
+    </div>
+    <div ng-if="activityEnd">
+      <button class="btn" disabled>活动报名已结束！</button>
+    </div>
+    <div ng-if="activityEnter" >
+      <button onclick="$('#receive').css('display','block');" class="btn">我要报名</button>
+    </div>
+    <div ng-if="activityOut">
+      <button onclick="$('#receiveCancel').css('display','block');" class="btn">取消报名</button>
+    </div>
+  </nav>
+</div>
+
+<div class="weui_dialog_confirm" id="receive" hidden>
+  <div class="weui_mask"></div>
+  <div class="weui_dialog">
+    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+    <div class="weui_dialog_bd">
+      确定报名？
+    </div>
+    <div class="weui_dialog_ft">
+      <a onclick="$('#receive').css('display','none');" class="weui_btn_dialog default">取消</a>
+      <a ng-click="activityApply(0)" onclick="$('#receive').css('display','none')"
+         class="weui_btn_dialog primary">确定</a>
+    </div>
+  </div>
+</div>
+
+<div class="weui_dialog_confirm" id="receiveCancel" hidden>
+  <div class="weui_mask"></div>
+  <div class="weui_dialog">
+    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+    <div class="weui_dialog_bd">
+      确定取消报名？
+    </div>
+    <div class="weui_dialog_ft">
+      <a onclick="$('#receiveCancel').css('display','none');" class="weui_btn_dialog default">取消</a>
+      <a ng-click="activityApply(1)" onclick="$('#receive').css('display','none')"
+         class="weui_btn_dialog primary">确定</a>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,214 @@
+/* ******************************** 包含返回按钮的导航栏样式 ******************************** */
+/******* 导航栏 **********/
+.navigationbar {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    vertical-align: middle;
+    background-color: #7DB343;
+    color: white;
+    font-size: 1.4rem;
+}
+
+.navbar-fixed-top, .navbar-fixed-bottom {
+  z-index: 12 !important;
+}
+/**********************返回+搜索/内容*****************/
+.navLeft {
+    /*width:10%;*/
+    float: left;
+    padding-top: 13px;
+}
+
+.navRight {
+    width: 90%;
+    float: right;
+    padding: 10px 10px 0px 10px;
+}
+
+.navText {
+    width: 90%;
+    float: right;
+    padding-left: 32%;
+}
+
+/*********************返回+城市+搜索/内容*************/
+
+.navcityLeft {
+    /*width:30%;*/
+    float: left;
+    height: 24px;
+    padding-top: 13px;
+}
+
+.navcityRight {
+    width: 68%;
+    float: right;
+    padding: 10px 10px 0px 0px;
+}
+
+.navcityText {
+    width: 68%;
+    float: right;
+    padding-left: 12%;
+}
+
+/*返回*/
+.back-button {
+    height: 24px;
+    margin-right: 10px;
+    margin-left: 10px;
+    float: left;
+}
+
+/**** 搜索框 ****/
+.search-group {
+    height: 30px;
+}
+
+/* 输入框 */
+.search-group .search-input {
+    float: left;
+    width: 82%;
+    margin-right: 2px;
+}
+
+/* 搜索按钮 */
+.search-group .search-button {
+    width: 25px;
+    height: 25px;
+    margin-right: 0px;
+    margin-top: 1.5px;
+    float: right;
+}
+
+/* 城市 */
+.city {
+    float: left;
+    height: 28px;
+    line-height: 25px;
+    margin-left: 10px;
+}
+
+/*********************有添加按钮*************/
+.navAddRight {
+    width: 80%;
+    float: left;
+    padding: 10px 10px 0px 20px;
+}
+
+/* 添加按钮样式  */
+.add-image {
+    width: 27px;
+    height: 27px;
+    float: right;
+    margin-top: 11.5px;
+    margin-right: 5px;
+}
+
+/* ******************************** 灰色的背景 ******************************** */
+.gray-body {
+    background: #F0EFF5;
+}
+
+/* ******************************** 字体大小 ******************************** */
+@media only screen and (max-device-width: 1080px), only screen and (max-width: 1080px) {
+    html, body {
+        font-size: 33.75px
+    }
+}
+
+@media only screen and (max-device-width: 960px), only screen and (max-width: 960px) {
+    html, body {
+        font-size: 30px
+    }
+}
+
+@media only screen and (max-device-width: 750px), only screen and (max-width: 750px) {
+    html, body {
+        font-size: 23.4375px
+    }
+}
+
+@media only screen and (max-device-width: 720px), only screen and (max-width: 720px) {
+    html, body {
+        font-size: 22.5px
+    }
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-width: 640px) {
+    html, body {
+        font-size: 20px
+    }
+}
+
+@media only screen and (max-device-width: 540px), only screen and (max-width: 540px) {
+    html, body {
+        font-size: 16.875px
+    }
+}
+
+@media only screen and (max-device-width: 480px), only screen and (max-width: 480px) {
+    html, body {
+        font-size: 13px
+    }
+
+    .navAddRight {
+        width: 82% !important;
+    }
+
+    .search-group .search-input {
+        width: 82% !important;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    html, body {
+        font-size: 12.5px
+    }
+
+    .back-button {
+        margin-right: 5px;
+    }
+
+    .navRight {
+        width: 85%;
+    }
+
+    .navAddRight {
+        width: 80% !important;
+    }
+
+    .search-group .search-input {
+        width: 85% !important;
+    }
+}
+
+@media only screen and (max-width: 360px), only screen and (max-width: 320px) {
+    html, body {
+        font-size: 11.25px
+    }
+
+    .back-button {
+        margin-right: 5px;
+
+    }
+
+    .navRight {
+        width: 85%;
+    }
+
+    .navAddRight {
+        width: 80% !important;
+    }
+
+    .search-group .search-input {
+        width: 82% !important;
+    }
+}
+
+@media only screen and (max-width: 320px), only screen and (max-device-width: 320px) {
+    html, body {
+        font-size: 10px
+    }
+}

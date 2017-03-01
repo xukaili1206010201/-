@@ -1,0 +1,43 @@
+/*body{*/
+  /*background-color: #F0EFF5;*/
+  /*/!*overflow: hidden;*!/*/
+/*}*/
+ul{
+  list-style: none;
+}
+.rececoupons-content{
+  margin-top: 60px;
+}
+.basic_attribute , .user_attribute{
+  margin:0px;
+}
+.basic_attribute li , .user_attribute li{
+  padding:5px 5px;
+}
+
+.coupons-time{
+  text-align: left;
+}
+
+.workerno-field{
+  margin:20px 10px;
+
+}
+
+.rececoupons-footer{
+  bottom: 0;
+}
+
+.container-button{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.btn:focus , .btn:focus , .btn:hover{
+  color: white;
+}
+/*.navbar{*/
+  /*background-color: #7CB342;*/
+/*}*/

@@ -1,0 +1,173 @@
+
+  <script>
+
+    //设置背景颜色
+    $(function () {
+      var screenW = $(window).width();
+      var screenH = $(window).height() - parseInt($('.navigationbar').css('height'));
+      $('.familyservicelist-content').css({
+        'height': screenH
+      })
+    })
+
+
+    var lastSelectedItem = '.familyservicelist-default-selected-item'
+    function didSelectedSegmentItem(currentItem) {
+      $(lastSelectedItem).css({
+        'border-bottom': 'none'
+      })
+      $(currentItem).css({
+        'border-bottom': '2px solid #7DB343'
+      })
+      lastSelectedItem = currentItem;
+    }
+    function showTargetView(event) {
+      didSelectedSegmentItem(event.target)
+    }
+
+    //计算高度
+    var comHeight = window.screen.availHeight - $('.navigationbar').height();
+    $('.servicelist-content').css({
+      'height' : comHeight + 'px',
+      'overflow' : 'scroll'
+    });
+
+  </script>
+
+
+<nav class="navbar navbar-default navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="../../../images/back_button.png" ng-click="goBack()">
+
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchServiceList()">
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div ng-if="isserviceSearch" class="familyservicelist-content">
+
+  <!-- 商家名称 -->
+  <div class="familyservicelist-sellername-view service-name" ng-click="jumpSellerdetail()" good-height data="{type:'0'}">
+    <span class="familyservicelist-sellername-text">{{bName}}</span>
+    <img class="familyservicelist-next-image" src="images/next.png">
+  </div>
+
+  <!-- 跑马灯 -->
+  <div class="familyservicelist-marquee marquee_box" ng-show="marqueeContent.length > 0">
+    <div class="marquee">
+      <ul class="marquee-content-items">
+        <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="familyservicelist-dropdown-menu select-items">
+    <select ng-model="selected" class="dropdown familyservicelist-dropdown" ng-init="selected='day_count'" ng-click="changeSort()">
+      <option value="zong_count">总销量优先</option>
+      <option value="day_count">日销量优先</option>
+      <option value="week_count">周销量优先</option>
+      <option value="score">评分优先</option>
+      <option value="sale_price">价格优先</option>
+      <option value="up_date">上架时优先</option>
+      <option value="goods_name">商品名优先</option>
+    </select>
+  </div>
+
+  <div class="familyservicelist-segmentcontrol change-tabs">
+    <button class="familyservicelist-segment-item" cate-change ng-click="showCtagoryContent('全部')">全部</button>
+    <!--<button class="familyservicelist-segment-item" onclick="showTargetView(event)" >button2</button>-->
+    <button class="familyservicelist-segment-item" cate-change ng-repeat="cList in categoryLis" ng-click="showCtagoryContent($index,cList.category_id)">{{cList.name}}</button>
+  </div>
+
+<!--------------商品列表--------------------->
+  <div class="familyservicelist-table show{{sCount}}" ng-repeat="sCount in serviceCount">
+
+    <div ng-if="!errMsg" class=" common-contentList" load-more data="{params : serviceListParams,repeatFun : '$scope.serviceListFun'}"><!--loadMore-->
+      <div>
+        <div class="familyservicelist-row" ng-repeat="slis in serviceList" ng-click="goServiceDetail(slis.goods_id)">
+          <div class="familyservicelist-row-left">
+            <img ng-src="{{slis.imageUrl}}" class="img-responsive">
+            <img class="image-tag" ng-if="slis.hot == 'Y'"  src="images/fire.png">
+          </div>
+
+          <div class="familyservicelist-row-right">
+
+            <div class="familyservicelist-content-top">
+
+              <div class="familyservicelist-content-top-left">
+                <p class="familyservicelist-service-name">
+                  {{slis.name}}
+                  <img class="img-responsive familyservice-tag" src="images/newtag.png" ng-if="slis.new == 'Y'">
+                </p>
+                <p class="familyservicelist-service-intro">{{slis.introduction}}</p>
+              </div>
+              <div class="familyservicelist-content-top-right">
+                <img src="../../../images/cart.jpg" ng-click="goReserve($event,slis.goods_id)">
+              </div>
+
+            </div>
+            <div class="familyservicelist-row-right-bottom">
+              <span class="familyservicelist-goods-currentprice">￥{{slis.sale_price}}</span>
+              <span class="familyservicelist-goods-unit">/{{slis.unit}}</span>
+              <span class="glyphicon glyphicon-sort"></span>
+              <span class="familyservicelist-goods-orginalprice">&nbsp;&nbsp;<s>￥{{slis.old_price}}</s></span>
+              <span class="familyservicelist-goods-sellnum">日销量：{{slis.day_count}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="errMsg"><img src="{{errMsg}}" class="errImg"/></div>
+
+  </div>
+
+</div>
+
+<!--------------关键字搜索----------------------->
+<div ng-if="!isserviceSearch">
+  <div ng-if="!isServiceList" style="text-align: center;font-size:1.6rem"><span>sorry,暂无相关数据！</span></div>
+  <div ng-if="isServiceList">
+    <div class="servicelist-content" load-more data="{params : searchParams,repeatFun : '$scope.serviceListFun'}"><!--loadMore-->
+      <div>
+        <div class="familyservicelist-row" ng-repeat="sByKey in serviceListByKey" style="border-bottom: 1px solid #ddd" ng-click="goServiceDetail()">
+          <div class="familyservicelist-row-left">
+            <img ng-src="{{sByKey.imageUrl}}" class="img-responsive">
+            <img class="image-tag" ng-if="sByKey.hot == 'Y'"  src="images/fire.png">
+          </div>
+
+          <div class="familyservicelist-row-right">
+
+            <div class="familyservicelist-content-top">
+
+              <div class="familyservicelist-content-top-left">
+                <p class="familyservicelist-service-name">
+                  {{sByKey.name}}
+                  <img class="img-responsive familyservice-tag" src="images/newtag.png" ng-if="sByKey.new == 'Y'">
+                </p>
+                <p class="familyservicelist-service-intro">{{sByKey.introduction}}</p>
+              </div>
+              <div class="familyservicelist-content-top-right">
+                <img src="../../../images/cart.jpg" ng-click="test1()">
+              </div>
+
+            </div>
+            <div class="familyservicelist-row-right-bottom">
+              <span class="familyservicelist-goods-currentprice">￥{{sByKey.sale_price}}</span>
+              <span class="familyservicelist-goods-unit">/{{sByKey.unit}}</span>
+              <span class="glyphicon glyphicon-sort"></span>
+              <span class="familyservicelist-goods-orginalprice">&nbsp;&nbsp;<s>￥{{sByKey.old_price}}</s></span>
+              <span class="familyservicelist-goods-sellnum">日销量：{{sByKey.day_count}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

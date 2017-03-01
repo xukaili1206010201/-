@@ -1,0 +1,99 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <div class="left-item">
+      <img class="back-button" ng-click="backSociety()" src="images/back_button.png">
+
+      <!--<p ng-click="jumpSelectcity()" ng-model="city_name" class="city" style="color: white; padding-right: 5px;">{{city_name}} <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>-->
+      <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+        <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+                ng-options="x.city_id as x.name for x in usercityList">
+        </select>
+      </p>
+    </div>
+
+    <div class="navigationbar-item">
+      <div class="search-button">
+        <img src="images/search_button.png">
+      </div>
+      <div class="search-field-block">
+        <div class="search-input">
+          <input type="text" class="form-control" placeholder="请输入搜索关键字">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="tribe-content">
+  <ul class="list-group" ng-show="BBS">
+    <!--部落信息-->
+    <li class="list-group-item">
+      <div class="media">
+        <div class="media-left">
+          <a href="#">
+            <img class="media-object" ng-src="{{BBS.buluo_image}}" alt=""/>
+          </a>
+        </div>
+        <div class="media-body" style="position:relative">
+          <b>{{BBS.buluo_name}}</b>
+          <p class="tie-count">{{BBS.new_count}}/{{BBS.count}}</p>
+          <!--<span class="btn-default own">只看自己</span>-->
+          <div class="own">
+            <div>
+              <input
+                bs-switch
+                ng-model="ownCheck"
+                type="checkbox"
+                switch-on-text="自己"
+                switch-off-text="全部"
+                switch-off-color="success"
+                switch-on-color="success"
+                switch-size="small"
+                ng-true-value="1"
+                ng-false-value="2"
+                switch-change="ownChange()">
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+
+    <!--帖子列表-->
+    <li ng-show="listBBS" class="list-group-item" ng-repeat="k in listBBS" ng-click="goPostDetail(k.bbs_id)">
+      <div class="media">
+        <div class="media-left">
+          <a href="#">
+            <img class="media-object" ng-src="{{k.avatar}}" alt=""/>
+          </a>
+        </div>
+        <div class="media-body" style="position:relative">
+          <p class="first-p">
+            <b>{{k.title}}</b>
+            <span>{{k.review_status}}</span>
+          </p>
+          <p class="second-p">{{k.nickname}}</p>
+          <p class="second-p">
+            <span>{{k.create_date}}</span>
+          </p>
+          <p class="third-p">
+            <span>{{k.review_date}}</span>
+            <span>{{k.reply_count}}</span>
+          </p>
+        </div>
+      </div>
+    </li>
+    <h4 ng-hide="listBBS" class="text-center" style="margin-top: 50px;">暂无帖子信息！</h4>
+
+  </ul>
+  <h4 ng-hide="BBS" class="text-center" style="margin-top: 70px;">暂无部落信息！</h4>
+
+  <div class="express-tie">
+    <button class="btn btn-success" ng-click="goEdit(buluoId)">发表帖子</button>
+  </div>
+
+</div>

@@ -1,0 +1,168 @@
+/*/!* ******************************** navigationbar with back-button   begin ******************************** *!/*/
+/*html , body{*/
+  /*/!*background-color: #F0EFF5;*!/*/
+  /*height: 100%;*/
+/*}*/
+/*ul{*/
+  /*list-style: none;*/
+/*}*/
+/*.navigation-bar{*/
+  /*overflow: hidden;*/
+/*}*/
+
+/* ******************************** 返回按钮样式 ******************************** */
+
+/*.back-button{*/
+  /*/!*background: green;*!/*/
+  /*width: 30px;*/
+  /*height: 30px;*/
+  /*margin-left: 10px;*/
+  /*/!* 51/2 - 30/3  *!/*/
+  /*margin-top: 10.5px;*/
+  /*float: left;*/
+/*}*/
+
+/* ******************************** navigationbar item样式 ******************************** */
+/*.navigationbar-item{*/
+  /*height: 30px;*/
+  /*margin-left: 50px;*/
+  /*margin-top: 10.5px;*/
+  /*margin-right: 50px;*/
+  /*/!*background: red;*!/*/
+  /*padding-top: 5px;*/
+
+/*}*/
+
+/*.item-title{*/
+  /*text-align: center;*/
+  /*font-size: 15px;*/
+  /*color: white;*/
+/*}*/
+
+/* ******************************** navigationbar with back-button   end ******************************** */
+
+
+/* ******************************** 内容样式 ******************************** */
+/*.body-content{*/
+  /*width: 100%;*/
+  /*height: 100%;*/
+  /*background: #F0EFF5;*/
+/*}*/
+
+/*.content{*/
+  /*margin-top: 51px;*/
+/*}*/
+/*.basic_attribute , .user_attribute{*/
+  /*margin:0px;*/
+  /*padding-left:10px;*/
+/*}*/
+/*.basic_attribute li , .user_attribute li{*/
+  /*margin:5px 5px;*/
+/*}*/
+
+/*.coupons-name{*/
+  /*font-size: 16px;*/
+/*}*/
+/*.coupons-city-type{*/
+  /*text-align: right;*/
+  /*font-size: 13px;*/
+/*}*/
+
+/*.coupons-time{*/
+  /*text-align: left;*/
+  /*font-size: 13px;*/
+/*}*/
+
+/*.user_attribute{*/
+  /*background-color: white;*/
+  /*padding-left: 0px;*/
+  /*padding-bottom: 2px;*/
+/*}*/
+
+/*.user_attribute li{*/
+  /*margin-left: 15px;*/
+/*}*/
+
+/*.user_attribute .group-property{*/
+  /*background-color: #dddddd;*/
+  /*margin-left: 0px;*/
+  /*margin-right: 0px;*/
+  /*padding-left: 10px;*/
+  /*font-size: 15px;*/
+/*}*/
+
+/*.coupons-goods-table{*/
+  /*background: #dddddd;*/
+  /*padding-left: 0px;*/
+/*}*/
+
+/*#coupons-goods-show{*/
+  /*margin-left: 0px;*/
+  /*overflow: hidden;*/
+/*}*/
+
+/*.goods-image{*/
+  /*float: left;*/
+/*}*/
+
+/*.goods-image img{*/
+  /*width: 64px;*/
+  /*height: 64px;*/
+/*}*/
+
+/*.goods-info{*/
+  /*float: left;*/
+  /*margin-left: 5px;*/
+/*}*/
+
+/*.coupondetail-goods-name{*/
+  /*margin-top: 10px;*/
+/*}*/
+
+/*.coupondetail-goods-price{*/
+  /*margin-top: 10px;*/
+  /*margin-bottom: 0px;*/
+  /*color: orange;*/
+/*}*/
+
+
+/*!* ******************************** 优惠券操作样式 ******************************** *!*/
+/*.coupons-operate-block{*/
+  /*height: 44px;*/
+  /*background: white;*/
+/*}*/
+
+/*.coupons-unused-block{*/
+  /*overflow: hidden;*/
+/*}*/
+
+/*.use-block{*/
+  /*float: left;*/
+  /*width: 45%;*/
+  /*margin-left: 3.3%;*/
+  /*margin-right: 3.3%;*/
+  /*margin-top: 5px;*/
+  /*margin-bottom: 5px;*/
+  /*!*background: red;*!*/
+/*}*/
+
+/*.send-block{*/
+  /*float: left;*/
+  /*width: 45%;*/
+  /*margin-right: 3.3%;*/
+  /*margin-top: 5px;*/
+  /*margin-bottom: 5px;*/
+  /*!*background: green;*!*/
+/*}*/
+
+/*.receive-block{*/
+  /*margin-left: 10px;*/
+  /*margin-right: 10px;*/
+  /*margin-top: 5px;*/
+  /*margin-bottom: 5px;*/
+/*}*/
+
+/*.order_num{*/
+  /*float: right;*/
+  /*margin-right: 10px;*/
+/*}*/

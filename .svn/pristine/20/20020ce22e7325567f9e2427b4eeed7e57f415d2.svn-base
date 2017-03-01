@@ -1,0 +1,431 @@
+
+/* ******************************** navigationbar with back-button   end ******************************** */
+
+.pay-content {
+  margin-top: 45px;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-top: 2px !important;
+}
+
+/*********************************************订单列表样式 begin*********************************************/
+.order-table .list-group {
+  margin-bottom: 0px;
+}
+.pay-order-row{
+  /*padding: 0px;*/
+  margin-bottom: 10px;
+  border: none;
+}
+
+.pay-row .section-header .section-header-content {
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+/* 订单信息字体 */
+.pay-row
+.section-header
+.section-header-content span {
+  font-size: 15px;
+}
+
+.pay-order-no{
+  font-size: 1.3rem;
+}
+
+/* 订单金额 */
+.order-price {
+  /*margin-right: 10px;*/
+  font-size: 16px;
+  float: right;
+  color: #F7AF0D;
+}
+
+
+/* 订单时间 */
+.pay-row
+.section-header
+.section-header-content
+.order-time {
+  margin: 0px;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+.pay-row .media-list .pay-type-content {
+  margin-left: 5px;
+  margin-top: 0px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #dddddd;
+}
+
+.pay-row .media-list .pay-type-content .pay-type-content-left {
+  padding-right: 5px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+.pay-row .media-list .pay-type-content .pay-type-content-left .pay-type-content-left-image {
+  width: 60px;
+  height: 60px;
+}
+
+/************************** 商品名称、商品价格  ************************/
+.pay-row .media-list .pay-type-content .media-body .pay-name-price {
+  overflow: hidden;
+  margin-right: 10px;
+}
+.pay-goods-image{
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 10px;
+}
+
+.pay-name-price {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.pay-goods-name{
+  display: inline-block;
+  width: 75%;
+  font-size: 1.4rem;
+}
+
+.pay-goods-pricecount{
+  float: right;
+  width: 23%;
+}
+
+
+.pay-goods-price {
+  font-size: 1.5rem;
+  color: #F7AF0D;
+  text-align: right;
+}
+
+.pay-goods-num{
+  text-align: right;
+  color: #F7AF0D;
+}
+
+
+
+.pay-goods-specifications{
+  float: left;
+}
+
+.pay-spec-coupons{
+  overflow: hidden;
+}
+
+
+/************************** 星期、商品数  ************************/
+/*.list-group-item .media-list .media .media-body .week-num {*/
+  /*overflow: hidden;*/
+  /*margin-right: 10px;*/
+/*}*/
+
+/*.list-group-item .media-list .media .media-body .pay-week-num span {*/
+  /*font-size: 12px;*/
+/*}*/
+
+
+
+.pay-guige-servicestation-count{
+  overflow: hidden;
+  width: 100%;
+}
+
+.pay-guige-service-station{
+  float: left;
+  overflow: hidden;
+}
+
+
+/*********************************************订单列表样式 end*********************************************/
+
+/*********************************************总额、留言输入框 begin*********************************************/
+.total-price-block {
+  background: white;
+}
+
+.total-price-block .total-price {
+  overflow: hidden;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.total-price-block .total-price span {
+  font-size: 16px;
+  height: 3.5rem;
+  line-height: 3.5rem;
+}
+
+.total-price-block .total-price .total-price-int {
+  float: right;
+  color: #F7AF0D;
+}
+
+/*********************************************总额、留言输入框 end*********************************************/
+
+/*********************************************优惠券列表 begin*********************************************/
+.coupons-table {
+  width: 100%;
+  /*background: white;*/
+  margin-top: 10px;
+  /*padding-left: 10px;*/
+  /*padding-top: 5px;*/
+  /*padding-right: 10px;*/
+  /*padding-bottom: 5px;*/
+}
+
+.coupons-table .coupons-table-row{
+  padding: 5px;
+}
+
+.coupons-table .coupons-text {
+  margin: 0px;
+  font-size: 16px;
+  /*background: red;*/
+  line-height: 30px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #dddddd;
+}
+
+/* 优惠券信息 */
+.pay-row-content{
+  padding-left: 10px;
+  overflow: hidden;
+}
+
+/* 优惠券信息-名称、类型、价值、数量 */
+.pay-coupons-info{
+  height: 2rem;
+  line-height: 2rem;
+}
+
+/* 减少优惠券按钮 */
+.numbermodify-minus{
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #dddddd;
+}
+
+/* 优惠券数量 */
+.numbermodify-number{
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #dddddd;
+  text-align: center;
+}
+
+/* 增加优惠券按钮 */
+.numbermodify-add{
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #dddddd;
+}
+
+
+.coupons-table .list-group {
+  margin-bottom: 5px;
+}
+
+.coupons-table .list-group .list-group-item {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-radius: 0px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  overflow: hidden;
+}
+
+.coupons-table .list-group .list-group-item span{
+  float: left;
+  height: 25px;
+  line-height: 25px;
+}
+
+.coupons-table .list-group .list-group-item .coupons-num-block{
+  float: right;
+}
+
+/*/!************** 订单下商品列表 begin********************!/*/
+/*/!* 商品列表 *!/*/
+.pay-goods-table{
+  width: 100%;
+  padding: 0px 10px 10px;
+}
+
+/*/!* 商品信息-图片(左)、文本(右) *!/*/
+/*.pay-goods-table*/
+/*.pay-goodsinfo-content{*/
+  /*overflow: hidden;*/
+/*}*/
+
+/*/!* 商品图片 *!/*/
+/*.pay-goods-table*/
+/*.pay-goodsinfo-content*/
+/*.pay-goodsinfo-img{*/
+  /*width: 60px;*/
+  /*height: 60px;*/
+  /*float: left;*/
+/*}*/
+
+/* 留言输入框 */
+.remark-field-block{
+  padding: 10px;
+  background: #dddddd;
+}
+
+
+
+/*/!************** 订单下商品列表 end********************!/*/
+
+/************** 账户余额 begin********************/
+.balance {
+  overflow: hidden;
+  background: white;
+  /*height:;*/
+  /*margin-bottom: 0px;*/
+  /*margin-top: 10px;*/
+}
+
+.balance .user-banlance {
+  float: left;
+  height: 3.5rem;
+  line-height: 3.5rem;
+  font-size: 1.5rem;
+  padding-left: 10px;
+}
+
+.balance .use-balance-field {
+  /*forn-control 高度默认为30px */
+  float: right;
+  margin-right: 10px;
+  width: 20%;
+}
+
+.use-balance-field input{
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: #F7AF0D;
+}
+
+/************** 账户余额 end********************/
+
+/*********************************************优惠券列表 end *********************************************/
+
+
+/********************************************* 需付款 begin *********************************************/
+.pay-require-topline{
+  background: #F0EFF5;
+  height: 1rem;
+}
+
+.paid-required{
+  font-size: 1.5rem;
+  color: #F7AF0D;
+  height: 3rem;
+  line-height: 3rem;
+  text-align: center;
+  background: white;
+  /*margin-top: 10px;*/
+}
+/********************************************* 需付款 end *********************************************/
+
+
+/********************************************* 支付方式 begin *********************************************/
+
+.pay-type-block{
+  background: white;
+}
+
+.pay-type-block .pay-type-text{
+  padding-left: 10px;
+  font-size: 16px;
+  height: 35px;
+  line-height: 35px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.pay-type-block .media{
+  margin: 0px;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.pay-type-block .media .media-left .media-object{
+  width: 2.9rem;
+  height: 2.9rem;
+}
+
+/*.pay-type-block .media .media-body span{*/
+  /*height: 30px;*/
+  /*line-height: 30px;*/
+/*}*/
+
+/*.pay-type-block .media .media-body .payment-platform{*/
+  /*font-size: 14px;*/
+/*}*/
+
+/*.pay-type-block .media .media-body .payment-remarks{*/
+  /*color: black;*/
+  /*font-size: 12px;*/
+/*}*/
+/*.pay-type-block .media .media-body .choosePaymentPlatform{*/
+  /*float: right;*/
+  /*margin-right: 10px;*/
+  /*margin-top: 8.5px;*/
+/*}*/
+
+.pay-payment-info{
+  float: left;
+}
+
+/* 支付方式的名称 */
+.pay-payment-platform-name{
+  font-size: 1.3rem;
+  /*float: left;*/
+}
+
+/* 支付方式的说明 */
+.pay-payment-remarks{
+  font-size: 1.1rem;
+  /*float: right;*/
+}
+
+.pay-payment-seletced{
+  float: right;
+  padding-right: 10px;
+  height: 100%;
+}
+
+.pay-choosePaymentPlatform{
+  width: 15px;
+  height: 15px;
+}
+/********************************************* 支付方式 end *********************************************/
+
+.pay-content .pay-button-group{
+  width: 100%;
+  padding: 0px 10px;
+  background: white;
+}
+
+.pay-content .pay-button-group .pay-ensurepay-button{
+  padding: 0px;
+  height: 35px;
+  width: 100%;
+  margin: 10px 0px;
+  border-radius: 3px;
+}

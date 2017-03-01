@@ -1,0 +1,280 @@
+
+.form-control {
+    height: 30px;
+}
+
+/* ******************************** navigationbar with back-button   end ******************************** */
+
+/* ******************************** 卡头   begin ******************************** */
+.sup-segment-ctrl {
+    margin-top: 50px;
+}
+
+.sup-segment-control {
+    background: white;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+    position: relative;
+    overflow-y: hidden;
+    z-index: 1000;
+}
+
+.breakfast-supper-block {
+    height: 3.3rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: -webkit-flex;    /* Chrome, WebKit */
+    display: flex;
+}
+
+.breakfast-item {
+    float: left;
+    text-align: center;
+}
+
+.breakfast-button {
+    display: block;
+    font-size: 1.3rem;
+    background-image: url(../images/type-default.png);
+    background-repeat: no-repeat;
+    background-size: 7rem 2.5rem;
+    line-height: 2.4rem;
+    width: 7rem;
+}
+
+.breakfast-active {
+    background-image: url(../images/type-active.png);
+    background-repeat: no-repeat;
+    background-size: 7rem 2.5rem;
+}
+
+.breakfast-supper-block .breakfast-item {
+    margin: 5px 0px 5px 5px !important;
+}
+
+.breakfast-supper-block .breakfast-item:first-child {
+    margin-left: 10px !important;
+}
+
+.breakfast-supper-block .breakfast-item:last-child {
+    margin-right: 10px !important;
+}
+
+.typeActive {
+    color: white;
+    background-color: rgb(125, 179, 67);
+    outline: none;
+}
+
+/* ******************************** 卡头   end ******************************** */
+
+/* ******************************** 轮播图   begin ******************************** */
+.auto-scroll-block img {
+    margin-top: 40px;
+    width: 100%;
+    height: 100px;
+}
+
+/* ******************************** 轮播图   end ******************************** */
+
+/* ******************************** 跑马灯   begin ******************************** */
+.sup-container {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+    /*margin-left: 0px;*/
+}
+
+/*.marquee {*/
+/*/!* required styles *!/*/
+/*display: block;*/
+/*padding: 0;*/
+/*margin: 0;*/
+/*list-style: none;*/
+/*/!*line-height: 1;*!/*/
+/*position: relative;*/
+/*overflow: hidden;*/
+
+/*/!* optional styles for appearance *!/*/
+/*width: 500px;*/
+/*height: 35px; /!* height should be included to reserve visual space for the marquee *!/*/
+/*line-height: 35px;*/
+/*background-color: #f2f2ff;*/
+/*border: 1px solid #08084d;*/
+/*}*/
+
+/*.marquee li {*/
+/*/!* required styles *!/*/
+/*position: absolute;*/
+/*top: -999em;*/
+/*left: 0;*/
+/*display: block;*/
+/*white-space: nowrap; /!* keep all text on a single line *!/*/
+
+/*/!* optional styles for appearance *!/*/
+/*font: 14px Arial, Helvetica, sans-serif;*/
+/*padding: 3px 5px;*/
+/*}*/
+.marquee_box {
+    width: 100%;
+    /*float: left;*/
+    display: inline-block;
+    overflow: hidden;
+    box-sizing: border-box;
+    height: 35px;
+    line-height: 35px;
+    position: relative;
+    cursor: pointer;
+    color: rgb(213, 179, 84);
+}
+
+.marquee-sibling {
+    padding: 0;
+    /*width: 4%;*/
+    height: 35px;
+    line-height: 35px;
+    float: left;
+    left: 0;
+    z-index: 2000;
+}
+
+.mt {
+    margin-top: 90px;
+}
+
+/* ******************************** 跑马灯   end ******************************** */
+
+/********************************提示**********************************************/
+
+.prompt-service {
+    background: rgb(243, 156, 18);
+    color: #FFFFFF;
+    width: 100%;
+    letter-spacing: .1rem;
+}
+
+.prompt-service .prompt-content {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.prompt-service .prompt-content > ul li {
+    margin-left: 0.5rem;
+}
+
+.prompt-service .prompt-content > ul li:first-child {
+    font-size: 1.3rem;
+}
+
+.prompt-service .prompt-content > ul .go-station {
+    color: #FFEDA7;
+    float: right;
+}
+
+.prompt-service .prompt-content > ul .args {
+    color: #FFFF00;
+}
+
+/***********************************end***********************************************/
+
+/*************************************所有商家数据******************************************/
+.all-bussiness-info {
+    /*margin-top: 1px;*/
+    height: 33px;
+    line-height: 33px;
+    padding: 0px .25rem;
+    color: #515151 !important;
+    padding-left: 10px;
+    background: #F0EFF5;
+}
+
+.all-bussiness-info span:first-child {
+    font-size: 14px;
+}
+
+.all-bussiness-info span:first-child span {
+    font-size: 17px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.all-bussiness-info span:nth-child(2) {
+    font-size: 14px;
+    float: right;
+}
+
+.all-bussiness-info img {
+    width: 20px;
+    height: 20px;
+}
+
+/**************************************end*************************************************/
+
+/************************************* 商家列表 begin ***************************************/
+
+.businessImg {
+    width: 64px;
+    height: 64px;
+    margin-left: 10px;
+}
+
+.seller-table p {
+    margin: 0px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+.sup-media {
+    /*border-top: 1px solid #dddddd;*/
+    border-bottom: 1px solid #dddddd;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 0px;
+}
+
+.seller-name-num {
+    overflow: hidden;
+}
+
+.description {
+    color: #999999;
+}
+
+.seller-name-num .support-seller-content {
+    float: left;
+    font-size: 1.4rem;
+}
+
+.seller-name-num .support-seller-content b {
+    color: #515151;
+}
+
+.seller-name-num .support-seller-content p {
+    float: left;
+}
+
+.Newimage {
+    float: left;
+    width: 32px;
+    height: 16px;
+    margin-top: 4px;
+    margin-right: 5px;
+}
+
+.seller-name-num .goods-num {
+    float: right;
+    margin-right: 10px;
+    margin-top: 3px;
+    color: #515151;
+}
+
+.search-li {
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+
+/************************************* 商家列表 end ***************************************/
+
+/*</style>*/

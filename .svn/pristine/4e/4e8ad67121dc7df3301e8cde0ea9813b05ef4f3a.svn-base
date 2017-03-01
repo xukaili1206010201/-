@@ -1,0 +1,512 @@
+var communityModuleController = angular.module('communityModuleController', []);
+
+//选择城市列表
+communityModuleController.controller(
+  'selectcityCtrl',
+  function ($scope,$rootScope, $stateParams, userService, $state, commonService,$window,$cookies) {
+    userService.postRequestWithUrlAndParams('listCity.action', '').success(function (response) {
+      switch (response.code) {
+        case '0':
+          $scope.hotCityList = [response.data.hot[0], response.data.hot[1], response.data.hot[2]];
+          $scope.cityList = response.data.list;
+          //数据请求完毕后重新进行排序
+          $.getScript('scripts/common/selectcity/sort.js', function () {
+            startSorts();
+          })
+          break;
+        case '-1':
+          commonService.showErrorMessage("返回失败");
+          $scope.errMsg = '请输入手机号码！';
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+
+    //选择城市
+    $scope.selectCity = function (cityModel) {
+      if($rootScope.jump=='Selectcity'){
+        console.log('12')
+        $window.history.back();
+        //localStorage.setItem("cityName",cityModel.name);
+        //localStorage.setItem("cityId",cityModel.city_id);
+        $sessionStorage.gpscityName=cityModel.name;
+        sessionStorage.gpscityId=cityModel.city_id;
+      }else{
+        sessionStorage.operate = 'selectcity';
+        sessionStorage.cityName = cityModel.name;
+        sessionStorage.cityId = cityModel.city_id;
+        $state.go('member-user-mycommunityset');
+      }
+    };
+
+    //回到我的小区设置
+    $scope.backMyCommunitySet = function () {
+      if($rootScope.jump=='Selectcity'){
+        $window.history.back();
+      }else{
+        $state.go('member-user-mycommunityset');
+      }
+    }
+  }
+);
+
+
+//选择小区列表
+communityModuleController.controller(
+  'selectCommunityCtrl',
+  function ($scope, $stateParams, userService, $state, commonService,$cookies,$rootScope) {
+    $scope.cityName=$sessionStorage.gpscityName;
+    var params = {'city_id': sessionStorage.gpscityId};
+    if (!params.city_id) {
+      commonService.showNoticeMessage("请选择城市");
+      return;
+    }
+    userService.postRequestWithUrlAndParams('listCommunity.action', params).success(function (response) {
+      switch (response.code) {
+        case '0':
+          $scope.hotCommunityList = response.data.hot;
+          $scope.communityList = response.data.list;
+          //数据请求完毕后重新进行排序
+          $.getScript('scripts/common/selectcity/sort.js', function () {
+            startSorts();
+          })
+          break;
+        case '-1':
+          commonService.showErrorMessage("返回失败");
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+
+    //回到我的小区设置
+    //点击返回按钮回到我的小区设置
+    $scope.goMyCommunitySet = function () {
+      $state.go('member-user-mycommunityset');
+    };
+
+    //选择小区后回到我的小区设置
+    $scope.selectCommunity = function (communityModel) {
+      sessionStorage.operate = 'selectcommunity';
+      sessionStorage.communityName = communityModel.name;
+      sessionStorage.communityId = communityModel.community_id;
+      console.log(sessionStorage.communityId)
+      $state.go('member-user-mycommunityset');
+    };
+  }
+);
+
+
+//我的小区列表
+communityModuleController.controller(
+  'myCommunityCtrl',
+  function ($scope, $stateParams, userService, $state, commonService,$q,$location,$cookies,$rootScope) {
+    $scope.params = {
+      "mobile": localStorage.mobile,
+      "city_id": sessionStorage.gpscityId,
+      'pageno' : '1', //页码
+      'pagesize' : '10', //页数
+      "url" : 'listUserCommunity.action',
+      "direction" : 'up'
+    };
+    if (!$scope.params.mobile) {
+      commonService.showNoticeMessage('请登录一下好吗？');
+      $state.go('member-personal-login');
+      sessionStorage.loginLocation = $location.path();
+    }
+    if (!$scope.params.city_id) {
+      commonService.showNoticeMessage("请选择城市!");
+      return;
+    }
+
+    commonService.showWeUILoadingHub();
+    var isOver = false; //false:标志数据未加载完成
+    $scope.myCommunityList = [];
+    $scope.CommunityFun = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            if (response.data.length == 0 && params.pageno == '1') {
+              commonService.showNoticeMessage("当前城市您还没有小区哟，赶快添加吧！");
+            } else {
+              var tempList = response.data;
+              if(tempList.length < params.pagesize){
+                isOver = true;//true:标志数据加载完成
+                defer.resolve(isOver);
+              }else{
+                isOver = false;
+                defer.resolve(isOver);
+              }
+              if(params.direction == 'down'){
+                $scope.myCommunityList = response.data;
+              }else{
+                $scope.myCommunityList = $scope.myCommunityList.concat(tempList);
+              }
+              localStorage.myCommunitys = $scope.myCommunityList.length || 0;
+              //$scope.myCommunityList = $scope.myCommunityList.concat(tempList);
+              //$scope.myCommunityList = response.data;
+              $.getScript('scripts/common/swipeleft.js', function(){
+                addSwipeLeft();
+              });
+            }
+            commonService.hiddenWeUILoadingHub();
+            break;
+          case '-8':
+            $state.go('member-personal-login');
+            sessionStorage.loginLocation=$location.path();
+            break;
+
+        }
+      }).error(function (data, status, header, config) {
+        commonService.hiddenWeUILoadingHub();
+      });
+      return defer.promise;
+    };
+    $scope.CommunityFun($scope.params);
+
+    /*************关键字搜索*******************/
+    $scope.isShowCommunity = true; //true:显示分类的优惠券，false：显示搜索的优惠券
+    var val = '';
+    $scope.CommunityList = [];
+    $scope.searchCom = function(){
+      $scope.CommunityList = [];
+      val = $('.search-input input').val();
+      if(val == ''){
+        $scope.isShowCommunity = true;
+        commonService.showWarnMessage('请输入关键字！');
+      }else{
+        $scope.isShowCommunity = false;
+        $scope.searchParams.key = val;
+        $scope.showSearchCom($scope.searchParams);
+      }
+    };
+    $scope.searchParams = {
+      "mobile": localStorage.mobile,
+      "city_id": sessionStorage.gpscityId,
+      'pageno' : '1', //页码
+      'pagesize' : '10', //页数
+      "url" : 'listUserCommunity.action',
+      "direction" : 'up',
+      "key" : ''
+    };
+    var isSearch = false;//false:标志数据未加载完成
+    $scope.isCommunity = true; //false:无相关数据 true：有相关数据
+    $scope.showSearchCom = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var tempList = response.data;
+            if(tempList.length == 0 && params.pageno == '1'){
+              /*判断请求的第一页无数据时，显示暂无数据*/
+              $scope.isCommunity = false;
+              return;
+            }else{
+              $scope.isCommunity = true;
+              if(tempList.length < params.pagesize){
+                isSearch = true;//true:标志数据加载完成
+                defer.resolve(isSearch);
+              }else{
+                isSearch = false;
+                defer.resolve(isSearch);
+              }
+              if(params.direction == 'down'){
+                $scope.CommunityList = response.data;
+              }else{
+                $scope.CommunityList = $scope.CommunityList.concat(tempList);
+              }
+            }
+            //$scope.myCommunityList = $scope.myCommunityList.concat(tempList);
+            //$scope.myCommunityList = response.data;
+            $.getScript('scripts/common/swipeleft.js', function(){
+              addSwipeLeft();
+            });
+            commonService.hiddenWeUILoadingHub();
+            break;
+        }
+      }).error(function (data, status, header, config) {
+        commonService.hiddenWeUILoadingHub();
+      });
+      return defer.promise;
+    };
+
+    //编辑我的小区
+    $scope.editCommunity = function (communityModel) {
+
+      //页面跳转
+      sessionStorage.userCommunity_id = communityModel.userCommunity_id;
+      sessionStorage.cityName = communityModel.city;
+      sessionStorage.cityId = communityModel.city_id;
+      sessionStorage.communityName = communityModel.community;
+      sessionStorage.communityId = communityModel.community_id;
+      sessionStorage.floor = communityModel.number;
+      sessionStorage.userName = communityModel.username;
+      sessionStorage.tel = communityModel.telphone;
+
+      /**
+       * 通过from来判断由什么页面进入我的小区
+       * from = 0 从个人中心进入我的小区，此时点击小区进行编辑操作
+       * from = 1 从购买页进入我的小区，此时点击小区进行选择小区的操作
+       * from = 2 从服务预约页进入我的小区，此时点击小区进行选择小区的操作
+       */
+      var from = $stateParams.from;
+      if(from == 0){
+        sessionStorage.parents = 'editcommunity';
+        $state.go('member-user-mycommunityset');
+      }else if(from == 1){
+        sessionStorage.parents = 'purchase-choosecommunity';
+        $state.go('service-purchase');
+      }else if(from == 2){//服务预约页
+        sessionStorage.parents = 'serviceReserve';
+        $state.go('guanjia-servicereserve',{
+          goodsId : localStorage.reserveGoodId
+        });
+      }
+
+
+    }
+
+    //删除我的小区
+    $scope.deleteCommunity = function (communityModel, event) {
+
+      var params = {
+        "mobile": localStorage.mobile,
+        "userCommunity_id": communityModel.userCommunity_id
+      };
+      if (!$cookies.get('ticket')) {
+        commonService.showNoticeMessage("账号不能为空!");
+        return;
+      }
+      if (!params.userCommunity_id) {
+        commonService.showNoticeMessage("小区不能为空!");
+        return;
+      }
+      userService.postRequestWithUrlAndParams('delUserCommunity.action', params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var rowName = event.target.parentNode.parentNode.parentNode;
+            if (rowName.className == 'line-wrapper ng-scope') {
+              $(rowName).remove();
+              commonService.showSuccessMessage("删除成功！");
+            }
+
+            localStorage.myCommunitys--;
+            break;
+          case '-1':
+            commonService.showErrorMessage("参数为空！");
+            break;
+          case '-2':
+            commonService.showErrorMessage("参数错误！");
+            break;
+          case '-3':
+            commonService.showErrorMessage("返回失败，系统异常！");
+            break;
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+    }
+
+
+    //返回个人中心
+    $scope.goToback = function () {
+      console.log($stateParams.from);
+      if($scope.isShowCommunity){
+        if(sessionStorage.myCommunityjump=='purchase'){
+          $state.go('service-purchase');
+        }
+        if(sessionStorage.myCommunityjump=='usercenter'){
+          $state.go("member-personal-usercenter");
+        }
+        if(sessionStorage.myCommunityjump == 'coupons'){
+          $state.go('member-user-mycoupons');
+        }
+      }else{
+        window.location.reload();
+      }
+    };
+
+
+    $scope.addOrEditCommunity = function () {
+      sessionStorage.parents = 'addcommunity';
+      $state.go('member-user-mycommunityset');
+    };
+
+  }
+);
+
+
+//我的小区设置
+communityModuleController.controller(
+  'myCommunitySetCtrl',
+  function ($scope, $stateParams, userService, $state, commonService,$cookies) {
+    console.log(sessionStorage.communityId)
+    console.log(sessionStorage.parents)
+    console.log(sessionStorage.operate)
+
+    //由我的小区列表进来编辑小区时
+    var from = sessionStorage.parents;
+
+    $scope.submitCommunityInfo = function () {
+      var params = {
+        "mobile": localStorage.mobile,
+        "userCommunity_id": sessionStorage.userCommunity_id,
+        "community_id": sessionStorage.communityId,
+        "username": $scope.userName,
+        "telphone": $scope.telphone,
+        "number": $scope.floor
+      };
+      if (!$cookies.get('ticket')) {
+        commonService.showWarnMessage("账号不能为空!");
+        return;
+      }
+      if (from == 'addcommunity') {
+        if (!params.community_id) {
+          if(!sessionStorage.gpscityId){
+            commonService.showWarnMessage("请选择城市!");
+            return;
+          }
+          commonService.showWarnMessage("请选择小区!");
+          return;
+        }
+      }
+      if (from == 'editcommunity') {
+        if (!params.userCommunity_id) {
+          commonService.showWarnMessage("地址不能为空!");
+          return;
+        }
+      }
+
+      if (!params.username) {
+        commonService.showWarnMessage("联系人不能为空!");
+        return;
+      }
+      if (!params.telphone) {
+        commonService.showWarnMessage("联系电话不能为空!");
+        return;
+      }
+      if (!params.number) {
+        commonService.showWarnMessage("楼层不能为空!");
+        return;
+      }
+
+      userService.postRequestWithUrlAndParams('editUserCommunity.action', params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            //小区信息提交成功后回到我的小区列表
+            $state.go('member-user-mycommunity');
+            break;
+          case '-1':
+            commonService.showErrorMessage('账号为空');
+            break;
+          case '-2':
+            commonService.showErrorMessage('小区为空');
+            break;
+          case '-3':
+            commonService.showErrorMessage('名称为空');
+            break;
+          case '-4':
+            commonService.showErrorMessage('电话为空');
+            break;
+          case '-5':
+            commonService.showErrorMessage('楼层为空');
+            break;
+          case '-6':
+            commonService.showErrorMessage('用户错误');
+            break;
+          case '-7':
+            commonService.showErrorMessage('小区错误');
+            break;
+          case '-8':
+            commonService.showErrorMessage('返回失败，系统异常');
+            break;
+        }
+      }).error(function (data, status, header, config) {
+      });
+    }
+
+    //进来编辑小区
+    if (from == 'editcommunity') {
+      //获取将要编辑的小区信息.由我的小区传进来的小区数据
+      $scope.cityName = sessionStorage.cityName;
+      $scope.communityName = sessionStorage.communityName;
+      $scope.floor = sessionStorage.floor;
+      $scope.userName = sessionStorage.userName;
+      $scope.telphone = sessionStorage.tel;
+      $scope.userCommunity_id = sessionStorage.userCommunity_id; //地址id
+      //sessionStorage.communityId = ""; //编辑小区时小区id为空
+
+      //编辑小区时选择城市
+      var operate = sessionStorage.operate;
+      if(operate == "selectcity"){
+        $scope.cityName = sessionStorage.cityName;
+        $scope.communityName = "小区";
+        sessionStorage.communityId = "";
+      }
+      //编辑小区时选择小区
+      else if(operate == "selectcommunity"){ //选择小区
+        $scope.cityName = sessionStorage.cityName;
+        $scope.communityName = sessionStorage.communityName;
+        $scope.community_id = sessionStorage.communityId;
+      }
+
+      $scope.userName = sessionStorage.userName?sessionStorage.userName:"";
+      $scope.telphone = sessionStorage.tel?sessionStorage.tel:"";
+      $scope.floor = sessionStorage.floor?sessionStorage.floor:"";
+
+    }
+    //进来添加小区
+    else if (from == 'addcommunity') { //由我的小区列表进来添加小区时
+      $scope.cityName = '城市';
+      $scope.communityName = '小区';
+      sessionStorage.userCommunity_id = ""; //地址id
+
+      //编辑小区时选择城市
+      var operate = sessionStorage.operate;
+      if(operate == "selectcity"){
+        $scope.cityName = sessionStorage.cityName;
+        $scope.communityName = "小区";
+        sessionStorage.communityId = "";
+      }else if(operate == "selectcommunity"){ //选择小区
+        $scope.cityName = sessionStorage.cityName;
+        $scope.communityName = sessionStorage.communityName;
+        $scope.community_id = sessionStorage.communityId;
+      }
+
+      $scope.userName = sessionStorage.userName?sessionStorage.userName:"";
+      $scope.telphone = sessionStorage.tel?sessionStorage.tel:"";
+      $scope.floor = sessionStorage.floor?sessionStorage.floor:"";
+
+    }
+
+    //前往选择城市
+    $scope.selectCity = function () {
+      sessionStorage.userName = $scope.userName;
+      sessionStorage.tel = $scope.telphone;
+      sessionStorage.floor = $scope.floor;
+      $state.go('member-user-selectcity');
+    }
+    //前往选择小区
+    $scope.selectCommunity = function () {
+      sessionStorage.userName = $scope.userName;
+      sessionStorage.tel = $scope.telphone;
+      //当没有选择城市的时候不能选择小区
+      if (!sessionStorage.cityName || !sessionStorage.cityId || !$scope.cityName || $scope.cityName=="城市") {
+        commonService.showWarnMessage("请选择城市");
+        return;
+      } else {
+        $state.go('member-user-selectcommunity');
+      }
+    };
+
+    //回到我的小区列表
+    $scope.backMycommunity = function () {
+      $state.go('member-user-mycommunity');
+    };
+
+
+  }
+);
+

@@ -1,0 +1,212 @@
+<div class="js_container">
+
+  <div class="page slideIn home">
+
+    <div class="bd">
+      <p class="bg-success" style="padding-left: 2rem;">交通</p>
+      <div class="weui_grids">
+        <a href="http://v.cygj.cn/index.php?m=content&c=index&a=mybus" class="weui_grid js_grid" data-id="toast" style="background-color:#fff">
+          <div class="weui_grid_icon">
+            <img src="images/micro/bus.png" alt="">
+          </div>
+          <p class="weui_grid_label">
+            公交查询
+          </p>
+        </a>
+
+        <a href="http://ws.ibike668.com:81/map.php?location=120.76251697791,31.67900792688&city=%E8%8B%8F%E5%B7%9E%E5%B8%82" class="weui_grid js_grid" data-id="msg" style="background-color:#fff">
+          <div class="weui_grid_icon">
+            <img src="images/micro/bike.png" alt="">
+          </div>
+          <p class="weui_grid_label">
+            自行车
+          </p>
+        </a>
+
+        <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4edd8de2461ac826&redirect_uri=http%3a%2f%2f58.211.176.21%2forders%2fSearch.aspx&response_type=code&scope=snsapi_base&state=875#wechat_redirect"
+           class="weui_grid js_grid" target="_blank" style="background-color:#fff">
+          <div class="weui_grid_icon">
+            <img src="images/micro/longbus.png" alt="">
+          </div>
+          <p class="weui_grid_label">
+            <i class="fa fa-weixin" style="color:#7DB343;font-size: 12px;"></i>长途汽车
+          </p>
+        </a>
+
+        <a target="_blank" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4edd8de2461ac826&redirect_uri=http%3a%2f%2f58.211.176.21%2fOrders%2fmeet.aspx&response_type=code&scope=snsapi_base&state=875#wechat_redirect" class="weui_grid js_grid" data-id="cell"
+           style="background-color:#fff">
+          <div class="weui_grid_icon">
+            <img src="images/micro/jiesongji.png" alt="">
+          </div>
+          <p class="weui_grid_label">
+            <i class="fa fa-weixin" style="color:#7DB343;font-size: 12px;"></i>接送机
+          </p>
+        </a>
+
+        <a href="http://www.cspark.cn/interface/weixin/index.php" class="weui_grid js_grid" data-id="progress" style="background-color:#fff">
+          <div class="weui_grid_icon">
+            <img src="images/micro/part.png" alt="">
+          </div>
+          <p class="weui_grid_label">
+            停车场
+          </p>
+        </a>
+
+        <a href="http://cs.weixin.china-ccw.com/CityService/weixin/Police/SelectPeccancy.html?cityid=320500" class="weui_grid js_grid" data-id="button" style="background-color:#fff">
+          <div class="weui_grid_icon">
+            <img src="images/micro/weizhang.png" alt="">
+          </div>
+          <p class="weui_grid_label">
+            违章查询
+          </p>
+        </a>
+
+        <a href="http://cs.weixin.china-ccw.com/CityService/weixin/Police/SelectDriverScore.html?cityid=320500" class="weui_grid js_grid" data-id="cell" style="background-color:#fff">
+          <div class="weui_grid_icon">
+            <img src="images/micro/jiashizheng.png" alt="">
+          </div>
+          <p class="weui_grid_label">
+            驾驶证查询
+          </p>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="weui_grids">
+      <p class="bg-success" style="padding-left: 2rem;">环境旅游</p>
+      <a href="http://wx.weather.com.cn/mweather/101190402.shtml#1" class="weui_grid js_grid" data-id="button" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/tianqi.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          天气查询
+        </p>
+      </a>
+      <a href="http://index.moji.com/show/aqi/index?internalid=48&platform=50040500" class="weui_grid js_grid" data-id="cell" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/kongqi.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          空气质量
+        </p>
+      </a>
+      <a target="_blank" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5a13af00284bee89&redirect_uri=http%3A%2F%2Fwxpay.cs-travel.com%2Fcs-ylk-wx%2Fweixin%2Fcard_payView.do&response_type=code&scope=snsapi_base&state=test123test#wechat_redirect" class="weui_grid js_grid"
+         data-id="cell"
+         style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/nianka.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          <i class="fa fa-weixin" style="color:#7DB343;font-size: 12px;"></i>年卡充值
+        </p>
+      </a>
+    </div>
+
+    <div class="weui_grids">
+      <p class="bg-success" style="padding-left: 2rem;">医疗</p>
+      <a target="_blank" href="http://wx01.jscsyy.com/wx/index.php?mod=model&act=yy&weixinuid=1" class="weui_grid js_grid" data-id="button" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/yuyue1.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          <!--<i class="fa fa-weixin" style="color:#7DB343;font-size: 12px;"></i>-->
+          一院预约
+        </p>
+      </a>
+      <a target="_blank" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx633a358f39eb72cc&redirect_uri=http%3A%2F%2Fwww.csey.net%2Fwx%2Findex.php%3Fmod%3Dmodel%26act%3Dyy%26weixinuid%3D1&response_type=code&scope=snsapi_base&state=1#wechat_redirect" class="weui_grid js_grid"
+         data-id="cell"
+         style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/yuyue2.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          <!--<i class="fa fa-weixin" style="color:#7DB343;font-size: 12px;"></i>-->
+          二院预约
+        </p>
+      </a>
+      <a target="_blank" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3a7fd6e26406c854&redirect_uri=http%3A%2F%2Fyt.21mhealth.com%2Fwx%2Fv2%2Fhospitals%2F100053%2Freg%2Frule&response_type=code&scope=snsapi_base&state=weixinAuthorize#wechat_redirect" class="weui_grid js_grid"
+         data-id="button" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/yuyue3.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          <!--<i class="fa fa-weixin" style="color:#7DB343;font-size: 12px;"></i>-->
+          中医院预约
+        </p>
+      </a>
+      <!-- <div class="weui_cells_title">便民服务</div> -->
+    </div>
+
+    <div class="weui_grids">
+      <p class="bg-success" style="padding-left: 2rem;">自来水</p>
+      <a href="http://iapp.21cs.cn/weizhan/shuifei/shuifei.aspx" class="weui_grid js_grid" data-id="button" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/shuifei.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          水费查询
+        </p>
+      </a>
+    <a href="http://www.cssf.cc/GongGongXinXi/News.aspx?type=10" class="weui_grid js_grid" data-id="cell" style="background-color:#fff">
+      <div class="weui_grid_icon">
+        <img src="images/micro/gonggao.png" alt="">
+      </div>
+      <p class="weui_grid_label">
+        停水公告
+      </p>
+    </a>
+    <a href="http://www.cssf.cc/ZaiXianFuWu/WangShangBaoXiu.aspx?code=001VmPth0PKGgC1Cinsh09sLth0VmPtB&state=" class="weui_grid js_grid" data-id="cell" style="background-color:#fff">
+      <div class="weui_grid_icon">
+        <img src="images/micro/zilaishui.png" alt="">
+      </div>
+      <p class="weui_grid_label">
+        自来水报修
+      </p>
+    </a>
+    </div>
+
+    <div class="weui_grids">
+      <p class="bg-success" style="padding-left: 2rem;">社保公积金</p>
+      <a href="http://iapp.21cs.cn/weizhan/shebao/shebao.aspx" class="weui_grid js_grid" data-id="cell" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/shebao.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          社保查询
+        </p>
+      </a>
+      <a href="http://iapp.21cs.cn/weizhan/googjj/userchose.aspx" class="weui_grid js_grid" data-id="dialog" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/gongjijin.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          公积金
+        </p>
+      </a>
+    </div>
+
+    <div class="weui_grids">
+      <p class="bg-success" style="padding-left: 2rem;">楼市</p>
+      <a href="http://www.jscsfc.com/zjweichat/map/index.aspx" class="weui_grid js_grid" data-id="dialog" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/loushiditu.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          虞城楼市
+        </p>
+      </a>
+
+      <a href="http://www.jscsfc.com/zjweichat/tax/index.htm" class="weui_grid js_grid" data-id="msg" style="background-color:#fff">
+        <div class="weui_grid_icon">
+          <img src="images/micro/ershoufang.png" alt="">
+        </div>
+        <p class="weui_grid_label">
+          过户费计算
+        </p>
+      </a>
+
+    </div>
+
+  </div>
+</div>

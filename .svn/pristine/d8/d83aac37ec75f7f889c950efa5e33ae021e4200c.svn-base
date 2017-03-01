@@ -1,0 +1,95 @@
+/*html{*/
+  /*font-size: 12px;*/
+/*}*/
+
+/*body{*/
+  /*background: white;*/
+/*}*/
+
+.content{
+  margin-top: 5.1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+
+.logo-block{
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.logo-block img{
+  width: 25%;
+  height: 25%;
+}
+
+.project-name{
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+
+.current-time{
+  font-size: 1.4rem;
+  text-align: left;
+  /*margin-left: 10px;*/
+}
+
+.feedback-field{
+  margin-top: 1rem;
+  /*margin-left: 1rem;*/
+  /*margin-right: 1rem;*/
+  height: 100px;
+  border: 1px solid #dddddd;
+  background: white;
+}
+
+.user-info-block{
+  margin-top: 1rem;
+  /*margin-left: 1rem;*/
+  /*margin-right: 1rem;*/
+}
+
+.user-info-block input{
+  margin-top: 1rem;
+}
+
+.footer{
+  background: #dddddd;
+  bottom: 0rem;
+  height: 3.5rem;
+  overflow: hidden;
+}
+
+.subdiv{
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+.submit-button-size{
+  margin-top: 2rem;
+  /*margin-left: 10px;*/
+  /*margin-right: 10px;*/
+  height: 3rem;
+}
+
+.contact-button-size{
+  margin-top: 0.5rem;
+  /*margin-left: 0.5rem;*/
+  /*margin-right: 1rem;*/
+  height: 2.5rem;
+}
+
+/*.submit-button{*/
+  /*height: 100%;*/
+  /*width: 100%;*/
+  /*margin: 0px;*/
+/*}*/
+.contact-us{
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.contact-us a{
+  text-decoration: none;
+}

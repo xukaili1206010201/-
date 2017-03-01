@@ -1,0 +1,79 @@
+<style>
+  body{
+  background: rgb(240, 239, 245) !important;
+  }
+</style>
+<nav class="navbar  navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+  </div>
+  <div class="navText">商家详情</div>
+
+
+</nav>
+
+<div class="navMain business-detail-content">
+  <!--商家名称+徽记+城市ID+额外预订提前天数+服务-->
+  <div class="panel panel-default">
+    <div class="panel-heading basic-head">
+      <div class="business-up">
+        <div class="basic-left">
+          <img ng-src="{{business.logo}}" class="logo-img"> <!--徽记-->
+        </div>
+        <div class="basic-right">
+          <div style="overflow: hidden">
+            <h3>{{business.name}}</h3>  <!--名称-->
+            <span>{{business.city_name}}</span> <!--城市-->
+          </div>
+          <p data="{type:'福利商家',telBelong:'{{business.name}}',page:'商家详情',business_id:'{{business.business_id}}'}" call-logs>
+            {{business.service}}
+            <span><a href="tel:{{business.telphone}}" class="tellColor fr">{{business.telphone}}</a></span>
+          </p> <!--服务-->
+          <p>额外预订提前天数 : {{business.booking_number}}</p>
+          <p class="setFont">{{business.ad}}</p><!--商家广告-->
+        </div>
+      </div>
+      <div style="margin-left:2rem;">
+        <p class="setFont">{{business.introduction}}</p> <!--商家简介-->
+        <!--<p class="setFont">{{business.content}}</p>&lt;!&ndash;服务内容&ndash;&gt;-->
+        <p class="setFont" ng-bind-html="business.content"></p><!--服务内容-->
+      </div>
+    </div>
+
+    <!--营业许可照+商品照+外景照+工作照-->
+    <div class="panel-body basic-pics" ng-if="isShowOne">
+      <div ng-if="business.license.length > 0">
+        营业许可照
+        <div>
+          <img ng-src="{{li}}" ng-repeat="li in business.license track by $index" class="seller-img img-distance"/>
+        </div>
+      </div>
+
+      <span ng-if="business.goods.length >0">商品照</span>
+      <div class="good-pic">
+        <img ng-src="{{goodPic}}" ng-repeat="goodPic in business.goods" class="seller-img">
+      </div>
+
+      <span ng-if="business.location.length >0">外景照</span>
+      <div class="good-pic">
+        <img ng-src="{{goodPic}}" ng-repeat="goodPic in business.location" class="seller-img">
+      </div>
+
+      <span ng-if="business.work.length >0">工作照</span>
+      <div class="good-pic">
+        <img ng-src="{{goodPic}}" ng-repeat="goodPic in business.work" class="seller-img">
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  $('.basic-left').css({
+    'height' : $('.basic-left').width() + 'px'
+  });
+</script>
+

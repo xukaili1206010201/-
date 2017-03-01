@@ -1,0 +1,108 @@
+
+<script>
+
+  $(function(){
+
+    var width = window.screen.width;
+    var lineH = (width-20)*30/652;
+    $('.stationDetail-sepLine').css({
+      'width':width-20 + 'px',
+      'height':lineH + 'px'
+    })
+
+    var imgH = (width-20)*9/16
+    $('.station-images-block').css({
+      'width':width-20 + 'px',
+      'height':imgH + 'px'
+    })
+
+  })
+
+</script>
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+  </div>
+  <div class="navText">站点详情</div>
+
+</nav>
+
+<div class="content" style="background-color: #fff;">
+  <p ng-model="stationDetailList.name" class="station-name">{{stationDetailList.name}}</p>
+
+  <img class="stationDetail-sepLine" src="images/stationdetailline.png">
+
+  <div class="station-images-block">
+    <img ng-src="{{locationImg}}">
+  </div>
+
+  <div class="station-info">
+    <p class="stationdetail-community">{{effectedCommunity}}</p>
+    <p class="stationdetail-service" ng-if="stationDetailList.content">已开通服务:{{stationDetailList.content}}</p>
+  </div>
+
+  <div class="station-manager-block">
+    <div class="wxh">
+      <img src="{{stationDetailList.wx_qrcode}}">
+      <p>{{stationDetailList.wx_name}}</p>
+    </div>
+    <div class="station-manager">
+      <div class="manager-avatar">
+        <img ng-src="{{stationDetailList.service}}">
+        <p ng-model="stationDetailList.number">编号:{{stationDetailList.number}}</p>
+      </div>
+    </div>
+    <div class="stationdetail-manager-name">
+      <p>社区阿庆嫂</p>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="connect-block" style="background: url('images/stationdetail-background.png');background-size: 100% 100%">
+
+    <div class="connect-top">
+
+      <div class="mobile-phone-block">
+        <div class="num-block">
+          <img src="images/mobile-icon.png">
+          <div class="mobile-num">
+            <p class="manager-mobile"><a href="tel://{{stationDetailList.wuye}}">{{stationDetailList.wuye}}</a></p>
+            <p class="manager-name">物业&nbsp;</p>
+          </div>
+        </div>
+
+        <div class="num-block phone-block">
+          <img src="images/phone-icon.png">
+          <div class="mobile-num">
+            <p class="manager-mobile"><a href="tel://{{stationDetailList.telphone}}">{{stationDetailList.telphone}}</a></p>
+            <p class="manager-name">阿姨&nbsp;</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="address-location">
+        <img src="images/address-icon.png">
+        <p ng-model="stationDetailList.address">{{stationDetailList.address}}</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div class="showDetailMap">
+  <div id="detailMap"></div>
+</div>
+<script>
+  var deviceH = window.screen.availWidth;
+  $('#detailMap').css({
+    'height' : deviceH + 'px'
+  });
+
+
+</script>

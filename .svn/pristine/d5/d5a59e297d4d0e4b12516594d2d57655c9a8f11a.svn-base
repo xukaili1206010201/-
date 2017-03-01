@@ -1,0 +1,11 @@
+::-webkit-scrollbar{
+  display: none;
+}
+.shopping-content{
+  border-top: 1px solid #dddddd;
+  margin-top:50px;
+}
+.SO_title{
+  font-size: 1.4rem;
+}
+

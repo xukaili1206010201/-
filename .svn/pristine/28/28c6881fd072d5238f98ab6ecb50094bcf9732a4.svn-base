@@ -1,0 +1,54 @@
+<nav class="navbar navbar-default navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="backCenter()" class="back-button" src="images/back_button.png">
+  </div>
+  <!-- 搜索框组-->
+  <div class="navRight">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchMyActivties()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="myActivitiesBlur()">
+    </div>
+  </div>
+
+
+</nav>
+
+
+<div class="activities-content">
+
+  <div class="activities-table" ng-if="!errMsg" load-more data="{params : activityParams,repeatFun : '$scope.getMyActivities'}">
+
+    <div>
+      <div class="activities-row" ng-repeat="k in listActivityBaoming" ng-click="goDetail(k.activity_id)">
+
+        <div class="activities-img">
+          <img class="img-responsive" ng-src="{{k.logo}}">
+        </div>
+
+        <div class="activities-row-right">
+          <p class="activities-name">{{k.name}}</p>
+          <p class="activities-address">{{k.address}}</p>
+          <p class="activities-intro">{{k.introduction}}</p>
+        </div>
+
+        <p class="activities-time-start">开始时间：{{k.start_date}}</p>
+        <p class="activities-time-end">结束时间：{{k.end_date}}</p>
+        <p class="activities-time-join">报名时间：{{k.baoming_date}}</p>
+        <p class="activities-time-approve">批准时间：{{k.review_date}}</p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+</div>
+<script>
+  var contentH = window.screen.availHeight - 50;
+  $('.activities-table').css({
+    'height' : contentH + 'px',
+    'overflow' : 'scroll'
+  });
+</script>
+

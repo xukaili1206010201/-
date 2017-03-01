@@ -1,0 +1,62 @@
+
+<nav class="navbar navbar-fixed-top navigationbar">
+    <div class="navigation-bar">
+        <!-- 返回按钮-->
+        <img ng-click="backMycommunity()" class="back-button" src="images/back_button.png">
+
+        <!-- 搜索框组-->
+        <div class="navigationbar-item">
+            <p class="item-title">我的小区设置</p>
+        </div>
+    </div>
+</nav>
+
+
+<div class="myhouse-set-content">
+  <div class="current-city" ng-click="selectCity()">
+    <p class="community_edit_font">{{cityName}}</p>
+    <div class="community-right-arrow">
+      <img src="images/next.png">
+    </div>
+  </div>
+
+  <form ng-submit="submitCommunityInfo()" name="communityset" class="info-input-block">
+
+    <div class="text-input-block">
+      <div class="input-field-block">
+        <input ng-model="userName" type="text" class="form-control community_edit_font" placeholder="姓名*">
+      </div>
+    </div>
+
+    <div class="text-input-block">
+      <div class="input-field-block">
+        <input ng-model="telphone" name="mobile" type="text" maxlength="11" class="form-control community_edit_font" placeholder="电话号码*">
+      </div>
+    </div>
+
+    <div class="text-input-block" ng-click="selectCommunity()">
+      <p class="text community_edit_font">{{communityName}}</p>
+        <div class="community-right-arrow">
+          <img src="images/next.png">
+        </div>
+    </div>
+
+    <div class="text-input-block">
+      <div class="input-field-block">
+        <input ng-model="floor" type="text"  class="form-control community_edit_font" placeholder="楼层号*">
+      </div>
+    </div>
+
+
+    <div class="navbar-fixed-bottom communityset-footer">
+      <button type="submit" class="btn btn-success" id="submit-button">提交</button>
+    </div>
+
+  </form>
+
+</div>
+
+
+
+
+

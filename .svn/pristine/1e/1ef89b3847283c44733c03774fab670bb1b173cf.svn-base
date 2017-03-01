@@ -1,0 +1,5 @@
+<div class="row" style="padding-top: 25%;font-size: 2.5rem;color: #fff;">
+	<div class="col-md-12 col-xs-12 text-center">
+		喜欢  {{operator}} 1
+	</div>
+</div>

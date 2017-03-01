@@ -1,0 +1,51 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" ng-click="backComservice()" src="images/back_button.png">
+
+    <!--<p ng-click="jumpSelectcity()" class="city" style="color: white; padding-right: 5px;">{{city_name}} <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;"></span></p>-->
+    <!--<p class="city" usercity-select>-->
+          <!--<span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}-->
+            <!--<span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>-->
+          <!--</span>-->
+      <!--<select ng-show="citySelect" class="citySelect" ng-model="usercityId"-->
+              <!--ng-options="x.city_id as x.name for x in usercityList">-->
+      <!--</select>-->
+    <!--</p>-->
+  </div>
+
+  <div class="navText">邻里社交</div>
+</nav>
+
+<div class="neighborhood-social" ng-if="neighborhoodContent">
+  <div ng-repeat="k in listBuluo">
+    <img ng-src="{{k.imageUrl}}" alt="" ng-click="goTribe(k.buluo_id)"/>
+    <span>{{k.name}}</span>
+  </div>
+</div>
+<div class="errMsg" ng-if="!neighborhoodContent" style="margin-top:60px;">{{errMsg}}</div>
+
+<!-- ************************************ 底部导航栏  ************************************-->
+<div class="navbar-fixed-bottom tabbar">
+  <div class="tabbar-item" ng-click="jumpComservice()">
+    <img src="images/comservice.png">
+    <p class="comservice-button">社区服务</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpWelfare()">
+    <img src="images/welfare_1.png">
+    <p class="comservice-button">商家福利</p>
+  </div>
+
+  <div class="tabbar-item">
+    <img src="images/linli_selected.png">
+    <p>邻里社交</p>
+  </div>
+
+  <div class="tabbar-item" ng-click="jumpUsercenter()">
+    <img src="images/usercenter.png">
+    <p>个人中心</p>
+  </div>
+</div>
+
+

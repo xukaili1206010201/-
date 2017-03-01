@@ -1,0 +1,23 @@
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+  </div>
+  <div class="navText">在线超市</div>
+</nav>
+
+<div class="shopping-content">
+  <ul>
+    <li class="sup-media" ng-repeat="item in segItems" ng-click="marketShow(item)">
+      <a href="{{item.url}}">
+        <div class="media-left">
+          <img class="media-object businessImg" ng-src="{{item.logo}}">
+        </div>
+        <div class="media-body">
+          <div class="SO_title">{{item.name}}</div>
+          <div class="description">{{item.introduction}}</div>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,95 @@
+::-webkit-scrollbar{
+  display: none;
+}
+
+/*body {*/
+  /*background: rgb(240, 239, 245);*/
+/*}*/
+
+
+.shopping-content{
+  padding-top: 0px;
+  margin-top:54px;
+}
+
+/*************************************** 卡头 begin ***************************************/
+.shopping-content .shopping-segment-control {
+  width: 100%;
+  height: 35px;
+  background: white;
+  overflow: hidden;
+}
+
+
+.shopping-content .shopping-segment-control .yhdian , .tttuan {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+.shopping-content .shopping-segment-control .yhdian {
+  /*background: red;*/
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.shopping-segment-control .btn {
+  font-size: 13px;
+  padding: 0px;
+}
+
+.shopping-content .shopping-segment-control .yhdian-button, .tttuan-button {
+  height: 100%;
+}
+
+.shopping-content .shopping-segment-control .yhdian .yhdian-button {
+  background: rgb(161, 216, 34);
+  color: white;
+}
+
+.shopping-content .shopping-segment-control .tttuan {
+  padding-left: 5px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.shopping-content .shopping-segment-control .tttuan .tttuan-button {
+  background: rgb(235, 235, 241);
+  color: black;
+}
+/*************************************** 卡头 end *****************************************/
+
+
+/*************************************** 外链展示 begin *****************************************/
+/*.webView_box{*/
+/*overflow:hidden;*/
+/*width:90%;*/
+/*height:100%;*/
+/*}*/
+/*.webView{*/
+/*!*position: fixed;*!*/
+/*!*right: 0;*!*/
+/*!*top: 85px;*!*/
+/*!*left: 0;*!*/
+/*!*bottom: 0;*!*/
+/*overflow:auto;*/
+/*width:100%;*/
+/*height:100%;*/
+
+/*}*/
+
+#yhdweb{
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+#tttweb{
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: none;
+}

@@ -1,0 +1,179 @@
+.familyservicedetail-content{
+  width: 100%;
+  /*margin-top: 50px;*/
+  margin-bottom: 4rem;
+  background: #F0EFF6;
+}
+.familyservicedetail-service-segmentcontrol{
+  overflow:hidden;
+}
+
+.familyservicedetail-service-info{
+  background: white;
+  padding: 0.5rem 1rem;
+}
+
+.familyservicedetail-service-info p{
+  margin: 0;
+}
+
+.familyservicedetail-service-name , .familyservicedetail-service-currentprice{
+  font-size: 1.6rem;
+}
+
+.familyservicedetail-service-intro , .familyservicedetail-service-unit ,
+.familyservicedetail-service-orginalprice , .familyservicedetail-service-sellnum{
+  color: #818181;
+  font-size: 1.2rem;
+}
+
+.familyservicedetail-service-currentprice , .familyservicedetail-service-unit{
+  color: orange;
+}
+
+.familyservicedetail-service-orginalprice , .familyservicedetail-service-sellnum{
+  color: black;
+}
+
+.familyservicedetail-service-sellnum{
+  float: right;
+}
+
+.familyservicedetail-timecount{
+  margin-top: 1px;
+  padding: 0.3rem 1rem;
+  font-size: 1.3rem;
+  width: 100%;
+  height: 2.5rem;
+  line-height: 1.9rem;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.familyservicedetail-service-detail{
+  background: white;
+  width: 100%;
+}
+
+
+.familyservicedetail-service-segmentcontrol-item{
+  width: 33.3%;
+  height: 4rem;
+  background: white;
+  border: none;
+  border-bottom: 0.3rem solid rgb(228,228,228);
+  margin: 0;
+  float: left;
+  outline: none;
+}
+
+.familyservicedetail-service-default-selected-item{
+  color: #7DB343;
+  border-bottom: 0.3rem solid #7DB343;
+}
+
+.familyservicedetail-service-detail-view , .familyservicedetail-service-comment-view ,
+.familyservicedetail-service-sellnum-view{
+  width: 100%;
+
+  display: none;
+}
+
+.familyservicedetail-service-default-show-view{
+  display: block;
+}
+
+.familyservicedetail-service-detail-view{
+  height: 200px;
+  padding:10px;
+}
+.familyservicedetail-service-comment-view{
+}
+.familyservicedetail-service-sellnum-view{
+  height: 200px;
+}
+
+.service-comment-row{
+  width: 100%;
+  border-bottom: 1px solid rgb(228,228,228);
+  overflow: hidden;
+}
+
+/* 评论 */
+.service-comment-user-info{
+  padding: 2.5%;
+  overflow: hidden;
+}
+.service-comment-user-avatar{
+  width: 13%;
+  float: left;
+}
+
+.service-comment-user-namestar{
+  padding-left: 1rem;
+  width: 87%;
+  float: left;
+}
+
+.service-comment-user-namestar p{
+  margin: 0;
+}
+
+.service-comment-user-namestar .service-comment-user-name{
+  font-size: 1.5rem;
+  overflow: hidden;
+}
+
+.service-comment-user-namestar .service-comment-user-name .service-comment-user-time{
+  float: right;
+  color: gray;
+  font-size: 1rem;
+  margin-top: 3px;
+}
+
+/*.service-comment-user-namestar .service-comment-user-time{*/
+/*color: gray;*/
+/*font-size: 1.2rem;*/
+/*}*/
+
+.service-comment-user-namestar .service-comment-user-star{
+  width: 1.5rem;
+  height: 1.5rem;
+  float: left;
+}
+
+.service-comment-user-commentcontent{
+  width: 100%;
+  overflow: hidden;
+}
+
+.service-comment-image-group{
+  overflow: hidden;
+  width: 100%;
+}
+
+/* 计划每一行放置4张图片，每张图片的间隙宽度时2.5% */
+.service-comment-image{
+  width: 21.875%;
+  margin-left: 2.5%; /* 不要随意更改，需与service-comment-user-info的padding对应 */
+  margin-bottom: 2.5%; /* 不要随意更改，需与service-comment-user-info的padding对应 */
+  height: auto;
+  float: left;
+}
+
+.service-comment-text{
+  padding: 0 2.5%;
+}
+
+
+.familyservicedetail-footer{
+  width: 100%;
+  height: 4rem;
+  padding: 0.5rem 1rem;
+  background: rgb(228,228,228);
+}
+
+.familyservicedetail-footer button{
+  width: 100%;
+  height: 3rem;
+}

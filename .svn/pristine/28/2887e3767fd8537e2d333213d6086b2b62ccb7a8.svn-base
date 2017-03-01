@@ -1,0 +1,55 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="back()">
+
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png">
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="couponsSeller-content">
+  <div class="content-header">
+    <div class="content-header-left">
+      <p class="coupons-name">{{couponsInfo.name}}</p>
+
+
+    </div>
+
+    <div class="content-header-right">
+      <p class="coupons-city">{{couponsInfo.city}}&nbsp;&nbsp;{{couponsInfo.type}}&nbsp;{{couponsInfo.number}}</p>
+      <p class="coupons-time">{{couponsInfo.start_date}}~{{couponsInfo.end_date}}</p>
+    </div>
+  </div>
+
+  <div class="sellers-table">
+
+    <ul class="media-list seller-list">
+      <li class="media" ng-repeat="business in couponsInfo.business" ng-click="showGoods(business.business_id)">
+        <div class="media-left">
+          <a href="#">
+            <img class="media-object" ng-src="{{business.logo}}" alt="...">
+          </a>
+        </div>
+        <div class="media-body couponseseller-row-content">
+          <ul>
+            <li class="seller-name">{{business.name}}
+              <span class="goods-num">{{business.goods_count}}个</span>
+            </li>
+            <li class="seller-intro">{{business.introduction}}</li>
+            <li class="seller-goods">
+              <span ng-repeat="good in business.goods">{{good.name}}&nbsp;&nbsp;</span>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</div>

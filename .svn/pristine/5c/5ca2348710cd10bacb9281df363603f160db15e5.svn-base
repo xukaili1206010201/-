@@ -1,0 +1,85 @@
+<style>
+  body{
+  background: rgb(240, 239, 245) !important;
+  }
+</style>
+<nav class="navbar  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+
+    <div class="navigationbar-item">
+      <p class="item-title">商家详情</p>
+    </div>
+  </div>
+
+</nav>
+
+<div class="business-detail-content">
+  <!--商家名称+徽记+城市ID+额外预订提前天数+服务-->
+  <div class="panel panel-default">
+    <div class="panel-heading basic-head">
+      <div class="basic-left">
+        <img ng-src="{{business.logo}}" class="seller-img">
+      </div>
+      <div class="basic-right">
+        <div>
+          <h3>{{business.name}}</h3>
+          <span>{{business.city_name}}</span>
+        </div>
+        <p>{{business.service}}</p>
+        <p>额外预订提前天数 : {{business.booking_number}}</p>
+      </div>
+
+    </div>
+    <!--商品照+外景照+工作照-->
+    <div class="panel-body basic-pics" ng-if="isShowOne">
+      <span ng-if="business.goods.length >0">商品照</span>
+      <div class="good-pic">
+        <img ng-src="{{goodPic}}" ng-repeat="goodPic in business.goods" class="seller-img">
+      </div>
+
+      <span ng-if="business.location.length >0">外景照</span>
+      <div class="good-pic">
+        <img ng-src="{{goodPic}}" ng-repeat="goodPic in business.location" class="seller-img">
+      </div>
+
+      <span ng-if="business.work.length >0">工作照</span>
+      <div class="good-pic">
+        <img ng-src="{{goodPic}}" ng-repeat="goodPic in business.work" class="seller-img">
+      </div>
+
+    </div>
+
+  </div>
+
+  <!--广告词和服务内容-->
+  <div class="panel panel-default" ng-if="isShowTwo">
+    <div class="panel-body">
+      <span ng-if="business.ad">广告词</span>
+      <p class="setFont">{{business.ad}}</p>
+      <hr ng-if="business.ad && business.content">
+      <span ng-if="business.content">服务内容</span>
+      <p class="setFont">{{business.content}}</p>
+    </div>
+  </div>
+
+  <!--简介和营业许可照-->
+  <div class="panel panel-default" ng-if="isShowThree">
+    <div class="panel-body">
+      <div ng-if="business.introduction">
+        商家简介
+        <p class="setFont">{{business.introduction}}</p>
+      </div>
+      <hr ng-if="business.introduction && business.license.length > 0">
+      <div ng-if="business.license.length > 0">
+        营业许可照
+        <div>
+          <img ng-src="{{li}}" ng-repeat="li in business.license track by $index" class="seller-img img-distance"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+

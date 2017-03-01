@@ -1,0 +1,1218 @@
+'use strict';
+
+var personalModuleController = angular.module('personalModuleController', []);
+
+//登录页
+personalModuleController.controller(
+  'loginCtrl',
+  function ($scope, $rootScope, $stateParams, userService, commonService, $state, $window, $location, $cookies, $http) {
+//********************************* 初始化 ********************************
+    $scope.formData = {};
+    //默认上次登录的手机号码
+    $scope.formData.mobile = parseInt(localStorage.lastMobile);
+    //项目徽记
+    $scope.logo = sessionStorage.logo;
+    //项目名称
+    $scope.projectName = sessionStorage.projectName;
+//********************************** end **********************************
+
+//********************************* 自定义函数 ******************************
+
+//********************************** end **********************************
+
+//********************************* 事件监听 ******************************
+    // 登录
+    //判断是从哪个页面跳转到登录页
+    //form = 3 活动详情页  5 社交部落 6 帖子详情 7帖子部落-发帖
+    $scope.from = $stateParams.from;
+    if ($scope.from != '3' && $scope.from != '5' && $scope.from != '6' && $scope.from != '7') {
+      sessionStorage.removeItem('loginValue');
+    }
+    $scope.jumpTo = function () {
+      if (!$rootScope.regxMobile.test($scope.formData.mobile)) {
+        commonService.showWarnMessage("请输入正确的手机号码！");
+      } else if (!$scope.formData.password) {
+        commonService.showWarnMessage("请输入密码！");
+      } else {
+        userService.memberLogin(
+          $scope.formData
+        ).success(function (data) {
+          $scope.result = data;
+
+          $scope.formData.username = $scope.result.data.username;
+          switch (data.code) {
+            case '0':
+              //移出默认的城市名和ID
+              sessionStorage.removeItem('gpscityName');
+              sessionStorage.removeItem('gpscityId');
+
+              //存储数据
+              localStorage.setItem("mobile", data.data.mobile);
+              //localStorage.setItem("password",$scope.formData.password);
+              localStorage.setItem("lastMobile", data.data.mobile);
+
+              //localStorage.setItem("ticket",data.data.ticket);
+              var expireDate = new Date();
+              expireDate.setDate(expireDate.getDate() + 30.333333333333333333333333);
+              $cookies.put('ticket', data.data.ticket, {'expires': expireDate});
+
+              if (sessionStorage.centerLogin == 'true') {
+                //判断用户设备是否为微信
+                var equipment = commonService.equipment();
+                 if (equipment == 'weixin') {
+                   var params = {};
+                   userService.getOpenId(params).success(function (response) {
+
+                     //获取微信授权
+                     var resType = typeof response;
+                     if (resType == 'object') {
+                     } else {
+                       sessionStorage.alipayHtml = response;
+                       $state.go("ali-pay");
+                     }
+
+                   }).error(function (data, status, header, config) {
+
+                   });
+                 } else {
+                   $state.go('member-personal-usercenter');
+                 }
+                sessionStorage.centerLogin = 'false';//避免再次登录到个人中心
+              } else {
+                if ($scope.from == '3') {//回到活动详情页
+                  $scope.value = sessionStorage.loginValue;
+                  $location.path(sessionStorage.loginLocation).search({
+                    activityId: $scope.value
+                  });
+                } else if ($scope.from == '4') {//回到商家福利页
+                  $state.go('welfare-seller');
+                } else if ($scope.from == '5') {//回到社交部落页
+                  $scope.value = sessionStorage.loginValue;
+                  $location.path(sessionStorage.loginLocation).search({
+                    buluoId: $scope.value
+                  });
+                } else if ($scope.from == '6') {//回到帖子详情页
+                  $scope.value = sessionStorage.loginValue;
+                  $location.path(sessionStorage.loginLocation).search({
+                    bbsId: $scope.value
+                  });
+                } else if ($scope.from == '7') {//回到社交部落页
+                  $scope.value = sessionStorage.loginValue;
+                  $location.path(sessionStorage.loginLocation).search({
+                    buluoId: $scope.value
+                  });
+                } else {
+                  $location.path(sessionStorage.loginLocation);
+                }
+              }
+
+
+              break;
+            case '-3':
+              commonService.showWarnMessage("账号不存在，请注册！");
+              break;
+            case '-4':
+              commonService.showWarnMessage("请输入正确的密码！");
+              break;
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    };
+
+    //跳转到注册页
+    $scope.jumpRegister = function () {
+      $state.go('member-personal-register', {mobile: $scope.formData.mobile});
+    };
+
+    //跳转到密码设置页
+    $scope.jumpPsdreset = function () {
+      $state.go('member-personal-passwordreset', {mobile: $scope.formData.mobile});
+    };
+//********************************** end **********************************
+  }
+);
+
+//注册页
+personalModuleController.controller(
+  'registerCtrl',
+  function ($scope, $rootScope, $stateParams, userService, commonService, $state, $interval, $location, $cookies) {
+//*********************************** 初始化 *********************************
+    $scope.formData = {};
+    //获取客服电话
+    $scope.showCompanyTel = sessionStorage.showCompanyTel;
+    $scope.companyTel = sessionStorage.companyTel;
+
+    $scope.checked = true;
+
+    $scope.formData.mobile = parseInt($stateParams.mobile);
+    //密码最短位数
+    $scope.passwordNum = sessionStorage.passwordNum;
+
+    // 登录
+    //判断是从哪个页面跳转到登录页
+    //form = 3 活动详情页  5 社交部落 6 帖子详情 7帖子部落-发帖
+    $scope.from = $stateParams.from;
+    if ($scope.from != '3' && $scope.from != '5' && $scope.from != '6' && $scope.from != '7') {
+      sessionStorage.removeItem('loginValue');
+    }
+//************************************* end ***********************************
+
+//*********************************** 事件监听 ********************************
+    //获取验证码
+    $scope.codeHtml = "获取验证码";
+    var time = sessionStorage.codeTime,
+      timePromise = undefined;
+    $scope.getCode = function () {
+      if (!$rootScope.regxMobile.test($scope.formData.mobile)) {
+        commonService.showWarnMessage("请输入正确的手机号码！");
+      } else {
+        userService.getSMSCode({
+          'mobile': $scope.formData.mobile,
+          'page': '注册'
+        }).success(function (data) {
+
+          $scope.result = data;
+
+          switch (data.code) {
+            case '0':
+              timePromise = $interval(function () {
+                if (time <= 0) {
+                  $interval.cancel(timePromise);
+                  timePromise = undefined;
+
+                  time = sessionStorage.codeTime;
+                  $scope.codeHtml = "重发验证码";
+                  $scope.checked = true;
+
+                } else {
+                  $scope.codeHtml = time + "秒后可重发";
+                  time--;
+
+                }
+              }, 1000);
+
+              $scope.checked = false;
+              break;
+            case '-1':
+              commonService.showWarnMessage("请输入手机号码！");
+              break;
+            case '-3':
+              commonService.showWarnMessage("系统异常，请重新获取！");
+              break;
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+    };
+
+    //查看验证码
+    $scope.lookCode = function () {
+      userService.getSMSCode({
+        'mobile': $scope.formData.mobile,
+        'number': $scope.formData.number,
+        'page': '注册'
+      }).success(function (data) {
+
+        $scope.result = data;
+        switch (data.code) {
+          case '0':
+            $('#myModal').modal('hide');
+            commonService.showWarnMessage("请向您指定的吸粉人查询验证码！");
+            break;
+          case '-1':
+            commonService.showWarnMessage("请输入手机号码！");
+            break;
+          case '-2':
+            commonService.showWarnMessage("请输入正确的推荐人工号！");
+            break;
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+    };
+
+    //******************** 立即注册,到个人中心 ************************
+    $scope.jumpTo = function () {
+
+      //判断密码是否全重复，升序，降序
+      var passwordArr = $scope.formData.password.split("");
+      //去重函数
+      var repatitionFun = function (Array) {
+        var n = []; //一个新的临时数组
+        for (var i = 0; i < Array.length; i++) {//遍历当前数组
+          //去重
+          if (n.indexOf(Array[i]) == -1) n.push(Array[i]);
+        }
+        var repatition;
+        if (n.length == 1) {
+          repatition = true;//全相同
+        } else {
+          repatition = false;
+        }
+        return repatition;
+      };
+
+      if (repatitionFun(passwordArr) == true) {
+        $scope.repatHint = true; //全重复
+        console.log('全重复')
+      } else {
+        console.log('不重复')
+        //升序或降序
+        var str = $scope.formData.password;
+        var ascend = [];
+        if (/^\d+$/.test(str) || /^[A-Za-z]+$/.test(str)) {//全数字或全字母
+          for (var i = 1; i < str.length; i++) {
+            if (str.charAt(i) < str.charAt(i - 1)) {
+              ascend.push('false'); //如果全false，则降序
+            } else {
+              ascend.push('true'); //如果全true，则升序
+            }
+          }
+          if (repatitionFun(ascend) == true) {
+            $scope.ascendHint = true;//全升序或降序
+            console.log('全升序或降序')
+          }
+        }
+      }
+
+      if (!$rootScope.regxMobile.test($scope.formData.mobile)) {
+        commonService.showWarnMessage("请输入正确的手机号码！");
+      } else if (!$scope.formData.password) {
+        commonService.showWarnMessage("请输入密码！");
+      } else if ($scope.formData.password == $scope.formData.mobile) {
+        commonService.showWarnMessage("密码请勿和手机号码相同！");
+      } else if (!$rootScope.regxPassword.test($scope.formData.password)) {
+        commonService.showWarnMessage("密码只能是字母或数字！");
+      } else if ($scope.formData.password.length < $scope.passwordNum) {
+        commonService.showWarnMessage("请输入" + $scope.passwordNum + "位以上的字母或数字！");
+      } else if ($scope.repatHint == true) {
+        $scope.repatHint = '';
+        commonService.showWarnMessage("密码全重复！");
+      } else if ($scope.ascendHint == true) {
+        $scope.ascendHint = '';
+        commonService.showWarnMessage("密码全升序或降序！");
+      } else if (!$rootScope.regxCode.test($scope.formData.code)) {
+        commonService.showWarnMessage("请输入正确的验证码！");
+      } else {
+        userService.memberRegister(
+          $scope.formData
+        ).success(function (data, status, header, config) {
+          $scope.result = data;
+
+          switch ($scope.result.code) {
+            case '0':
+              //移出默认的城市名和ID
+              sessionStorage.removeItem('gpscityName');
+              sessionStorage.removeItem('gpscityId');
+              //存储数据
+              localStorage.setItem("mobile", $scope.formData.mobile);
+              localStorage.setItem("lastMobile", $scope.formData.mobile);
+              //localStorage.setItem("password",$scope.formData.password);
+
+              //逻辑同登录页
+              var expireDate = new Date();
+              expireDate.setDate(expireDate.getDate() + 30.333333333333333333333333);
+              $cookies.put('ticket', data.data.ticket, {'expires': expireDate});
+
+              if (sessionStorage.centerLogin == 'true') {
+                //判断用户设备是否为微信
+                var equipment = commonService.equipment();
+                if (equipment == 'weixin') {
+                  var params = {};
+                  userService.getOpenId(params).success(function (response) {
+
+                    //获取微信授权
+                    var resType = typeof response;
+                    if (resType == 'object') {
+                    } else {
+                      sessionStorage.alipayHtml = response;
+                      $state.go("ali-pay");
+                    }
+
+                  }).error(function (data, status, header, config) {
+
+                  });
+                } else {
+                  $state.go('member-personal-usercenter');
+                }
+                sessionStorage.centerLogin = 'false';//避免再次登录到个人中心
+              } else {
+                if ($scope.from == '3') {//回到活动详情页
+                  $scope.value = sessionStorage.loginValue;
+                  $location.path(sessionStorage.loginLocation).search({
+                    activityId: $scope.value
+                  });
+                } else if ($scope.from == '4') {//回到商家福利页
+                  $state.go('welfare-seller');
+                } else if ($scope.from == '5') {//回到社交部落页
+                  $scope.value = sessionStorage.loginValue;
+                  $location.path(sessionStorage.loginLocation).search({
+                    buluoId: $scope.value
+                  });
+                } else if ($scope.from == '6') {//回到帖子详情页
+                  $scope.value = sessionStorage.loginValue;
+                  $location.path(sessionStorage.loginLocation).search({
+                    bbsId: $scope.value
+                  });
+                } else if ($scope.from == '7') {//回到社交部落页
+                  $scope.value = sessionStorage.loginValue;
+                  $location.path(sessionStorage.loginLocation).search({
+                    buluoId: $scope.value
+                  });
+                } else {
+                  $location.path(sessionStorage.loginLocation);
+                }
+              }
+
+              break;
+            case '-3':
+              commonService.showWarnMessage("已被注册！");
+              break;
+            case '-4':
+              commonService.showWarnMessage("验证码错误！");
+              break;
+            case '-5':
+              commonService.showWarnMessage("注册失败，系统异常！");
+              break;
+          }
+
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+
+    }
+//************************************* end ***********************************
+  }
+);
+
+//密码设置页
+personalModuleController.controller(
+  'passwordresetCtrl',
+  function ($scope, $stateParams, userService, $state, $rootScope, $interval, commonService, $window, $cookies) {
+//*********************************** 初始化 *********************************
+    $scope.formData = {};
+    //获取客服电话
+    $scope.showCompanyTel = sessionStorage.showCompanyTel;
+    $scope.companyTel = sessionStorage.companyTel;
+
+    $scope.checked = true;
+    $scope.formData.mobile = parseInt($stateParams.mobile);
+    //密码最短位数
+    $scope.passwordNum = sessionStorage.passwordNum;
+//************************************* end ***********************************
+
+//*********************************** 事件监听 ********************************
+    //获取验证码
+    $scope.codeHtml = "获取验证码";
+    var time = sessionStorage.codeTime,
+      timePromise = undefined;
+    $scope.getCode = function () {
+      if (!$rootScope.regxMobile.test($scope.formData.mobile)) {
+        commonService.showWarnMessage("请输入正确的手机号码！");
+      } else {
+        userService.getSMSCode({
+          'mobile': $scope.formData.mobile,
+          'page': '密码设置'
+        }).success(function (data, status, header, config) {
+
+          $scope.result = data;
+          switch ($scope.result.code) {
+            case '0':
+              timePromise = $interval(function () {
+                if (time <= 0) {
+                  $interval.cancel(timePromise);
+                  timePromise = undefined;
+
+                  time = sessionStorage.codeTime;
+                  $scope.codeHtml = "重发验证码";
+                  $scope.checked = true;
+
+                } else {
+                  $scope.codeHtml = time + "秒后可重发";
+                  time--;
+
+                }
+              }, 1000);
+              $scope.checked = false;
+              break;
+            case '-1':
+              commonService.showWarnMessage("请输入手机号码！");
+              break;
+            case '-2':
+              commonService.showWarnMessage("系统异常，请重新获取！");
+              break;
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+    };
+
+    //查看验证码
+    $scope.lookCode = function () {
+      userService.getSMSCode({
+        'mobile': $scope.formData.mobile,
+        'number': $scope.formData.number,
+        'page': '密码设置'
+      }).success(function (data) {
+
+        $scope.result = data;
+        switch (data.code) {
+          case '0':
+            $('#myModal').modal('hide');
+            commonService.showWarnMessage("请向您指定的吸粉人查询验证码！");
+            break;
+          case '-1':
+            commonService.showWarnMessage("请输入手机号码！");
+            break;
+          case '-2':
+            commonService.showWarnMessage("请输入正确的推荐人工号！");
+            break;
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+    };
+
+    //密码设置到个人信息设置页
+    $scope.jumpTo = function () {
+
+      //判断密码是否全重复，升序，降序
+      var passwordArr = $scope.formData.password.split("");
+      //去重函数
+      var repatitionFun = function (Array) {
+        var n = []; //一个新的临时数组
+        for (var i = 0; i < Array.length; i++) {//遍历当前数组
+          //去重
+          if (n.indexOf(Array[i]) == -1) n.push(Array[i]);
+        }
+        var repatition;
+        if (n.length == 1) {
+          repatition = true;//全相同
+        } else {
+          repatition = false;
+        }
+        return repatition;
+      };
+
+      if (repatitionFun(passwordArr) == true) {
+        $scope.repatHint = true; //全重复
+        console.log('全重复')
+      } else {
+        $scope.repatHint = false;
+        console.log('不重复')
+        //升序或降序
+        var str = $scope.formData.password;
+        var ascend = [];
+        if (/^\d+$/.test(str) || /^[A-Za-z]+$/.test(str)) {//全数字或全字母
+          for (var i = 1; i < str.length; i++) {
+            if (str.charAt(i) < str.charAt(i - 1)) {
+              ascend.push('false'); //如果全false，则降序
+            } else {
+              ascend.push('true'); //如果全true，则升序
+            }
+          }
+          if (repatitionFun(ascend) == true) {
+            $scope.ascendHint = true;//全升序或降序
+            console.log('全升序或降序')
+          }
+        }
+
+      }
+
+      if (!$rootScope.regxMobile.test($scope.formData.mobile)) {
+        commonService.showWarnMessage("请输入正确的手机号码！");
+      } else if (!$scope.formData.password) {
+        commonService.showWarnMessage("请输入密码！");
+      } else if ($scope.formData.password == $scope.formData.mobile) {
+        commonService.showWarnMessage("密码请勿和手机号码相同！");
+      } else if (!$rootScope.regxPassword.test($scope.formData.password)) {
+        commonService.showWarnMessage("密码只能是字母或数字！");
+      } else if ($scope.formData.password.length < $scope.passwordNum) {
+        commonService.showWarnMessage("请输入" + $scope.passwordNum + "位以上的字母或数字！");
+      } else if ($scope.repatHint == true) {
+        $scope.repatHint = '';
+        commonService.showWarnMessage("密码全重复！");
+      } else if ($scope.ascendHint == true) {
+        $scope.ascendHint = '';
+        commonService.showWarnMessage("密码全升序或降序！");
+      } else if (!$rootScope.regxCode.test($scope.formData.code)) {
+        commonService.showWarnMessage("请输入正确的验证码！");
+      } else {
+        userService.editPassword(
+          $scope.formData
+        ).success(function (data) {
+          $scope.result = data;
+
+          switch ($scope.result.code) {
+            case '0':
+              //忘记密码到个人中心
+              if ($stateParams.from == '0') {
+                $state.go('member-personal-editUserInfo');
+                //localStorage.setItem("mobile",$scope.formData.mobile);
+                //localStorage.setItem("password",$scope.formData.password);
+                //$state.go('member-personal-usercenter');
+              } else {//密码设置到个人信息设置页
+                //localStorage.setItem("password",$scope.formData.password);
+                $state.go('member-personal-login');
+              }
+              break;
+            case '-1':
+              commonService.showWarnMessage("参数为空！");
+              break;
+            case '-2':
+              commonService.showWarnMessage("参数错误！");
+              break;
+            case '-3':
+              commonService.showWarnMessage("验证码无效！");
+              break;
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+    }
+//************************************* end ***********************************
+  }
+);
+
+//个人中心页
+personalModuleController.controller(
+  'userCenterCtrl',
+  function ($scope, $stateParams, userService, $state, $rootScope, commonService, $cookies, payCacheService) {
+//*********************************** 初始化 *********************************
+    $scope.formData = {};
+
+    localStorage.removeItem('showType');
+    localStorage.removeItem('statusElem');
+    localStorage.removeItem('skip');
+
+    //获取用户信息
+    userService.getUserInfo({}).success(function (data) {
+      $scope.result = data;
+
+      switch ($scope.result.code) {
+        case '0':
+
+          //用户信息
+          var reg = /^(\d{3})(\d{4})(\d{4})$/;
+          var matches = reg.exec(data.data.mobile);
+          var newNum = matches[1] + '****' + matches[3];
+          $scope.formData.mobile = newNum;
+
+          $rootScope.nickname = $scope.result.data.nickname;
+          $scope.formData.nickname = $rootScope.nickname;
+
+          $rootScope.headImgurl = $scope.result.data.headImgurl;
+
+          if ($scope.result.data.headImgurl == null) {
+            $scope.formData.headImgurl = 'images/user-icon.png'
+          } else {
+            $scope.formData.headImgurl = $rootScope.headImgurl;
+          }
+
+          $rootScope.username = $scope.result.data.username;
+
+          //我的业务-->用户权限
+          //1001: 系统管理员--业务量统计
+          //1002：城市管理员--业务量统计
+          //1003：商家--我发货的商品
+          //1004：吸粉--我粉丝的验证码
+          //1005：配送人--无
+          //1006：派发人--我派发的商品
+          $scope.Fanscode = false;
+          $scope.Delivery = false;
+          $scope.Distribute = false;
+          $scope.Portfolio = false;
+          $scope.role = $scope.result.data.role;
+          $scope.business = false;
+          if ($scope.role != '') {
+            if ($scope.role.indexOf('1001') >= 0 || $scope.role.indexOf("1002") >= 0) {
+              $scope.business = true;
+              $scope.Portfolio = true;
+            }
+            if ($scope.role.indexOf("1004") >= 0) {
+              $scope.business = true;
+              $scope.Fanscode = true;
+            }
+            if ($scope.role.indexOf("1003") >= 0) {
+              $scope.business = true;
+              $scope.Delivery = true;
+            }
+            if ($scope.role.indexOf("1006") >= 0) {
+              $scope.business = true;
+              $scope.Distribute = true;
+            }
+          } else {
+            $scope.business = false;
+          }
+          break;
+        case '-1':
+          $state.go('member-personal-usercenterNo');
+          break;
+        case '-2':
+          $state.go('member-personal-usercenterNo');
+          commonService.showWarnMessage("参数错误！");
+          break;
+        case '-8':
+          $cookies.remove('ticket');
+          $state.go('member-personal-usercenterNo');
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+//************************************* end ***********************************
+
+//*********************************** 事件监听 ********************************
+    //进入个人信息设置
+    $scope.jumpEditUserInfo = function (mobile) {
+      $state.go('member-personal-editUserInfo')
+    };
+
+
+    //前往我的小区
+    $scope.goToMyCommunity = function () {
+      $state.go("member-user-mycommunity", {"from": 0});
+      sessionStorage.myCommunityjump = 'usercenter'
+    };
+
+    //前往我报名的活动
+    $scope.goToMyactivities = function () {
+      $state.go("member-user-myactivities");
+    };
+
+    //前往我的消息
+    $scope.goToUserMessage = function () {
+      localStorage.skip = 'usercenter';
+      localStorage.goBack = 'usercenter';
+      $state.go("member-user-message", {from: '1'});
+    };
+    //前往我的购物车
+    $scope.jumpCart = function () {
+      $state.go('member-user-cart', {from: 1});
+    };
+    //前往我的订单
+    $scope.jumpMyorder = function () {
+      localStorage.skip = 'usercenter';
+      localStorage.goBack = 'usercenter';
+      $state.go('member-user-myorder', {"from": 1});
+    };
+    //前往我的预约
+    $scope.jumpAppointment = function () {
+      $state.go('member-user-reserve');
+    };
+    //前往我的优惠券
+    $scope.jumpMycoupons = function () {
+      localStorage.skip = 'usercenter';
+      $state.go('member-user-mycoupons');
+    };
+
+    //前往我粉丝的验证码
+    $scope.jumpFanscode = function () {
+      $state.go("member-business-fans_code");
+    };
+    //前往我发货的商品
+    $scope.jumpDelivery = function () {
+      $state.go("member-business-delivery");
+    };
+    //前往我派发的商品
+    $scope.jumpDistribute = function () {
+      $state.go("member-business-distribute");
+    };
+    //前往业务量统计
+    $scope.jumpPortfolio = function () {
+      $state.go("member-business-portfolio");
+    };
+
+    //前往站点介绍
+    $scope.goToStationintro = function () {
+      $state.go("member-about-stationintro");
+    };
+    //前往关注我们
+    $scope.goToFollowUs = function () {
+      sessionStorage.loadCount = 1;
+      $state.go("member-about-followus");
+    };
+
+    //前往联系我们
+    $scope.goToContactUs = function () {
+      $state.go("member-about-contactus");
+    };
+//************************************* end ***********************************
+  }
+);
+
+//个人中心未登录页
+personalModuleController.controller(
+  'userCenterNoCtrl',
+  function ($scope, $stateParams, userService, $state, $rootScope, $cookies) {
+
+    //登录
+    $scope.jumpLogin = function () {
+      $state.go('member-personal-login');
+      sessionStorage.centerLogin = 'true';
+    };
+
+    //前往站点介绍
+    $scope.goToStationintro = function () {
+      $state.go("member-about-stationintro");
+    };
+    //前往关注我们
+    $scope.goToFollowUs = function () {
+      sessionStorage.loadCount = 1;
+      $state.go("member-about-followus");
+    };
+    //前往联系我们
+    $scope.goToContactUs = function () {
+      $state.go("member-about-contactus");
+    };
+
+    //前往社区服务
+    $scope.jumpComservice = function () {
+      $state.go("guanjia-comservice");
+    };
+
+    //前往邻里社交
+    $scope.jumpSociety = function () {
+      $state.go('society-Neighborhood');
+    };
+
+    $scope.back = function () {
+      if ($cookies.get('ticket')) {
+        $state.go('member-personal-usercenter');
+      } else {
+        $state.go('member-personal-usercenterNo');
+      }
+    };
+
+    //浏览器或者安卓手机的返回按钮监听并更改返回事件
+    history.replaceState("state", null, window.location.href);
+    window.onpopstate = function (event) {
+      if (event.state == "state") {
+        $scope.back();//我们在控制器中自定义的返回事件
+      }
+    }
+
+  }
+);
+
+//个人信息设置页
+personalModuleController.controller(
+  'editUserInfoCtrl',
+  function ($scope, $rootScope, $stateParams, userService, $state, commonService, $cookies) {
+//*********************************** 初始化 *********************************
+    $scope.formData = {};
+    //获取用户信息
+    userService.getUserInfo({
+      'mobile': localStorage.mobile
+    }).success(function (response) {
+      switch (response.code) {
+        case '0':
+          $scope.formData = response.data;
+          //头像
+          $rootScope.headImgurl = $scope.formData.headImgurl;
+          var ordImg = "<img id='ordImg' src=" + $scope.formData.headImgurl + ">";
+          $('.imgBox').append(ordImg);
+          break;
+        case '-1':
+          commonService.showWarnMessage("参数为空！");
+          break;
+        case '-2':
+          commonService.showWarnMessage("参数错误！");
+          break;
+        case '-8':
+          $cookies.remove('ticket');
+          sessionStorage.centerLogin = 'true';
+          $state.go('member-personal-login');
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+//************************************* end ***********************************
+
+//*********************************** 事件监听 ********************************
+    //身份证转生日
+    $scope.birthday = function () {
+      var input = $scope.formData.id_number;
+      var year = input.substring(6, 10);
+      var month = input.substring(10, 12);
+      var date = input.substring(12, 14);
+      $scope.formData.birthday = year + "-" + month + "-" + date;
+    };
+
+    //身份证和生日绑定
+    $scope.birthdayBlur = function () {
+      if (!$scope.formData.birthday) {
+        $scope.birthday();
+      } else {
+      }
+    };
+
+
+    //上传头像
+    $('.js_file').on('change', function (event) {
+      var imageEle = document.getElementById("edituserinfo-img-upload");//jquery 无法获取到
+      // 获取文件上传域内输入的多个文件
+      var fileList = imageEle.files;
+      var lastFile;
+      //遍历每个文件
+      for (var i = 0; i < fileList.length; i++) {
+        var file = fileList[i];
+        // div = document.createElement("div");
+        // div.innerHTML = "第" + (i + 1) + "个文件的文件名是：" + file.name + ",该文件类型是:" + file.type + ",该文件大小为:" + file.size;
+        //把div元素添加到页面中
+        // document.body.appendChild(div);
+        if (i == fileList.length - 1) {
+          lastFile = fileList[fileList.length - 1];
+        }
+        // alert("类型"+file.type+"名字"+file.name+"修改时间"+file.name+file.lastModifiedDate+"大小"+Math.floor(file.size/1024)+"kb");
+      }
+
+      //
+      if (lastFile.size > 1024 * 1024 * 10) {
+        commonService.showErrorMessage('您选择的图片太大了,换一张试试');
+        return;
+      }
+
+      var Orientation;
+      //获取照片方向角属性，用户旋转控制
+      //1 ： 0°
+      //6 ： 顺时针90°
+      //8 ： 逆时针90°
+      //3 ：  180°
+      EXIF.getData(lastFile, function () {
+        EXIF.getAllTags(this);
+        alert(EXIF.getTag(this, 'Orientation'));
+        Orientation = EXIF.getTag(this, 'Orientation');
+      });
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.src = e.target.result;
+        var base64;
+        img.onload = function () {
+          var maxWidth = 500;//最大的宽
+          if(img.width > maxWidth){
+            var scaleMum=maxWidth/img.width; //缩放比例
+          }else{
+            var scaleMum = 1;
+          }
+          var w = img.width*scaleMum;
+          var h = img.height*scaleMum;
+          var canvas = document.createElement('canvas');
+          var ctx = canvas.getContext('2d');
+
+          if (Orientation != "" && Orientation != 1 && Orientation!=null) {
+            switch (Orientation) {
+              case 6:
+                //alert('需要顺时针（向左）90度旋转');
+                canvas.width = h;
+                canvas.height = w;
+                ctx.scale(scaleMum,scaleMum);
+                ctx.rotate(Math.PI / 2);
+                ctx.drawImage(img, 0, -img.height);
+                break;
+            }
+          }else{
+             //设置 canvas 的宽度和高度
+            canvas.width = w;
+            canvas.height = h;
+            ctx.drawImage(img, 0, 0, w, h);
+          }
+
+          base64 = canvas.toDataURL('image/png');
+          var updateImageDate = base64.substr(base64.indexOf(',') + 1, base64.length - 1);
+
+          $rootScope.newheadImgurl = updateImageDate;
+          $("#ordImg").attr("src", base64);
+
+          //上传头像
+          if ($rootScope.newheadImgurl != null) {
+            userService.editHeadImgurl({
+              //'mobile': localStorage.mobile,
+              'ticket': $cookies.get("ticket"),
+              'headImgurl': $rootScope.newheadImgurl
+            }).success(function (data) {
+              $scope.result = data;
+              switch ($scope.result.code) {
+                case '0':
+                  break;
+                case '-1':
+                  commonService.showWarnMessage("参数为空！");
+                  break;
+                case '-2':
+                  commonService.showWarnMessage("参数错误！");
+                  break;
+              }
+            }).error(function (data, status, header, config) {
+            });
+
+          }
+
+        }
+
+      }
+      reader.readAsDataURL(lastFile);
+    });
+
+    //进入手机号设置页
+    $scope.editmobile = function () {
+      $state.go('member-personal-mobileset', {mobile: $scope.formData.mobile});
+    };
+
+    //进入个人名片页
+    $scope.editusercard = function () {
+      $state.go('member-personal-businesscard', {mobile: $scope.formData.mobile});
+    };
+
+    //进入密码设置页
+    $scope.editPasswordreset = function () {
+      $state.go('member-personal-passwordreset', {mobile: $scope.formData.mobile, from: '0'});
+    };
+
+    //注销登录
+    $scope.editcenterNo = function () {
+      userService.loginOut({
+        'ticket': $cookies.get("ticket")
+      }).success(function (data) {
+        localStorage.removeItem("mobile");
+        $cookies.remove("ticket");
+        sessionStorage.removeItem('centerLogin');
+        $state.go('member-personal-usercenterNo', {mobile: $scope.formData.mobile});
+        $rootScope.username = '';
+        //移出默认的城市名和ID
+        sessionStorage.removeItem('gpscityName');
+        sessionStorage.removeItem('gpscityId');
+        //移出商家福利页默认卡头
+        sessionStorage.removeItem('welfareType');
+      });
+
+    };
+
+    //返回到个人中心页
+    $scope.jumpCenter = function () {
+      $state.go('member-personal-usercenter');
+    };
+
+    //提交信息到个人中心页
+    $scope.jumpTo = function (username) {
+
+      if (!$rootScope.regxIdnumber.test($scope.formData.id_number) && $scope.formData.id_number != '') {
+        commonService.showWarnMessage("请输入正确的身份证号码！");
+      } else if (!$rootScope.regxEmail.test($scope.formData.email)) {
+
+        commonService.showWarnMessage("请输入正确的邮箱！");
+      } else {
+        //提交用户信息
+        userService.editUserInfo(
+          $scope.formData
+        ).success(function (data) {
+          $scope.result = data;
+          switch ($scope.result.code) {
+            case '0':
+              $rootScope.nickname = $scope.formData.nickname;
+              $state.go('member-personal-usercenter');
+              break;
+            case '-1':
+              commonService.showWarnMessage("参数为空！");
+              break;
+            case '-2':
+              commonService.showWarnMessage("参数错误！");
+              break;
+          }
+
+        }).error(function (data, status, header, config) {
+        });
+      }
+
+    }
+//************************************* end ***********************************
+  }
+);
+
+//手机号设置页
+personalModuleController.controller(
+  'mobilesetCtrl',
+  function ($scope, $rootScope, $stateParams, userService, commonService, $state, $interval) {
+//*********************************** 初始化 *********************************
+    $scope.formData = {};
+    //获取客服电话
+    $scope.showCompanyTel = sessionStorage.showCompanyTel;
+    $scope.companyTel = sessionStorage.companyTel;
+
+    $scope.checked = true;
+
+    $scope.formData.mobile = parseInt($stateParams.mobile);
+    $scope.formData.newmobile = $scope.formData.mobile;
+//************************************* end ***********************************
+
+//*********************************** 事件监听 ********************************
+    //获取验证码
+    $scope.codeHtml = "获取验证码";
+    var time = sessionStorage.codeTime,
+      timePromise = undefined;
+    $scope.getCode = function () {
+      if (!$rootScope.regxMobile.test($scope.formData.newmobile)) {
+        commonService.showWarnMessage("请输入正确的手机号码！");
+      } else if ($scope.formData.mobile == $scope.formData.newmobile) {
+        commonService.showWarnMessage("请修改手机号码！");
+      } else {
+        userService.getSMSCode({
+          'mobile': $scope.formData.newmobile,
+          'page': '手机号码设置'
+        }).success(function (data) {
+          $scope.result = data;
+
+          switch ($scope.result.code) {
+            case '0':
+
+              timePromise = $interval(function () {
+                if (time <= 0) {
+                  $interval.cancel(timePromise);
+                  timePromise = undefined;
+
+                  time = sessionStorage.codeTime;
+                  $scope.codeHtml = "重发验证码";
+                  $scope.checked = true;
+
+                } else {
+                  $scope.codeHtml = time + "秒后可重发";
+                  time--;
+
+                }
+              }, 1000, 100);
+              $scope.checked = false;
+
+              break;
+            case '-1':
+              commonService.showWarnMessage("请输入手机号码！");
+
+              break;
+            case '-2':
+              commonService.showWarnMessage("系统异常，请重新获取！");
+              break;
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+    };
+
+    //查看验证码
+    $scope.lookCode = function () {
+      userService.getSMSCode({
+        'mobile': $scope.formData.newmobile,
+        'number': $scope.formData.number,
+        'page': '手机号码设置'
+      }).success(function (data) {
+
+        $scope.result = data;
+        switch (data.code) {
+          case '0':
+            $('#myModal').modal('hide');
+            commonService.showWarnMessage("请向您指定的吸粉人查询验证码！");
+            break;
+          case '-1':
+            commonService.showWarnMessage("请输入手机号码！");
+            break;
+          case '-2':
+            commonService.showWarnMessage("请输入正确的推荐人工号！");
+            break;
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+    };
+
+    //修改手机号码到个人信息设置页
+    $scope.jumpeditUser = function () {
+      if (!$rootScope.regxMobile.test($scope.formData.newmobile)) {
+        commonService.showWarnMessage("请输入正确的新手机号码！");
+      } else if ($scope.formData.mobile == $scope.formData.newmobile) {
+        commonService.showWarnMessage("请修改手机号码！");
+      } else if (!$rootScope.regxCode.test($scope.formData.code)) {
+        commonService.showWarnMessage("请输入正确的验证码！");
+      } else {
+        userService.editMobileInfo(
+          $scope.formData
+        ).success(function (data) {
+          $scope.result = data;
+
+          switch ($scope.result.code) {
+            case '0':
+              localStorage.setItem("mobile", $scope.formData.newmobile);
+              $state.go('member-personal-editUserInfo');
+              break;
+            case '-1':
+              commonService.showWarnMessage("参数为空！");
+              break;
+            case '-2':
+              commonService.showWarnMessage("参数错误！");
+              break;
+            case '-3':
+              commonService.showWarnMessage("验证码无效！");
+              break;
+          }
+
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    };
+
+//************************************* end ***********************************
+  }
+);
+
+//个人名片页
+personalModuleController.controller(
+  'businesscardCtrl',
+  function ($scope, $rootScope, $stateParams, userService, $state) {
+    $scope.formData = {};
+    //获取用户消息
+    $rootScope.mobile = localStorage.getItem("mobile")
+    userService.getUserInfo({
+      'mobile': $rootScope.mobile
+    }).success(function (data) {
+      $scope.result = data;
+
+      switch ($scope.result.code) {
+        case '0':
+          $scope.formData = $scope.result.data;
+
+          break;
+        case '-1':
+          commonService.showWarnMessage("参数为空！");
+          break;
+        case '-2':
+          commonService.showWarnMessage("参数错误！");
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+
+    //提交信息到个人信息设置页
+    $scope.jumpeditUser = function () {
+      //区分是个人名片页还是个人信息设置页
+      $scope.formData.editMyCard = 'editMyCard';
+      userService.editUserInfo(
+        $scope.formData
+      ).success(function (data) {
+        $state.go('member-personal-editUserInfo');
+
+      }).error(function (data, status, header, config) {
+
+      });
+    }
+  }
+);

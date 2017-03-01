@@ -1,0 +1,75 @@
+
+<script type="text/javascript">
+
+  var text = document.getElementById('applyreason')
+  text.style.color = "gray"
+
+  //获得焦点
+  function getfocus(obj){
+    if (obj.value == "您的建议对我们很重要"){
+      obj.value = "";
+    }
+    obj.style.color = "black";
+  }
+  //失去焦点
+  function losefocus(obj){
+    if (obj.value == ""){
+      obj.style.color = "gray";
+      obj.value = "您的建议对我们很重要";
+    }
+  }
+  //检查输入
+  function checkinput(){
+    obj = document.getElementById('applyreason');
+    if (obj.value == "您的建议对我们很重要" || obj.value == ""){
+      alert("请填写内容！");
+      return false;
+    }
+    return true;
+  }
+</script>
+
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goToUserCenter()">
+    <!-- 搜索框组-->
+    <div class="navigationbar-item">
+      <p class="item-title">联系我们</p>
+    </div>
+  </div>
+</nav>
+
+<div class="content">
+  <div class="logo-block">
+    <img class="contactus-logo" ng-src="{{logoUrl}}">
+    <p class="project-name">{{contactusAppname}}</p>
+  </div>
+
+  <!--<div ng-model="advice" class="feedback-field" contenteditable="true">-->
+    <!--您的建议对我们很重要。-->
+  <!--</div>-->
+
+  <!--<textarea ng-model="advice" class="feedback-field"placeholder="您的建议对我们很重要">-->
+
+  <!--</textarea>-->
+
+  <textarea class="feedback-field" id="applyreason"  onfocus="getfocus(this)"
+             onblur="losefocus(this)">您的建议对我们很重要</textarea>
+
+
+  <div class="user-info-block">
+    <input ng-model="userInfo" type="text" class="form-control" placeholder="您的姓名、手机号等联系方式">
+  </div>
+
+  <div class="contact-button-size">
+    <button type="submit" class="btn btn-block btn-success" ng-click="submitAdvice()">提交</button>
+  </div>
+
+  <div class="contact-us navbar-fixed-bottom KBheight">
+    <a class="link-button" href="tel://{{companyTel}}">客服电话：{{showCompanyTel}}</a>
+  </div>
+
+</div>
+

@@ -1,0 +1,17 @@
+.post-reply-content{
+  padding:10px;
+}
+.post-reply-content .property-edit textarea{
+  width:78%;
+}
+.post-reply-content #contentTie{
+  height:80px;
+  resize: none;
+}
+.post-reply-content .img-bg{
+  background-color: rgb(240, 239, 245);
+}
+.post-reply-content .btn{
+  border-radius: 4px;
+  width:40%;
+}

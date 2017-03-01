@@ -1,0 +1,60 @@
+
+.base-society{
+  background-color: #ddd;
+  border-bottom:1px solid #ddd;
+  padding:0px 10px;
+  height:30px;
+  line-height: 30px;
+  /*font-size: 1.3rem;*/
+}
+.basesocietyTtitle{
+  float: left;
+  font-size: 1.3rem;
+}
+.base-society .postInfo{
+  float: right;
+  /*padding-top:0.4rem;*/
+}
+
+.postInfo .review-status a {
+  color:#337ab7;
+}
+.postlist{
+  margin-top:15px;
+}
+.postlist .content-floor{
+  padding:10px 10px 0px 10px;
+  margin-top:0px;
+}
+.postlist .content-floor .media-left{
+  text-align: center;
+}
+.postlist .content-floor .edit{
+  float: right;
+  margin-top: -20px;
+}
+.postdetailContent a{
+  color:#337ab7;
+}
+.bbs_nickname{
+  font-size: 0.8rem;
+  width:4rem;
+  white-space:normal;
+}
+
+/*.bbs-content , .bbs-img{*/
+  /*width:80%;*/
+  /*margin-left:42px;*/
+/*}*/
+
+.bbs-img img,.bbsReply-img img{
+  width:8rem;
+  height:8rem;
+  padding:0px 5px 5px 0px;
+}
+.bbs-head-img,.bbsReply-head-img{
+  float:left;
+  width:4rem;
+  height:4rem;
+}
+

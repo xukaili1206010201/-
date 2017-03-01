@@ -1,0 +1,164 @@
+
+.goods-detail-content{
+  overflow-x:hidden;
+  margin-bottom:49px;
+}
+.get img{
+  max-width: 100%;
+}
+.goods-detail{
+   margin-left:20px;
+}
+.goods_title{
+  font-size: 14px;
+}
+.goods_body{
+  font-size: 10px;
+  color:#999999;
+}
+.number li{
+  height:20px;
+  line-height: 20px;
+}
+.goodsdetail i{
+  font-size:10px;
+}
+
+.sale_count b{
+  /*color:#F7AF0D;*/
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+.sale_count b span{
+  /*color:#F7AF0D;*/
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.sale_count .old_price{
+  color: #999999;
+}
+
+.today_sales{
+  font-size: 13px;
+  /*color:#818181;*/
+}
+.count_down{
+  border-top:1px solid #CCCCCC;
+  border-bottom:1px solid #CCCCCC;
+  clear: both;
+  height:35px;
+  line-height: 35px;
+  background-color: #F0EFF5;
+  padding-left:20px;
+  color:#818181;
+}
+.col-xs-4{
+  padding:0px;
+}
+.detailCommon{
+  font-size: 13px;
+  color:#555555;
+  font-weight:bold ;
+}
+
+.goodsdetail>li{
+  border-bottom: 2px;
+  border-bottom: solid;
+  border-bottom-color: #ddd;
+}
+
+.tab-content .goods-description{
+   margin:12px 18px 0px 18px;
+   color:#555555;
+}
+
+.detail_img{
+  margin:10px 0px;
+}
+.fotter_btn{
+  background-color:#F0EFF5;
+  height: 70px;
+  border-top:1px solid #CCCCCC;
+}
+
+.fotter_btn .btn{
+  padding: 0px;
+}
+.detail-bottom-btn{
+  height:50px;
+  width:100%;
+  /*background-color: #ddd;*/
+  padding:5px 10px;
+}
+.goods-detail-buy-button{
+  height: 40px;
+  width:100%;
+  background-color:rgb(125, 179, 67);
+  font-size:15px;
+}
+.rt{
+  float:right;
+  margin-right: 5px;
+}
+.time{
+  font-size: 12px;
+}
+
+.goodsDetail-star-pic img{
+  width:15px;
+  height:15px;
+}
+.evaluate{
+  font-size: 13px;
+  margin:5px 0px;
+}
+
+.goodsdetail-comment-row{
+  width: 100%;
+  margin: 0px;
+  padding: 5px 10px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.goodsdetail-comment-row .evaluate{
+  margin-bottom: 0px;
+}
+.evaluate_imgBox{
+  margin-left:40px;
+}
+.evaluate_img{
+  width:80px;
+  height:80px;
+  padding-left:10px
+}
+.goodDetailTabs{
+  height:2.8rem;
+  width:100%;
+  display: inline-flex;
+  justify-content:space-around;
+  border-bottom: 1px solid #ddd;
+}
+.goodDetailTabs li{
+  float:left;
+  height:2.8rem;
+  line-height: 2.8rem;
+  text-align: center;
+  font-size:1.2rem;
+  width:10rem;
+}
+.tab-active{
+  color: #7DB343;
+  border-bottom:3px solid #7DB343;
+}
+.descriptionBox{
+  padding:1rem;
+}
+.charts{
+  height: 100%;
+  margin:10px 10px 0px 10px;
+}
+.evaluateBox .headImg{
+  width:4rem;
+  height:4rem;
+}

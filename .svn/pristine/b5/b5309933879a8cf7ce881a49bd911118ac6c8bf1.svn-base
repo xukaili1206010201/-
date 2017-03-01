@@ -1,0 +1,53 @@
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!--<p class="navbar-text text-center">我的消息</p>-->
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img ng-click="backMyCommunitySet()" class="back-button" src="images/back_button.png">
+
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchCity()">
+
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div ng-show="hotCityList.length > 0">
+  <div>
+    <p class="hot_city" ng-show="hotCityList.length > 0">
+      热门城市
+    </p>
+    <ul ng-repeat="hotCity in hotCityList" class="text-center">
+      <li ng-bind="hotCity.name" ng-click="selectCity(hotCity)" class="col-xs-4 selectcity-hotcity">{{hotCity
+        .name}}</li>
+    </ul>
+  </div>
+</div>
+
+
+<div id="letter"></div>
+
+<div  class="sort_box">
+
+  <div ng-repeat="cityModel in cityList" class="sort_list">
+    <ul>
+      <li ng-click="selectCity(cityModel)" class="num_name selectcity-cityName">{{cityModel.name}}
+        <span class="status">已开通</span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+<div class="text-center" ng-hide="cityList.length > 0" style="margin-top:80px;font-size: 1.5rem;">没有相关数据！</div>
+
+<div class="initials">
+  <ul>
+    <li></li>
+  </ul>
+</div>
+

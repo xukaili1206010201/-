@@ -1,0 +1,147 @@
+.fl{
+  float:left;
+}
+.fr{
+  float:right;
+}
+.error{
+  margin-top:80px;
+  display: block;
+  z-index:1000 ;
+  text-align: center;
+}
+.TagListError{
+  display: block;
+  z-index:1000 ;
+  color:#A94442;
+  margin-left:23%;
+}
+.content{
+  margin-top: 50px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+.navMain{
+  margin-top:50px;
+}
+.selectMain{
+  margin-top:80px;
+}
+
+/*背景色为灰色*/
+.BG-grey{
+  background-color: #ddd;
+}
+/*卡头*/
+.fixedTab{
+  background-color: white;
+  height: 35px;
+  line-height: 35px;
+ }
+.fixedTab li{
+  float: left;
+  font-size: 1.3rem
+}
+.cartHead{
+  color: #7DB343;
+  border-bottom: 3px solid #7DB343;
+}
+  /*查询验证码*/
+.verfication-code{
+  text-align: center;
+}
+.verfication-code button{
+  width:45.5%;
+  /*height: 35px;*/
+}
+.verfication-code-query{
+  margin-right: 1.5%;
+}
+/*间隔固定底部和内容*/
+.empty{
+  height:60px;
+}
+button,a{ outline: none;}
+a,a:hover{ text-decoration:none; color:#333}
+
+/*数字输入框样式*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]{
+  -moz-appearance: textfield;
+}
+/*城市选择下拉列表*/
+.citySelect{
+  font-size: 1.3rem;
+  width:5.7rem;
+  /*overflow: inherit;*/
+  /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+  border: none;!important;
+  /*background: #7DB343;*/
+
+  /*很关键：将默认的select选择框样式清除*/
+  /*appearance:none;*/
+  /*-moz-appearance:none;*/
+  /*-webkit-appearance:none;*/
+
+  /*在选择框的最右侧中间显示小箭头图片*/
+  background: url(../images/city_select.jpg) no-repeat scroll right center transparent;
+
+  /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+  /*padding-right: 5px;*/
+  /*margin-right: 5px;*/
+}
+.citySelect option {
+  background-color: #7DB343;
+}
+/*公告*/
+.marquee-broadcast{
+  height:25px;
+  line-height: 25px;
+  color:orange;
+  background-color: #F0EFF5;
+  width:100%;
+}
+/*按钮的圆角*/
+.btnRadius{
+  font-size: 15px;
+  border-radius: 4px;
+}
+/*底部一个按钮*/
+.buttonOne{
+  padding-top:5px;
+  padding-bottom:5px;
+}
+.buttonOne button{
+  width:91%;
+}
+/*底部两个按钮*/
+.buttonTwo{
+  padding-top:5px;
+}
+.buttonTwo button{
+  width: 44%;
+}
+.buttonTwo button:first-child{
+  margin-right: 3%;
+}
+
+/*金额的颜色*/
+.moneyColor{
+  color:#F7AF0D;
+}
+/*销价的颜色*/
+.orderColor{
+  color:#999;
+}
+/*电话样式*/
+.contact-us{
+  text-align: center;
+  margin-bottom: 30px;
+}
+.tellColor{
+  color: #337ab7;!important;
+  text-decoration: underline;!important;
+}

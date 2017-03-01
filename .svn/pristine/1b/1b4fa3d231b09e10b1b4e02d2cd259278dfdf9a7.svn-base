@@ -1,0 +1,75 @@
+
+/* ******************************** 列表 样式 ******************************** */
+
+/* ******************************** 卡头 样式 ******************************** */
+.segment-control {
+  margin-top: 50px;
+  border-bottom: 1px solid #ddd;
+}
+
+.segment-control a:hover {
+  text-decoration: none;
+}
+
+/* ********************************未读消息表 样式 ******************************** */
+.unread-message-table {
+  display: block;
+  margin-top: 81px;
+}
+
+.readed-message-table{
+  margin-top: 81px;
+}
+
+
+.unread-message-table .line-wrapper{
+  background: white;
+  width: 100%;
+}
+
+.readed-message-table .line-wrapper,.searchMsg .line-wrapper{
+  background: white;
+  width: 100%;
+}
+
+
+.read-time {
+  text-align: right;
+}
+
+
+.message-content {
+  color: #4e4e4e;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  margin-right: 10px;
+  /*最多显示两行*/
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  clear: both;
+}
+
+/*.line-normal-wrapper{
+  position: relative;
+}*/
+
+.message-city{
+  float:right;
+  margin-right:5px;
+}
+
+.message-time{
+  float:right;
+  margin-right:5px;
+}
+.msg-font{
+  font-size:1.1rem;
+}
+.msg-sender{
+  float:left;
+}
+.msg-left{
+  margin-left:10px;
+}

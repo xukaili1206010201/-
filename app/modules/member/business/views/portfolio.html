@@ -1,0 +1,88 @@
+<!--suppress ALL -->
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navcityLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+    <p class="city">
+      <select city-height class="citySelect" ng-model="selectedCity"
+              ng-change="changeSeletedCity()">
+        <option value="{{city.city_id}}" ng-repeat="city in allCityData">{{city.name}}</option>
+      </select>
+    </p>
+  </div>
+  <div class="navcityText">业务量统计</div>
+
+</nav>
+<div class="navMain">
+
+  <div style="overflow-x: auto">
+  <div tab-portfolio class="portfolio">
+    <ul class="text-center fixedTab"  role="tablist">
+      <li role="presentation" class="cartHead" ng-click="changeTabTotal('order')"
+          ng-class="{'order':'cartHead'}[params.type]">分类销售</li>
+      <li role="presentation" ng-click="changeTabTotal('orderTop')"
+          ng-class="{'orderTop':'cartHead'}[params.type]">销售排名</li>
+      <li role="presentation" ng-click="changeTabTotal('ad')"
+          ng-class="{'ad':'cartHead'}[params.type]">广告</li>
+      <li role="presentation" ng-click="changeTabTotal('telphone')"
+          ng-class="{'telphone':'cartHead'}[params.type]">电话</li>
+      <li role="presentation" ng-click="changeTabTotal('fans')"
+          ng-class="{'fans':'cartHead'}[params.type]">吸粉</li>
+      <li role="presentation" ng-click="changeTabTotal('user')"
+          ng-class="{'user':'cartHead'}[params.type]">用户量</li>
+    </ul>
+  </div>
+  </div>
+
+  <div class="row link-orderTop" ng-show="params.type=='orderTop'">
+    <button class="btn btn-default" ng-class="{'business':'isSelected'}[params.orderTopType]"
+            ng-click="changeOrderTopTab('business')">商家
+    </button>
+    <button class="btn btn-default" ng-class="{'goods':'isSelected'}[params.orderTopType]"
+            ng-click="changeOrderTopTab('goods')">单品
+    </button>
+    <button class="btn btn-default" ng-class="{'serviceStation':'isSelected'}[params.orderTopType]"
+            ng-click="changeOrderTopTab('serviceStation')">服务站
+    </button>
+  </div>
+
+  <div class="row link-orderTop" ng-show="params.type=='order'">
+    <button class="btn btn-default" ng-class="{'':'isSelected'}[params.orderType]"
+            ng-click="changeOrderTopTab('')">全部
+    </button>
+    <button class="btn btn-default" ng-class="{'article':'isSelected'}[params.orderType]"
+            ng-click="changeOrderTopTab('article')">推文
+    </button>
+    <button class="btn btn-default" ng-class="{'ad':'isSelected'}[params.orderType]"
+            ng-click="changeOrderTopTab('ad')">广告
+    </button>
+  </div>
+
+  <div class="tab-content" ng-if="datas!=null">
+    <div role="tabpanel" class="tab-panel active">
+      <canvas id="line" class="chart chart-line" chart-data="datas"
+              chart-labels="labels" chart-series="series" chart-legend="true"
+              chart-options="options">
+      </canvas>
+    </div>
+  </div>
+
+  <div class="table-responsive portfolio-table" ng-show="datas!=null">
+    <table class="table">
+      <thead>
+      <tr style="background:#ECECEC;">
+        <td>分类\日</td>
+        <td ng-repeat="day in reverseLabels track by $index">{{day}}</td>
+      </tr>
+      <tr ng-repeat="serire in reverseSeries track by $index" ng-style="{'color':reverseColours[$index]}">
+        <td>{{serire}}</td>
+        <td ng-repeat="data in reverseDatas[$index] | reverseArray track by $index">
+          <span>{{data}}</span>
+        </td>
+      </tr>
+      </thead>
+    </table>
+  </div>
+
+</div>

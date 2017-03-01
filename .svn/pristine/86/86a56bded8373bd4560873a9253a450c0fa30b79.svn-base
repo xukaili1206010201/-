@@ -1,0 +1,421 @@
+var couponsModuleController = angular.module('couponsModuleController', []);
+
+//请求我的优惠券列表
+couponsModuleController.controller(
+  'myCouponsCtrl',
+  function ($scope, $stateParams, userService, $state,$q,commonService,$timeout,$location,$rootScope,$cookieStore) {
+    var skipType = localStorage.skip; //记录跳转到我的优惠券的页面
+    //console.log(skipType);
+
+    /**********优惠券列表***********************/
+    $scope.couponsParams = {
+      "mobile":localStorage.mobile,
+      "status": "1",
+      'pageno' : '1', //页码
+      'pagesize' : '20', //页数
+      "url" : 'listUserCoupons.action',
+      "direction" : 'up',
+      //'type' : '社区服务',
+      "key" : ''
+    };
+    $scope.couponsList = [];
+    var isOver = false; //false:标志数据未加载完成
+    $scope.errMsg = '';
+    $scope.coupons = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        if(response.code == '0'){
+          var tempList = response.data;
+          if (tempList.length == 0 && params.pageno == '1') {
+            $scope.errMsg = '没有相关数据';
+          } else {
+            $scope.errMsg = '';
+          }
+          if(tempList.length < params.pagesize){
+            isOver = true;//true:标志数据加载完成
+            defer.resolve(isOver);
+          }else{
+            isOver = false;
+            defer.resolve(isOver);
+          }
+          if(params.direction == 'down'){
+            $scope.couponsList = response.data;
+          }else{
+            $scope.couponsList = $scope.couponsList.concat(tempList);
+          }
+          $.getScript('scripts/common/plugins/swipeleft.js', function () {
+            addSwipeLeft();
+          });
+        }else if(response.code == '-8'){
+          $state.go('member-personal-login');
+          sessionStorage.loginLocation = $location.path();
+        }else{
+          commonService.showWarnMessage(response.data);
+        }
+      }).error(function (data, status, header, config) {
+        console.log("error=====>>"+data);
+      });
+      return defer.promise;
+    };
+
+    if (skipType == 'comservice' || skipType == 'usercenter' || !skipType) {
+      //从首页或个人中心页进入我的优惠券
+      $scope.showType = '1'; //默认显示未用优惠券
+      localStorage.showType = '1';
+      //保存从首页或个人中心进入到我的优惠券页，
+      // 以便从优惠券详情页返回到我的优惠券页后
+      // 再次点击我的优惠券页的返回按钮,判断返回的页面
+      if (skipType == 'usercenter') {
+        localStorage.goBack = 'usercenter';
+      } else {
+        localStorage.goBack = 'comservice';
+      }
+    }else if(skipType == 'couponsdetail' || skipType == 'couponsSeller'){
+      //从优惠券详情页返回到我的优惠券页
+      $scope.showType = localStorage.showType;
+      $scope.couponsParams.status = $scope.showType;
+      $('.coupons-data li').removeClass('cartHead');
+      switch ($scope.showType){
+        case '0':
+              $('.unreceive-button').addClass('cartHead');
+              break;
+        case '1':
+              $('.unused-button').addClass('cartHead');
+              break;
+        case '2':
+              $('.used-button').addClass('cartHead');
+              break;
+        case '3':
+              $('.outdate-button').addClass('cartHead');
+              break;
+      }
+    }
+    $scope.coupons($scope.couponsParams);
+
+    //点击选项卡切换选项
+    $scope.showCoupons = function(type){
+      $('.search-input').val('');
+      $scope.couponsList = [];
+      $scope.showType = type;
+      localStorage.showType = type;
+      $scope.couponsParams.status = type;
+      $scope.couponsParams.pageno = 1;
+      $scope.coupons($scope.couponsParams);
+    };
+
+    //点击删除，删除优惠券：未用、已用、过期
+    $scope.deleteCoupons = function(couponsId,$event){
+      userService.postRequestWithUrlAndParams('delUserCoupons.action',{
+        'userCoupons_id' : couponsId
+      }).success(function(response){
+        if(response.code == '0'){
+          commonService.showSuccessMessage('删除成功!');
+          $($event.target).parents('.list-group-item').remove();
+        }else if(response.code == '-8'){
+          $state.go('member-personal-login');
+          sessionStorage.loginLocation = $location.path();
+        }
+      });
+    }
+
+    /******************关键字搜索******************************/
+    var val = '';
+    $scope.searchCoupons = function(){
+      $scope.couponsList = [];
+      val = $('.search-input').val();
+      $scope.couponsParams.key = val;
+      $scope.couponsParams.pageno = '1';
+      $scope.coupons($scope.couponsParams);
+    };
+    //失去焦点，获取key的值
+    $scope.couponsBlur = function(){
+      $scope.couponsParams.key = $('.search-input').val();
+    };
+
+    //跳转到优惠券详情页
+    $scope.goDetail = function(couponsId,fuwu_type){
+        localStorage.status = $scope.showType;
+        //localStorage.pageno = $scope.couponsParams.pageno;
+        $state.go('member-user-coupondetail',{
+          couponsId:couponsId
+        });
+      $cookieStore.put('from', '%youhui%'); //存放我的优惠券页标识符
+    };
+
+    //返回上一页
+    $scope.back = function(){
+      val = $('.search-input').val();
+      if (val != '') {
+        $('.search-input').val('');
+        $scope.searchCoupons();
+        return;
+      }
+      if(localStorage.goBack == 'comservice'){
+        $state.go("guanjia-comservice");
+      }else if(localStorage.goBack == 'usercenter'){
+        $state.go("member-personal-usercenter");
+      }
+      localStorage.removeItem('showType');
+      localStorage.removeItem('goBack');
+      localStorage.removeItem('skip');
+      localStorage.removeItem('status');
+    }
+  }
+);
+
+//优惠券领取页
+couponsModuleController.controller(
+  'receiveCouponsCtrl',
+  function ($scope, $stateParams, userService, $state,commonService) {
+   /* $scope.id = $stateParams.id;
+    $scope.recommend_person;
+
+    //获取优惠券数据
+    userService.postRequestWithUrlAndParams('getUserCoupons.action', {
+      "coupons_id":$scope.id
+    }).success(function(response){
+      console.log(response);
+      if(response.code == '0'){
+        $scope.receiveDetail = response.data;
+      }else if(response.code == '-8'){
+        $state.go('member-personal-login');
+        sessionStorage.loginLocation = $location.path();
+      }
+    });
+
+    //领取优惠券
+    $scope.receiving = function(){
+        var params = {
+          "mobile":$stateParams.id,
+          "coupons_id":$scope.receiveDetail.coupons_id,
+          "number" : $scope.recommend_person
+        };
+        var promise = userService.getReceive(params);
+          promise.then(function(response){
+            console.log(response);
+            if(response.code == '0'){
+              $('#myModal').modal('show');
+              $scope.goBusiness = function(userCoupons_id){
+                userService.postRequestWithUrlAndParams('getUserCoupons.action', params).success(function(response){
+                  if(response.code == '0'){
+                    $('.modal-backdrop').remove();
+                    $state.go('member-user-couponsseller',{'couponsId':response.data.userCoupons_id});
+                  }
+                }).error(function(response){
+                  console.log("error=====>>");
+                });
+
+              }
+            }else if(response.code = '-2'){
+              commonService.showWarnMessage(response.data);
+            }else if(response.code == '-8'){
+              $state.go('member-personal-login');
+              sessionStorage.loginLocation = $location.path();
+            }
+          },function(response){
+            console.log('------error--------');
+          });
+      };
+    //}
+
+    //点击返回按钮
+    $scope.back = function(){
+      history.back();
+    }
+    $scope.backList = function(){
+      localStorage.showType = '1';
+      $('.modal-backdrop').remove();
+      $state.go('member-user-mycoupons');
+    }*/
+  }
+);
+
+
+//优惠券详情
+couponsModuleController.controller(
+  'couponDetailCtrl',
+  function ($scope, $stateParams, userService, $state,$timeout,commonService,$cookies,$location) {
+    //从消息系统跳转到优惠券详情页
+    var skipType = localStorage.skip;
+
+    //from 判断从哪个页面跳转到此页
+    // %fuli% 商家福利  %youhui%  我的优惠券
+    $scope.from = $cookies.get('from');
+    $scope.couponsId = $stateParams.couponsId || localStorage.couponsId;
+    var startTime;
+    //$scope.isTime = false;
+    var isUsing;
+    var currentTime = (new Date()).getTime();
+    var params = {"coupons_id":$scope.couponsId,"mobile":localStorage.mobile};
+    $scope.couponsDetails = [];
+    userService.postRequestWithUrlAndParams('getUserCoupons.action', params).success(function (response) {
+      if(response.code == '0'){
+        $scope.couponsDetails = response.data;
+        if($scope.couponsDetails.status == '未用'){
+          startTime = $scope.couponsDetails.start_date;
+          startTime = startTime.replace(/-/g,'/');
+          var start = (new Date(startTime)).getTime();
+          if(start > currentTime){ //未用且没有开始
+            $scope.isTime = false;
+            $scope.isClass = 'unUsing';
+          }else{  //未用且已经开始
+            $scope.isTime = true;
+            $scope.isClass = 'Using';
+          }
+        }
+        isUsing = $scope.isTime;
+        localStorage.removeItem('couponsId');
+      }else if(response.code == '-8'){
+        localStorage.couponsId = $stateParams.couponsId;
+        $state.go('member-personal-login');
+        sessionStorage.loginLocation = $location.path();
+      }else{
+        commonService.showWarnMessage(response.data);
+      }
+
+    }).error(function (data, status, header, config) {
+      console.log("error=====>>"+data);
+    });
+
+    //点击使用，跳转到优惠券商家页
+    $scope.goSeller = function(couponsId){
+      $state.go('member-user-couponsseller',{couponsId:couponsId});
+    }
+
+    /*************************点击使用属性，跳转到订单详情页*************************************/
+    $scope.goOrderDetail = function(orderId,couponsId){
+      localStorage.couponsId = couponsId;
+      $state.go('member-user-orderdetail',{
+        orderId : orderId,
+        from : 'coupondetail'
+      });
+    }
+
+    /***********************************点击领取*********************************************/
+    //点击确认，领取优惠券--(领取优惠券)
+    var userCouponsId;
+    $scope.receiveCoupons = function(){
+      var params = {
+        "mobile":$stateParams.id,
+        "coupons_id":$scope.couponsId,
+        "number" : $scope.recommend_person
+      };
+      var promise = userService.getReceive(params);
+      promise.then(function(response){
+        if(response.code == '0'){
+          $('#receive').modal('hide');
+          userCouponsId = response.data.user_coupons_id;
+          $timeout(function(){
+            $('#receiveSuccess').modal('show');
+          },500);
+        }else if(response.code == '-8'){
+          $state.go('member-personal-login');
+          sessionStorage.loginLocation = $location.path();
+        }else{
+          commonService.showWarnMessage(response.data);
+        }
+      },function(response){
+        console.log('------error--------');
+      });
+    };
+
+    //领取成功后，跳转到优惠券商家页
+    $scope.goBusiness = function(){
+      $('.modal-backdrop').remove();
+      $state.go('member-user-couponsseller',{'couponsId':userCouponsId});
+    }
+
+    /*******************************赠送优惠券***********************************************/
+    //点击赠送
+    $scope.sendFriend = function(couponsId){
+      if(!(/^1[34578]\d{9}$/.test($scope.friendMobile))){
+        commonService.showWarnMessage('请输入正确的手机号码！');
+        return;
+      }
+      if($scope.friendMobile == localStorage.mobile){
+        commonService.showWarnMessage('请输入朋友的手机号!');
+        return;
+      }
+      userService.postRequestWithUrlAndParams('givingUserCoupons.action',{
+        'mobile' : localStorage.mobile,
+        'giving_mobile' : $scope.friendMobile,
+        'userCoupons_id' : couponsId
+      }).success(function(response){
+        if(response.code == '0'){
+          commonService.showSuccessMessage('优惠券赠送成功！');
+          var timer = $timeout(function(){
+            $('.modal-backdrop').remove();
+            $state.go('member-user-mycoupons');
+            $timeout.cancel(timer);
+          },1000);
+        }else if(response.code == '-8'){
+          $state.go('member-personal-login');
+          sessionStorage.loginLocation = $location.path();
+        }else if(response.code == '-2'){
+          commonService.showWarnMessage('您的朋友还未注册，已发注册推荐短信给他（她），请稍候再送');
+        }else{
+          commonService.showWarnMessage(response.data);
+        }
+      });
+    }
+
+    //点击返回按钮
+    $scope.backmycoupons = function(){
+      if ($scope.from == '%fuli%') {
+        $state.go('welfare-seller');
+      } else if ($scope.from == '%youhui%') {
+        localStorage.skip = 'couponsdetail';
+        $state.go('member-user-mycoupons');
+      }else if(skipType == 'messagedetail'){ //跳转到消息详情页
+        $state.go("member-user-messagedetail",{messageId:localStorage.msgId});
+      } else {    //如果参数被修改
+        localStorage.skip = 'couponsdetail';
+        $state.go('member-user-mycoupons');
+      }
+
+    }
+  }
+);
+//优惠券商家
+couponsModuleController.controller('couponsSellerCtrl',['$scope','commonService','$stateParams','$state','userService','$cookies',function($scope,commonService,$stateParams,$state,userService,$cookies){
+  //显示参与优惠券的商家列表
+  userService.postRequestWithUrlAndParams('getUserCouponsByBusiness.action',{
+    'userCoupons_id' : $stateParams.couponsId
+  }).success(function(response){
+    console.log(response.data.business);
+    if(response.code == '0'){
+      $scope.couponsInfo = response.data;
+    }else if(response.code == '-8'){
+      $state.go('member-personal-login');
+      sessionStorage.loginLocation = $location.path();
+    }else{
+      commonService.showWarnMessage(response.data);
+    }
+  });
+
+  //点击商家，进入商品列表页
+  $scope.showGoods = function(goodIds,businessId,type){
+    $cookies.put('from','%couponsSeller%');
+    $cookies.remove('city_fuwu_id');
+    $cookies.put('businessId',businessId);
+    $cookies.put('goodIds',goodIds);
+    localStorage.showType = '0';
+    if(!businessId){
+      $cookies.put('busType',true);
+    }
+    if(type == '特供服务'){
+      $state.go('guanjia-goodslist');
+    }else if(type == '家庭服务'){
+      $state.go('guanjia-familyservicelist');
+    }else{
+      $state.go('guanjia-goodslist');
+    }
+
+  };
+
+  //点击返回按钮,跳转到我的优惠券页
+  $scope.back = function(){
+    $state.go('member-user-mycoupons');
+  }
+
+}]);

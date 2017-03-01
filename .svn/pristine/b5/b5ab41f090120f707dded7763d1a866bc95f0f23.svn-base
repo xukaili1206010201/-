@@ -1,0 +1,278 @@
+var messageModuleController = angular.module('messageModuleController', []);
+
+//消息列表
+messageModuleController.controller(
+  'userMessageCtrl',
+  function ($scope, $stateParams, userService, $state, commonService,$q,$cookies,$location) {
+
+    $scope.from=$stateParams.from; //from 0:首页  1：个人中心
+
+    //请求未读消息列表
+      $scope.unreadMessageList = [];
+      $scope.params = {
+        "mobile": localStorage.mobile,
+        "city_id": sessionStorage.gpscityId,
+        "read": "0",
+        'pageno' : '1', //页码
+        'pagesize' : '10', //页数
+        "url" : 'listUserMessage.action',
+        "direction" : 'up'
+      };
+      var isOver = false; //false:标志数据未加载完成
+      $scope.readMsg = function(params){
+        var defer = $q.defer();
+        userService.postRequestWithPageNo(params).success(function(response){
+          switch (response.code) {
+            case '0':
+              var tempList = response.data;
+              console.log(tempList)
+              if(tempList.length < params.pagesize){
+                isOver = true;//true:标志数据加载完成
+                defer.resolve(isOver);
+              }else{
+                isOver = false;
+                defer.resolve(isOver);
+              }
+              if(params.read == '0'){
+                if(params.direction == 'down'){//下拉刷新
+                  $scope.unreadMessageList = response.data;
+                }else{//上拉加载
+                  $scope.unreadMessageList = $scope.unreadMessageList.concat(tempList);
+                }
+              }else if(params.read == '1'){
+                if(params.direction == 'down'){//下拉刷新
+                  $scope.readedMessageList = response.data;
+                }else{//上拉加载
+                  $scope.readedMessageList = $scope.readedMessageList.concat(tempList);
+                }
+              }
+              $.getScript('scripts/common/swipeleftNocss.js', function () {
+                addSwipeLeft();
+              });
+              break;
+            case '-1':
+              $scope.errMsg = '账号为空';
+              break;
+            case '-2':
+              $scope.errMsg = '城市为空';
+              break;
+            case '-8':
+              $state.go('member-personal-login');
+              sessionStorage.loginLocation=$location.path();
+              break;
+          }
+        });
+        return defer.promise;
+      };
+    $scope.readMsg($scope.params);
+
+    //请求已读消息列表
+    $scope.readedMessageList = [];
+    $scope.messageListParams = {
+      "mobile": localStorage.mobile,
+      "city_id": sessionStorage.gpscityId,
+      "read": "1",
+      'pageno' : '1', //页码
+      'pagesize' : '10', //页数
+      "url" : 'listUserMessage.action',
+      "direction" : 'up'
+    };
+    var isReadedOver = false; //false:标志数据未加载完成
+    /*$scope.readedMsg = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var tempList = response.data;
+            if(tempList.length < params.pagesize){
+              isReadedOver = true;//true:标志数据加载完成
+              defer.resolve(isReadedOver);
+            }else{
+              isReadedOver = false;
+              defer.resolve(isReadedOver);
+            }
+            if(params.direction == 'down'){//下拉刷新
+              $scope.readedMessageList = response.data;
+            }else{//上拉加载
+              $scope.readedMessageList = $scope.readedMessageList.concat(tempList);
+            }
+            //$scope.readedMessageList = $scope.readedMessageList.concat(tempList);
+            //$scope.readedMessageList = response.data.read;
+            $.getScript('scripts/common/swipeleft.js', function () {
+              addSwipeLeft();
+            });
+            break;
+          case '-1':
+            $scope.errMsg = '账号为空';
+            break;
+          case '-2':
+            $scope.errMsg = '城市为空';
+            break;
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+      return defer.promise;
+    };*/
+    $scope.readMsg($scope.messageListParams);
+
+    /***********************关键字搜索*************************/
+    $scope.isShowMsg = true; //true:显示分类的优惠券，false：显示搜索的优惠券
+    var val = '';
+    $scope.msgList = [];
+    $scope.searchMsg = function(){
+      $scope.msgList = [];
+      val = $('.search-input input').val();
+      if(val == ''){
+        commonService.showWarnMessage('请输入关键字！');
+        $scope.isShowMsg = true;
+      }else{
+        $scope.isShowMsg = false;
+        $scope.searchParams.key = val;
+        $scope.searchMessage($scope.searchParams);
+      }
+    };
+    $scope.searchParams = {
+      "mobile": localStorage.mobile,
+      "city_id": sessionStorage.gpscityId,
+      'pageno' : '1', //页码
+      'pagesize' : '10', //页数
+      "url" : 'listUserMessage.action',
+      "direction" : 'up',
+      "key" : ''
+    };
+    var isSearch = false;//false:标志数据未加载完成
+    $scope.isMsg = true; //false:无相关数据 true：有相关数据
+    $scope.searchMessage = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var tempList = response.data;
+            if(tempList.length == 0 && params.pageno == '1'){
+            //判断请求的第一页无数据时，显示暂无相关数据
+              $scope.isMsg = false;
+              return;
+            }else{
+              $scope.isMsg = true;
+              if(tempList.length < params.pagesize){
+                isSearch = true;//true:标志数据加载完成
+                defer.resolve(isSearch);
+              }else{
+                isSearch = false;
+                defer.resolve(isSearch);
+              }
+              if(params.direction == 'down'){//下拉刷新
+                $scope.msgList = response.data;
+              }else{//上拉加载
+                $scope.msgList = $scope.msgList.concat(tempList);
+              }
+              //$scope.readedMessageList = $scope.readedMessageList.concat(tempList);
+              $.getScript('scripts/common/swipeleftNocss.js', function () {
+                addSwipeLeft();
+              });
+            }
+            break;
+          case '-1':
+            $scope.errMsg = '账号为空';
+            break;
+          case '-2':
+            $scope.errMsg = '城市为空';
+            break;
+        }
+      });
+      return defer.promise;
+    };
+
+    //删除消息
+    $scope.deleteMessage = function (messageModel,event) {
+      var params = {"mobile": "18701712551", "userMessage_id": messageModel.userMessage_id};
+      userService.postRequestWithUrlAndParams('delUserMessage.action', params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var rowName = event.target.parentNode.parentNode.parentNode;
+            if(rowName.className == 'line-wrapper ng-scope'){
+              $(rowName).remove();
+              commonService.showSuccessMessage("删除成功！");
+            }
+            break;
+          case '-1':
+            commonService.showErrorMessage("参数为空!");
+            break;
+          case '-2':
+            commonService.showErrorMessage("参数错误!");
+            break;
+          case '-3':
+            commonService.showErrorMessage("操作无效");
+            break;
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+    };
+
+
+    //查看详细详情
+    $scope.readMessage = function (messageModel) {
+      $state.go("member-user-messagedetail",{messageId:messageModel.userMessage_id});
+    }
+
+    //返回个人中心
+    $scope.goToUserCenter = function(){
+      if($scope.isShowMsg){
+        if($scope.from =='0'){
+          $state.go("guanjia-comservice");
+        }else{
+          $state.go("member-personal-usercenter");
+        }
+      }else{
+        window.location.reload();
+      }
+    }
+  }
+);
+
+//消息详情
+messageModuleController.controller(
+  'messageDetailCtrl',
+  function ($scope, $stateParams, userService, $state, commonService,$cookies) {
+    //请求消息详情
+    var params = {
+      "userMessage_id": $stateParams.messageId
+    };
+    if (!$cookies.get('ticket')) {
+      commonService.showNoticeMessage("账号不能为空");
+      return;
+    }
+    if (!params.userMessage_id) {
+      commonService.showNoticeMessage("优惠券不能为空");
+      return;
+    }
+    userService.postRequestWithUrlAndParams('getUserMessage.action', params).success(function (response) {
+
+      switch (response.code) {
+        case '0':
+          $scope.messageModel = response.data;
+          break;
+        case '-1':
+          commonService.showErrorMessage("参数为空");
+          break;
+        case '-2':
+          commonService.showErrorMessage("参数错误");
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+
+
+    //前往消息列表
+    $scope.goToUserMessage = function(){
+      $state.go("member-user-message");
+      //window.history.back(-1);
+    }
+
+
+
+  }
+);

@@ -1,0 +1,30 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goToUserMessage()">
+  </div>
+  <div class="navText">消息详情</div>
+
+</nav>
+
+<div class="message-detail-content">
+  <div class="msg-detail-head">
+    <p>
+      <span class="message-title">【{{messageModel.title}}】<span class="msg-font">{{messageModel.message_role}}</span></span>
+      <span class="message-city msg-detail-font">{{messageModel.city}}</span>
+    </p>
+
+
+    <p class="sender-time msg-detail-font">{{messageModel.sender}}&nbsp;&nbsp;{{messageModel.create_date}}</p>
+  </div>
+
+  <div class="message-detail-block">
+    <p class="message-detail" ng-bind-html="messageModel.content" ng-click="goOtherDetail()"></p>
+  </div>
+  <div class="message-image" ng-if="messageModel.imageUrl">
+    <img style="width:40%;height:10%;" ng-src="{{messageModel.imageUrl}}">
+  </div>
+
+  <p class="read-time msg-detail-font">{{messageModel.read_date}}&nbsp;阅</p>
+</div>
+

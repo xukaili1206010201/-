@@ -1,0 +1,239 @@
+<!--<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  &lt;!&ndash;新 Bootstrap 核心 CSS 文件 &ndash;&gt;
+  <link rel="stylesheet" href="/leshenghuoClient/app/styles/bootstrap-3.3.5-dist/bootstrap.css">
+  &lt;!&ndash; 可选的Bootstrap主题文件（一般不用引入） &ndash;&gt;
+  <link rel="stylesheet" href="/leshenghuoClient/app/styles/bootstrap-3.3.5-dist/bootstrap-theme.css">
+  &lt;!&ndash; jQuery文件。务必在bootstrap.min.js 之前引入 &ndash;&gt;
+  <script src="/leshenghuoClient/app/scripts/common/jquery-1.11.3.js"></script>
+  &lt;!&ndash; 最新的 Bootstrap 核心 JavaScript 文件 &ndash;&gt;
+  <script src="/leshenghuoClient/app/scripts/common/bootstrap-3.3.5-dist/bootstrap.js"></script>
+
+  <title>在线超市</title>
+
+  <style>
+    ::-webkit-scrollbar{
+      display: none;
+    }
+
+    body {
+      background: rgb(240, 239, 245);
+    }
+
+    .navigationbar {
+      background: rgb(161, 216, 34);
+      color: white;
+    }
+
+    .content{
+      margin-top: 50px;
+    }
+
+    /*************************************** 卡头 begin ***************************************/
+    .content .segment-control {
+      width: 100%;
+      height: 35px;
+      background: white;
+      overflow: hidden;
+    }
+
+
+    .content .segment-control .yhdian , .tttuan {
+      width: 50%;
+      height: 100%;
+      float: left;
+    }
+
+    .content .segment-control .yhdian {
+      /*background: red;*/
+      padding-left: 10px;
+      padding-right: 5px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .btn {
+      font-size: 13px;
+      padding: 0px;
+    }
+
+    .content .segment-control .yhdian-button, .tttuan-button {
+      height: 100%;
+    }
+
+    .content .segment-control .yhdian .yhdian-button {
+      background: rgb(161, 216, 34);
+      color: white;
+    }
+
+    .content .segment-control .tttuan {
+      padding-left: 5px;
+      padding-right: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .content .segment-control .tttuan .tttuan-button {
+      background: rgb(235, 235, 241);
+      color: black;
+    }
+    /*************************************** 卡头 end *****************************************/
+
+
+    /*************************************** 外链展示 begin *****************************************/
+    /*.webView_box{*/
+    /*overflow:hidden;*/
+    /*width:90%;*/
+    /*height:100%;*/
+    /*}*/
+    /*.webView{*/
+    /*!*position: fixed;*!*/
+    /*!*right: 0;*!*/
+    /*!*top: 85px;*!*/
+    /*!*left: 0;*!*/
+    /*!*bottom: 0;*!*/
+    /*overflow:auto;*/
+    /*width:100%;*/
+    /*height:100%;*/
+
+    /*}*/
+
+    #yhdweb{
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    #tttweb{
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: none;
+    }
+
+    /*************************************** 外链展示 end *****************************************/
+  </style>-->
+
+
+  <script>
+    $(function () {
+//        隐藏滚动条
+      function myBrowser(){
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+        var isOpera = userAgent.indexOf("Opera") > -1;
+        if (isOpera) {
+          return "Opera"
+        }; //判断是否Opera浏览器
+        if (userAgent.indexOf("Firefox") > -1) {
+          return "FF";
+        } //判断是否Firefox浏览器
+        if (userAgent.indexOf("Chrome") > -1){
+          return "Chrome";
+        }
+        if (userAgent.indexOf("Safari") > -1) {
+          return "Safari";
+        } //判断是否Safari浏览器
+        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+          return "IE";
+        }; //判断是否IE浏览器
+      }
+
+      var mb = myBrowser();
+
+      var width = $(window).width();
+      var height = $(window).height();
+      var webViewWidth = width + 16;
+      var webViewHeight = height + 20;
+      if ("FF" == mb) {
+        $('.webView_box').css({
+          'overflow': 'hidden',
+          'width': width + 'px',
+          'height': height + 'px'
+
+        });
+        $('.webView').css({
+          'overflow': 'auto',
+          'width': webViewWidth + 'px',
+          'height': webViewHeight + 'px'
+        });
+      }
+      if ("Safari" == mb) {
+        console.log(height)
+        $('.webView').css({
+          'width': width + 'px',
+          'height': height + 'px'
+        });
+      }
+    });
+
+    /*************************************** 卡头点击 begin *****************************************/
+    var lastSelectButton = '.yhdian-button';
+    var lastShowWeb = '#yhdweb';
+    var currentShowWeb;
+
+    function setButtonAndShowOrHiddenTable(target) {
+      $(lastSelectButton).css({
+        'background': 'rgb(235, 235, 241)',
+        'color': 'black'
+      });
+      $(target).css({
+        'background': 'rgb(161, 216, 34)',
+        'color': 'white'
+      });
+      lastSelectButton = target;
+
+      $(lastShowWeb).css({
+        'display': 'none'
+      });
+      $(currentShowWeb).css({
+        'display': 'block'
+      });
+
+    }
+
+    function showYHDian(event) {
+      currentShowWeb = '#yhdweb';
+      setButtonAndShowOrHiddenTable(event.target);
+    }
+
+    function showFNW(event) {
+      currentShowWeb = '#tttweb';
+      setButtonAndShowOrHiddenTable(event.target);
+    }
+
+    /*************************************** 卡头点击 end *****************************************/
+  </script>
+
+</head>
+<body>
+<nav class="navbar navbar-fixed-top navigationbar">
+  <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+  <p class="navbar-text text-center title-item">在线超市</p>
+</nav>
+
+<div class="shopping-content">
+
+  <div class="shopping-segment-control">
+    <div class="yhdian">
+      <button type="button" class=" btn btn-block button-background-color yhdian-button" onclick="showYHDian(event)" ng-click="record(marketList[0].market_id)">{{marketList[0].name}}</button>
+    </div>
+    <div class="tttuan">
+      <button type="button" class=" btn btn-block tttuan-button" onclick="showFNW(event)" ng-click="record(marketList[1].market_id)">{{marketList[1].name}}</button>
+    </div>
+  </div>
+  <div class="webView_box">
+    <div class="webView">
+      <iframe id="yhdweb" ng-src="{{url_1}}"></iframe>
+      <!--<iframe id="yhdweb" src="http://m.yhd.com/mw/sort"></iframe>-->
+      <iframe id="tttweb" ng-src={{url_2}}></iframe>
+    </div>
+  </div>
+
+
+</div>
+

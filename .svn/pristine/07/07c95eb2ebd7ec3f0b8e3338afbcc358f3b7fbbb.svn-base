@@ -1,0 +1,108 @@
+
+/*
+小区设置中统一字体大下
+*/
+.community_edit_font{
+  font-size: 1.4rem;
+}
+
+
+
+.myhouse-set-content{
+    margin-top: 50px;
+}
+
+.community-name-block{
+  overflow: hidden;
+}
+
+.right-arrow{
+  float: right;
+}
+
+.community-input-block{
+  float: left;
+  margin-right: 0px;
+}
+
+
+.submit-button-block{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+.content{
+  margin-top: 51px;
+}
+
+.current-city{
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-top: 10px;
+  overflow: hidden;
+  height: 33px;
+
+}
+
+.current-city p{
+  float: left;
+  line-height: 33px;
+  height: 33px;
+}
+
+.current-city img{
+  float: left;
+  width: 20px;
+  height: 20px;
+}
+
+.text-input-block{
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 33px;
+  margin-top: 20px;
+}
+
+.input-field-block , .input-field-block-community{
+  overflow: hidden;
+}
+
+.text{
+  float: left;
+  height: 33px;
+  line-height: 33px;
+}
+
+
+.input-field-block{
+  width: 100%;
+  float: left;
+}
+
+
+.community-right-arrow{
+  float: right;
+  margin-top: 6px;
+}
+
+.community-right-arrow img{
+  width: 20px;
+  height: 20px;
+}
+
+
+.communityset-footer{
+  background: #dddddd;
+  height: 49px;
+}
+
+#submit-button{
+  width: 95%;
+  height: 33px;
+  padding: 0px;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  margin-top: 8px;
+}
+

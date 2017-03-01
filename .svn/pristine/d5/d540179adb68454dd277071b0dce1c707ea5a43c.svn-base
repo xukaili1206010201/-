@@ -1,0 +1,138 @@
+.societyTribeNav {
+  width:100%;
+  height:50px;
+  line-height: 50px;
+  vertical-align: middle;
+  background-color: #7DB343;
+  color: white;
+  font-size: 1.4rem;
+}
+.societyTribeNavLeft{
+  width:32%;
+  float: left;
+  margin-top: 1.3rem;
+}
+.societyTribeNavMiddle{
+  width:44%;
+  float: left;
+  margin-top: 10px;
+}
+.societyTribeNavMiddle .societyTribesearch-input{
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.societyTribeNavRight{
+  float: right;
+  width:65px;
+  margin:10px 5px 0px 5px;
+}
+.societyTribeNavRight .societyTribesearch-button{
+  width:25px;
+  height: 25px;
+  /*margin-right: 0px;*/
+  float: left;
+}
+.societyTribeNavRight .societyTribeseadd-image{
+  width: 27px;
+  height: 27px;
+  margin-right: 3%;
+  float: right;
+}
+/*.societyTribesearch-group{*/
+  /*width: 85%;*/
+  /*height:30px;*/
+/*}*/
+/*.societyTribesearch-input{*/
+  /*!*float: left;*!*/
+  /*margin-right: 2px;*/
+  /*display: block;*/
+  /*width: 85%;*/
+  /*height: 30px;*/
+  /*padding: 6px 12px;*/
+  /*font-size: 14px;*/
+  /*line-height: 1.42857143;*/
+  /*color: #555;*/
+  /*background-color: #fff;*/
+  /*background-image: none;*/
+  /*border: 1px solid #ccc;*/
+  /*border-radius: 4px;*/
+/*}*/
+/*.societyTribesearch-button{*/
+  /*width:25px;*/
+  /*height: 25px;*/
+  /*!*margin-right: 0px;*!*/
+  /*!*float: right;*!*/
+/*}*/
+/****************部落信息*************************/
+.tribe-content .navMain{
+  margin-bottom: 0;
+}
+.societyTribe{
+  background-color: #ddd;
+}
+.tieInfo{
+  position:relative;
+}
+.tieInfo span{
+  font-size: 1.3rem;
+}
+.tribe-content .tie-count{
+  position:absolute;
+  bottom:0px;
+}
+.tribe-content .list-group-item{
+  border-radius: 0px;
+}
+/***************帖子列表*****************************/
+.BBS_title span{
+  font-size: 1.2rem;
+}
+.BBS_title img{
+  margin-left: 1rem;
+}
+.BBS_info{
+  margin-top:10px;
+}
+.BBS_info span{
+  float:right;
+  padding-right:0.8rem;
+}
+.BBS_info span:first-child{
+  float: none;
+  padding-left:0px;
+}
+/**************发表帖子*********************/
+.tribe-content .express-tie{
+  background-color: #ddd;
+  padding:5px 10px;
+  position:fixed;
+  bottom: 0;
+  left:0;
+  width:100%;
+}
+.tribe-content .express-tie .btn{
+  width:100%;
+  border-radius: 4px;
+}
+
+.own{
+  /*width:90px;*/
+  /*height:30px;*/
+  float:right;
+  border: 1px solid #ddd;
+  /*padding: 5px 6px;*/
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+  margin-top:8px;
+  background-color: #fff;
+}

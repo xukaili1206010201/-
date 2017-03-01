@@ -1,0 +1,46 @@
+
+.business-detail-content .panel{
+  border: none;
+  border-radius: 0;
+}
+
+.seller-img{
+  width: 64px;
+  height: 64px;
+}
+.img-distance{
+  margin-left:5px;
+  margin-top:3px;
+}
+.setFont{
+  font-size:1.2rem;
+}
+
+.business-detail-content .basic-head{
+  padding:10px 15px 10px 0px;
+}
+.business-detail-content .basic-head{
+  overflow: hidden;
+}
+.business-detail-content .basic-left{
+  float:left;
+  width:30%;
+  text-align: center;
+}
+.business-detail-content .basic-right{
+  float:left;
+  width:70%;
+}
+.business-detail-content .basic-right h3{
+  margin:0;
+  float:left;
+}
+.business-detail-content .basic-right div span{
+  float:right;
+}
+.business-detail-content .basic-right p{
+  clear:both;
+}
+.business-detail-content .basic-pics{
+  clear: both;
+}

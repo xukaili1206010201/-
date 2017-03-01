@@ -1,0 +1,35 @@
+'use strict';
+
+var appRoute = angular.module('appRoute',
+    [
+      'ngRoute',
+      'ui.router',
+      //'blankModuleRoute',
+      'personalModuleRoute',
+      //'userModuleRoute',
+      'orderModuleRoute',
+      'aboutModuleRoute',
+      'communityModuleRoute',
+      'businessModuleRoute',
+      'cartModuleRoute',
+      'guanjiaModuleRoute',
+      'serviceModuleRoute',
+      'couponsModuleRoute',
+      'messageModuleRoute',
+      'welfareRoute',
+      'societyRoute',
+      'activitiesRoute',
+      'reserveRoute'
+    ]);
+
+appRoute.config(
+    function ($stateProvider, $urlRouterProvider, $routeProvider, $locationProvider) {
+      $stateProvider
+          .state('not-found', {
+            url: '/not-found.htm',
+            templateUrl: '404.html',
+            controller: 'notFoundCtrl',
+          });
+      $urlRouterProvider
+          .otherwise("/guanjia/comservice.htm");
+    });

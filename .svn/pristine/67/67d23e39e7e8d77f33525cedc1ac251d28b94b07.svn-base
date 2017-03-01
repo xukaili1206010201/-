@@ -1,0 +1,70 @@
+
+<nav class="navbar navbar-fixed-top navigationbar"  ng-show="isShow">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goToUserCenter()">
+  </div>
+  <div class="navText">关注我们</div>
+</nav>
+
+<div class="followus-content"  ng-show="isShow">
+
+  <div class="sharetofriends text-center">
+
+    <div class="followus-qrcode">
+
+      <!-- 微信公众号 -->
+      <div class="followus-first-qrcode">
+        <img class="followus-qrcode-left-image" ng-src="{{wxgzhCode}}">
+        <p class="followus-qrcode-title">微信服务号：{{wxfwh}}</p>
+      </div>
+
+      <!-- 微信服务号 -->
+      <div class="followus-second-qrcode">
+        <img class="followus-qrcode-right-image" ng-src="{{wxdrhCode}}">
+        <p class="followus-qrcode-title">微信订阅号：{{wxdrh}}</p>
+      </div>
+
+    </div>
+
+    <div class="followus-qrcode">
+
+      <!-- 微信公众号 -->
+      <div class="followus-first-qrcode">
+        <img class="followus-qrcode-left-image" ng-src="{{appleCode}}" ng-click="goToAppleAppStore()">
+        <p class="followus-qrcode-title">苹果应用二维码</p>
+      </div>
+
+      <!-- 微信服务号 -->
+      <div class="followus-second-qrcode">
+        <img class="followus-qrcode-right-image" ng-src="{{androidCode}}" ng-click="goToAndroidAppStore()">
+        <p class="followus-qrcode-title">安卓应用二维码</p>
+      </div>
+
+    </div>
+
+
+    <div class="share-block">
+
+      <!-- JiaThis Button BEGIN -->
+      <div class="jiathis_style_32x32">
+        <a class="jiathis_button_weixin"></a>
+        <a class="jiathis_button_tsina"></a>
+        <a class="jiathis_button_cqq"></a>
+        <a class="jiathis_button_qzone"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank">更多</a>
+      </div>
+      <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=" charset="utf-8"></script>
+      <!-- JiaThis Button END -->
+    </div>
+
+  </div>
+
+  <div class="recommend">
+    <div class="recommend-block">
+      <input ng-model="friendsMobile" type="text" maxlength="11" class="form-control" placeholder="好友手机">
+      <button class="btn btn-block btn-success btnRadius" ng-click="recommedToFriends()">推荐给好友</button>
+    </div>
+  </div>
+
+</div>

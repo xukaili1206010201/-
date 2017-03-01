@@ -1,0 +1,77 @@
+/* ******************************** 内容样式 ******************************** */
+.message-detail-content{
+  margin-top: 51px;
+}
+
+.message-title{
+  font-size: 17px;
+  padding-left: 10px;
+}
+
+.sender-info{
+  height:20px;
+  line-height: 20px;;
+  overflow: hidden;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.sender-info p{
+  font-size: 13px;
+}
+
+.sender-info .city{
+  float: left;
+}
+
+.sender-info .sender-time{
+  float: right;
+}
+
+
+
+/*.content  .title , .message-image  , .read-time , .link-text{*/
+  /*margin-top: 5px;*/
+  /*margin-left: 10px;*/
+  /*margin-right: 10px;*/
+  /*margin-bottom: 0px;*/
+/*}*/
+
+.message-image{
+  width: 100%;
+  text-align: center;
+}
+
+.message-image img{
+  width: 100px;
+  height: 100px;
+}
+
+.message-detail-block{
+  background: rgb(235,235,241);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  overflow: hidden;
+}
+
+.message-detail-block .message-detail{
+  float: left;
+  margin: 0px;
+}
+
+.message-detail-block .link{
+  color: #0088cc;
+  text-align: right;
+  margin-bottom: 0px;
+  /*padding-top: 10px;*/
+}
+.read-time{
+  float:right;
+  margin-right: 10px;
+}

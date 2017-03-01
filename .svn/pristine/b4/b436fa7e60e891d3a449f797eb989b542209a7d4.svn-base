@@ -1,0 +1,17 @@
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="backPay()" style="margin-top: 15px;margin-right:
+    10px">
+
+    <!--<div class="navigationbar-item">-->
+      <!--<p class="item-title">支付</p>-->
+    <!--</div>-->
+  </div>
+</nav>
+
+<iframe class="alipay-html" style="width: 100%;height: 100%;z-index: 100;position: fixed;top: 0;left: 0;border: none">
+
+</iframe>
+

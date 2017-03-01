@@ -1,0 +1,66 @@
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+  </div>
+  <div class="navText">服务详情</div>
+
+</nav>
+
+<div class="familyaccountdetail-content">
+
+  <div class="familyaccountdetail-carousel">
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides">
+          <img ng-src="{{slide}}" curousel-height class="slideImg">
+        </slide>
+      </carousel>
+    </div>
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.png" class="slideImg" curousel-height>
+    </div>
+
+  </div>
+
+
+
+  <!--<div class="familyaccountdetail-service-info">-->
+    <!--<p class="familyaccountdetail-service-name">{{accountgoodsList.name}}</p>-->
+
+    <!--<p class="familyaccountdetail-service-intro">{{accountgoodsList.introduction}}</p>-->
+  <!--</div>-->
+  <div class="goodsdetail goods-detail">
+    <ul>
+      <li class="goods_title">
+        <b>{{accountgoodsList.name}}</b>
+      </li>
+      <li class="goods_body">
+        <p style="color:#000;font-size: 1.1rem;">{{accountgoodsList.business}}</p>
+        <p>{{accountgoodsList.introduction}}</p>
+      </li>
+    </ul>
+  </div>
+  <!--开卖倒计时-->
+  <div class="count_down" ng-if="showTimeHtml != ''">
+    {{showTimeHtml}}
+  </div>
+
+  <div class="familyaccountdetail-service-detail">
+
+    <div class="familyaccountdetail-service-segmentcontrol">
+      <button type="button" class="familyaccountdetail-service-segmentcontrol-item">商品详情</button>
+    </div>
+
+    <div class="familyaccountdetail-service-detail-view" ng-bind-html="description">
+    </div>
+
+
+  </div>
+
+
+</div>
+
+

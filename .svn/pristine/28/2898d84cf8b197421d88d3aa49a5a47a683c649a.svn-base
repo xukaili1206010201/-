@@ -1,0 +1,80 @@
+<div class="body-content">
+  <nav style="background-color: #7DB343" class="navbar  navbar-fixed-top navigationbar">
+    <div class="navigation-bar">
+      <!-- 返回按钮-->
+      <img class="back-button" src="images/back_button.png" ng-click="back()">
+
+      <!-- 搜索框组-->
+      <div class="navigationbar-item">
+        <p class="item-title">优惠券详情</p>
+      </div>
+    </div>
+  </nav>
+  <div class="detail-content" >
+    <div>
+      <ul class="basic_attribute">
+        <li class="coupons-name">{{couponsDetails.name}}</li>
+        <li class="coupons-city-type">{{couponsDetails.city}}&nbsp;&nbsp;{{couponsDetails.type}}&nbsp;{{couponsDetails.number}}</li>
+        <li class="coupons-time">{{couponsDetails.status}}&nbsp;&nbsp;{{couponsDetails.start_date}}~{{couponsDetails.end_date}}</li>
+        <li>
+          {{couponsDetails.business}} <span ng-if="couponsDetails.business">({{couponsDetails.fuwu_type}})</span>
+          <span ng-if="couponsDetails.business && couponsDetails.goods ">、</span> {{couponsDetails.goods}}</li>
+        <li>{{couponsDetails.community}}</li>
+      </ul>
+      <!--状态为已用，显示---begin:-->
+      <ul class="user_attribute" ng-if="couponsDetails.status == '已用'">
+        <li class="group-property">使用情况</li>
+        <li>{{couponsDetails.use_date}}&nbsp;已用</li>
+        <li>{{couponsDetails.order_no}}</li>
+        <li>
+          <p>{{couponsDetails.use_business}}</p>
+          <p>{{couponsDetails.use_goods}}</p>
+        </li>
+      </ul>
+      <!-----------end:------------->
+    </div>
+
+    <!--<div class="navbar-fixed-bottom coupons-operate-block">-->
+    <!-- 优惠券已领取但未使用的时候显示-->
+    <div class="coupons-unused-block using" ng-if="couponsDetails.status == '未用'">
+      <div class="use-block" ng-show="isTime">
+        <button type="button" class="btn btn-block btn-success" ng-click="goSeller(couponsDetails.userCoupons_id)">使用</button>
+      </div>
+      <div class="send-block {{isClass}}">
+        <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#give">赠送</button>
+      </div>
+    </div>
+
+    <!-- 优惠券未领取的时候显示-->
+    <!--  -->
+    <div class="coupons-unreceive-block" ng-if="couponsDetails.status == '未领'">
+      <div class="receive-block">
+        <button type="button" class="btn btn-block btn-success" ng-click="goReceive(couponsDetails)">领取</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="give" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <!--<div class="modal-header">-->
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+        <!--<h4 class="modal-title" id="myModalLabel">Modal title</h4>-->
+        <!--</div>-->
+        <div class="modal-body">
+          <input type="text" class="form-control" placeholder="请输入手机号码！" ng-model="friendMobile" aria-describedby="basic-addon2">
+          <em style="color:red;font-size:1rem" ng-if="msg == -1">手机号码未注册或者优惠券已失效！</em>
+          <em style="color:red;font-size:1rem" ng-if="msg == 0">优惠券已赠送！</em>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" ng-click="sendFriend(couponsDetails.userCoupons_id)">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+

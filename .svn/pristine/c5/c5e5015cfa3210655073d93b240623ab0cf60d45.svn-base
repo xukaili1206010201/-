@@ -1,0 +1,37 @@
+/* ******************************** navigationbar with back-button   begin ******************************** */
+
+.navigation-bar{
+    /*background: green;*/
+    overflow: hidden;
+}
+
+/* ******************************** 返回按钮样式 ******************************** */
+
+/*.back-button{*/
+    /*/!*background: green;*!/*/
+    /*width: 30px;*/
+    /*height: 30px;*/
+    /*margin-left: 10px;*/
+    /*/!* 51/2 - 30/3  *!/*/
+    /*margin-top: 10.5px;*/
+    /*float: left;*/
+/*}*/
+
+/* ******************************** navigationbar item样式 ******************************** */
+.navigationbar-item{
+    height: 30px;
+    margin-left: 50px;
+    margin-top: 10.5px;
+    margin-right: 50px;
+    /*background: red;*/
+    padding-top: 5px;
+
+}
+
+.item-title{
+    text-align: center;
+    font-size: 15px;
+    color: white;
+}
+
+/* ******************************** navigationbar with back-button   end ******************************** */

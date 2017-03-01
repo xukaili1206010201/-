@@ -1,0 +1,420 @@
+var societyController = angular.module('societyController',[]);
+//邻里社交
+societyController.controller('societyCtrl',['$scope','$state','societyService','commonService','$cookies','$rootScope',function($scope,$state,societyService,commonService,$cookies,$rootScope){
+  /************************************ 初始化  ****************************************/
+  //城市
+  $scope.city_name = sessionStorage.gpscityName;
+
+  /************************************** end ******************************************/
+
+  /*********************************** 自定义函数 ***************************************/
+  //部落列表
+  societyService.listBuluo({
+    'city_id':sessionStorage.gpscityId,
+    'pageno':'1',
+    'pagesize':'6'
+  }).success(function(response){
+    switch (response.code){
+      case '0':
+        $scope.listBuluo=response.data;
+        break;
+      case '1':
+        commonService.showErrorMessage("参数为空");
+        break;
+      case '-2':
+        commonService.showErrorMessage("参数错误");
+        break;
+    }
+  });
+
+  /************************************** end ******************************************/
+
+  /*********************************** 页面事件监听 *************************************/
+  //返回到首页
+  $scope.backComservice = function(){
+    $state.go('guanjia-comservice');
+  };
+
+  //点击部落图标，进入社交部落页
+  $scope.goTribe = function(buluoId){
+    $state.go('society-tribe',{
+      'buluoId':buluoId
+    });
+  };
+
+  //进入社区服务
+  $scope.jumpComservice = function(){
+    $state.go("guanjia-comservice");
+  };
+
+  //进入个人中心
+  $scope.jumpUsercenter = function () {
+    //判断是否有缓存
+    if ($cookies.get('ticket') != null) {
+      $state.go("member-personal-usercenter");
+    } else {
+      $state.go("member-personal-usercenterNo");
+    }
+  };
+  /************************************** end ******************************************/
+}]);
+
+//社交部落页
+societyController.controller('tribeCtrl',['$scope','$state','societyService','$stateParams','commonService','$rootScope',function($scope,$state,societyService,$stateParams,commonService,$rootScope){
+  /************************************ 初始化  ****************************************/
+  $scope.city_name=sessionStorage.gpscityName;
+  //*******own取值******
+  //1  只看自己
+  //2  全部
+  $scope.ownCheck='2';
+
+  $scope.buluoId=$stateParams.buluoId;
+  /************************************** end ******************************************/
+
+  /*********************************** 自定义函数 ***************************************/
+  //帖子列表
+  $scope.param={
+    'city_id':sessionStorage.gpscityId,
+    'buluo_id':$scope.buluoId,
+    'pageno':'1',
+    'pagesize':'6',
+    'mobile':localStorage.mobile
+  };
+  societyService.listBBS($scope.param).success(function(response){
+      switch (response.code){
+        case '0':
+          $scope.BBS=response.data;
+          $scope.listBBS=$scope.BBS.bbs;
+          break;
+        case '1':
+          commonService.showErrorMessage("参数为空");
+          break;
+        case '-2':
+          commonService.showErrorMessage("参数错误");
+          break;
+      }
+
+  });
+  /************************************** end ******************************************/
+
+  /*********************************** 页面事件监听 *************************************/
+  //切换是否只看自己
+  $scope.ownChange=function(){
+    $scope.listBBS='';
+    if($scope.ownCheck == '1'){
+      $scope.param.own='';
+    }else{
+      $scope.param.own='2';
+    }
+    societyService.listBBS($scope.param).success(function(response){
+      switch (response.code){
+        case '0':
+          $scope.BBS=response.data;
+          $scope.listBBS=$scope.BBS.bbs;
+          break;
+        case '1':
+          commonService.showErrorMessage("参数为空");
+          break;
+        case '-2':
+          commonService.showErrorMessage("参数错误");
+          break;
+      }
+
+    });
+  };
+
+  //点击帖子，进入帖子详情页
+  $scope.goPostDetail = function(bbsId){
+    $state.go('society-postdetail',{
+      'bbsId':bbsId
+    });
+  };
+  //点击发表帖子，进入帖子编辑页
+  $scope.goEdit = function(buluoId){
+    $state.go('society-postedit',{
+      'buluoId':buluoId
+    });
+  };
+
+  //返回到邻里社交
+  $scope.backSociety = function(){
+    $state.go('society-Neighborhood');
+  };
+  /************************************** end ******************************************/
+}]);
+
+//帖子详情页
+societyController.controller('postCtrl',['$scope','$state','societyService','$stateParams','commonService',function($scope,$state,societyService,$stateParams,commonService){
+  /************************************ 初始化  ****************************************/
+  $scope.bbsId=$stateParams.bbsId;
+  /************************************** end ******************************************/
+
+  /*********************************** 自定义函数 ***************************************/
+  //帖子详情
+  societyService.getBBS({
+    'bbs_id':$scope.bbsId
+  }).success(function(response){
+    switch (response.code){
+      case '0':
+        $scope.bbsList=response.data;
+
+        break;
+      case '1':
+        commonService.showErrorMessage("参数为空");
+        break;
+      case '-2':
+        commonService.showErrorMessage("参数错误");
+        break;
+    }
+  });
+
+  //回帖列表
+  societyService.listBBSReply({
+    'bbs_id':$scope.bbsId,
+    'pageno':'1',
+    'pagesize':''
+  }).success(function(response){
+    switch (response.code){
+      case '0':
+        $scope.bbsReplyList=response.data;
+        break;
+      case '1':
+        commonService.showErrorMessage("参数为空");
+        break;
+      case '-2':
+        commonService.showErrorMessage("参数错误");
+        break;
+    }
+  });
+
+  /************************************** end ******************************************/
+
+  /*********************************** 页面事件监听 *************************************/
+  //点击回复进入帖子回复页
+  $scope.goPostReply = function(bbsReplyId){
+    $state.go('society-postreply',{
+      'title':$scope.bbsList.title,
+      'bbsId':$scope.bbsId,
+      'bbsReplyId':bbsReplyId
+    });
+  };
+
+  //点击编辑进入帖子编辑页
+  $scope.goPostEdit = function(){
+    $state.go('society-postedit',{
+      'bbsId':$scope.bbsId
+    });
+  };
+
+  //返回到社交部落
+  $scope.backTribe = function(){
+    $state.go('society-tribe',{
+      'buluoId':$scope.bbsList.buluo_id
+    });
+  };
+  /************************************** end ******************************************/
+}]);
+
+//帖子编辑页
+societyController.controller('EditCtrl',['$scope','$state','societyService','$stateParams','commonService',function($scope,$state,societyService,$stateParams,commonService){
+  /************************************ 初始化  ****************************************/
+  $scope.bbsId=$stateParams.bbsId;
+  $scope.buluoId=$stateParams.buluoId;
+  $scope.review_status='0';
+  /************************************** end ******************************************/
+
+  /*********************************** 自定义函数 ***************************************/
+  //帖子详情
+  societyService.getBBS({
+    'bbs_id':$scope.bbsId
+  }).success(function(response){
+    switch (response.code){
+      case '0':
+        $scope.bbsList=response.data;
+        $scope.formerImg=$scope.bbsList.bbs_image.join(",");
+
+        break;
+      case '1':
+        commonService.showErrorMessage("参数为空");
+        break;
+      case '-2':
+        commonService.showErrorMessage("参数错误");
+        break;
+    }
+  });
+  /************************************** end ******************************************/
+
+  /*********************************** 页面事件监听 *************************************/
+  //点击提交帖子到帖子详情页
+  $scope.submitBbsList = function(){
+
+    //*********************************上传图片************************************
+    //判断编辑前是否有图片
+    if($scope.bbsList.bbs_image!=null){
+      var formerImgcount=$scope.bbsList.bbs_image.length;
+    }else{
+      var formerImgcount=0;
+    }
+    var commentImageList = [];
+    var imageList = $('.weui_uploader_files').find('.weui_uploader_file');
+    for (var index = formerImgcount; index < imageList.length; index++) {
+      var imageDiv = imageList[index];
+      var imageData = imageDiv.style.backgroundImage;
+      //console.log(imageData);
+      //console.log(imageData.substr(imageData.indexOf(','),imageData.indexOf(")")))
+      var updateImageDate = imageData.substr(imageData.indexOf(','),imageData.indexOf(")"));
+      updateImageDate = updateImageDate.substr(1,updateImageDate.length - 1);
+      updateImageDate = updateImageDate.substr(0,updateImageDate.length - 2);
+      //console.log(updateImageDate);
+      commentImageList.push(updateImageDate);
+    }
+
+    //多张图片的base64编码以字符串方式传输
+    var imageBase64String = commentImageList.toString();
+    //for(var index = 0 ; index < commentImageList.length;index++){
+    //  if(index == commentImageList.length - 1){
+    //    imageBase64String = imageBase64String + commentImageList[index];
+    //  }else{
+    //    imageBase64String = imageBase64String + commentImageList[index] + ',';
+    //  }
+    //}
+
+
+//*********************************上传图片 end ************************************
+    //判断编辑前后是否有图片
+    if($scope.formerImg!='' && imageBase64String!=''){
+      $scope.bbs_images=$scope.formerImg +','+ imageBase64String;
+      console.log('都不为空')
+    }else if(imageBase64String !='' ){
+      console.log('原本无')
+      $scope.bbs_images=imageBase64String;
+    }else{
+      console.log('后来无')
+      $scope.bbs_images=$scope.formerImg;
+    }
+
+    $scope.param={
+      'title':$scope.bbsList.title,
+      'content':$scope.bbsList.bbs_content,
+      'bbs_id':$scope.bbsId,
+      'bbs_images':$scope.bbs_images,
+      'mobile':localStorage.mobile,
+      'city_id':sessionStorage.gpscityId
+    };
+
+    $scope.param.buluo_id=$scope.buluoId;
+
+    console.log($scope.param);
+    societyService.editBBS($scope.param).success(function(response){
+      console.log(response);
+      switch (response.code){
+        case '0':
+          $state.go('society-postdetail',{
+            'bbsId':$scope.bbsId
+          });
+          break;
+        case '1':
+          commonService.showErrorMessage("参数为空");
+          break;
+        case '-2':
+          commonService.showErrorMessage("参数错误");
+          break;
+      }
+
+    });
+
+  };
+
+  //返回到帖子详情
+  $scope.backPostDetail=function(){
+    $state.go('society-postdetail',{
+      'bbsId':$scope.bbsId
+    });
+  };
+  /************************************** end ******************************************/
+}]);
+
+//帖子回复页
+societyController.controller('replyCtrl',['$scope','$state','societyService','$stateParams',function($scope,$state,societyService,$stateParams){
+  /************************************ 初始化  ****************************************/
+  $scope.title=$stateParams.title;
+  $scope.bbsId=$stateParams.bbsId;
+  $scope.bbsReplyId=$stateParams.bbsReplyId;
+  /************************************** end ******************************************/
+
+  /*********************************** 页面事件监听 *************************************/
+  //点击提交帖子到帖子详情页
+    $scope.replyBBS=function(){
+
+      //***********************上传图片****************************
+      var commentImageList = [];
+      var imageList = $('.weui_uploader_files').find('.weui_uploader_file');
+      for (var index = 0; index < imageList.length; index++) {
+        var imageDiv = imageList[index];
+        var imageData = imageDiv.style.backgroundImage;
+        //console.log(imageData);
+        //console.log(imageData.substr(imageData.indexOf(','),imageData.indexOf(")")))
+        var updateImageDate = imageData.substr(imageData.indexOf(','),imageData.indexOf(")"));
+        updateImageDate = updateImageDate.substr(1,updateImageDate.length - 1);
+        updateImageDate = updateImageDate.substr(0,updateImageDate.length - 2);
+        //console.log(updateImageDate);
+        commentImageList.push(updateImageDate);
+      }
+
+      //多张图片的base64编码以字符串方式传输
+      var imageBase64String = commentImageList.toString();
+      //for(var index = 0 ; index < commentImageList.length;index++){
+      //  if(index == commentImageList.length - 1){
+      //    imageBase64String = imageBase64String + commentImageList[index];
+      //  }else{
+      //    imageBase64String = imageBase64String + commentImageList[index] + ',';
+      //  }
+      //}
+      //********************上传图片 end *************************
+      $scope.reply_images=imageBase64String;
+
+      if($scope.bbsReplyId !=null ){
+        $scope.param={//回复回帖
+          'content':$scope.content,
+          'reply_images':$scope.reply_images,
+          'mobile':localStorage.mobile,
+          'reply_id':$scope.bbsReplyId,
+          'ticket':'FFC369685F7BFA59AD86F0B3C0C6FF5C'
+        }
+      }else{
+        $scope.param={//回帖
+          'content':$scope.content,
+          'reply_images':$scope.reply_images,
+          'mobile':localStorage.mobile,
+          'bbs_id':$scope.bbsId,
+          'ticket':'FFC369685F7BFA59AD86F0B3C0C6FF5C'
+        };
+      }
+
+      societyService.replyBBS($scope.param).success(function(response){
+        switch (response.code){
+          case '0':
+            $state.go('society-postdetail',{
+              'bbsId':$scope.bbsId
+            });
+            break;
+          case '1':
+            commonService.showErrorMessage("参数为空");
+            break;
+          case '-2':
+            commonService.showErrorMessage("参数错误");
+            break;
+        }
+
+      });
+
+    };
+
+  //返回到帖子详情
+  $scope.backPostDetail=function(){
+    $state.go('society-postdetail',{
+      'bbsId':$scope.bbsId
+    });
+  };
+  /************************************** end ******************************************/
+}]);

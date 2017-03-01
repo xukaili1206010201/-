@@ -1,0 +1,40 @@
+
+/*html{*/
+  /*font-size: 10px;*/
+/*}*/
+
+.main .list-group .fans-code-row{
+  padding-bottom: 5px;
+}
+
+.main .list-group .fans-code-row p , span{
+  margin: 0px;
+}
+
+.main .list-group .fans-code-row .verfication-code{
+  font-size: 1.6rem;
+}
+
+.main .list-group .fans-code-row .user-mobile , .address-code{
+  font-size: 1.4rem
+}
+
+.main .list-group .fans-code-row .address-code{
+  float: right;
+}
+
+
+.main .list-group .fans-code-row .send-time{
+  font-size: 1.2rem;
+  text-align: right;
+}
+
+.send-time{
+  float: right;
+}
+.fans_mobile{
+  font-size: 1.6rem
+}
+.fR{
+  float:right;
+}

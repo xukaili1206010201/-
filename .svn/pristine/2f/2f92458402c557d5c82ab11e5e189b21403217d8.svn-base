@@ -1,0 +1,10 @@
+.callactivity-content img{
+  width:5rem;
+  height:5rem;
+}
+.callactivity-right{
+  padding-left: 1rem;
+}
+.callactivity-activitytitle{
+  font-size: 1.4rem;
+}

@@ -1,0 +1,133 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <!-- 返回按钮-->
+  <div class="navcityLeft">
+    <img class="back-button" src="images/back_button.png" ng-click="goBack()">
+    <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+      <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+              ng-options="x.city_id as x.name for x in usercityList">
+      </select>
+    </p>
+  </div>
+  <div class="navcityRight">
+    <div class="search-group">
+      <img src="images/search_button.png" class="search-button" ng-click="searchFamilyBusiness()">
+      <div class="city_search">
+        <input type="text" class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="serviceBlur()">
+      </div>
+    </div>
+  </div>
+
+</nav>
+
+
+<div class="familyservice-content" ng-if="familyserviceContent">
+
+  <!-- 卡头  -->
+  <div class="family-segment-tab">
+    <div class="familyservice-segementcontrol tab-change-control">
+      <div class="tab-service" ng-repeat="sType in serviceType">
+        <a
+          change-service
+          data="{parentClass:'.familyservice-segementcontrol',childClass:'.tab-service',
+              childItem:'.familyservice-segmentcontrol-item',listClass:'.familyservice-table'}"
+          class="familyservice-segmentcontrol-item "
+          ng-click="change_tab(sType)">{{sType.name}}
+        </a>
+        <span ng-hide="true">{{$index}}</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!--轮播图-->
+  <div ng-if="slides.length > 0">
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides" active="slide.active">
+          <img ng-src="{{slide.image}}" curousel-height class="slideImg">
+        </slide>
+      </carousel>
+    </div>
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.png" curousel-height class="slideImg">
+    </div>
+  </div>
+
+  <!--跑马灯 -->
+  <div class="marquee-broadcast">
+  </div>
+
+
+  <!--提示区-->
+  <div class="prompt-service" ng-show="isShowPrompt" ng-click="goStationIntro()">
+    <div class="prompt-content">
+      <ul class="list-unstyled">
+        <li ng-show="promptData.message.length!=''">
+          <i class="glyphicon glyphicon-bullhorn"></i>
+          <span class="args">{{promptData.message}}</span>
+        </li>
+        <li>您可预定<span class="args">{{promptData.booking_number}}</span>天的<span
+          class="args">{{promptData.label}}</span>，
+                <span
+                  ng-if="!promptData.xiuxi"><span class="args">星期天</span>的除外。</span>
+          <span ng-show="promptData.booking_stop_number!=0">次日的请提前<span
+            class="args">{{promptData.booking_stop_number}}</span>天，</span>
+          <span class="args">{{promptData.booking_date}}</span>后将推迟一天。
+          请在<span class="args">{{promptData.paisong_start_date}}</span>到<span class="args">{{promptData.paisong_end_date}}</span>到预定小区服务站领取。
+        <li class="go-station">点击查看已开通的小区<i class="glyphicon glyphicon-arrow-right"></i></li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+  <!--所有此服务的商家数据 -->
+  <div class="all-bussiness-info" ng-show="allBusiness.businessCount>0" ng-click="goServiceList()">
+  <span><span>全部商家</span>&nbsp;&nbsp;{{allBusiness.businessCount}}个</span>
+  <span>商品{{allBusiness.goodsCount}}个
+  <!--<i class="glyphicon glyphicon-chevron-right"></i>-->
+  <img src="images/next.png">
+  </span>
+  </div>
+
+  <!-- 列表 -->
+  <div class="familyservice-table show{{tCount}}" ng-repeat="tCount in tabCount">
+
+    <div ng-if="familyserviceList" class="business-content" load-more
+         data="{params : businessParams,repeatFun : '$scope.businessLis'}">
+      <div>
+        <div class="familyservice-row" ng-repeat="bFamily in business_family"
+             ng-click="goServiceList(bFamily.business_id)">
+
+          <div class="familyservice-row-left">
+            <img ng-src="{{bFamily.logo}}" class="img-responsive familyservice-sellerlogo">
+            <img class="image-tag" ng-if="bFamily.hot == 'Y'" src="images/fire.png">
+          </div>
+
+          <div class="familyservice-row-right">
+            <p>
+           <span class="familyservice-seller-name">
+           {{bFamily.name}}
+           <img class="img-responsive familyservice-tag" src="images/newtag.png" ng-if="bFamily.new == 'Y'">
+           </span>
+              <span class="familyservice-goods-num">{{bFamily.goods_count}}</span>
+            </p>
+
+            <p class="familyservice-seller-intro">{{bFamily.introduction}}</p>
+
+            <p class="familyservice-seller-service">{{bFamily.content}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="!familyserviceList" class="errMsg">{{errMsg}}</div>
+
+  </div>
+
+</div>
+<div ng-if="!familyserviceContent" class="errMsg errTop" >没有相关数据</div>
+
+

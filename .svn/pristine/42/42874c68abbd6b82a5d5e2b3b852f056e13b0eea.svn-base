@@ -1,0 +1,39 @@
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮 -->
+    <img class="back-button" src="images/back_button.png">
+
+    <!-- 添加按钮 -->
+    <img ng-click="addOrEditCommunity()" class="add-image" src="images/add.png">
+
+    <!--搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png">
+
+      <div class="search-input">
+        <input class="form-control" placeholder="请输入搜索关键字">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="table" class="community-table" mycommunity-list="">
+  <ul class="list-group" id="community-list">
+
+    <li class="list-group-item" ng-repeat="communityModel in myCommunityList">
+      <div class="row-content">
+        <p class="community_name">{{communityModel.community}}</p>
+        <span class="community_city"> {{communityModel.city}}</span>
+        <span class="floor">{{communityModel.number}}号楼</span>
+        <span style="display: none;">{{communityModel.userCommunity_id}}</span>
+        <span style="display: none;">{{communityModel.username}}</span>
+        <span style="display: none;">{{communityModel.telphone}}</span>
+      </div>
+      <div class="delete_button" ng-click="deleteCommunity()">删除</div>
+    </li>
+
+  </ul>
+</div>
+
+

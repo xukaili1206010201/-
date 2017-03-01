@@ -1,0 +1,150 @@
+
+.goods-detail-content{
+  overflow-x:hidden;
+  margin-bottom:85px;
+}
+.get img{
+  max-width: 100%;
+}
+.goods-detail{
+   margin-left:20px;
+}
+.goods_title{
+  font-size: 14px;
+}
+.goods_body{
+  font-size: 10px;
+  color:#999999;
+}
+.number li{
+  float:left;
+  height:20px;
+  line-height: 20px;
+}
+.goodsdetail i{
+  font-size:10px;
+}
+
+.sale_count b{
+  color:#F7AF0D;
+  font-size: 16px;
+  font-weight: 400;
+}
+.sale_count b span{
+  color:#F7AF0D;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sale_count .old_price{
+  color: #999999;
+}
+
+.today_sales{
+  font-size: 13px;
+  margin-left: 15%;
+  color:#818181;
+}
+.repertory{
+  font-size: 13px;
+  margin-left:25px;
+  color:#818181;
+}
+.count_down{
+  border-top:1px solid #CCCCCC;
+  border-bottom:1px solid #CCCCCC;
+  clear: both;
+  height:35px;
+  line-height: 35px;
+  background-color: #F0EFF5;
+  padding-left:20px;
+  color:#818181;
+}
+.col-xs-4{
+  padding:0px;
+}
+.goods-detail-content .goodsdetail a{
+  font-size: 13px;
+  color:#555555;
+  font-weight:bold ;
+}
+
+.goodsdetail>li{
+  font-size: 16px;
+  border-bottom: 2px;
+  border-bottom: solid;
+  border-bottom-color: #ddd;
+}
+.goodsdetail > li > a:hover, .goodsdetail > li > a:focus,.goodsdetail .active{
+  background: #FFFFFF;
+  color: #7DB343;
+  border-bottom-color: #7DB343;
+}
+
+.tab-content .goods-description{
+   margin:12px 18px 0px 18px;
+   color:#555555;
+}
+.goodsdetail a{
+  color:#555555;
+  font-weight:bold ;
+}
+.detail_img{
+  margin:10px 0px;
+}
+.fotter_btn{
+  background-color:#F0EFF5;
+  height: 70px;
+  border-top:1px solid #CCCCCC;
+}
+
+.fotter_btn .btn{
+  padding: 0px;
+}
+
+.goods-detail-buy-button{
+  height: 45%;
+  width:70%;
+  margin-top:5%;
+  margin-left:15%;
+  background-color:rgb(125, 179, 67);
+}
+
+.rt{
+  float:right;
+  margin-right: 5px;
+}
+.time{
+  font-size: 12px;
+}
+
+.goodsDetail-star-pic img{
+  width:15px;
+  height:15px;
+}
+.evaluate{
+  font-size: 13px;
+  margin:5px 0px;
+}
+
+.goodsdetail-comment-row{
+  width: 100%;
+  margin: 0px;
+  padding: 5px 10px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.goodsdetail-comment-row .evaluate{
+  margin-bottom: 0px;
+}
+.evaluate{
+  margin-left:50px;
+}
+.evaluate_imgBox{
+  margin-left:40px;
+}
+.evaluate_img{
+  width:80px;
+  height:80px;
+  padding-left:10px
+}

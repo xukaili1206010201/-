@@ -1,0 +1,65 @@
+
+<nav class="navbar navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="goToUserCenter()">
+  </div>
+  <div class="navText">联系我们</div>
+
+</nav>
+
+<div class="content">
+  <div class="logo-block">
+    <img class="contactus-logo" ng-src="{{logoUrl}}">
+    <p class="project-name">{{contactusAppname}}</p>
+  </div>
+
+  <!--<div ng-model="advice" class="feedback-field" contenteditable="true">-->
+    <!--您的建议对我们很重要。-->
+  <!--</div>-->
+
+  <!--<textarea ng-model="advice" class="feedback-field"placeholder="您的建议对我们很重要">-->
+
+  <!--</textarea>-->
+
+  <textarea class="feedback-field" id="applyreason" placeholder="您的建议对我们很重要"></textarea>
+
+
+  <div class="user-info-block">
+    <input ng-model="userInfo" type="text" class="form-control" placeholder="您的姓名、手机号等联系方式">
+  </div>
+
+  <div class="contact-button-size">
+    <button type="submit" class="btn btn-block btn-success btnRadius -mob-share-open" ng-click="submitAdvice()
+    ">提交</button>
+  </div>
+
+  <div class="contact-us navbar-fixed-bottom KBheight" call-logs data="{type:'客服',telBelong:'',page:'联系我们'}">
+    客服电话：<a class="link-button tellColor" href="tel://{{companyTel}}">{{showCompanyTel}}</a>
+  </div>
+
+</div>
+
+
+<script>
+  function textWillChange(event){
+//    alert ("The new content: " + event.target.value);
+    filteremoji();
+  }
+
+  function  onPropChanged (event){
+    alert ("The new content: " + event.srcElement.value);
+  }
+
+
+  function filteremoji(){
+    var ranges = [
+      '\ud83c[\udf00-\udfff]',
+      '\ud83d[\udc00-\ude4f]',
+      '\ud83d[\ude80-\udeff]'
+    ];
+    var emojireg = $("#applyreason").val();
+    emojireg = emojireg .replace(new RegExp(ranges.join('|'), 'g'),'');
+  }
+
+</script>

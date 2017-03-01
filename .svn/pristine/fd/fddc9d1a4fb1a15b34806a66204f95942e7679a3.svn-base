@@ -1,0 +1,372 @@
+'use strict';
+
+var aboutModuleController = angular.module('aboutModuleController', []);
+
+//联系我们
+aboutModuleController.controller(
+  'contactUsCtrl',
+  function ($scope,$rootScope, $stateParams, teacherService, userService, $state, commonService,$timeout) {
+    //设置客服电话
+    $scope.companyTel = localStorage.companyTel;
+
+    //获取当前日期
+    var currentDate = new Date();
+    var reg = new RegExp("/", "g")
+    $scope.todayDate = currentDate.toLocaleDateString().replace(reg, "-");
+
+    //获取客服电话
+    $scope.showCompanyTel = sessionStorage.showCompanyTel;
+    $scope.companyTel =  sessionStorage.companyTel;
+
+    $scope.advice = "您的建议对我们很重要。";
+    //意见反馈
+    $scope.submitAdvice = function () {
+      var params = {"mobile": $scope.userInfo, "content": $scope.advice}
+      if (!params.content || params.content == "您的建议对我们很重要。") {
+        commonService.showWarnMessage("请输入您的建议或意见!");
+        return;
+      }
+      if (!params.mobile) {
+        commonService.showWarnMessage("请留下您的联系方式!");
+        return;
+      }
+      if (params.mobile.length < 11) {
+        commonService.showWarnMessage("请留下您完整的联系方式!");
+        return;
+      }
+
+      //获取客服电话
+      userService.postRequestWithUrlAndParams("editFeedback.action", params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            commonService.showSuccessMessage("反馈成功!");
+            $timeout(function(){
+              $state.go('member-personal-usercenter');
+            },1000);
+            break;
+        }
+
+      }).error(function (data, status, header, config) {
+
+      })
+
+    };
+
+    //返回个人中心或未登录个人中心
+    $scope.goToUserCenter = function () {
+      if($cookies.get('ticket') == null){
+        $state.go("member-personal-usercenterNo");
+      }else{
+        $state.go("member-personal-usercenter");
+      }
+    }
+
+  }
+);
+
+
+//关注我们
+aboutModuleController.controller(
+  'followUsCtrl',
+  function ($scope, $stateParams, userService, $state, commonService,$cookies) {
+
+    //设置umeng分享的appkey
+    window.umappkey = '5735388a67e58e248b002fb6';
+
+    userService.postRequestWithUrlAndParams('interface/getProjectConfigInfo.action', '').success(function (response) {
+
+      switch (response.code) {
+        case '0':
+          var divW = $('.wxcode-block').width();
+          //微信二维码
+          if (response.data.wx_qrcode.length > 0) {
+            var qrcode = new QRCode(document.getElementById("wx-code"), {
+              text: response.data.wx_qrcode,
+              width: divW,
+              height: divW
+            });
+          }
+
+          //iOS二维码
+          if (response.data.ios_url.length > 0) {
+            var qrcode = new QRCode(document.getElementById("apple-code"), {
+              text: response.data.ios_url,
+              width: divW,
+              height: divW
+            });
+          }
+
+          //android二维码
+          if (response.data.android_url) {
+            var qrcode = new QRCode(document.getElementById("android-code"), {
+              text: response.data.android_url,
+              width: divW,
+              height: divW
+            });
+          }
+
+          break;
+      }
+
+    }).error(function (data, status, header, config) {
+
+    });
+
+    //分享
+    $scope.share = function () {
+
+      var opt = {
+        'data': {
+          'content': {
+            'text': '我就是要分享～～', //要分享的文字
+          }
+        }
+      };
+      //$("#btn").umshare(opt);
+
+    };
+
+    //推荐给好友
+    $scope.recommedToFriends = function () {
+      var params = {"mobile": $scope.friendsMobile};
+      if (!params.mobile) {
+        commonService.showWarnMessage("请输入好友手机号");
+        return;
+      } else if (params.mobile.length != 11) {
+        commonService.showWarnMessage("手机号有问题哟!");
+        return;
+      }
+      userService.postRequestWithUrlAndParams("recommended.action", params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            commonService.showSuccessMessage("推荐成功");
+            break;
+        }
+
+      }).error(function (data, status, header, config) {
+        console.log("Error =======>>" + status);
+      })
+
+    };
+
+
+    //返回个人中心或未登录个人中心
+    $scope.goToUserCenter = function () {
+      if($cookies.get('ticket') == null){
+        $state.go("member-personal-usercenterNo");
+      }else{
+        $state.go("member-personal-usercenter");
+      }
+    }
+
+  }
+);
+
+
+//站点介绍
+aboutModuleController.controller(
+  'stationIntroCtrl',
+  function ($scope,$rootScope, $stateParams,userService, $state,commonService,$cookies) {
+    //$scope.city_name=sessionStorage.gpscityName;
+
+    $scope.param = {
+   /*   pageno: '4',
+      pagesize: '3',*/
+      city_id: sessionStorage.gpscityId
+    };
+    userService.postRequestWithUrlAndParams('listServiceStation.action', 'param').success(function (response) {
+
+      switch (response.code) {
+        case '0':
+          $scope.stationList = response.data;
+          $.getScript('scripts/common/selectcity/sort.js', function () {
+            startSorts();
+          });
+          //存储服务站和经纬度
+          var array = [];
+          $.each($scope.stationList,function(index,info){
+            array.push({name: info.name, lng: info.longitude, lat: info.latitude});
+          });
+          $scope.locateCity(array);
+
+          //进入站点详情
+          $scope.jumpStationdetail=function(station_id){
+            console.log(station_id);
+            $state.go('member-about-stationdetail',{station_id:station_id});
+          };
+
+          break;
+        case '-1':
+          commonService.showWarnMessage("失败！");
+          break;
+      }
+
+    }).error(function (data, status, header, config) {
+
+    });
+
+    //地图
+    $scope.locateCity = function(array){
+      // 百度地图API功能
+      var mp = new BMap.Map("allmap");
+      mp.centerAndZoom(new BMap.Point(array[0].lng,array[0].lat), 11);
+      mp.enableScrollWheelZoom(true);
+
+      // 复杂的自定义覆盖物
+      function ComplexCustomOverlay(point, text){
+        this._point = point;
+        this._text = text;
+      }
+      ComplexCustomOverlay.prototype = new BMap.Overlay();
+      ComplexCustomOverlay.prototype.initialize = function(map){
+        this._map = map;
+        var div = this._div = document.createElement("div");
+        div.style.position = "absolute";
+        div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+        div.style.backgroundColor = "#EE5D5B";
+        div.style.border = "1px solid #BC3B3A";
+        div.style.color = "white";
+        div.style.height = "18px";
+        div.style.padding = "0px 2px 0px 2px";
+        div.style.lineHeight = "18px";
+        div.style.whiteSpace = "nowrap";
+        div.style.MozUserSelect = "none";
+        div.style.fontSize = "12px"
+        var span = this._span = document.createElement("span");
+        div.appendChild(span);
+        span.appendChild(document.createTextNode(this._text));
+        var that = this;
+
+        var arrow = this._arrow = document.createElement("div");
+        arrow.style.background = "url(http://map.baidu.com/fwmap/upload/r/map/fwmap/static/house/images/label.png) no-repeat";
+        arrow.style.position = "absolute";
+        arrow.style.width = "11px";
+        arrow.style.height = "10px";
+        arrow.style.top = "17px";
+        arrow.style.left = "10px";
+        arrow.style.overflow = "hidden";
+        div.appendChild(arrow);
+
+
+        div.onmouseout = function(){
+          this.style.backgroundColor = "#EE5D5B";
+          this.style.borderColor = "#BC3B3A";
+          this.getElementsByTagName("span")[0].innerHTML = that._text;
+          arrow.style.backgroundPosition = "0px 0px";
+        };
+
+        mp.getPanes().labelPane.appendChild(div);
+
+        return div;
+      };
+      ComplexCustomOverlay.prototype.draw = function(){
+        var map = this._map;
+        var pixel = map.pointToOverlayPixel(this._point);
+        this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
+        this._div.style.top  = pixel.y - 30 + "px";
+      };
+
+      for (var i = 0; i < array.length; i ++) {
+
+        var txt = array[i].name;
+        var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(array[i].lng,array[i].lat), txt);
+        mp.addOverlay(myCompOverlay);
+      }
+    };
+
+
+
+    /******************关键字搜索***************/
+    var val = '';
+    $scope.stationByKey = [];
+    $scope.isSearch = true;//true:显示分类的服务站列表，false：显示搜索的服务站列表
+    $scope.searchStation = function(){
+      $scope.stationByKey = [];
+      val = $('.search-input input').val();
+      if(val == ''){
+        $scope.isSearch = true;
+        commonService.showWarnMessage('请输入关键字！');
+      }else{
+        $scope.isSearch = false;
+        $scope.stationParams.key = val;
+        $scope.serviceStation($scope.stationParams);
+      }
+    };
+    $scope.stationParams = {
+      city_id :  sessionStorage.gpscityId,
+      url : 'listServiceStation.action',
+      key : ''
+    };
+    $scope.isShow = true;//false:无相关数据 true：有相关数据
+    $scope.serviceStation = function(params){
+      userService.postRequestWithPageNo(params).success(function(response){
+        switch (response.code) {
+          case '0':
+            console.log(params);
+            console.log(response.data);
+            if(response.data.length == 0){
+              $scope.isShow = false;
+              return;
+            }else{
+              $scope.isShow = true;
+              $scope.stationByKey = response.data;
+              $.getScript('scripts/common/selectcity/sort.js', function () {
+                startSorts();
+              });
+              //进入站点详情
+              $scope.jumpStationdetail=function(station_id){
+                $state.go('member-about-stationdetail',{station_id:station_id});
+              };
+            }
+            break;
+          case '-1':
+            commonService.showWarnMessage("失败！");
+            break;
+        }
+      });
+    };
+
+
+    //返回个人中心或未登录个人中心
+    $scope.goToUserCenter = function () {
+      if($scope.isSearch){
+        //if($cookies.get('ticket') == null){
+        //  $state.go("member-personal-usercenterNo");
+        //}else{
+        //  $state.go("member-personal-usercenter");
+        //}
+        window.history.back(-1);
+      }else{
+        window.location.reload();
+      }
+
+    }
+
+  }
+);
+
+//站点详情
+aboutModuleController.controller(
+  'stationDetailCtrl',
+  function ($scope,$rootScope,$stateParams, userService,commonService, $state,$cookies) {
+    $scope.city_name=sessionStorage.gpscityName;
+
+    $scope.station_id=$stateParams.station_id;
+
+    userService.postRequestWithUrlAndParams('getServiceStation.action', {service_station_id:$scope.station_id}).success(function (response) {
+      $scope.stationDetailList=response.data;
+      switch (response.code) {
+        case '0':
+
+          break;
+        case '-1':
+          commonService.showWarnMessage("参数为空！");
+          break;
+      }
+
+    }).error(function (data, status, header, config) {
+
+    })
+
+  }
+);

@@ -1,0 +1,18 @@
+
+.neighborhood-social div img{
+  width:5rem;
+  height:5rem;
+}
+.neighborhood-social div span{
+  display: block;
+  margin:5px;
+}
+
+.neighborhood-social div {
+  width: 33.33%;
+  font-size: 1.2rem;
+  float: left;
+  text-align: center;
+  margin-top: 2.4rem;
+  color: #6A6A6A;
+}

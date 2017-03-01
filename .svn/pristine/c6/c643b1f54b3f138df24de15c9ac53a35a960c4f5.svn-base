@@ -1,0 +1,36 @@
+<nav class="navbar navbar-fixed-top navigationbar">
+  <p class="text-center title-item">登录</p>
+</nav>
+
+<div class="company-info">
+  <img ng-src="{{logo}}">
+  <p>{{projectName}}</p>
+</div>
+
+<form name="form" ng-submit="jumpTo()">
+
+  <div class="input-field">
+    <div class="input-group input-property">
+      <input ng-model="formData.mobile" name="mobile" type="tel" class="form-control" placeholder="手机号*" aria-describedby="basic-addon1">
+      <!--<span class="error" ng-show="form.$dirty && form.mobile.$error.maxlength">请输入有效的手机号码！</span>-->
+    </div>
+    <div class="input-group input-property">
+      <input ng-model="formData.password"  name="password" type="password" class="form-control" placeholder="密码*" aria-describedby="basic-addon1">
+      <!--<span class="error" ng-show="form.$dirty && form.password.$error.pattern">请输入6-20位，任意数字和字母的组合</span>-->
+    </div>
+  </div>
+
+  <div class="submit-button">
+    <button type="submit" class="btn btn-block login-button btn-success btnRadius">登 录</button>
+  </div>
+</form>
+
+<div class="register-lostpsd text-center">
+  <a ng-click="jumpRegister()" class="register-button link-button tellColor">注册</a>
+  <span class="separator-line">|</span>
+  <a ng-click="jumpPsdreset()" class="lost-psd-button link-button tellColor">忘记密码</a>
+</div>
+
+<!--<div class="alert text-center" ng-show="errMsg">{{errMsg}}</div>-->
+
+<!--<div get-location="" id="position"></div>-->

@@ -1,0 +1,29 @@
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navLeft">
+    <!-- 返回按钮-->
+    <img ng-click="back()" class="back-button" src="images/back_button.png">
+  </div>
+  <div class="navRight">
+    <!-- 搜索框组-->
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchCode()">
+      <input class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="codeBlur()">
+    </div>
+  </div>
+
+
+</nav>
+
+<div class="navMain fansCode">
+  <ul class="list-group" ng-if="!errMsg">
+    <li class="list-group-item" ng-repeat="k in fansCodeList">
+      <span class="fans_mobile">{{k.mobile}}</span>
+      <span class="fR">{{k.page}}</span>
+      <p>{{k.number}}
+        <span class="send-time">{{k.send_date}}</span>
+      </p>
+    </li>
+  </ul>
+  <div ng-if="errMsg" class="errMsg">{{errMsg}}</div>
+</div>
+

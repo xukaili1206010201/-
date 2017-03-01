@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <!--新 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="../../../styles/bootstrap-3.3.5-dist/bootstrap.css">
+  <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="/leshenghuoClient/app/styles/bootstrap-3.3.5-dist/bootstrap-theme.css">
+  <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+  <script src="/leshenghuoClient/app/scripts/common/jquery-1.11.3.js"></script>
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="/leshenghuoClient/app/scripts/common/bootstrap-3.3.5-dist/bootstrap.min.js"></script>
+
+  <!-- 跑马灯-->
+  <!--bootstrap.css js、bootstrap.js-->
+  <script src="/leshenghuoClient/app/scripts/common/marquee.js"></script>
+
+  <!-- 下拉列表-->
+  <link rel="stylesheet" type="text/css" href="/leshenghuoClient/app/styles/easydropdown/demo.css">
+  <link rel="stylesheet" type="text/css" href="/leshenghuoClient/app/styles/easydropdown/easydropdown.css">
+  <script src="/leshenghuoClient/app/scripts/common/easydropdown.js"></script>
+
+  <link rel="stylesheet" href="../../styles/util.css">
+
+  <title>乐管家</title>
+
+  <style>
+    body {
+      background: rgb(240, 239, 245);
+    }
+
+    /* ******************************** navigationbar with back-button   begin ******************************** */
+
+    .navigationbar {
+      background: rgb(161, 216, 34);
+      height: 51px;
+    }
+
+    .navigationbar .navigation-bar {
+      overflow: hidden;
+    }
+
+    /* ******************************** 返回按钮样式 ******************************** */
+
+    .navigationbar .navigation-bar .left-item {
+      margin-left: 10px;
+      /* 51/2 - 30/3  */
+      margin-top: 10.5px;
+      float: left;
+    }
+
+    .navigationbar .navigation-bar .left-item  .back-button {
+      width: 30px;
+      height: 30px;
+      float: left;
+    }
+
+    .navigationbar .navigation-bar .left-item .city {
+      float: left;
+      height: 30px;
+      line-height: 30px;
+      margin-left: 10px;
+    }
+
+    /* ******************************** navigationbar item样式 ******************************** */
+    .navigationbar .navigation-bar .navigationbar-item {
+      margin-left: 10px;
+      margin-top: 10.5px;
+      margin-right: 10px;
+      height: 30px;
+
+      overflow: hidden;
+    }
+
+    .navigationbar .navigation-bar .navigationbar-item .search-button {
+      float: right;
+    }
+
+    .navigationbar .navigation-bar .navigationbar-item .search-button img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .navigationbar .navigation-bar .navigationbar-item .search-field-block {
+      margin-left: 0px;
+      margin-right: 35px;
+      height: 100%;
+    }
+
+    .navigationbar .navigation-bar .navigationbar-item .search-field-block .search-input .search-field {
+      height: 30px;
+    }
+
+    /* ******************************** navigationbar with back-button   end ******************************** */
+
+    .content {
+      margin-top: 50px;
+    }
+
+    .table-top-fixd{
+      position: fixed;
+      left: 0px;
+      top: 50px;
+      width: 100%;
+    }
+
+
+    /* ******************************** 跑马灯   begin ******************************** */
+    .container {
+      width: 100%;
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+
+    .content .marquee_box {
+      width: 100%;
+      float: left;
+      display: inline-block;
+      overflow: hidden;
+      box-sizing: border-box;
+      height: 35px;
+      line-height: 35px;
+      position: relative;
+      cursor: pointer;
+      color: rgb(213, 179, 84);
+      border-bottom: 1px solid #dddddd;
+      background: white;
+    }
+
+    .content .marquee_box .marquee-sibling {
+      padding: 0;
+      width: 4%;
+      height: 35px;
+      line-height: 35px;
+      float: left;
+      left: 0;
+      z-index: 2000;
+    }
+
+    .content .marquee,
+    *[class^="marquee"] {
+      display: inline-block;
+      white-space: nowrap;
+      position: absolute;
+    }
+
+    .content .marquee_box .marquee {
+      margin-left: 25%;
+    }
+
+    /* ******************************** 跑马灯   end ******************************** */
+
+    /* ******************************** 卡头   begin ******************************** */
+    .content .segment-control {
+      width: 100%;
+      height: 35px;
+      background: white;
+      overflow: hidden;
+    }
+
+    .content .segment-control .paotui, .daigou {
+      width: 50%;
+      height: 100%;
+      float: left;
+    }
+
+    .content .segment-control .paotui {
+      /*background: red;*/
+      padding-left: 10px;
+      padding-right: 5px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .btn {
+      font-size: 13px;
+      padding: 0px;
+    }
+
+    .content .segment-control .paotui-button, .daigou-button {
+      height: 100%;
+    }
+
+    .content .segment-control .paotui .paotui-button {
+      background: rgb(161, 216, 34);
+      color: white;
+    }
+
+    .content .segment-control .daigou {
+      padding-left: 5px;
+      padding-right: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .content .segment-control .daigou .daigou-button {
+      background: rgb(235, 235, 241);
+      color: black;
+    }
+
+    /* ******************************** 卡头   end ******************************** */
+
+
+
+
+
+    /* ******************************** 下拉选择列表   begin ******************************** */
+    .filter-block .dropdown{
+      margin: 0px;
+      width: 100%;
+    }
+    /* ******************************** 下拉选择列表   end ******************************** */
+
+
+
+    /* ******************************** 商品列表   end ******************************** */
+    .content .media{
+      background: white;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      margin: 0px;
+      border-bottom: 1px solid #dddddd;
+    }
+
+    .content .media .media-left .media-object{
+      width: 60px;
+      height: 60px;
+      margin-left: 10px;
+    }
+
+    .content .media .media-body p{
+      margin: 0px;
+    }
+
+    .content .media .media-body .goods-name , .goods-intro{
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+    }
+
+    .content .media .media-body .goods-price{
+      font-size: 14px;
+      color: orange;
+    }
+
+    .content .media .media-body .goods-orginalprice{
+      font-size: 13px;
+      color: darkgray;
+    }
+
+    .content .media .media-body  .goods-sell-num{
+      font-size: 12px;
+      float: right;
+      margin-right: 10px;
+    }
+
+    .content .media .media-body .goods-intro{
+      font-size: 14px;
+    }
+
+    .daigou-table{
+      display: none;
+    }
+
+
+  </style>
+
+
+  <script>
+    //************************************* 跑马灯 begin **************************************
+    $(function () {
+      createMarquee({});
+    });
+    //************************************* 跑马灯 end ***************************************
+
+    //************************************* 计算列表顶部的高度以给列表设置位置 begin **************************************
+    $(function(){
+      var navigationbarH = parseInt($(".navbar").css("height"));
+      var tableTopH = parseInt($(".table-top-fixd").css("height"));
+      var marginTop = navigationbarH + tableTopH;
+      $(".paotui-table").css({
+        'margin-top':marginTop+'px'
+      });
+      $(".daigou-table").css({
+        'margin-top':marginTop+'px'
+      });
+    });
+    //************************************* 计算列表顶部的高度以给列表设置位置 end **************************************
+
+
+    //************************************* 卡头切换 begin **************************************
+    var lastSelectButton = '.paotui-button';
+    var  lastShowTable = '.paotui-table';
+    var currentShowTable;
+    function setButtonAndShowOrHiddenTable(target){
+      $(lastSelectButton).css({
+        'background':'rgb(235, 235, 241)',
+        'color':'black'
+      });
+      $(target).css({
+        'background':'rgb(161, 216, 34)',
+        'color':'white'
+      });
+      lastSelectButton = target;
+
+      $(lastShowTable).css({
+        'display':'none'
+      });
+      $(currentShowTable).css({
+        'display':'block'
+      });
+      lastShowTable = currentShowTable;
+
+    }
+
+    function showPaotuiTable(event){
+      currentShowTable = '.paotui-table';
+      setButtonAndShowOrHiddenTable(event.target);
+    }
+
+    function showDaigouTable(event){
+      currentShowTable = '.daigou-table';
+      setButtonAndShowOrHiddenTable(event.target);
+    }
+    //************************************* 卡头切换 end ****************************************
+
+  </script>
+
+</head>
+<body>
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <div class="left-item">
+      <img class="back-button" src="/leshenghuoClient/app/images/back.png">
+
+      <p class="city">常熟 <span class="glyphicon glyphicon-chevron-down"></span></p>
+    </div>
+
+    <div class="navigationbar-item">
+      <div class="search-button">
+        <img src="/leshenghuoClient/app/images/search-icon.png">
+      </div>
+      <div class="search-field-block">
+        <div class="search-input">
+          <input type="text" class="form-control search-field" placeholder="请输入搜索关键字">
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div class="content">
+
+  <div class="table-top-fixd">
+    <!-- ********************************** 跑马灯 ********************************** -->
+    <div class="container">
+      <div class="marquee_box">
+        <div class="marquee-sibling"></div>
+        <div class="marquee">
+          供应时间：6：30-8：30至小区便民服务站领取！
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ********************************** 卡头 ********************************** -->
+    <div class="segment-control">
+      <div class="paotui">
+        <button type="button" class=" btn btn-block paotui-button" onclick="showPaotuiTable(event)">跑腿</button>
+      </div>
+      <div class="daigou">
+        <button type="button" class=" btn btn-block daigou-button" onclick="showDaigouTable(event)">代购</button>
+      </div>
+    </div>
+
+
+    <!-- ********************************** 下拉列表 ********************************** -->
+    <div class="filter-block">
+      <select tabindex="4" class="dropdown">
+        <option value="" class="label" value="">总销量优先</option>
+        <option value="1">日销量优先</option>
+        <option value="2">周销量优先</option>
+        <option value="3">评分优先</option>
+        <option value="4">价格优先</option>
+        <option value="5">上架时优先</option>
+      </select>
+    </div>
+  </div>
+
+
+  <!-- ********************************** 商品列表--跑腿 begin ********************************** -->
+  <div class="paotui-table">
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保</p>
+      </div>
+    </div>
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保立白洗衣液，洁净环保立白洗衣液，洁净环保立白洗衣液，洁净环保立白洗衣液，洁净环保</p>
+      </div>
+    </div>
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保立白洗衣液</p>
+      </div>
+    </div>
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保立白洗衣液</p>
+      </div>
+    </div>
+
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保立白洗衣液</p>
+      </div>
+    </div>
+
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保立白洗衣液</p>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <!-- ********************************** 商品列表--跑腿 end ********************************** -->
+
+
+  <!-- ********************************** 商品列表--跑腿 begin ********************************** -->
+  <div class="daigou-table">
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保</p>
+      </div>
+    </div>
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保立白洗衣液，洁净环保立白洗衣液，洁净环保立白洗衣液，洁净环保立白洗衣液，洁净环保</p>
+      </div>
+    </div>
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/leshenghuoClient/app/images/logo.jpg" alt="...">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="goods-name">立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液立白洗衣液</p>
+        <span class="goods-price">￥15/瓶&nbsp;&nbsp;</span>
+        <span class="goods-orginalprice"><s>￥18/瓶</s></span>
+        <span class="goods-sell-num">日销量:19</span>
+        <p class="goods-intro">立白洗衣液，洁净环保立白洗衣液</p>
+      </div>
+    </div>
+  </div>
+  <!-- ********************************** 商品列表--跑腿 end ********************************** -->
+
+
+</div>
+
+
+</body>
+</html>

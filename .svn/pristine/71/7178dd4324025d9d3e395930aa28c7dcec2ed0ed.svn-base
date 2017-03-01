@@ -1,0 +1,142 @@
+
+<script type="text/javascript">
+  $(function(){
+    var screenH = document.documentElement.clientHeight;
+    var segmentH  = parseInt($('.navigationbar').css('height'));
+    var mapH =screenH - segmentH + 20;
+    $('#allmap').css({
+      'width':'100%',
+      'height':mapH + 'px'
+    });
+  });
+
+  var lastSelectedButton = '.stationintro-map';
+  var lastShowTable = '.station-map';
+  var currentShowTable;
+
+  function showOrhiddenTable(target){
+    $(lastSelectedButton).css({
+      'background':'white',
+      'color':'black'
+    });
+
+    $(target).css({
+      'background':'rgb(164, 214, 40)',
+      'color':'white'
+    });
+    lastSelectedButton = target;
+
+    $(lastShowTable).css({
+      'display':'none'
+    });
+
+    $(currentShowTable).css({
+      'display':'block'
+    });
+
+    lastShowTable = currentShowTable;
+
+  }
+
+  function showStationIntroList(event){
+    currentShowTable = '.station-list';
+    $('.stationintro-item').css({
+      'display':'block'
+    });
+    $('.stationintro-title').css({
+      'display':'none'
+    });
+    $('.city-stationintro').css({
+      'display':'none'
+    });
+    showOrhiddenTable(event.target);
+  }
+
+  function showStationIntroMap(event){
+    currentShowTable = '.station-map';
+    $('.stationintro-item').css({
+      'display':'none'
+    });
+    $('.stationintro-title').css({
+      'display':'block'
+    });
+    $('.city-stationintro').css({
+      'display':'block'
+    });
+    showOrhiddenTable(event.target);
+  }
+
+</script>
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navigation-bar">
+    <!-- 返回按钮-->
+    <div class="left-item">
+      <img ng-click="goToUserCenter()" class="back-button" src="images/back_button.png">
+      <!--<p ng-click="jumpSelectcity()" ng-model="city_name" class="city city-stationintro">{{city_name}} <span class="glyphicon glyphicon-menu-down"></span></p>-->
+      <p class="city" usercity-select>
+        <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}</span>
+        <select ng-show="citySelect" usercity-select class="citySelect" ng-model="usercityId" ng-options="x.city_id as x.name for x in usercityList"></select>
+        <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+      </p>
+    </div>
+    <div class="stationintro-title text-center">服务站分布图</div>
+    <div class="stationintro-item">
+      <img class="search-button" src="images/search_button.png" ng-click="searchStation()">
+      <div class="search-field-block">
+        <div class="search-input">
+          <input type="text" class="form-control" placeholder="请输入搜索关键字">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<div class="segment-control navbar-fixed-top">
+  <button style="outline: none;" class="btn segment-item stationintro-map" onclick="showStationIntroMap(event)">地图</button>
+  <button style="outline: none;" class="btn segment-item stationintro-list" onclick="showStationIntroList(event)">列表</button>
+</div>
+<!--地图-->
+<div class="station-map">
+  <div id="allmap"></div>
+</div>
+<!--列表-->
+<div class="station-list" ng-if="isSearch">
+  <div class="sort_box">
+    <div ng-click="jumpStationdetail(k.service_station_id)" class="sort_list" ng-repeat="k in stationList">
+      <!--<div class="num_logo"><img src="images/img.png"/></div>-->
+      <ul>
+        <li ng-model="k.name" class="num_name">{{k.name}}</li>
+        <li ng-model="k.number" class="address">{{k.number}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="initials">
+    <ul>
+      <li></li>
+    </ul>
+  </div>
+</div>
+<!--关键字搜索-->
+  <div ng-if="!isSearch" class="searchStation">
+    <div ng-if="!isShow" style="text-align: center;font-size:1.6rem"><span>sorry,暂无相关数据！</span></div>
+    <div ng-if="isShow">
+      <div class="sort_box">
+        <div ng-click="jumpStationdetail(k.service_station_id)" class="sort_list" ng-repeat="k in stationByKey">
+          <!--<div class="num_logo"><img src="images/img.png"/></div>-->
+          <ul>
+            <li ng-model="k.name" class="num_name">{{k.name}}</li>
+            <li ng-model="k.number" class="address">{{k.number}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="initials">
+        <ul>
+          <li></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+

@@ -1,0 +1,1273 @@
+'use strict';
+
+var orderModuleController = angular.module('orderModuleController', []);
+
+//我的订单
+orderModuleController.controller(
+  'myOrderCtrl',['$scope','userService','$state','commonService','$timeout','$interval','$q','$stateParams','$cookies','$location','payCacheService',function ($scope,userService,$state,commonService,$timeout,$interval,$q,$stateParams,$cookies,$location,payCacheService) {
+    /*****************订单列表**********************/
+    $scope.orderParams = {
+      status : '0',
+      'pageno' : '1', //页码
+      'pagesize' : '10', //页数
+      "url" : 'listOrder.action',
+      'direction' : 'up',
+      'key' : ''
+    };
+    $scope.errMsg = '';
+    $scope.orderList = [];
+    var isAll = false;//false:标志数据未加载完成
+    $scope.getOrders = function(params){
+      var defer = $q.defer();
+      userService.postRequestWithPageNo(params).success(function(response){
+        switch (response.code) {
+          case '0':
+
+            if(params.pageno == 1){
+              $scope.orderList = [];
+            }
+
+            var tempList = response.data;
+
+            /*
+             * add by yincong 19/09/2016
+             * line 33~71
+             * 用作保存勾选状态
+             */
+
+            //console.log(tempList);
+            //var orderTable = [];
+            //if (tempList.length > 0){
+
+              //var localOrderArrayStr = localStorage.selectedUnpaidOrder;
+              //if(localOrderArrayStr == undefined){ //还没有往本地表中添加过商品
+              //  //此时所有的订单以及商品都是非勾选状态
+              //  for(var index = 0 ; index < tempList.length; index++){
+              //    var order = tempList[index];
+              //    var goodsArray = order.goods;
+              //    order.isSelected = false;
+              //    for (var i = 0 ; i < goodsArray.length;i++){
+              //      var goodsObject = [i];
+              //      goodsObject.isSelected = false;
+              //      order.goods = goodsObject;
+              //    }
+              //    orderTable.push(order);
+              //  }
+              //}else{
+              //
+              //  var localOrderArray = JSON.parse(localOrderArrayStr);
+              //
+              //  //本地表中有数据
+              //  for(var index = 0 ; index < tempList.length; index++){
+              //    var order = tempList[index];
+              //    var orderId = order.order_id;
+              //    var goodsArray = order.goods;
+              //
+              //    //1. 判断该订单下是否所有的商品都被选中
+              //    //var
+              //
+              //
+              //  }
+              //
+              //
+              //}
+
+            //  tempList = orderTable
+            //}
+
+            if (tempList.length == 0 && params.pageno == '1') {
+              $scope.errMsg = '没有相关数据';
+            }else{
+              $scope.errMsg = '';
+              if(tempList.length < params.pagesize){
+                isAll = true;//true:标志数据加载完成
+                defer.resolve(isAll);
+              }else{
+                isAll = false;
+                defer.resolve(isAll);
+              }
+              if(params.direction == 'down'){
+                $scope.orderList = response.data;
+              }else{
+                $scope.orderList = $scope.orderList.concat(tempList);
+              }
+            }
+            break;
+          case '-8':
+          $state.go('member-personal-login');
+          sessionStorage.loginLocation=$location.path();
+          break;
+        }
+      });
+      return defer.promise;
+    };
+    $scope.getOrders($scope.orderParams);
+
+    //点击选项卡，切换显示数据
+    $scope.showType = '0'; //默认显示待付款订单
+    $scope.showOrderData = function(type,$event){
+      $('.myorder-tabs-ul li').removeClass('selectedOrder');
+      $($event.target).addClass('selectedOrder');
+      $scope.orderList = [];
+      $scope.showType = type;
+      if(type == '7'){
+        $scope.orderParams.status = '';
+      }else{
+        $scope.orderParams.status = type;
+      }
+      $scope.orderParams.pageno = 1;
+      $scope.getOrders($scope.orderParams);
+    };
+
+
+    /***********关键字搜索*****************/
+    var val = '';
+    $scope.searchOrder = function(){
+      $scope.orderList = [];
+      val = $('.search-input').val();
+      $scope.orderParams.key = val;
+      $scope.orderParams.pageno = 1;
+      $scope.getOrders($scope.orderParams);
+    };
+   //失去焦点时，获取key值
+    $scope.orderBlur = function(){
+      $scope.orderParams.key = $('.search-input').val();
+    };
+
+    //返回
+    $scope.goBack = function(){
+        var from = $stateParams.from;
+        //社区服务-订单
+        if(from == 0){
+          $state.go('guanjia-comservice');
+        }
+        if(from == 1){
+          $state.go('member-personal-usercenter');
+        }
+    };
+    //点击订单跳转到订单详情
+    $scope.goOrderDetail = function(orderId,$event){
+      var goodStatus = [];
+      var siblings = $($event.target).parents('.list-group-item').siblings();
+      var oldStatus;
+      $.each(siblings,function(index,domElem){
+        var nowStatus = $(domElem).find('.good-status').html();
+        if(oldStatus != nowStatus){
+          goodStatus.push(nowStatus);
+        }
+        oldStatus = nowStatus;
+      });
+      payCacheService.setProperty('goodsStatus',goodStatus);
+      $state.go('member-user-orderdetail',{
+        orderId:orderId
+      });
+    };
+
+
+    //订单 -----点击删除按钮 ---- 待付款、已完成、已退货
+    //var goodSure; //保存当前选项卡下的商品选择框标签
+    //var orderIdArr = []; //保存选中的订单的ID
+    //var ulElem = []; // 保存选中订单的ul标签
+    //var isContinue = false;
+    //var selectedorderCount,selectedgoodCount;
+
+
+
+    var deleteOrdersArray = [];
+
+    //点击删除，弹出模态框
+    $scope.isSureDelete = function(parent){
+
+      if($scope.orderList.length == 0){
+        commonService.showErrorMessage("没有相关数据");
+        return;
+      }
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(parent,["待付款","已完成","已退货"]);
+      var params = selctedOrderParams.apiParams;
+      var hadOtherStatusGoods = selctedOrderParams.hadInvalidGoods[0];
+      if (hadOtherStatusGoods){
+        commonService.showErrorMessage("只能删除商品状态为待付款、已完成、已退货！");
+      } else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }else{
+        deleteOrdersArray = params;
+        $('#sureModal').modal('show');
+      }
+
+
+
+      //deleteOrdersArray = [];
+      //var targetOrdersArray = []
+      //
+      //orderIdArr = [];
+      //ulElem = [];
+      //if($scope.orderList.length > 0){
+      //
+      //  goodSure = $(parent).find('.goodSure');
+      //  selectedgoodCount = goodSure.length;
+      //  var deleteOrderTable = [];
+      //  $.each(goodSure,function(index,domEl){
+      //    var goodStatus = $(domEl).prev().html();
+      //    if($(domEl).hasClass('checked')){
+      //      //如果选中并且满足订单状态，则保存good_id
+      //      if(goodStatus == '待付款' || goodStatus == '已完成' || goodStatus == '已退货'){
+      //        var goodId = $(domEl).next().html();
+      //        var orderId =$(domEl).parents('.list-group').find('.myOrder-orderId').html();
+      //
+      //        orderIdArr.push(orderId);
+      //        deleteOrderTable.push([orderId,goodId]);
+      //
+      //        isContinue = true;
+      //        //保存ul标签
+      //        ulElem.push($(domEl).parents('.list-group'));
+      //      }else{
+      //        //选中的订单状态不为待付款、已完成或已退货。
+      //        isContinue = false;
+      //      }
+      //    }else{
+      //      selectedgoodCount--;
+      //    }
+      //  });
+      //
+      //  //元素去重
+      //  var tmp = new Array();
+      //  for(var i in orderIdArr){
+      //    if(tmp.indexOf(orderIdArr[i])==-1){
+      //      tmp.push(orderIdArr[i]);
+      //    }
+      //  }
+      //
+      //  for (var index = 0; index < tmp.length;index++){
+      //    var deleteObject = {};
+      //    var deleteGoodsTable = [];
+      //    var orderId = tmp[index];
+      //    for (var i = 0 ; i < deleteOrderTable.length;i++){
+      //      var deleteOrderId = deleteOrderTable[i][0];
+      //      var deleteGoodsId = deleteOrderTable[i][1];
+      //      if (orderId == deleteOrderId){
+      //        deleteObject.order_id = orderId;
+      //        deleteGoodsTable.push(deleteGoodsId);
+      //      }
+      //    }
+      //    deleteObject.orderItem_id = deleteGoodsTable;
+      //    targetOrdersArray.push(deleteObject);
+      //  }
+      //
+      //  deleteOrdersArray = targetOrdersArray;
+      //
+      //  //判断是否选择了商品，无，提示；有，则弹出确认框
+      //  if(selectedorderCount > 0 || selectedgoodCount > 0 ){
+      //    if(isContinue){
+      //      $('#sureModal').modal('show');
+      //    }else{
+      //      commonService.showWarnMessage('只能删除订单状态为待付款、已完成、已退货！');
+      //    }
+      //  }else{
+      //    commonService.showWarnMessage('请选择商品');
+      //  }
+      //}else{
+      //  commonService.showWarnMessage('没有相关数据，不能进行删除操作！');
+      //}
+    };
+    //点击确认，进行删除
+    $scope.deleteOrders = function(){
+
+      $('#sureModal').modal('hide');
+
+      var deleteParams={json:JSON.stringify(deleteOrdersArray)};
+      userService.postRequestWithUrlAndParams('delOrder.action',deleteParams).success(function(response){
+        if(response.code == '0'){
+
+          //commonService.showWarnMessage('订单删除成功！');
+          //$.each(ulElem,function(index,domEl){
+          //  $(domEl).remove();
+          //});
+
+          reloadData();
+        }else{
+          commonService.showWarnMessage('订单删除失败！');
+        }
+      });
+
+    };
+
+    //未支付订单前往支付
+    $scope.goToPay = function(parent){
+
+      if($scope.orderList.length == 0){
+        commonService.showErrorMessage("没有相关数据");
+        return;
+      }
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(parent,["待付款"]);
+      var params = selctedOrderParams.apiParams;
+      var hadOtherStatusGoods = selctedOrderParams.hadInvalidGoods[0];
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[2];
+      if (hadOtherStatusGoods){
+        commonService.showErrorMessage("您选择了非待付款的商品，请重新选择");
+      }else if(hadInvalidGoods){
+        commonService.showErrorMessage("您选择了失效商品，请重新选择");
+      } else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }else{
+        sessionStorage.isFrom = 2;
+        payCacheService.setProperty('orderId',params);
+        payCacheService.getProperty("orderId");
+        $state.go("guanjia-pay",{"from":"2",
+          obj:{ }
+        });
+      }
+
+
+      //var orderLists = $(parent).find('.orderSure');
+      //var orderIdList = []; //存储需支付的订单号
+      //$.each(orderLists,function(index,domEl) {
+      //  if ($(domEl).hasClass('checked')) {
+      //    //如果是待付款的订单，查询订单下的商品是否都为待付款状态
+      //    var orderId = $(domEl).next().html();
+      //    orderIdList.push(orderId);
+      //  }
+      //});
+
+
+      /*
+       * add by yincong 19/09/2016
+       * line 252~256
+       * 用作保存勾选状态的调试用
+       */
+      //var savedOrderArrayStr =  localStorage.selectedUnpaidOrder
+      //var savedOrderArray = JSON.parse(savedOrderArrayStr);
+      //console.log(savedOrderArray);
+      //
+      //return;
+
+    };
+
+    //订单退款
+    $scope.goRefund = function(){
+      //var orderLis = $('.tosend-message-table').find('.order-status');
+      //var goodLis = $('.tosend-message-table').find('.img-status');
+      //var goodS = '待发货';
+      //var changeGoods = '待退款';
+      //var operate = '退款';
+      //var url = 'refundOrder.action';
+      //var orderType = '我的订单';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoods,operate,url,orderType);
+
+
+      if($scope.orderList.length == 0){
+        commonService.showErrorMessage("没有相关数据");
+        return;
+      }
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".tosend-message-table",["待发货"]);
+      var params = selctedOrderParams.apiParams;
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      if (hadInvalidGoods){
+        commonService.showErrorMessage("您选择了非待发货的商品，请重新选择");
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }else{
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("refundOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("退款成功！");
+            //退货成功后重新请求数据
+            reloadData();
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    };
+    //取消退款
+    $scope.cancelRefund = function(){
+      //var goodLis = $('.tobackmoney-message-table').find('.img-status');
+      //var orderLis = $('.tobackmoney-message-table').find('.order-status');
+      //var goodS = '待退款';
+      //var changeGoodS = '待发货';
+      //var operate = '取消退款';
+      //var url = 'cancelRefundOrder.action';
+      //var orderType = '我的订单';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+      if($scope.orderList.length == 0){
+        commonService.showErrorMessage("没有相关数据");
+        return;
+      }
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".tobackmoney-message-table",["待退款"]);
+      var params = selctedOrderParams.apiParams;
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      if (hadInvalidGoods){
+        commonService.showErrorMessage("您选择了非待退款的商品，请重新选择");
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }else{
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("cancelRefundOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("取消退款成功！");
+            //取消退款成功后重新请求数据
+            reloadData();
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+
+    }
+
+    //订单退货
+    $scope.returnGoods = function(){
+      //var goodLis = $('.alsend-message-table').find('.img-status');
+      //var orderLis = $('.alsend-message-table').find('.order-status');
+      //var goodS = '已发货'; //商品目前的状态
+      //var changeGoodS = '待退货'; //商品需要修改的状态
+      //var operate = '退货';
+      //var url = 'returnOrder.action';
+      //var orderType = '我的订单';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+
+      if($scope.orderList.length == 0){
+        commonService.showErrorMessage("没有相关数据");
+        return;
+      }
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".alsend-message-table",["已发货"]);
+      var params = selctedOrderParams.apiParams;
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      if (hadInvalidGoods){
+        commonService.showErrorMessage("您勾选了非已发货的商品，请重新勾选");
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请勾选商品！");
+      } else{
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("returnOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("退货成功！");
+            //退货成功后重新请求数据
+            reloadData();
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    }
+
+    //取消退货
+    $scope.cancelReturn = function(){
+      //var goodLis = $('.toback-message-table').find('.img-status');
+      //var orderLis = $('.toback-message-table').find('.order-status');
+      //var goodS = '待退货'; //商品目前的状态
+      //var changeGoodS = '已发货'; //商品需要修改的状态
+      //var operate = '取消退货';
+      //var url = 'cancelReturnOrder.action';
+      //var orderType = '我的订单';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+
+      if($scope.orderList.length == 0){
+        commonService.showErrorMessage("没有相关数据");
+        return;
+      }
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".toback-message-table",["待退货"]);
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      var params = selctedOrderParams.apiParams;
+      if (hadInvalidGoods){
+        commonService.showErrorMessage('您选择了非待退货的商品，请重新选择');
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }else{
+
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("cancelReturnOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("取消退货成功！");
+            //确认收货成功后重新请求数据
+            reloadData();
+
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+
+    }
+    //确认收货
+    $scope.confirmGoods = function(parent){
+
+      //var goodLis = $('.alsend-message-table').find('.img-status');
+      //var orderLis = $('.alsend-message-table').find('.order-status');
+      //var goodS = '已发货'; //商品目前的状态
+      //var changeGoodS = '已完成'; //商品需要修改的状态
+      //var operate = '确认收货';
+      //var url = 'confirmOrder.action';
+      //var orderType = '我的订单';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+
+      if($scope.orderList.length == 0){
+        commonService.showErrorMessage("没有相关数据");
+        return;
+      }
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(parent,["已发货"]);
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];  //判断是否勾选有非对应状态中的商品
+      var hadTimerGoods = selctedOrderParams.hadInvalidGoods[1];    //判断是否有勾选定时商品
+      var params = selctedOrderParams.apiParams;
+      if (hadInvalidGoods){
+        commonService.showErrorMessage('您选择了非已发货的商品，请重新选择');
+      }else if (hadTimerGoods){
+        commonService.showErrorMessage('您选择了定时商品，请重新选择');
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }
+      else{
+        var params = selctedOrderParams.apiParams;
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("confirmOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("确认收货成功！");
+            //确认收货成功后重新请求数据
+            reloadData();
+
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    };
+
+    //取消确认收货
+    $scope.cancelConfirm = function(parent){
+
+      //var goodLis = $('.alsend-message-table').find('.img-status');
+      //var orderLis = $('.alsend-message-table').find('.order-status');
+      //var goodS = '已完成'; //商品目前的状态
+      //var changeGoodS = '已发货'; //商品需要修改的状态
+      //var operate = '取消确认收货';
+      //var url = 'cancelConfirmOrder.action';
+      //var orderType = '我的订单';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(parent,["已完成"]);
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];  //判断是否勾选有非对应状态中的商品
+      var params = selctedOrderParams.apiParams;
+      if(hadInvalidGoods){
+        commonService.showErrorMessage("您选择了非已完成的商品,请重新选择!");
+      }else{
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("cancelConfirmOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("取消确认收货成功！");
+            //确认收货成功后重新请求数据
+            reloadData();
+
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+    };
+
+    //点击评价，跳转到商商品评价设置页
+    $scope.goJudge = function(good,orderId){
+      $state.go('member-user-productjudge',{
+        goodId : good.goods_id,
+        goodDetail : {
+          orderId : orderId,
+          imageUrl : good.imageUrl,
+          name : good.name,
+          guige : good.guige,
+          sale_price : good.sale_price,
+          count : good.count,
+          unit : good.unit,
+          delivery : good.delivery,
+          service_station : good.service_station,
+          coupons : good.cpupons,
+          status : good.status,
+          remark : good.remark
+        }
+      });
+    }
+
+
+    /*
+     * status 为订单中商品的状态
+     * status = ‘已发货’
+     *
+     * 返回勾选对应的状态的数据以及是否够训吖了其他状态的标志
+     * @return Array apiParams             根据用户传入的状态返回对应状态的勾选的商品
+     * @return Array hadInvalidGoods       错误标志位，表明用户勾选的数据中是否存在其他状态的商品数据
+     *         Bool hadOtherStatusGoods    勾选商品中是否有其他状态的商品
+     *         Bool hadTimerGoods          勾选商品中是否有定时商品
+     *         Bool hadInvalidGoods        勾选商品中是否有失效商品
+     */
+    var getSelectedOrdersAndGoods = function(parent,statusArray){
+
+      var hadSendOrderParamsArray = [];  //存储经过处理的准备传到后台的参数
+      var selectedOrderIdTable = [];  //存储所有的勾选的订单id
+      var selectedOrderParamsTable = [];   //存储所有的勾选的订单id与商品id
+      var hadOtherStatusGoods = false; //是否勾选非已发货商品的标志
+      var hadTimerGoods = false; // 是否勾选了定时商品
+      var hadInvalidGoods = false; //是否勾选了失效商品
+      var goodSure = $(parent).find('.goodSure')
+      $.each(goodSure,function(index,domEl){
+        var goodsStatus = $(domEl).prev().html();
+        var isTimerGoods = $(domEl).prev().prev().html(); //是否是定时商品
+        var isInvalidGoods = $(domEl).prev().prev().prev().html(); //商品的失效原因
+        if($(domEl).hasClass('checked')) {
+          //如果选中并且满足订单状态，则保存good_id
+          //判断选中的商品是否是给定的状态
+          var isInvalidStatus = false;
+          for (var index = 0 ; index < statusArray.length; index ++){
+            var status = statusArray[index];
+            if (status == goodsStatus){
+              isInvalidStatus = true;
+              break;
+            }
+          }
+
+          if (isInvalidStatus) {
+
+            //判断是否勾选定时商品
+            if (isTimerGoods == "Y"){
+              hadTimerGoods = true;
+            }
+            if (isInvalidGoods.length > 0){
+              hadInvalidGoods = true;
+            }
+
+            var goodId = $(domEl).next().html();
+            var orderId = $(domEl).parents('.list-group').find('.myOrder-orderId').html();
+            selectedOrderIdTable.push(orderId);
+            selectedOrderParamsTable.push([orderId,goodId]);
+
+          }else{
+            //遍历到非已发货商品时停止遍历，并设置标识符为勾选了非法商品
+            hadOtherStatusGoods = true;
+            return false;
+          }
+        }
+      });
+
+      //元素去重
+      var tmp = new Array();
+      for(var i in selectedOrderIdTable){
+        if(tmp.indexOf(selectedOrderIdTable[i])==-1){
+          tmp.push(selectedOrderIdTable[i]);
+        }
+      }
+      //遍历去重后的订单id,把取到的oredrid与去重后的对比,如果一样就方法哦同一个数组
+      for (var index = 0; index < tmp.length;index++){
+        var deleteObject = {};
+        var deleteGoodsTable = [];
+        var orderId = tmp[index];
+        for (var i = 0 ; i < selectedOrderParamsTable.length;i++){
+          var deleteOrderId = selectedOrderParamsTable[i][0];
+          var deleteGoodsId = selectedOrderParamsTable[i][1];
+          if (orderId == deleteOrderId){
+            deleteObject.order_id = orderId;
+            deleteGoodsTable.push(deleteGoodsId);
+          }
+        }
+        deleteObject.orderItem_id = deleteGoodsTable;
+        hadSendOrderParamsArray.push(deleteObject);
+      }
+
+      return {'apiParams':hadSendOrderParamsArray,'hadInvalidGoods':[hadOtherStatusGoods,hadTimerGoods,hadInvalidGoods]}
+
+    }
+
+    /*
+     * 订单的操作完成后重新请求数据
+     */
+    var reloadData = function(){
+      $scope.getOrders($scope.orderParams);
+    }
+
+
+    /*
+     * 从页面上删除勾选的商品或者订单
+     * @params parent 索要删除的节点所在的选项卡
+     */
+    var deleteNodeOfHtml  = function(parent){
+      var  goodSure = $(parent).find('.goodSure')
+      $.each(goodSure,function(index,domEl){
+        var goodsStatus = $(domEl).prev().html();
+        if($(domEl).hasClass('checked')) {
+          var goodsRowTable = $(domEl).parents('.myorder-goods-row')
+          var goodsRow = goodsRowTable[0];
+          //找到当前商品所属的订单
+          var orderRowTable = $(domEl).parents('.list-group');
+          var orderRow = orderRowTable[0];
+          //找到上千订单的勾选状态
+          var isSelectedOrder = $(orderRow).find('.orderSure');
+          //判断当前订单是否是勾选，若是则表示该订单下的所有商品都是选中状态，否则就只有某个商品是被选中的
+          if ($(isSelectedOrder).hasClass('checked')){
+            console.log("删除整个订单");
+            $(orderRow).remove();
+          }else{
+            console.log("删除订单下的勾选商品");
+            $(goodsRow).remove();
+          }
+        }
+      });
+    }
+
+  }]);
+//商品评价
+orderModuleController.controller(
+  'goodsJudgeCtrl',
+  function ($scope, $stateParams,userService, $state, commonService,$cookies) {
+
+    console.log($stateParams);
+
+    //接受由订单传过来的商品
+    var  goodsId = $stateParams.goodId;
+    var goodsInfo = $stateParams.goodDetail;
+    var orderId = goodsInfo.orderId;
+    $scope.commentGoodsImageUrl = goodsInfo.imageUrl;
+    $scope.commentGoodsName = goodsInfo.name;
+    $scope.commentGoodsPrice = goodsInfo.sale_price;
+    $scope.commentGoodsCount = goodsInfo.count;
+    $scope.commentGoodsUnit = goodsInfo.unit;
+    $scope.commentGoodsSpecifications = goodsInfo.guige;
+    $scope.commentGoodsServiceStation = goodsInfo.service_station;
+    $scope.commentGoodsServiceDelivery = goodsInfo.delivery;
+    $scope.commentGoodsCoupons = goodsInfo.coupons;
+
+
+    //获取用户评分
+    var userScore = 0;
+    $('#star').on('rating.change', function (event, value, caption) {
+      userScore = value;
+    });
+
+    //用户提交评论
+    $scope.submitUserAppraise = function () {
+
+      var commentImageList = [];
+      var imageList = $('.weui_uploader_files').find('.weui_uploader_file');
+      for (var index = 0; index < imageList.length; index++) {
+        var imageDiv = imageList[index];
+        var imageData = imageDiv.style.backgroundImage;
+
+        var updateImageDate = imageData.substr(imageData.indexOf(','),imageData.indexOf(")"));
+        updateImageDate = updateImageDate.substr(1,updateImageDate.length - 1);
+        updateImageDate = updateImageDate.substr(0,updateImageDate.length - 2);
+        commentImageList.push(updateImageDate);
+      }
+
+      //多张图片的base64编码以字符串方式传输
+      var imageBase64String = commentImageList.toString();
+
+      //用户评价内容
+      var content = $('.comment-goods-commentcontent').val();
+      //var goodsId = goodsId;
+      var params = {
+        "mobile": localStorage.mobile,
+        "goods_id": goodsId,
+        "order_id": orderId,
+        "star": userScore,
+        "content": content,
+        "pictrue": imageBase64String
+      };
+      if(!$cookies.get('ticket')){
+        commonService.showWarnMessage("账号不能为空，请登录！");
+        return;
+      }else if(!params.content && !params.pictrue){
+        commonService.showWarnMessage("请输入您的评论或上传图片！");
+        return;
+      }
+
+
+      userService.postRequestWithUrlAndParams("addGoodsComment.action", params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            commonService.showSuccessMessage("评价成功!");
+            history.back();
+            break;
+          case '-1':
+            commonService.showErrorMessage("参数为空!");
+            break;
+          case '-2':
+            commonService.showErrorMessage("参数错误!");
+            break;
+          case '-3':
+            commonService.showErrorMessage("返回失败，系统异常!");
+            break;
+        }
+      }).error(function (data, status, header, config) {
+
+      });
+
+    }
+  }
+);
+
+//订单详情页
+orderModuleController.controller(
+  'orderDetailCtrl',
+  function ($scope, $stateParams, userService,$state,commonService,$timeout,$cookies,payCacheService) {
+   //获取该订单下的所有商品的状态
+    $scope.showStatus = payCacheService.getProperty('goodsStatus');
+    //console.log($scope.showStatus);
+
+    userService.getOrder({
+      'order_id':$stateParams.orderId
+    }).success(function (data) {
+      $scope.orderDetail = data.data;
+    }).error(function (data, status, header, config) {
+
+    });
+
+    //返回
+    $scope.goBack = function(){
+      $state.go('member-user-myorder');
+    };
+
+    //点击删除按钮，弹出模态框
+    $scope.deleteGoods = function(){
+
+      var orderObject = {'order_id':$stateParams.orderId};
+      var goodsIdTable = [];
+      var goodsTable = $('.orderdetail-goods-isselected');
+      for (var index = 0;index < goodsTable.length;index++){
+        var goodsRow = goodsTable[index];
+        var isSelected = $(goodsRow).hasClass('checked');
+        var goodsId = $(goodsRow).next().html();
+        if (isSelected){
+          goodsIdTable.push(goodsId);
+        }
+      }
+      orderObject.goods_id = goodsIdTable;
+
+      if(goodsIdTable.length == 0){
+        commonService.showWarnMessage('未选择商品');
+      }else{
+        $('#deleteSure').modal('show');
+      }
+
+    }
+    //点击模态框中的确定，删除订单
+    $scope.deleteOrder=function(orderId,orderStatus){
+
+      var orderObject = {'order_id':$stateParams.orderId};
+      var goodsIdTable = [];
+      var goodsTable = $('.orderdetail-goods-isselected');
+      for (var index = 0;index < goodsTable.length;index++){
+        var goodsRow = goodsTable[index];
+        var isSelected = $(goodsRow).hasClass('checked');
+        var goodsId = $(goodsRow).next().html();
+        if (isSelected){
+          goodsIdTable.push(goodsId);
+        }
+      }
+      orderObject.goods_id = goodsIdTable;
+      if(goodsIdTable.length == 0){
+        commonService.showWarnMessage('未选择商品');
+      }else{
+        var orderId = [orderObject];
+        var deleteParams={json:JSON.stringify(orderId)};
+        userService.postRequestWithUrlAndParams('delOrder.action',deleteParams).success(function(response){
+          if(response.code == '0'){
+            $('#deleteSure').modal('hide');
+            //commonService.showWarnMessage('订单：'+orderId+'/n删除成功！');
+            $timeout(function(){
+              history.back(-1);
+            },1000);
+          }else{
+            commonService.showWarnMessage('订单：'+orderId+'/n删除失败！');
+          }
+        });
+
+      }
+
+      //var isDel = true;
+      ////如果订单是代付款状态，则查询订单下的商品是否有非待付款的，有的话，不执行删除操作！
+      //if(orderStatus == '待付款'){
+      //  $.each($('.img-status'),function(index,domEl){
+      //    if($(domEl).prev().html() != '待付款'){
+      //      isDel = false;
+      //      return false;
+      //    }
+      //  });
+      //}
+      //if(isDel){
+      //  userService.postRequestWithUrlAndParams('delOrder.action',{
+      //    mobile : localStorage.mobile,
+      //    order_id : orderId
+      //  }).success(function(response){
+      //    if(response.code == '0'){
+      //      $('#deleteSure').modal('hide');
+      //      commonService.showWarnMessage('订单：'+orderId+'/n删除成功！');
+      //      $timeout(function(){
+      //        history.back(-1);
+      //      },1000);
+      //    }else{
+      //      commonService.showWarnMessage('订单：'+orderId+'/n删除失败！');
+      //    }
+      //  });
+      //}else if(orderStatus == '待付款' && !isDel){
+      //  commonService.showWarnMessage('订单：'+orderId+'中有非待付款商品，\n不能删除！');
+      //}
+    };
+
+
+    //退款
+    $scope.refund_detail = function(orderId){
+      //console.log('enter'+orderId);
+      //var orderLis = orderId;
+      //var goodLis = $('.detail-list-group').find('.img-status');
+      //var goodS = '待发货';
+      //var changeGoods = '待退款';
+      //var operate = '退款';
+      //var url = 'refundOrder.action';
+      //var orderType = '订单详情';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoods,operate,url,orderType);
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".orderDetailContent",["待发货"]);
+      var params = selctedOrderParams.apiParams;
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      if (hadInvalidGoods){
+        commonService.showErrorMessage("您选择了非待发货的商品，请重新选择");
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }else{
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("refundOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("退款成功！");
+            //退货成功后重新请求数据
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    };
+
+
+    //取消退款
+    $scope.cancelRefund_detail = function(orderId){
+      //var goodLis = $('.detail-list-group').find('.img-status');
+      //var orderLis = orderId;
+      //var goodS = '待退款';
+      //var changeGoodS = '待发货';
+      //var operate = '取消退款';
+      //var url = 'cancelRefundOrder.action';
+      //var orderType = '订单详情';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".orderDetailContent",["待退款"]);
+      var params = selctedOrderParams.apiParams;
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      if (hadInvalidGoods){
+        commonService.showErrorMessage("您选择了非待退款的商品，请重新选择");
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }else{
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("cancelRefundOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("取消退款成功！");
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    }
+
+    //订单退货
+    $scope.return_detail = function(orderId){
+      //var goodLis = $('.detail-list-group').find('.img-status');
+      //var orderLis = orderId;
+      //var goodS = '已发货'; //商品目前的状态
+      //var changeGoodS = '待退货'; //商品需要修改的状态
+      //var operate = '退货';
+      //var url = 'returnOrder.action';
+      //var orderType = '订单详情';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".orderDetailContent",["已发货"]);
+      var params = selctedOrderParams.apiParams;
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      if (hadInvalidGoods){
+        commonService.showErrorMessage("您勾选了非已发货的商品，请重新勾选");
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请勾选商品！");
+      } else{
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("returnOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("退货成功！");
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    }
+    //取消退货
+    $scope.cancelReturn_detail = function(orderId){
+      //var goodLis = $('.detail-list-group').find('.img-status');
+      //var orderLis = orderId;
+      //var goodS = '待退货'; //商品目前的状态
+      //var changeGoodS = '已发货'; //商品需要修改的状态
+      //var operate = '取消退货';
+      //var url = 'cancelReturnOrder.action';
+      //var orderType = '订单详情';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".orderDetailContent",["待退货"]);
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      var params = selctedOrderParams.apiParams;
+      if (hadInvalidGoods){
+        commonService.showErrorMessage('您选择了非待退货的商品，请重新选择');
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }else{
+
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("cancelReturnOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("取消退货成功！");
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    }
+    //确认收货
+    $scope.confirm_detail = function(orderId){
+      //var goodLis = $('.detail-list-group').find('.img-status');
+      //var orderLis = orderId;
+      //var goodS = '已发货'; //商品目前的状态
+      //var changeGoodS = '已完成'; //商品需要修改的状态
+      //var operate = '确认收货';
+      //var url = 'confirmOrder.action';
+      //var orderType = '订单详情';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+
+      var selctedOrderParams = getSelectedOrdersAndGoods(".orderDetailContent",["已发货"]);
+      var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];  //判断是否勾选有非对应状态中的商品
+      var hadTimerGoods = selctedOrderParams.hadInvalidGoods[1];    //判断是否有勾选定时商品
+      var params = selctedOrderParams.apiParams;
+      if (hadInvalidGoods){
+        commonService.showErrorMessage('您选择了非已发货的商品，请重新选择');
+      }else if (hadTimerGoods){
+        commonService.showErrorMessage('您选择了定时商品，请重新选择');
+      }else if (params.length == 0){
+        commonService.showErrorMessage("请选择商品！");
+      }
+      else{
+        var params = selctedOrderParams.apiParams;
+        var apiParams = {'json':JSON.stringify(params)};
+        userService.postRequestWithUrlAndParams("confirmOrder.action",apiParams).success(function(response){
+          var errorCode = response.code;
+          if (errorCode == 0){
+            commonService.showSuccessMessage("确认收货成功！");
+            //确认收货成功后重新请求数据
+            reloadData();
+
+          }else{
+            commonService.showErrorMessage(response.data);
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+      }
+
+    };
+    //取消确认收货
+    $scope.cancelConfirm_detail = function(orderId){
+      //var goodLis = $('.detail-list-group').find('.img-status');
+      //var orderLis = orderId;
+      //var goodS = '已完成'; //商品目前的状态
+      //var changeGoodS = '已发货'; //商品需要修改的状态
+      //var operate = '取消确认收货';
+      //var url = 'cancelConfirmOrder.action';
+      //var orderType = '订单详情';
+      //userService.handleOrder(goodLis,orderLis,goodS,changeGoodS,operate,url,orderType);
+
+
+
+      //var selctedOrderParams = getSelectedOrdersAndGoods(".orderDetailContent","已完成");
+      //var hadInvalidGoods = selctedOrderParams.hadInvalidGoods[0];
+      //var params = selctedOrderParams.apiParams;
+      //if (hadInvalidGoods){
+      //  commonService.showErrorMessage('您选择了非待退货的商品，请重新选择');
+      //}else if (params.length == 0){
+      //  commonService.showErrorMessage("请选择商品！");
+      //}else{
+      //
+      //  var apiParams = {'json':JSON.stringify(params)};
+      //  userService.postRequestWithUrlAndParams("cancelReturnOrder.action",apiParams).success(function(response){
+      //    var errorCode = response.code;
+      //    if (errorCode == 0){
+      //      commonService.showSuccessMessage("取消退货成功！");
+      //    }else{
+      //      commonService.showErrorMessage(response.data);
+      //    }
+      //  }).error(function (data, status, header, config) {
+      //
+      //  });
+      //}
+
+
+    };
+
+    //进入支付页
+    $scope.jumpPay = function(){
+
+      var orderObject = {'order_id':$stateParams.orderId};
+      var goodsIdTable = [];
+      var goodsTable = $('.orderdetail-goods-isselected');
+      for (var index = 0;index < goodsTable.length;index++){
+        var goodsRow = goodsTable[index];
+        var isSelected = $(goodsRow).hasClass('checked');
+        var goodsId = $(goodsRow).next().html();
+        if (isSelected){
+          goodsIdTable.push(goodsId);
+        }
+      }
+      orderObject.goods_id = goodsIdTable;
+
+      if (goodsIdTable.length == 0){
+        commonService.showWarnMessage('未选择商品');
+      }else{
+        var orderId = [orderObject];
+        payCacheService.setProperty("orderId",orderId); //采纳数，非单纯的orderId
+        payCacheService.setProperty("detailOrderId",$stateParams.orderId);
+        sessionStorage.isFrom = 4;
+        $state.go("guanjia-pay",{"from":"4", obj:{}});
+      }
+
+      //var isChecked = $('.detail-list-group .orderSure').hasClass('checked');
+      //if(isChecked){
+      //  var orderId = $('.detail-list-group .orderSure').next().html();
+      //  payCacheService.setProperty("orderId",orderId);
+      //  payCacheService.setProperty("detailOrderId",$stateParams.orderId);
+      //  sessionStorage.isFrom = 4;
+      //  $state.go("guanjia-pay",{"from":"4", obj:{}});
+      //}else{
+      //  commonService.showWarnMessage('未选择商品');
+      //}
+    }
+
+
+    /*
+     * status 为订单中商品的状态
+     * status = ‘已发货’
+     *
+     * 返回勾选对应的状态的数据以及是否够训吖了其他状态的标志
+     * @return apiParams         根据用户传入的状态返回对应状态的勾选的商品
+     * @return hadInvalidGoods   错误标志位，表明用户勾选的数据中是否存在其他状态的商品数据
+     *
+     */
+    var getSelectedOrdersAndGoods = function(parent,status){
+
+      var hadSendOrderParamsArray = [];  //存储经过处理的准备传到后台的参数
+      var selectedOrderIdTable = [];  //存储所有的勾选的订单id
+      var selectedOrderParamsTable = [];   //存储所有的勾选的订单id与商品id
+      var hadOtherStatusGoods = false; //是否勾选非已发货商品的标志
+      var hadTimerGoods = false; // 是否勾选了定时商品
+      var goodSure = $(parent).find('.goodSure')
+      $.each(goodSure,function(index,domEl){
+        var goodsStatus = $(domEl).prev().html();
+        var isTimerGoods = $(domEl).prev().prev().html(); //是否是定时商品
+        if($(domEl).hasClass('checked')) {
+          //如果选中并且满足订单状态，则保存good_id
+          //判断选中的商品是否是给定的状态
+          if (goodsStatus == status) {
+
+            //判断是否勾选定时商品
+            if (isTimerGoods == "Y"){
+              hadTimerGoods = true;
+            }
+
+            var goodId = $(domEl).next().html();
+            var orderId = $(domEl).parents('.list-group').find('.myOrder-orderId').html();
+            selectedOrderIdTable.push(orderId);
+            selectedOrderParamsTable.push([orderId,goodId]);
+
+            //元素去重
+            var tmp = new Array();
+            for(var i in selectedOrderIdTable){
+              if(tmp.indexOf(selectedOrderIdTable[i])==-1){
+                tmp.push(selectedOrderIdTable[i]);
+              }
+            }
+            for (var index = 0; index < tmp.length;index++){
+              var deleteObject = {};
+              var deleteGoodsTable = [];
+              var orderId = tmp[index];
+              for (var i = 0 ; i < selectedOrderParamsTable.length;i++){
+                var deleteOrderId = selectedOrderParamsTable[i][0];
+                var deleteGoodsId = selectedOrderParamsTable[i][1];
+                if (orderId == deleteOrderId){
+                  deleteObject.order_id = orderId;
+                  deleteGoodsTable.push(deleteGoodsId);
+                }
+              }
+              deleteObject.orderItem_id = deleteGoodsTable;
+              hadSendOrderParamsArray.push(deleteObject);
+            }
+
+          }else{
+            //遍历到非已发货商品时停止遍历，并设置标识符为勾选了非法商品
+            hadOtherStatusGoods = true;
+            return false;
+          }
+        }
+      });
+      return {'apiParams':hadSendOrderParamsArray,'hadInvalidGoods':[hadOtherStatusGoods,hadTimerGoods]}
+
+    }
+
+
+  }
+);

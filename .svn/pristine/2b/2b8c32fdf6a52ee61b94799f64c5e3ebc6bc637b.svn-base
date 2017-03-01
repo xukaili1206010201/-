@@ -1,0 +1,19 @@
+.post-edit-content{
+  padding:10px;
+}
+.post-edit-content #contentTie{
+  width:100%;
+  height:80px;
+  resize: none;
+}
+.post-edit-content .img-bg{
+  background-color: rgb(240, 239, 245);
+}
+.post-edit-content .btn{
+  border-radius: 4px;
+  width:40%;
+}
+.editBbsImg{
+  width:79px;
+  height:79px;
+}

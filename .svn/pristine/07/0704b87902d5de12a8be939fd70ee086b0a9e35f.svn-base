@@ -1,0 +1,50 @@
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+    <!--<p class="navbar-text text-center">我的消息</p>-->
+    <div class="navigation-bar">
+        <!-- 返回按钮-->
+        <img ng-click="back()" class="back-button" src="images/back_button.png">
+
+        <!-- 搜索框组-->
+        <div class="search-group">
+            <img class="search-button" src="images/search_button.png" ng-click="searchCode()">
+            <div class="search-input">
+                <input class="form-control" placeholder="请输入搜索关键字">
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="main fansCode" ng-if="isShowCode">
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="k in fansCodeList">
+      <span class="fans_mobile">{{k.mobile}}</span>
+      <span class="fR">{{k.page}}</span>
+      <p>{{k.number}}
+        <span class="send-time">{{k.send_date}}</span>
+      </p>
+    </li>
+  </ul>
+</div>
+
+  <!-------------关键字搜索------------------->
+  <div class="searchCode" ng-if="!isShowCode">
+      <div ng-if="!isCode" style="text-align: center;font-size:1.6rem"><span>sorry,暂无相关数据！</span></div>
+      <ul ng-if="isCode">
+        <li class="list-group-item" ng-repeat="k in fanCList">
+          <span class="fans_mobile">{{k.mobile}}</span>
+          <span class="fR">{{k.page}}</span>
+          <p>{{k.number}}
+            <span class="send-time">{{k.send_date}}</span>
+          </p>
+        </li>
+      </ul>
+  </div>
+
+<script>
+  var searchHeight = window.screen.availHeight - $('.navigationbar').height();
+  $('.searchCode').css({
+    'height' : searchHeight + 'px',
+    'overflow' : 'scroll'
+  });
+</script>

@@ -1,0 +1,95 @@
+/* ******************************** 列表 样式 ******************************** */
+.goods-judge-goodsinfo{
+  margin-top:50px;
+  background: #F0EFF5;
+  padding: 10px;
+}
+.product-judge-image-left{
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 0px;
+}
+.product-judge-image-left >img{
+  width:4rem;
+  height:4rem;
+}
+.media-main{
+  /*margin-top:15px;*/
+  font-size: 10px;
+}
+
+.goods-judge-goodsname{
+  font-size: 15px;
+  margin-bottom: 0px;
+}
+
+/*.goods-judge-service{*/
+  /*margin-left: 10px;*/
+/*}*/
+
+.goods-comment-row{
+  margin-right: 0px;
+}
+
+.allstar{
+  margin-left: 20px;
+  /*margin-top: 20px;*/
+}
+.star-pic {
+  float: left;
+}
+
+.allstar .star-pic img{
+  height: 30px;
+  width: 30px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+.input-text{
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+.sure-button{
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+.sure-button-detail{
+  width: 100%;
+  height: 100%;
+}
+.upload p{
+  margin:10px 15px;
+  font-size: 15px;
+}
+
+
+.upload-img-background{
+  height:90px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border:1px solid #ddd;
+  background: white;
+  padding: 10px 0px 10px 0px;
+}
+
+.upload_img{
+  margin-left: 10px;
+  height: 70px;
+  width: 70px;
+}
+
+.goods-judge-tabbar{
+  width: 100%;
+  height: 40px;
+  background: #ddd;
+  padding: 5px 10px 5px 10px;
+}
+
+.goods-judge-tabbar .btn{
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}

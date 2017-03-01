@@ -1,0 +1,27 @@
+/* ******************************** navigationbar with back-button   begin ******************************** */
+.tab-content {
+    margin: 10px 10px;
+}
+
+.chart-legend, .bar-legend, .line-legend, .pie-legend, .radar-legend,
+.polararea-legend, .doughnut-legend {
+    text-align: left !important;
+}
+.portfolio{
+    overflow-x: auto;
+}
+.portfolio-table table td{
+    border:1px solid #D6D6D6;
+}
+.link-orderTop{
+    text-align: center;
+    margin:1rem 0;
+    width:100%;
+}
+.link-orderTop .isSelected{
+    background:#E6E6E6;
+}
+.link-orderTop button{
+    padding:3px;
+    width: 30%;
+}

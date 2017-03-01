@@ -1,0 +1,277 @@
+.topay-msg,.tosend-msg,.tobackmoney-msg,.alsend-msg,.toback-msg,.finish-msg,.alback-msg{
+  background: #F0EFF5;
+}
+
+
+.all-message-table {
+    margin-top: 10px;
+    background-color: #f0eff5;
+}
+.order-container ul,.searchOrd ul{
+  margin-bottom: 0px;
+  padding-bottom: 10px;
+}
+.list-group li.order-basic-info{
+  background-color: #F0F0F0;
+}
+.order_no{
+  font-size:1.2rem;
+}
+.order-status{
+  float:right;
+}
+.order-basic-second{
+  overflow: hidden;
+}
+.order-basic-second p:first-child{
+  float:left;
+}
+.order-basic-second p:last-child{
+  float:right;
+}
+.order-basic-second .secondChild{
+  float:right;
+}
+.product-good{
+  font-size:1.2rem;
+  display: inline-block;
+  width: 70%;
+}
+.order-guige{
+  padding-left:35px;
+  clear: both;
+}
+/*/!* ******************************** 其他表 样式 ******************************** *!/*/
+.topay-message-table, .tobackmoney-message-table, .tosend-message-table, .alsend-message-table, .toback-message-table, .finish-message-table, .alback-message-table {
+    border: 0;
+    background-color: #f0eff5;
+}
+
+.note-message .judge{
+  float:right;
+  padding:.1rem .5rem;
+  border-radius: 5px;
+  background: rgb(161, 216, 34);
+  color:white;
+}
+
+/* 商品失效 */
+.myorder-goods-invalid{
+  color: red;
+  font-size: 10px;
+}
+
+.price-type{
+  margin-bottom: 60px !important;
+}
+.foot-price{
+    color: red;
+}
+.text-align{
+    text-align: center;
+}
+.line{
+    border-bottom: 1px solid #9e9898;
+}
+
+.order-message-text {
+    margin-left: 30px;
+    font-size:1rem;
+}
+.order-message-text .myorder-city, .ordernum, .ordertime, .paytime, .myorder-shop, .state, .allmoney, .myorder-note {
+    height: 15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.allmoney {
+    margin-left:8px;
+    color: red;
+    font-size:1.1rem;
+}
+
+.list-text {
+    margin-left: 90px;
+    margin-right: 0px;
+}
+.row{
+  margin-left:0px;
+}
+.myorder-count{
+    float: right;
+    color: red;
+}
+.note-message {
+    margin-top: 5px;
+    clear:both;
+}
+.myorder-time{
+  overflow: hidden;
+}
+.product-name ,.myorder-time , .size{
+    /*margin-bottom: 5px !important;*/
+}
+.col{
+  padding-right: 0px;
+  padding-left:0px;
+}
+
+.myorder-shop {
+    margin-left: 20px;
+}
+
+.sendway {
+    margin-left: 10px;
+}
+
+.message-pic {
+    float: left;
+    margin-top: 20px;
+}
+
+.product-pic {
+    height: 100%;
+    float: right;
+    width: 60px;
+    margin-left: 5px;
+}
+
+.product-pic img {
+    width: 60px;
+    height: 60px;
+}
+
+.pic {
+    float: left;
+}
+
+.message-pic img {
+    width: 20px;
+    height: 20px;
+}
+
+.price {
+    float: right;
+    color: red;
+    font-size: 1.1rem;
+}
+
+.station {
+    float: right;
+    font-size: 12px;
+}
+
+.judge-button {
+    float: left;
+    width: 60px;
+    height: 18px;
+    font-size: 10px;
+}
+
+.judge-price {
+    float: right;
+}
+
+/*-------------最下方的按键------------------------*/
+.my-button-group {
+    bottom: 0;
+    height: 50px;
+    background-color: #c4e3f3;
+}
+
+.button-group-left1 {
+    float: left;
+    width: 40%;
+    height: 100%;
+    background-color: #c4e3f3;
+}
+.button-group-all-left{
+  float: left;
+  width: 20%;
+  height: 100%;
+  background-color: #c4e3f3;
+}
+.button-group-right1 {
+    float: left;
+    width: 60%;
+    height: 100%;
+}
+.button-group-all-right{
+  float: left;
+  width: 80%;
+  height: 100%;
+}
+.button-group-left2 {
+    float: left;
+    width: 70%;
+    height: 100%;
+    background-color: #c4e3f3;
+}
+
+.button-group-right2 {
+    float: left;
+    width: 30%;
+    height: 100%;
+}
+
+.button-cancel {
+    width: 100%;
+    height: 100%;
+}
+.button-margin{
+  margin-top: 60px;
+}
+
+.edit-group {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.edit-group button {
+    width: 100%;
+    height: 100%;
+}
+
+.labletext {
+    margin-left: 15px;
+    margin-top: 15px;
+}
+
+.all-select-button {
+    float: inherit;
+    margin-right: 5px;
+}
+
+.statusHide{
+  display: none;
+}
+
+/****************选项卡*************************/
+.myorder-tabs{
+  margin-top:50px;
+  width:100%;
+  height:3.3rem;
+  overflow-x: scroll;
+  font-size:1.3rem;
+  border-bottom:1px solid #ddd;
+  background-color: #fff;
+}
+.myorder-tabs-ul{
+  overflow-x: scroll;
+  display: inline-flex;
+  padding-left: 1rem;
+  height:3.3rem;
+  line-height:3.3rem;
+  color:#000;
+}
+.myorder-tabs-ul li{
+  float:left;
+  width:4.5rem;
+  margin-right:1rem;
+  text-align: center;
+}
+.selectedOrder{
+  color:#7DB343;
+  border-bottom:3px solid #7DB343;
+}

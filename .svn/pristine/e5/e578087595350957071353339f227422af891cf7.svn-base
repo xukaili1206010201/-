@@ -1,0 +1,224 @@
+<script type="text/javascript">
+
+
+  //************************************* 轮播图 begin ***************************************
+  $(function () {
+    $('#owl-demo').owlCarousel({
+      items: 1,
+      autoPlay: 3000,
+      pagination: false
+    });
+  });
+  //************************************* 列表中商家名的长度设置 begin ***************************************
+  //避免商家名过长讲商家的商品数挤下来
+  $(function () {
+    var titlenumW = parseInt($('.seller-name-num').css('width'));
+    var numW = parseInt($('.goods-num').css('width'));
+    var titleMaxW = titlenumW - 10 - numW - 50;
+    $('.seller-name').css({
+      'max-width': titleMaxW + 'px'
+    });
+  })
+  //************************************* 列表中商家名的长度设置 end ***************************************
+
+  function showbreakfast() {
+    $('.breakfast-button').css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+
+    });
+
+    //设置其他的按钮背景为橙色
+    $('.supper-button ,.fruit-button ,.goods-button').css({
+      'background': 'rgb(237, 237, 237)',
+      'color': 'rgb(109, 109, 109)'
+
+    });
+
+  }
+  function showfruit() {
+    $('.fruit-button').css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+
+    });
+
+    //设置其他的按钮背景为橙色
+    $('.breakfast-button ,.supper-button ,.goods-button').css({
+      'background': 'rgb(237, 237, 237)',
+      'color': 'rgb(109, 109, 109)'
+
+    });
+
+  }
+  function showsupper() {
+    $('.supper-button').css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+
+    });
+
+    //设置其他的按钮背景为橙色
+    $('.breakfast-button ,.fruit-button ,.goods-button').css({
+      'background': 'rgb(237, 237, 237)',
+      'color': 'rgb(109, 109, 109)'
+
+    });
+  }
+  function showgoods() {
+    $('.goods-button').css({
+      'background': 'rgb(161, 216, 34)',
+      'color': 'white'
+
+    });
+
+    //设置其他的按钮背景为橙色
+    $('.breakfast-button ,.fruit-button ,.supper-button').css({
+      'background': 'rgb(237, 237, 237)',
+      'color': 'rgb(109, 109, 109)'
+
+    });
+  }
+</script>
+
+
+<nav class="navbar-fixed-top navigationbar">
+  <!-- 返回按钮-->
+  <div class="navcityLeft">
+    <img ng-click="backtocomservice()" class="back-button" src="images/back_button.png">
+    <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+      <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+              ng-options="x.city_id as x.name for x in usercityList">
+      </select>
+    </p>
+
+  </div>
+
+  <div class="navcityRight">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchBusiness()">
+      <input class="search-input form-control" type="text" placeholder="请输入搜索关键字" ng-blur="supportBlur()">
+    </div>
+  </div>
+</nav>
+
+<div ng-if="supportContent">
+  <!-- 卡头切换-->
+  <div class="navbar-fixed-top sup-segment-control">
+    <div class="breakfast-supper-block">
+      <div class="breakfast-item" ng-repeat="b in fuwu_id">
+
+        <a class="breakfast-button"
+           ng-click="changeServiceTab(b)"
+           change-service
+           data="{parentClass:'.breakfast-supper-block',childClass:'.breakfast-item',
+      childItem:'.breakfast-button',listClass:'.seller-table'}">
+          {{b.name}}
+        </a>
+        <span ng-hide="true">{{$index}}</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div ng-repeat="count in fuwu_count" class="seller-table show{{count}}">
+    <div class="support-content-test" load-more data="{params : params,repeatFun : '$scope.businessFun'}">
+      <div>
+        <!--轮播图-->
+        <div ng-if="slides.length > 0" class="corouselH">
+          <div ng-hide="imgShow">
+            <carousel interval="myInterval" class="carousel-ad-images">
+              <slide ng-repeat="slide in slides" active="slide.active">
+                <img ng-src="{{slide.imageUrl}}" curousel-height class="slideImg" ng-click="adToDetail($index)">
+              </slide>
+            </carousel>
+          </div>
+          <!--占位图-->
+          <div ng-if="imgShow">
+            <img src="images/zhanwei.png" curousel-height class="slideImg">
+          </div>
+        </div>
+
+        <!--公告信息-->
+        <div class="marquee-broadcast">
+        </div>
+
+        <!-- 城市服务提示信息 -->
+        <div class="prompt-service" ng-show="isShowPrompt" ng-click="goStationIntro()">
+          <div class="prompt-content">
+            <ul class="list-unstyled">
+              <li ng-show="promptData.message.length!=''">
+                <i class="glyphicon glyphicon-bullhorn"></i>
+                <span class="args">{{promptData.message}}</span>
+              </li>
+              <li>您可预定<span class="args">{{promptData.booking_number}}</span>天的<span
+                class="args">{{promptData.label}}</span>，
+                <span
+                  ng-if="!promptData.xiuxi"><span class="args">星期天</span>的除外。</span>
+                 <span ng-show="promptData.booking_stop_number!=0">次日的请提前<span class="args">{{promptData.booking_stop_number}}</span>天，</span>
+                 <span class="args">{{promptData.booking_date}}</span>后将推迟一天。
+                请在<span class="args">{{promptData.paisong_start_date}}</span>到<span class="args">{{promptData.paisong_end_date}}</span>到预定小区服务站领取。
+              <li class="go-station">点击查看已开通的小区<i class="glyphicon glyphicon-arrow-right"></i></li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+
+        <!--所有此服务的商家数据 -->
+        <div class="all-bussiness-info" ng-show="allBusiness.businessCount>0" ng-click="jumpgoodslist()">
+          <span><span>全部商家</span>&nbsp;&nbsp;{{allBusiness.businessCount}}个</span>
+            <span>商品{{allBusiness.goodsCount}}个
+              <!--<i class="glyphicon glyphicon-chevron-right"></i>-->
+              <img src="images/next.png">
+            </span>
+        </div>
+
+        <!--商家列表-->
+        <div class="support-list" ng-if="!errMsg">
+          <ul class="media-list">
+            <li class="sup-media" ng-repeat="b in business">
+              <div class="media-left">
+                <!--<a href="#">-->
+                <img class="media-object businessImg" src="{{b.logo}}" alt="...">
+                <img class="image-tag" ng-show="b.hot == 'Y'" src="images/fire.png">
+                <!--</a>-->
+              </div>
+              <div class="media-body" ng-click="jumpgoodslist(b.business_id)" alt="{{b.business_id}}">
+                <div class="seller-name-num">
+                  <div class="support-seller-content">
+                    <img class="Newimage" ng-show="b.new == 'Y'" src="images/newtag.png">
+                    <p>{{b.name}}</p>
+                  </div>
+                  <p class="goods-num">{{b.goods_count}}个</p>
+                </div>
+                <p class="description">{{b.ad}}</p>
+                <p class="description">{{b.content}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div ng-if="errMsg" class="errMsg">{{errMsg}}</div>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
+<div ng-if="!supportContent" class="error">{{errMsg}}</div>
+
+<script>
+  /**********加载更多相关***********/
+  var busHeight = window.screen.availHeight - $('.navigationbar').outerHeight() - $('.sup-segment-control').outerHeight();
+  $('.support-content-test').css({
+    'height': busHeight + 'px',
+    'overflow': 'scroll'
+  });
+
+  $('.seller-table').css({
+    'margin-top' : $('.sup-segment-control').outerHeight() + 50 + 'px'
+  });
+</script>

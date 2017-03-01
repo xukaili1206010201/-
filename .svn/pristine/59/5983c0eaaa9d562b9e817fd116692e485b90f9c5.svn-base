@@ -1,0 +1,485 @@
+/**
+ * Created by crazybear on 16/4/21.
+ */
+'use strict';
+
+var cartModuleController = angular.module('cartModuleController', []);
+//请求订单数据
+cartModuleController.controller(
+  'guanjiaCtrl',
+  function ($scope, $stateParams, userService, $state) {
+    $scope.formData = {};
+
+    $scope.jumpTo = function () {
+      userService.memberLogin(
+        $scope.formData
+      ).success(function (data) {
+          $scope.result = data;
+          console.log(data);
+          switch (data.code) {
+            case '0':
+              $state.go('member-personal-register');
+              break;
+            case '-1':
+              $scope.errMsg = '请输入手机号码！';
+              break;
+            case '-2':
+              $scope.errMsg = '请输入密码！';
+              break;
+            case '-3':
+              $scope.errMsg = '账号不存在，请注册！';
+              break;
+            case '-4':
+              $scope.errMsg = '密码错误！';
+              break;
+          }
+        }).error(function (data, status, header, config) {
+
+        });
+    }
+  }
+);
+
+//我的购物车
+cartModuleController.controller('cartCtrl', ['$scope', '$state', '$stateParams', 'userService', 'commonService', '$q','$cookies', '$location','$rootScope','$timeout','payCacheService',function ($scope, $state, $stateParams, userService, commonService, $q,$cookies,$location,$rootScope,$timeout,payCacheService) {
+  if (!$cookies.get('ticket')) {
+    commonService.showWarnMessage("账号不能为空，请登录！");
+    return;
+  } else if (!sessionStorage.gpscityId) {
+    commonService.showWarnMessage("请选择城市");
+    return;
+  }
+  $scope.totalPrice = (0.00).toFixed(2);
+  $scope.errMsg = '';
+  $scope.carList = function (params) {
+    var defer = $q.defer();
+    userService.postRequestWithPageNo(params).success(function (response) {
+      console.log(response)
+      switch (response.code) {
+        case '0':
+          var tempList = response.data;
+          if(tempList.length == 0 && params.pageno == '1'){
+            $scope.errMsg = '没有相关数据';
+          }else{
+            $scope.errMsg = '';
+            if (tempList.length < params.pagesize) {
+              isCart = true;//true:标志数据加载完成
+              defer.resolve(isCart);
+            } else {
+              isCart = false;
+              defer.resolve(isCart);
+            }
+            if (params.direction == 'down') {
+              $scope.cartLists = response.data;
+            } else {
+              $scope.cartLists = $scope.cartLists.concat(tempList);
+            }
+          }
+          break;
+        case '-1':
+          commonService.showErrorMessage("参数为空");
+          break;
+        case '-8':
+          $state.go('member-personal-login');
+          sessionStorage.loginLocation=$location.path();
+          break;
+      }
+    }).error(function (data, status, header, config) {
+      commonService.hiddenLoadingHub();
+    });
+    return defer.promise;
+  };
+  //获取购物车中的商品数据
+  $scope.cartParams = {
+    'mobile': localStorage.mobile,
+    'pageno': '1', //页码
+    'pagesize': '5', //页数
+    'type':'特供',
+    'url': 'listCart.action',
+    'direction': 'up',
+    'key' : ''
+  };
+  $scope.showType = true; //true: 显示订购类数据,默认
+  var isCart = false;//false:标志数据未加载完成
+  $scope.cartLists = []; //存储订购类数据
+  $scope.carList($scope.cartParams);
+
+  $scope.btnType = '购买';
+  //点击选项卡，切换显示数据
+  $scope.showSelectedData = function(type){
+    console.log('22222')
+    $scope.cartLists = [];
+    if(type == '特供'){ //订购类
+      $scope.showType = true;
+      $scope.btnType = '购买';
+    }else{ //预约类
+      console.log('12')
+      $scope.showType = false;
+      $scope.btnType = '预约';
+    }
+    $scope.cartParams.pageno = 1;
+    $scope.cartParams.type = type;
+    $scope.carList($scope.cartParams);
+  };
+
+  //点击购买或者预约按钮
+  $scope.buyOrReserve = function($event){
+    console.log($($event.target).html());
+    var txt = $($event.target).html();
+    if(txt == '购买'){
+      $scope.placeOrder('.order-table','购买');
+    }else if(txt == '预约'){
+      $scope.placeOrder('.reserve-table','预约');
+    }else{
+      console.log('哇卡卡卡，报错了！');
+    }
+  };
+
+  /**************关键字搜索**********************/
+  var val = '';
+  $scope.searchGoods = function () {
+    $scope.cartLists = [];
+    val = $('.search-input').val();
+    $scope.cartParams.key = val;
+    $scope.cartParams.pageno = 1;
+    $scope.carList($scope.cartParams);
+  };
+  //失去焦点时，获取key的值
+  $scope.cartBlur = function(){
+    $scope.cartParams.key = $('.search-input').val();
+  };
+
+  //删除商品
+  $scope.deleteGoods = function () {
+
+    //存储将要删除的购物车商品id
+    var goodsIdToDelete = [];
+    //获取所有的商品列表
+    var goodsList = $('.list-group').find('.list-group-item');
+    //循环商品列表
+    for (var index = 0; index < goodsList.length; index++) {
+      //获取当前商品状态（是否被勾选）
+      var isSelect = $(goodsList[index]).find(".sure").hasClass("checked");
+      //如果已被勾选则计算该勾选商品的总价格
+      if (isSelect) {
+        var cartId = $(goodsList[index]).find(".cart-id").html();
+        goodsIdToDelete.push(cartId);
+      }
+    }
+
+
+    var params = {"mobile": localStorage.mobile, "cart_id": goodsIdToDelete.toString()};
+
+    if (!$cookies.get('ticket')) {
+      commonService.showWarnMessage("账号不能为空，请登录！");
+      return;
+    } else if (!params.cart_id) {
+      commonService.showWarnMessage("请勾选商品");
+      return;
+    }
+
+    params = {'json': JSON.stringify(params)};
+    userService.postRequestWithUrlAndParams("delCart.action", params).success(function (response) {
+      switch (response.code) {
+        case '0':
+          for (var index = 0; index < goodsList.length; index++) {
+            //获取当前商品状态（是否被勾选）
+            var isSelect = $(goodsList[index]).find(".sure").hasClass("checked");
+            //如果已被勾选则计算该勾选商品的总价格
+            if (isSelect) {
+              console.log(goodsList[index]);
+              $(goodsList[index]).remove();
+            }
+          }
+          getTotalPrice();
+          break;
+        case '-1':
+          commonService.showWarnMessage("参数为空");
+          break;
+        case '-2':
+          commonService.showWarnMessage("参数错误");
+          break;
+        case '-3':
+          commonService.showWarnMessage("返回失败，系统异常");
+          break;
+      }
+    }).error(function (data, status, header, config) {
+
+    });
+
+  };
+
+  //购买商品,下单 或者预约
+  $scope.placeOrder = function (parent,type) {
+    //存储将要购买的购物车商品id
+    var goodsToBuy = [];
+    //获取所有的商品列表
+    var goodsList = $(parent).find('.cart-row');
+    //循环商品列表
+    for (var index = 0; index < goodsList.length; index++) {
+      //获取当前商品状态（是否被勾选）
+      var isSelect = $(goodsList[index]).find(".sure").hasClass("checked");
+      //如果已被勾选则计算该勾选商品的总价格
+      if (isSelect) {
+        var regx = /^\+?[1-9][0-9]*$/;
+        //获取勾选商品的数量
+        var goodsNumber = $(goodsList[index]).find(".cart-number-input").val();
+        if (!regx.test(goodsNumber)) {
+          commonService.showNoticeMessage('请填写正确数量!');
+          return;
+        };
+        var cartId = $(goodsList[index]).find(".cart-id").html();
+        //勾选商品的id
+        var goodsId = $(goodsList[index]).find(".goods-id").html();
+
+        //配送id
+        var goodsDeliveryId = $(goodsList[index]).find(".cart-good-deliveryId").html();
+        //服务站id
+        var goodsserviceStationId = $(goodsList[index]).find(".cart-good-serviceStationId").html();
+
+        //收货人姓名
+        var receiverName = $(goodsList[index]).find('.cart-goods-receiver-name').html();
+        //收货人电话
+        var receiverTelphone = $(goodsList[index]).find('.cart-goods-receiver-telphone').html();
+        //收货人地址
+        var receiverAddress = $(goodsList[index]).find('.cart-goods-receiver-address').html();
+
+        //规格
+        var goodsGuige = $(goodsList[index]).children('.cart-message-text').children('.cart-good-guige').html();
+        var goodsGuige1 = $(goodsList[index]).children('.cart-message-text').children('.cart-good-guige1').html();
+        var goodsGuige2 = $(goodsList[index]).children('.cart-message-text').children('.cart-good-guige2').html();
+
+        //是否失效
+        var status = $(goodsList[index]).find('.cart-goods-status').html().length;
+
+        //var guigeList = [];
+        //for (var i = 0; i < goodsGuige.length; i++) {
+        //  guigeList.push(goodsGuige[i].value);
+        //}
+        goodsToBuy.push({
+          "goods_id": goodsId,
+          "count": goodsNumber,
+          "guige": goodsGuige,
+          "guige_1":goodsGuige1,
+          "guige_2":goodsGuige2,
+          "delivery_id": goodsDeliveryId,
+          "service_station_id": goodsserviceStationId,
+          "contact_name": receiverName,
+          "contact_phone": receiverTelphone,
+          "address": receiverAddress,
+          "status": status,
+          "cart_id":cartId
+        });
+
+      }
+    }
+    //判断选购的商品中是否存在失效商品，若没有则将失效标志移除
+    var goodsToBuyNew = [];
+    for (var index = 0; index < goodsToBuy.length; index++) {
+      var dict = goodsToBuy[index];
+      var status = dict["status"];
+      if (status > 0) {
+        commonService.showWarnMessage("您选购的商品中有失效商品！");
+        return;
+      }
+      delete dict.status;
+      goodsToBuyNew.push(dict);
+    }
+    var params = {"mobile": localStorage.mobile, "goods": goodsToBuyNew};
+    if (!$cookies.get('ticket')) {
+      commonService.showWarnMessage("账号不能为空，请登录！");
+      return;
+    } else if (params.goods.length == 0) {
+      commonService.showWarnMessage("请勾选商品！");
+      return;
+    }
+    //额外添加isCart参数，方便后台判断是从购物车购买还是在购买页直接购买
+    params = {'json' : JSON.stringify(params),'isCart':true};
+    if(type == '购买'){
+      userService.postRequestWithUrlAndParams("buy.action", params).success(function (response) {
+        switch (response.code) {
+          case '0':
+            var orderNo = response.data;
+            payCacheService.setProperty("orderId",orderNo);
+            //下单成功，前往支付页
+            sessionStorage.isFrom = 1;
+            $state.go('guanjia-pay', {
+              from: 1,
+              obj: {
+                orderIds: orderNo
+              }
+            });
+            break;
+          case '-1':
+            commonService.showErrorMessage("参数为空");
+            break;
+          case '-2':
+            commonService.showErrorMessage("参数错误");
+            break;
+          case '-3':
+            commonService.showErrorMessage("操作失败，系统异常");
+            break;
+        }
+      });
+    }else{
+      userService.postRequestWithUrlAndParams("buy.action", params).success(function(response){
+        if(response.code == '0'){
+          commonService.showSuccessMessage('预约成功！');
+          $timeout(function(){
+            $state.go('member-personal-usercenter');
+          },500);
+        }else if(response.code == '-4'){
+          commonService.showWarnMessage('铛铛铛，商家休息了！');
+        }else{
+          console.log('直接预约接口有错误！');
+        }
+      });
+    }
+
+  };
+
+  //计算总价
+  function getTotalPrice() {
+    var totalPriceF = 0.0;
+    //获取所有的商品列表
+    var goodsList = $('.list-group').find('.list-group-item');
+    //循环商品列表
+    for (var index = 0; index < goodsList.length; index++) {
+      //获取当前商品状态（是否被勾选）
+      var isSelect = $(goodsList[index]).find(".sure").hasClass("checked");
+      //如果已被勾选则计算该勾选商品的总价格
+      if (isSelect) {
+        //获取勾选商品的数量
+        var goodsNumber = $(goodsList[index]).find(".cart-number-input").val();
+        //获取勾选商品的单价
+        var goodsPrice = parseFloat($(goodsList[index]).find(".cart-goods-price").html());
+        totalPriceF += goodsNumber * goodsPrice;
+      }
+    }
+    $scope.totalPrice = totalPriceF.toFixed(2);
+
+  };
+
+  //增减商品的数量
+  //增加商品的数量后重新计算商品的数量
+  $scope.increase = function ($event) {
+    var elem = $($event.target).prev();
+    //var val = 1;
+    if (elem.val() == null || elem.val().trim() == '') {
+      val = 0;
+    } else {
+      val = parseFloat(elem.val());
+    }
+    elem.val(++val);
+
+    getTotalPrice();
+  };
+//减少商品的数量后重新计算商品的数量
+  $scope.decrease = function ($event) {
+    var elem = $($event.target).next();
+    var val = parseFloat(elem.val());
+    if (val > 1) {
+      elem.val(--val);
+    }
+    getTotalPrice();
+  };
+
+  //输入负数和小数点
+  $scope.inputChange = function ($event) {
+    var elem = $($event.target);
+    var val = parseFloat(elem.val());
+    var regx = /^-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
+    if (val < 1 || regx.test(val)) {
+      elem.val(1);
+      commonService.showWarnMessage("别耍小聪明哦!")
+    }
+  }
+
+
+  //勾选商品或取消勾选商品后需要重新计算总价格
+  //状态改变完成后再计算总价格才有效～～
+  $scope.selectOrNot = function ($event) {
+
+    //获取商品的状态，看商品是否失效，若失效则不可勾选
+    //var statusDiv = $($event.target).parent().parent().parent().find('.cart-goods-status')[0];
+    //var status = $(statusDiv).html()
+    //if(status.length == 0){
+
+    var elem = $($event.target);
+    var status = elem.parents('.deliver_list').find('.good_status').html();
+    if (elem.hasClass('checked')) {
+      elem.removeClass('checked');
+      elem.attr('src', 'images/sure-icon.png');
+
+      if ($('.check-all').hasClass('selectAll')) {
+        $('.check-all').removeClass('selectAll');
+        $('.check-all').attr('src', 'images/sure-icon.png');
+      }
+
+    } else {
+      elem.addClass('checked');
+      elem.attr('src', 'images/checked.jpg');
+    }
+
+    getTotalPrice();
+
+    //}
+  };
+
+  //全选商品
+  $scope.selectAllGoods = function ($event) {
+    var elem = $($event.target);
+    //非全选状态点击全选，勾选所有非失效商品
+    if (!elem.hasClass('selectAll')) {
+      $.each($('.sure'), function (index, domEl) {
+        //对商品进行判断，失效商品不能够被勾选
+        //var statusDiv = $(domEl).parent().parent().parent().find('.cart-goods-status')[0];
+        //var status = $(statusDiv).html()
+        //if(status.length == 0){
+
+        if (!$(domEl).hasClass('checked')) {
+          $(domEl).addClass('checked');
+          $(domEl).attr('src', 'images/checked.jpg');
+        }
+
+        //}
+
+      });
+      elem.addClass('selectAll');
+      elem.attr('src', 'images/checked.jpg');
+    } else { //全选状态点击全选,取消勾选所有商品
+      $.each($('.sure'), function (index, domEl) {
+        if ($(domEl).hasClass('checked')) {
+          $(domEl).removeClass('checked');
+          $(domEl).attr('src', 'images/sure-icon.png');
+        }
+      });
+      elem.removeClass('selectAll');
+      elem.attr('src', 'images/sure-icon.png');
+    }
+
+    getTotalPrice();
+  }
+
+  //回到个人中心，这里需要加判断，从社区服务也可以进入购物车
+  $scope.backLastPage = function () {
+    /**
+     * 由哪一个页面跳转到我的购物车
+     * @params from
+     * from = 0 由社区服务跳转至购物车
+     * from = 1 由个人中心跳转至购物车
+     */
+    if ($scope.isShowOrders) {
+      var from = $stateParams.from;
+      if (from == 1) { //回到个人中心
+        $state.go('member-personal-usercenter');
+      } else if (from == 0) { //回到社区服务
+        $state.go('guanjia-comservice');
+      }
+    } else {
+      window.location.reload();
+    }
+
+  };
+
+}]);

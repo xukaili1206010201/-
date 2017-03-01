@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <title>乐生活</title>
+  <meta name="description" content="">
+  <!--<meta name="viewport" content="width=device-width">-->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/owl-carousel/owl-carousel/owl.carousel.css" />
+  <link rel="stylesheet" href="bower_components/owl-carousel/owl-carousel/owl.theme.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" />
+  <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css" />
+  <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <!-- custom:css -->
+
+
+
+  <!-- ********************* 输入框、开关样式 ********************* -->
+  <link href="styles/bootstrap-switch/dist/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+
+  <!-- ********************* We UI ****************** -->
+  <link type="text/css" rel="stylesheet" href="styles/weui.css">
+
+  <!-- ********************* 消息提示框 ****************** -->
+  <link type="text/css" rel="stylesheet" href="styles/toastmessage/css/jquery.toastmessage.css">
+
+  <!-- ********************* loading提示框 ****************** -->
+  <link type="text/css" rel="stylesheet" href="styles/loaders.css">
+  <link type="text/css" rel="stylesheet" href="styles/loadinghub.css">
+
+  <!-- ********************* 轮播图样式  ****************** -->
+  <!--<link href="styles/owlcarousel/owl.carousel.css" rel="stylesheet" type="text/css">-->
+  <!--<link href="styles/owlcarousel/owl.theme.css" rel="stylesheet" type="text/css">-->
+
+  <!-- ********************* 跑马灯样式  ****************** -->
+  <link rel="stylesheet" href="styles/marquee.css">
+
+  <!-- ********************* 商品评价--星星打分 ****************** -->
+  <link href="styles/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+
+
+  <!-- 统一样式 -->
+  <link rel="stylesheet" href="styles/util.css"/>
+  <link rel="stylesheet" href="styles/leshenghuo.css">
+  <!--******************** 底部导航栏样式 ***********************-->
+  <link href="styles/tabbar.css" type="text/css" rel="stylesheet">
+
+  <!-- 登录 -->
+  <link href="styles/login.css" type="text/css" rel="stylesheet">
+  <!-- 注册 -->
+  <link href="styles/register.css" type="text/css" rel="stylesheet">
+  <!-- 手机号码设置 -->
+  <link href="styles/mobileset.css" type="text/css" rel="stylesheet">
+  <!-- 密码设置-->
+  <link href="styles/passwordreset.css" type="text/css" rel="stylesheet">
+  <!-- 个人名片-->
+  <link href="styles/businesscard.css" type="text/css" rel="stylesheet">
+  <!-- 个人信息设置-->
+  <link href="styles/editUserInfo.css" type="text/css" rel="stylesheet">
+  <!--个人中心-->
+  <link href="styles/usercenter.css" type="text/css" rel="stylesheet">
+  <!--个人中心未登录-->
+  <link href="styles/usercenterNo.css" type="text/css" rel="stylesheet">
+
+
+
+  <link rel="stylesheet" href="styles/animations.css"/>
+
+  <!-- ************************************* 社区服务  ******************************** -->
+  <link rel="stylesheet" href="styles/comservice.css">
+  <link href="styles/support.css" type="text/css" rel="stylesheet">
+  <link href="styles/goodlist.css" type="text/css" rel="stylesheet">
+  <link href="styles/sellerdetail.css" rel="stylesheet" type="text/css">
+  <!--商品详情-->
+  <link rel="stylesheet" href="styles/goodsDetail.css">
+  <!--在线超市-->
+  <link rel="stylesheet" href="styles/shoppingonline.css"/>
+  <link rel="stylesheet" href="styles/purchase.css"/>
+  <link rel="stylesheet" href="styles/pay.css"/>
+  <!--活动召集详情页-->
+  <link rel="stylesheet" href="styles/activitydetail.css" type="text/css"/>
+
+  <!-- ************************************* 公共服务  ******************************** -->
+  <link rel="stylesheet" href="styles/publicservice.css"/>
+
+  <!-- ************************************* 家庭服务  ******************************** -->
+  <link rel="stylesheet" href="styles/familyservice.css"/>
+  <link rel="stylesheet" href="styles/familyservicelist.css"/>
+  <link rel="stylesheet" href="styles/familyservicedetail.css"/>
+  <link rel="stylesheet" href="styles/servicereserve.css"/>
+
+  <!-- ************************************* 家庭金融  ******************************** -->
+  <link rel="stylesheet" href="styles/familyaccount.css"/>
+  <link rel="stylesheet" href="styles/familyaccountlist.css"/>
+  <link rel="stylesheet" href="styles/familyaccountdetail.css"/>
+
+  <!--************* 我的信息 ****************-->
+  <!-- 我的订单-->
+  <link rel="stylesheet" href="styles/myorder.css">
+
+  <!-- 我的购物车-->
+  <link rel="stylesheet" href="styles/cart.css">
+
+  <!-- 优惠券商家样式-->
+  <link rel="stylesheet" href="styles/couponsseller.css"/>
+  <!-- 优惠券详情页样式-->
+  <link rel="stylesheet" href="styles/coupondetail.css"/>
+
+  <!-- 我的小区 -->
+  <link href="styles/my_house.css" type="text/css" rel="stylesheet">
+  <!-- mycommunity -->
+  <link href="styles/mycommunity.css" type="text/css" rel="stylesheet">
+  <!--  选择城市 -->
+  <link href="styles/selectcity.css" type="text/css" rel="stylesheet">
+  <!--选择小区-->
+  <link href="styles/selectcommunity.css" type="text/css" rel="stylesheet">
+  <!-- 我的小区设置 -->
+  <link href="styles/myHouse_set.css" type="text/css" rel="stylesheet">
+  <!-- 服务站选择 -->
+  <link href="styles/selectStation.css" rel="stylesheet" type="text/css">
+
+
+  <link rel="stylesheet" href="styles/myactivities.css"/>       <!-- 我参与的活动 -->
+  <link rel="stylesheet" href="styles/myactivitiesdetail.css" > <!-- 我参与的活动详情 -->
+
+  <link rel="stylesheet" href="styles/reserve.css" > <!-- 我的预约单 -->
+
+  <!--************* 我的业务 ****************-->
+  <!-- 我的订单 -->
+  <link href="styles/myorder.css" type="text/css" rel="stylesheet">
+  <link href="styles/product_judge.css" type="text/css" rel="stylesheet">
+  <link rel="stylesheet" href="styles/orderdetail.css" type="text/css"/>
+  <!-- 我的优惠券 -->
+  <link href="styles/mycoupons.css" type="text/css" rel="stylesheet">
+  <!-- 优惠券详情 -->
+  <!--<link href="styles/couponsdetail.css" type="text/css" rel="stylesheet">-->
+  <!-- 领取优惠券 -->
+  <link href="styles/receivecoupons.css" type="text/css" rel="stylesheet">
+  <!-- 我的消息 -->
+  <link href="styles/usermessage.css" type="text/css" rel="stylesheet">
+  <!--************* 关于我们 ****************-->
+  <!-- 关注我们 -->
+  <link href="styles/followus.css" type="text/css" rel="stylesheet">
+  <!-- 联系我们 -->
+  <link href="styles/contactus.css" type="text/css" rel="stylesheet">
+  <!-- 站点介绍 -->
+  <link href="styles/stationintro.css" type="text/css" rel="stylesheet">
+  <!-- 站点详情 -->
+  <link href="styles/stationdetail.css" type="text/css" rel="stylesheet">
+  <!--************* 我的业务 ****************-->
+  <!-- 我发货的商品 -->
+  <link href="styles/delivery.css" type="text/css" rel="stylesheet">
+  <!-- 我派发的商品 -->
+  <link href="styles/distribute.css" type="text/css" rel="stylesheet">
+  <!-- 我粉丝的验证码 -->
+  <link href="styles/fans_code.css" type="text/css" rel="stylesheet">
+  <!-- 业务量统计 -->
+  <link href="styles/portfolio.css" type="text/css" rel="stylesheet">
+  <!--商家福利-->
+  <link rel="stylesheet" href="styles/sellerWalfare.css" type="text/css"/>
+
+  <!--***************邻里社交*******************-->
+  <!--邻里社交-->
+  <link rel="stylesheet" href="styles/society.css"/>
+  <!--社交部落页-->
+  <link rel="stylesheet" href="styles/societyTribe.css"/>
+  <!--帖子详情页-->
+  <link rel="stylesheet" href="styles/postdetail.css"/>
+  <!--帖子编辑-->
+  <link rel="stylesheet" href="styles/postEdit.css"/>
+  <!--帖子回复-->
+  <link rel="stylesheet" href="styles/postreply.css"/>
+
+
+  <!-- endcustom -->
+  <!-- endbuild -->
+</head>
+<body ng-app="owWebApp" ng-controller="applicationController">
+<!--[if lte IE 8]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- ng-animate="'view'" -->
+<div class="main" auth-info ui-view="">
+</div>
+
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/owl-carousel/owl-carousel/owl.carousel.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+<script src="bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.js"></script>
+<script src="bower_components/marquee/gammamarquee.min.js"></script>
+<script src="bower_components/Chart.js/Chart.js"></script>
+<script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<!-- custom:js -->
+<script src="scripts/common/bootstrap-switch/dist/bootstrap-switch.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/services/service.js"></script>
+<script src="scripts/routes/route.js"></script>
+<script src="scripts/common/jsAddress.js"></script>
+<script src="scripts/common/main.js"></script>
+<script src="scripts/controllers/commonController.js"></script>
+<script src="scripts/controllers/controller.js"></script>
+<script src="scripts/directives/directive.js"></script>
+<script src="scripts/filters/filter.js"></script>
+<script src="scripts/interceptor/interceptor.js"></script>
+<script src="scripts/services/authService.js"></script>
+<script src="scripts/services/commonService.js"></script>
+
+
+<!-- ********************* 消息提示框 ****************** -->
+<script src="scripts/common/jquery.toastmessage.js"></script>
+
+<!-- ********************* We UI ****************** -->
+<script src="scripts/common/weui/zepto.min.js"></script>
+
+<!-- ********************* 星星打分 ****************** -->
+<script src="scripts/common/star-rating.min.js"></script>
+
+<!-- ********************* 轮播图js  ****************** -->
+<!--<script src="scripts/common/owlcarousel/owl.carousel.js"></script>-->
+<!--<script src="path/to/ui-bootstrap.min.js"></script>-->
+<!--<script src="path/to/ui-bootstrap-tpls.min.js"></script>-->
+
+<!-- ********************* 跑马灯js  ****************** -->
+<!--<script src="scripts/common/marquee.js"></script>-->
+
+<!-- ********************* 下拉列表  ****************** -->
+<script src="scripts/common/easydropdown.js"></script>
+
+<!-- ********************* 服务  ****************** -->
+<script src="scripts/services/guanjiaService.js"></script>
+<script src="scripts/services/userService.js"></script>
+<script src="scripts/services/societyService.js"></script>
+
+<script src="modules/member/personal/controller.js"></script>
+<script src="modules/member/personal/personalRoute.js"></script>
+
+<script src="modules/member/user/cart/cartRoute.js"></script>
+<script src="modules/member/user/cart/controller.js"></script>
+
+<!--************* 关于我们 ****************-->
+<script src="modules/member/about/controller.js"></script>
+<script src="modules/member/about/aboutRoute.js"></script>
+
+<!--************* 我的业务 ****************-->
+<script src="modules/member/business/businessController.js"></script>
+<script src="modules/member/business/businessRoute.js"></script>
+
+<!--************* 我的信息 ****************-->
+<!-- 我的优惠券 -->
+<script src="modules/member/user/coupons/controller.js"></script>
+<script src="modules/member/user/coupons/couponsRoute.js"></script>
+
+<!-- 我的消息 -->
+<script src="modules/member/user/message/controller.js"></script>
+<script src="modules/member/user/message/messageRoute.js"></script>
+
+<!-- 我的小区 -->
+<script src="modules/member/user/community/controller.js"></script>
+<script src="modules/member/user/community/communityRoute.js"></script>
+
+<!-- 我的订单 -->
+<script src="modules/member/user/order/orderRoute.js"></script>
+<script src="modules/member/user/order/controller.js"></script>
+
+<!-- 我参与的活动 -->
+<script src="modules/member/user/activities/controller.js"></script>
+<script src="modules/member/user/activities/acticitiesRoute.js"></script>
+
+<!-- 我的预约单 -->
+<script src="modules/member/user/reserve/controller.js"></script>
+<script src="modules/member/user/reserve/reserveRoute.js"></script>
+
+<!--************* 服务  ****************-->
+<script src="modules/service/controller.js"></script>
+<script src="modules/service/serviceRoute.js"></script>
+
+<!--************* 管家  ****************-->
+<script src="modules/guanjia/controller.js"></script>
+<script src="modules/guanjia/guanjiaRoute.js"></script>
+
+<!-- 我的小区 -->
+<script src="scripts/common/selectcity/jquery.charfirst.pinyin.js"></script>
+<script src="scripts/common/selectcity/sort.js"></script>
+
+<!--商家福利-->
+<script src="modules/welfare/controller.js"></script>
+<script src="modules/welfare/welfareRoute.js"></script>
+
+<!--邻里社交-->
+<script src="modules/society/controller.js"></script>
+<script src="modules/society/societyRoute.js"></script>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=F014826165b8660773dbdabc11f6bfcc"></script>
+
+<!-- 关注我们 -->
+<!--<script src="scripts/common/jquery.qrcode/jquery.qrcode.js"></script>-->
+<script src="scripts/common/jquery.qrcode/qrcode.js"></script>
+
+<!-- endcustom -->
+<!-- endbuild -->
+
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<script>
+
+  $(function () {
+    $('#owl-ad').owlCarousel({
+      items: 1,
+      autoPlay: 3000,
+      pagination: false
+    });
+  });
+</script>
+
+<nav class="navbar navbar-default  navbar-fixed-top navigationbar">
+  <div class="navcityLeft">
+    <!-- 返回按钮-->
+    <img class="back-button" src="images/back_button.png" ng-click="backtocomservice()">
+
+    <p class="city" usercity-select>
+          <span ng-hide="citySelect" ng-model="usercityName">{{usercityName}}
+            <span class="glyphicon glyphicon glyphicon-menu-down" style="color: white;margin-right:5px;"></span>
+          </span>
+      <select ng-show="citySelect" class="citySelect" ng-model="usercityId"
+              ng-options="x.city_id as x.name for x in usercityList">
+      </select>
+    </p>
+  </div>
+
+  <div class="navcityRight">
+    <div class="search-group">
+      <img class="search-button" src="images/search_button.png" ng-click="searchAccount()">
+      <input type="text" class="search-input form-control" placeholder="请输入搜索关键字" ng-blur="accountBlur()">
+    </div>
+  </div>
+
+</nav>
+
+<div class="familyaccount-content">
+  <!--轮播图-->
+  <div ng-if="slides.length > 0">
+    <div ng-hide="imgShow">
+      <carousel interval="myInterval" class="carousel-ad-images">
+        <slide ng-repeat="slide in slides" active="slide.active">
+          <img ng-src="{{slide.image}}" class="slideImg" curousel-height>
+        </slide>
+      </carousel>
+    </div>
+
+    <!--占位图-->
+    <div ng-if="imgShow">
+      <img src="images/zhanwei.jpg" curousel-height class="slideImg">
+    </div>
+  </div>
+
+  <!-- 跑马灯 -->
+  <div class="marquee-broadcast" ng-show="marqueeContent.length > 0">
+    <marquee behavior="scroll" scrollAmount="{{slide}}">
+      <ul class="list-inline">
+        <li ng-repeat="k in marqueeContent">{{k.content}}</li>
+      </ul>
+    </marquee>
+  </div>
+
+  <!--所有此服务的商家数据 -->
+  <div class="all-bussiness-info" ng-show="allBusiness.businessCount>0" ng-click="jumpaccountlist()">
+    <span><span>全部商家</span>&nbsp;&nbsp;{{allBusiness.businessCount}}个</span>
+  <span>商品{{allBusiness.goodsCount}}个
+    <!--<i class="glyphicon glyphicon-chevron-right"></i>-->
+  <img src="images/next.png">
+  </span>
+  </div>
+
+  <!-- 列表 -->
+  <div class="familyaccount-table" ng-if="!errMsg" load-more
+       data="{params : params,repeatFun : '$scope.familyAccount'}">
+    <div>
+      <div class="familyaccount-row" ng-repeat="b in familyaccountList" ng-click="jumpaccountlist(b.business_id)">
+
+        <div class="familyaccount-row-left">
+          <img ng-src={{b.logo}} class="img-responsive">
+        </div>
+
+        <div class="familyaccount-row-right">
+          <p>
+           <span class="familyaccount-seller-name">
+            {{b.name}}
+             <img ng-show="b.hot == 'Y'" src="images/fire.png">
+             <img ng-show="b.new == 'Y'" class="img-responsive familyaccount-tag" src="images/newtag.png">
+           </span>
+            <span class="familyaccount-goods-num">{{b.goods_count}}</span>
+          </p>
+
+          <p class="familyaccount-seller-intro">{{b.introduction}}</p>
+
+          <p class="familyaccount-seller-service">{{b.content}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="errMsg" ng-if="errMsg">{{errMsg}}</div>
+</div>
+
+<script>
+  var searchH = window.screen.availHeight - parseInt($('.navigationbar').css('height'));
+  $('.familyaccount-search').css({
+    height: searchH + 'px',
+    overflow: 'scroll'
+  });
+</script>
+

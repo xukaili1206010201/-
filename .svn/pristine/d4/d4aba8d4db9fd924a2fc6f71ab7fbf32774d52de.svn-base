@@ -1,0 +1,31 @@
+/*body{*/
+    /*background: rgba(239,239,243,1);*/
+/*}*/
+
+.user-baisc-info{
+    margin-top: 71px;
+}
+
+/*.user-baisc-info label{*/
+/*color: darkgray;*/
+/*}*/
+
+.input-field{
+    border: none;
+    outline: none;
+    width: 100%;
+}
+
+.bottom-operate{
+    background: rgb(235,235,243);
+    text-align: center;
+}
+
+.bottom-operate button{
+    width: 96%;
+    margin-top: 8px;
+}
+.bus_property-edit{
+  overflow: hidden;
+  margin:10px 10px;
+}
